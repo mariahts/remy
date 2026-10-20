@@ -14,13 +14,12 @@ La app propone recetas según tu despensa y los ingredientes que te faltan.
 ## Funcionalidades de la primera versión
 - Registro e inicio de sesión
 - Despensa personal (alimentos y cantidades)
-- Catálogo de recetas con información nutricional
+- Catálogo de recetas
 - Sugerencias según la despensa (completas y con pocos ingredientes faltantes)
 - Filtros por tiempo, calorías, tipo de plato y región
-- Marcar recetas como cocinadas
 
 ## Funcionalidades futuras
-Lista de la compra con cálculo de gastos, planes de comidas y calendario,
+Lista de la compra, planes de comidas y calendario,
 valoraciones, recetas propias con foto, modo offline, sugerencias por
 patrones de consumo y funciones sociales.
 
