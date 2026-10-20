@@ -8,7 +8,7 @@ que tienes en casa.
 - Mario Jiménez Ruiz
 
 ## Problema que resuelve
-Tiramos comida y muchas veces no sabemos qué cocinar con lo que tenemos.
+Muchas veces no sabemos qué cocinar con lo que tenemos.
 La app propone recetas según tu despensa y los ingredientes que te faltan.
 
 ## Funcionalidades de la primera versión
