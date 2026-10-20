@@ -24,11 +24,19 @@ valoraciones, recetas propias con foto, modo offline, sugerencias por
 patrones de consumo y funciones sociales.
 
 ## Tecnologías
-- Kotlin y Jetpack Compose 
+- Kotlin y Jetpack Compose (Material 3)
 
 ## Organización del equipo
 - Tablero Kanban: https://github.com/users/mariahts/projects/1
-- Flujo de trabajo: issue → rama → Pull Request → revisión → merge
+
+### Flujo de trabajo
+1. Cada tarea tiene una issue asignada a una persona.
+2. Se crea una rama desde `main` (ejemplo: `feature/7-navegacion`).
+3. Se hacen commits y se abre una Pull Request con `Closes #N`.
+4. La otra persona revisa y aprueba la PR.
+5. Se hace merge a `main` y la issue se cierra.
+
+No se hacen commits directos a `main`.
 
 ## Estado actual
 Organización inicial del proyecto. Aún sin código funcional.
