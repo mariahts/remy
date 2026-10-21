@@ -24,7 +24,22 @@ valoraciones, recetas propias con foto, modo offline, sugerencias por
 patrones de consumo y funciones sociales.
 
 ## Tecnologías
-- Kotlin y Jetpack Compose (Material 3)
+- Kotlin y Jetpack Compose
+
+## Estructura del proyecto
+
+La app sigue la arquitectura MVVM. El código está en
+`app/src/main/java/com/remy/app/`:
+
+- `data`: acceso a datos (Room y repositorios). Se rellenará cuando
+  se implemente la persistencia.
+- `domain/model`: clases de negocio, como Receta o Alimento.
+- `ui`: interfaz con Jetpack Compose.
+  - `screens`: pantallas.
+  - `components`: elementos reutilizables.
+  - `navigation`: rutas y navegación entre pantallas.
+  - `viewmodel`: ViewModels de cada pantalla.
+  - `theme`: colores, tipografía y tema.
 
 ## Organización del equipo
 - Tablero Kanban: https://github.com/users/mariahts/projects/1
@@ -39,4 +54,5 @@ patrones de consumo y funciones sociales.
 No se hacen commits directos a `main`.
 
 ## Estado actual
-Organización inicial del proyecto. Aún sin código funcional.
+Proyecto Android base creado y estructura de paquetes definida.
+Aún sin funcionalidades implementadas.
