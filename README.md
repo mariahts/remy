@@ -71,7 +71,7 @@ No se necesita ninguna clave ni servicio externo para ejecutar la aplicación.
 
 ## Organización del equipo
 - Tablero Kanban (GitHub Project): https://github.com/users/mariahts/projects/1
-- Columnas: Backlog, Ready, En progreso, En revisión y Hecho.
+- Columnas: Backlog, Ready, En progreso, En revision, Hecho y Blocked.
 
 ### Flujo de trabajo
 1. Cada tarea tiene una issue asignada a una persona.
@@ -91,5 +91,5 @@ No se hacen commits directos a `main`: está protegida y exige una aprobación.
 
 ## Documentación
 La memoria del proyecto (Word) se entrega en el Aula Virtual. En la carpeta
-`docs/` se irán añadiendo el modelo de datos, los bocetos, las pruebas
-(`pruebas.md`) y el registro de uso de IA (`uso-ia.md`).
+`docs/` está el registro de uso de IA (`uso-ia.md`); se irán añadiendo el
+modelo de datos, los bocetos y las pruebas (`pruebas.md`).
