@@ -1,0 +1,107 @@
+name: Tarea
+description: Tarea del proyecto REMY con su clasificación de RA, tamaño y prioridad
+title: "[Tarea] "
+labels: ["V1"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Un resultado concreto, no una tarea genérica. Si en los criterios de abajo
+        no cabe un *"abro la app y veo X"*, la tarea es demasiado grande: divídela
+        en varias. Nunca crear tareas de 4 o 5 puntos.
+
+  - type: input
+    id: resultado
+    attributes:
+      label: Resultado
+      description: Qué se puede comprobar al terminar.
+      placeholder: "Guardar preferencias de filtrado"
+    validations:
+      required: true
+
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción
+      description: Qué hay que hacer y por qué.
+    validations:
+      required: true
+
+  - type: textarea
+    id: criterios
+    attributes:
+      label: Criterios de aceptación
+      description: Qué comportamiento debe observarse para dar la tarea por terminada.
+      value: |
+        - [ ]
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ra
+    attributes:
+      label: RA
+      description: Resultado de aprendizaje que acredita esta tarea.
+      options:
+        - RA2
+        - RA3
+        - Ambos
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tamano
+    attributes:
+      label: Tamaño en puntos de esfuerzo
+      description: "1 = menos de 2 h · 2 = media jornada · 3 = un día · 5 = dos días o más (dividir)."
+      options:
+        - "1"
+        - "2"
+        - "3"
+        - "5"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: prioridad
+    attributes:
+      label: Prioridad
+      description: "Alta = sin esto la app no funciona · Media = necesario, pero se puede retrasar · Baja = si hay tiempo."
+      options:
+        - Alta
+        - Media
+        - Baja
+    validations:
+      required: true
+
+  - type: input
+    id: revisor
+    attributes:
+      label: Persona revisora
+      description: Siempre la otra persona del equipo.
+      placeholder: "mariahts o FedericoCamposMartinez"
+    validations:
+      required: true
+
+  - type: input
+    id: sprint
+    attributes:
+      label: Sprint
+      placeholder: "2"
+    validations:
+      required: true
+
+  - type: input
+    id: depende
+    attributes:
+      label: Depende de
+      placeholder: "#11"
+
+  - type: textarea
+    id: prueba
+    attributes:
+      label: Prueba prevista
+      description: Cómo se comprueba en el emulador o en un test.
+      placeholder: "Test del DAO + comprobar en el emulador tras reiniciar"
