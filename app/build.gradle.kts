@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 android {
@@ -36,6 +37,11 @@ android {
     buildFeatures {
         compose = true
     }
+}
+
+// Room: exporta el esquema de la base de datos a app/schemas para poder versionar migraciones
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 dependencies {
