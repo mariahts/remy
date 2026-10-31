@@ -41,17 +41,21 @@ conexión, sugerencias por patrones de consumo y funciones sociales.
 ## Tecnologías
 - Kotlin y Jetpack Compose (Material 3)
 - Arquitectura MVVM (ViewModel y repositorios)
-- Navigation Compose
-- Room y DataStore (previstos)
-- CameraX y Coil para la función multimedia (previstos)
+- Navigation Compose (ya en uso: barra inferior con tres pantallas)
+- Room para los datos estructurados (ya en uso: la despensa, con el esquema
+  exportado a `app/schemas/` para poder migrar versiones)
+- CameraX para la función multimedia (prototipo en marcha: permiso, vista
+  previa y captura de fotografía)
+- DataStore para las preferencias y Coil para mostrar imágenes (previstos)
 
 ## Estructura del proyecto
 El código está en `app/src/main/java/com/remy/app/`:
 
-- `data`: acceso a datos (Room, DataStore y repositorios).
+- `data`: acceso a datos (entidad `Alimento`, DAO, `RemyDatabase`,
+  repositorios; más adelante DataStore).
 - `domain/model`: clases de negocio, como Receta o Alimento.
 - `ui`: interfaz con Jetpack Compose.
-  - `screens`: pantallas.
+  - `screens`: pantallas (despensa, recetas, sugerencias y prototipo de cámara).
   - `components`: elementos reutilizables.
   - `navigation`: rutas y navegación entre pantallas.
   - `viewmodel`: ViewModels de cada pantalla.
@@ -68,6 +72,8 @@ un móvil con la depuración USB activada. La app usa minSdk 26.
 5. Pulsar **Run** sobre el módulo `app`.
 
 No se necesita ninguna clave ni servicio externo para ejecutar la aplicación.
+La app pide permiso de cámara al abrir la pantalla de cámara; se puede denegar
+y sigue funcionando con el selector de fotos del sistema.
 
 ## Organización del equipo
 - Tablero Kanban (GitHub Project): https://github.com/users/mariahts/projects/1
@@ -75,21 +81,29 @@ No se necesita ninguna clave ni servicio externo para ejecutar la aplicación.
 
 ### Flujo de trabajo
 1. Cada tarea tiene una issue asignada a una persona.
-2. Se crea una rama desde `main` (ejemplo: `feature/7-navegacion`).
+2. Se crea una rama desde `dev` (ejemplo: `feature/22-room-despensa`).
 3. Se hacen commits descriptivos y se abre una Pull Request con `Closes #N`.
 4. La otra persona revisa la PR, deja una observación concreta y la aprueba.
-5. Se hace merge a `main` y la issue pasa a Hecho.
+5. Se hace merge a `dev` y la issue pasa a Hecho.
 
 No se hacen commits directos a `main`: está protegida y exige una aprobación.
+El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
 
 ## Estado actual
-- Repositorio, tablero, protección de `main` y plantillas de issue y PR listos.
-- Proyecto Android base (Kotlin, Compose, Material 3) que compila y se ejecuta
-  en el emulador con la plantilla inicial.
-- Estructura de paquetes MVVM creada.
-- Aún no hay funcionalidades de la aplicación implementadas.
+- Repositorio, tablero con sus columnas y campos, protección de `main` y
+  plantillas de issue y de PR listos; las 40 issues están clasificadas con
+  etiquetas de RA, tamaño, prioridad y sprint.
+- Proyecto Android con Kotlin, Compose y Material 3 que compila y se ejecuta
+  en el emulador.
+- Navegación con barra inferior y tres pantallas (#7).
+- Diagrama del modelo de datos en `docs/ModeloE_R_Remy.drawio` (#11).
+- Despensa con Room: entidad, DAO, base de datos y repositorio, con esquema
+  exportado y test del DAO (#22).
+- Prototipo de cámara con CameraX: permiso, vista previa y captura (#25).
+- Pendientes del hito: tema (#8), bocetos (#9 y #10) y la pantalla de despensa
+  (#24, bloqueada hasta que esté el tema).
 
 ## Documentación
 La memoria del proyecto (Word) se entrega en el Aula Virtual. En la carpeta
-`docs/` está el registro de uso de IA (`uso-ia.md`); se irán añadiendo el
-modelo de datos, los bocetos y las pruebas (`pruebas.md`).
+`docs/` están el modelo de datos (`.drawio`) y el registro de uso de IA
+(`uso-ia.md`); se irán añadiendo los bocetos y las pruebas (`pruebas.md`).
