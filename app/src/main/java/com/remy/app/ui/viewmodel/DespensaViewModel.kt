@@ -11,6 +11,7 @@ import com.remy.app.data.AlimentoRepository
 import com.remy.app.data.RemyDatabase
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -27,7 +28,19 @@ class DespensaViewModel(private val repositorio: AlimentoRepository) : ViewModel
         val valor = cantidad.replace(',', '.').toDouble()
         viewModelScope.launch {
             if (editando == null) {
-                repositorio.guardar(Alimento(nombre = nombre.trim(), cantidad = valor, unidad = unidad.trim()))
+                val limpio = nombre.trim()
+                // Si el nombre ya está en el catálogo de recetas, se recupera
+                // ese mismo alimento en vez de duplicarlo: así una receta que
+                // usa "Arroz" vuelve a completarse al añadirlo otra vez (#34)
+                val existente = repositorio.catalogo.first()
+                    .firstOrNull { it.nombre.trim().equals(limpio, ignoreCase = true) }
+                if (existente != null) {
+                    repositorio.actualizar(
+                        existente.copy(cantidad = valor, unidad = unidad.trim(), enDespensa = true)
+                    )
+                } else {
+                    repositorio.guardar(Alimento(nombre = limpio, cantidad = valor, unidad = unidad.trim()))
+                }
             } else {
                 repositorio.actualizar(editando.copy(nombre = nombre.trim(), cantidad = valor, unidad = unidad.trim()))
             }

@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [Alimento::class, Receta::class, Ingrediente::class],
-    version = 3
+    version = 4
 )
 abstract class RemyDatabase : RoomDatabase() {
     abstract fun alimentoDao(): AlimentoDao
@@ -56,13 +56,20 @@ abstract class RemyDatabase : RoomDatabase() {
             }
         }
 
+        /** Separa despensa y catálogo con la columna enDespensa (#34). */
+        val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE `alimentos` ADD COLUMN `enDespensa` INTEGER NOT NULL DEFAULT 1")
+            }
+        }
+
         fun obtener(contexto: Context): RemyDatabase =
             instancia ?: synchronized(this) {
                 instancia ?: Room.databaseBuilder(
                     contexto.applicationContext,
                     RemyDatabase::class.java,
                     "remy.db"
-                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).build().also { instancia = it }
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).build().also { instancia = it }
             }
     }
 }
