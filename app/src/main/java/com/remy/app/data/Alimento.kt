@@ -7,10 +7,10 @@ import androidx.room.PrimaryKey
 data class Alimento(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val nombre: String,
-    val kcal: Int,
-    val proteinas: Int,
-    val regionOrigen: String,
-    val tipoPlato: String,
+    val kcal: Int = 0,
+    val proteinas: Int = 0,
+    val regionOrigen: String = "",
+    val tipoPlato: String = "",
     val cantidad: Double,
-    val unidad: String // "g", "u", "ml"...
+    val unidad: String
 )
