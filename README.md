@@ -75,6 +75,19 @@ No se necesita ninguna clave ni servicio externo para ejecutar la aplicación.
 La app pide permiso de cámara al abrir la pantalla de cámara; se puede denegar
 y sigue funcionando con el selector de fotos del sistema.
 
+### Cómo probar el recorrido principal (Entrega 3)
+1. Instalar la APK o pulsar Run: la app abre la pestaña Despensa y, en la
+   primera instalación, entran el catálogo de 20 recetas y 30 alimentos.
+2. Añadir un alimento con el botón flotante; probar a guardar con cantidad 0
+   para ver el mensaje de validación.
+3. Pestaña Recetas: tocar una tarjeta para abrir el detalle (ingredientes,
+   pasos y nutrición) y volver con «Volver al listado».
+4. Pestaña Sugerencias: con la despensa completa aparecen «Se puede cocinar
+   ya» y «Casi cocinable»; al borrar un alimento de la despensa (por ejemplo
+   «Arroz») aparecen recetas en «Casi cocinable» con «Falta: …».
+5. Elegir el filtro «Postre» o cambiar el máximo de faltantes y, con la app
+   cerrada, abrirla de nuevo: la preferencia se conserva (DataStore).
+
 ## Organización del equipo
 - Tablero Kanban (GitHub Project): https://github.com/users/mariahts/projects/1
 - Columnas: Backlog, Ready, En progreso, En revision, Hecho y Blocked.
@@ -89,21 +102,25 @@ y sigue funcionando con el selector de fotos del sistema.
 No se hacen commits directos a `main`: está protegida y exige una aprobación.
 El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
 
-## Estado actual
-- Repositorio, tablero con sus columnas y campos, protección de `main` y
-  plantillas de issue y de PR listos; las 40 issues están clasificadas con
-  etiquetas de RA, tamaño, prioridad y sprint.
-- Proyecto Android con Kotlin, Compose y Material 3 que compila y se ejecuta
-  en el emulador.
-- Navegación con barra inferior y tres pantallas (#7).
-- Diagrama del modelo de datos en `docs/ModeloE_R_Remy.drawio` (#11).
-- Despensa con Room: entidad, DAO, base de datos y repositorio, con esquema
-  exportado y test del DAO (#22).
+## Estado actual (Entrega 3, 4 de noviembre de 2026)
+- Base de datos Room en la versión 4 con migraciones explícitas: despensa
+  (#22 y #28), recetas e ingredientes con su relación (#23) y precarga del
+  catálogo de 20 recetas y 30 alimentos en el primer arranque (#30).
+- Preferencias con DataStore: filtros de tipo de plato y máximo de
+  ingredientes faltantes que se recuperan al reabrir la app (#29).
+- Pantallas de listado (#31) y detalle (#32) de recetas, con navegación desde
+  la tarjeta y vuelta atrás.
+- Sugerencias: algoritmo que separa recetas completas de casi cocinables por
+  identificador de alimento (#33) y pantalla que muestra los dos grupos con el
+  listado de lo que falta (#34).
+- Pruebas: 14 unitarias y 9 instrumentadas en verde, más el recorrido manual;
+  el registro está en `docs/pruebas.md`.
 - Prototipo de cámara con CameraX: permiso, vista previa y captura (#25).
-- Pendientes del hito: tema (#8), bocetos (#9 y #10) y la pantalla de despensa
-  (#24, bloqueada hasta que esté el tema).
+- Pendientes: tema (#8), bocetos (#9 y #10) y pantalla de despensa (#24,
+  bloqueada hasta que aplique el tema); filtros por tiempo, calorías y región
+  (#37); receta marcada como cocinada con foto (#35).
 
 ## Documentación
 La memoria del proyecto (Word) se entrega en el Aula Virtual. En la carpeta
-`docs/` están el modelo de datos (`.drawio`) y el registro de uso de IA
-(`uso-ia.md`); se irán añadiendo los bocetos y las pruebas (`pruebas.md`).
+`docs/` están el modelo de datos (`.drawio`), el registro de uso de IA
+(`uso-ia.md`) y el registro de pruebas (`pruebas.md`).
