@@ -57,6 +57,10 @@ fun SugerenciasScreen(
         // al algoritmo de #33, que recalcula los grupos al cambiar
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text("Filtrar por tipo de plato", style = MaterialTheme.typography.titleMedium)
+            Text(
+                "Los filtros quedan guardados: se recuperan al volver a abrir la app.",
+                style = MaterialTheme.typography.bodySmall
+            )
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 TIPOS_DE_PLATO.forEach { tipo ->
                     FilterChip(
