@@ -7,7 +7,10 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [Alimento::class, Receta::class, Ingrediente::class], version = 2)
+@Database(
+    entities = [Alimento::class, Receta::class, Ingrediente::class],
+    version = 3
+)
 abstract class RemyDatabase : RoomDatabase() {
     abstract fun alimentoDao(): AlimentoDao
     abstract fun recetaDao(): RecetaDao
@@ -45,13 +48,21 @@ abstract class RemyDatabase : RoomDatabase() {
             }
         }
 
+        /** Añade tiempo y pasos a las recetas existentes (#30). */
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE `recetas` ADD COLUMN `tiempoMinutos` INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE `recetas` ADD COLUMN `pasos` TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
         fun obtener(contexto: Context): RemyDatabase =
             instancia ?: synchronized(this) {
                 instancia ?: Room.databaseBuilder(
                     contexto.applicationContext,
                     RemyDatabase::class.java,
                     "remy.db"
-                ).addMigrations(MIGRATION_1_2).build().also { instancia = it }
+                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).build().also { instancia = it }
             }
     }
 }
