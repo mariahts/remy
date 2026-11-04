@@ -28,6 +28,9 @@ interface RecetaDao {
     @Query("SELECT * FROM recetas ORDER BY nombre")
     fun observarTodas(): Flow<List<RecetaConIngredientes>>
 
+    @Query("SELECT COUNT(*) FROM recetas")
+    suspend fun contar(): Int
+
     @Transaction
     @Query("SELECT * FROM recetas WHERE id = :id")
     suspend fun porId(id: Long): RecetaConIngredientes?

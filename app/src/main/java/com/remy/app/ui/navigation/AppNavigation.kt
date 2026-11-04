@@ -9,12 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.remy.app.ui.screens.CamaraScreen
 import com.remy.app.ui.screens.DespensaScreen
+import com.remy.app.ui.screens.RecetaDetalleScreen
 import com.remy.app.ui.screens.RecetasScreen
 import com.remy.app.ui.screens.SugerenciasScreen
 
@@ -60,7 +63,15 @@ fun AppNavigation() {
             modifier = Modifier.padding(padding)
         ) {
             composable(Routes.DESPENSA) { DespensaScreen() }
-            composable(Routes.RECETAS) { RecetasScreen() }
+            composable(Routes.RECETAS) {
+                RecetasScreen(onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) })
+            }
+            composable(
+                route = Routes.RECETA_DETALLE,
+                arguments = listOf(navArgument("id") { type = NavType.LongType })
+            ) { entrada ->
+                RecetaDetalleScreen(id = entrada.arguments?.getLong("id") ?: -1L)
+            }
             composable(Routes.SUGERENCIAS) { SugerenciasScreen() }
             composable(Routes.CAMARA) { CamaraScreen() }
         }

@@ -3,6 +3,7 @@ package com.remy.app.data
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
@@ -11,6 +12,10 @@ import kotlinx.coroutines.flow.Flow
 interface AlimentoDao {
     @Insert
     suspend fun insertar(alimento: Alimento): Long
+
+    /** Inserta solo si no existe ya con ese identificador (precarga, #30). */
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertarSiFalta(alimento: Alimento): Long
 
     @Query("SELECT * FROM alimentos ORDER BY nombre")
     fun observarTodos(): Flow<List<Alimento>>
