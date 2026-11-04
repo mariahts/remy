@@ -70,7 +70,10 @@ fun AppNavigation() {
                 route = Routes.RECETA_DETALLE,
                 arguments = listOf(navArgument("id") { type = NavType.LongType })
             ) { entrada ->
-                RecetaDetalleScreen(id = entrada.arguments?.getLong("id") ?: -1L)
+                RecetaDetalleScreen(
+                    id = entrada.arguments?.getLong("id") ?: -1L,
+                    onVolver = { navController.popBackStack() }
+                )
             }
             composable(Routes.SUGERENCIAS) { SugerenciasScreen() }
             composable(Routes.CAMARA) { CamaraScreen() }
