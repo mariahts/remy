@@ -32,7 +32,7 @@ class AlimentoDaoTest {
     fun cerrarBase() = db.close()
 
     @Test
-    fun insertarLeerYBorrar() = runBlocking {
+    fun insertarLeerYOCultar() = runBlocking {
         val id = dao.insertar(
             Alimento(
                 nombre = "Tomate",
@@ -48,8 +48,11 @@ class AlimentoDaoTest {
         val leido = dao.porId(id)
         assertEquals("Tomate", leido?.nombre)
 
-        dao.borrar(leido!!)
-        assertNull(dao.porId(id))
+        // Borrar de la despensa oculta el alimento pero conserva la fila:
+        // las recetas que lo usan como ingrediente no se rompen (#34)
+        dao.ocultar(id)
+        assertTrue(dao.observarTodos().first().none { it.id == id })
+        assertEquals(false, dao.porId(id)?.enDespensa)
     }
 
     @Test
