@@ -35,6 +35,11 @@ interface RecetaDao {
     @Query("SELECT * FROM recetas WHERE id = :id")
     suspend fun porId(id: Long): RecetaConIngredientes?
 
+    /** Detalle con los ingredientes resueltos hasta el nombre del alimento. */
+    @Transaction
+    @Query("SELECT * FROM recetas WHERE id = :id")
+    suspend fun detallePorId(id: Long): RecetaDetalle?
+
     @Update
     suspend fun actualizar(receta: Receta)
 
