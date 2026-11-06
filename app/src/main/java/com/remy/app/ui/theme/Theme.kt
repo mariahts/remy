@@ -1,58 +1,98 @@
 package com.remy.app.ui.theme
 
-import android.app.Activity
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = Green600,
     onPrimary = Color.White,
+    primaryContainer = Green100,
+    onPrimaryContainer = Green900,
+    secondary = Green700,
     onSecondary = Color.White,
+    secondaryContainer = Green100,
+    onSecondaryContainer = Green900,
+    tertiary = Orange600,
     onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    tertiaryContainer = Orange100,
+    onTertiaryContainer = Orange800,
+    background = Mint,
+    onBackground = Slate900,
+    surface = Color.White,
+    onSurface = Slate900,
+    surfaceVariant = Slate100,
+    onSurfaceVariant = Slate500,
+    outline = Slate300,
+    outlineVariant = Slate200,
+    error = Red600,
+    onError = Color.White,
+    errorContainer = Red100,
+    onErrorContainer = Red900,
+    surfaceBright = Color.White,
+    surfaceDim = Color(0xFFCBE2D1),
+    surfaceContainerLowest = Color.White,
+    surfaceContainerLow = Color(0xFFF4FCF6),
+    surfaceContainer = Color(0xFFEAF9EE),
+    surfaceContainerHigh = Mint,
+    surfaceContainerHighest = Color.White // las Card se pintan con este color
 )
 
+/**
+ * Colores propios de REMY que Material 3 no define: avisos, información y
+ * categorías de alimentos (cereales, verduras, proteínas, frescos, aceites).
+ * Uso: MaterialTheme.remyColors.warning
+ */
+@Immutable
+data class RemyColors(
+    val warning: Color,
+    val warningContainer: Color,
+    val onWarningContainer: Color,
+    val success: Color,
+    val info: Color,
+    val infoContainer: Color,
+    val categoryCereales: Color,
+    val categoryVerduras: Color,
+    val categoryProteinas: Color,
+    val categoryFrescos: Color,
+    val categoryAceites: Color
+)
+
+private val DefaultRemyColors = RemyColors(
+    warning = Orange600,
+    warningContainer = Orange100,
+    onWarningContainer = Orange800,
+    success = Green600,
+    info = Indigo700,
+    infoContainer = Indigo100,
+    categoryCereales = Color(0xFFFEF08A),
+    categoryVerduras = Color(0xFFFFE4C8),
+    categoryProteinas = Orange100,
+    categoryFrescos = Green100,
+    categoryAceites = Color(0xFFECFCCB)
+)
+
+private val LocalRemyColors = staticCompositionLocalOf { DefaultRemyColors }
+
+val MaterialTheme.remyColors: RemyColors
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalRemyColors.current
+
+/** Tema único de REMY (solo modo claro, sin colores dinámicos del sistema). */
 @Composable
-fun REMYTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+fun REMYTheme(content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalRemyColors provides DefaultRemyColors) {
+        MaterialTheme(
+            colorScheme = LightColorScheme,
+            typography = Typography,
+            shapes = RemyShapes,
+            content = content
+        )
     }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
 }
