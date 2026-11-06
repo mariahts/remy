@@ -12,8 +12,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -50,7 +51,11 @@ fun DespensaScreen(viewModel: DespensaViewModel = viewModel(factory = DespensaVi
     Scaffold(
         contentWindowInsets = WindowInsets(0),
         floatingActionButton = {
-            FloatingActionButton(onClick = { abrirFormulario(null) }) { Text("+") }
+            FloatingActionButton(
+                onClick = { abrirFormulario(null) },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ) { Text("+") }
         }
     ) { padding ->
         if (alimentos.isEmpty()) {
@@ -67,18 +72,23 @@ fun DespensaScreen(viewModel: DespensaViewModel = viewModel(factory = DespensaVi
         } else {
             LazyColumn(modifier = Modifier.padding(padding).fillMaxSize()) {
                 items(alimentos, key = { it.id }) { alimento ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    Card(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp),
+                        shape = MaterialTheme.shapes.large,
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(alimento.nombre, style = MaterialTheme.typography.titleMedium)
-                            Text("${alimento.cantidad.formato()} ${alimento.unidad}")
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(alimento.nombre, style = MaterialTheme.typography.titleMedium)
+                                Text("${alimento.cantidad.formato()} ${alimento.unidad}")
+                            }
+                            TextButton(onClick = { abrirFormulario(alimento) }) { Text("Editar") }
+                            TextButton(onClick = { viewModel.borrar(alimento) }) { Text("Borrar") }
                         }
-                        TextButton(onClick = { abrirFormulario(alimento) }) { Text("Editar") }
-                        TextButton(onClick = { viewModel.borrar(alimento) }) { Text("Borrar") }
                     }
-                    HorizontalDivider()
                 }
             }
         }

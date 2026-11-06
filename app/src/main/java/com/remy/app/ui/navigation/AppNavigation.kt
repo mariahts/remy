@@ -2,7 +2,9 @@ package com.remy.app.ui.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +39,7 @@ fun AppNavigation() {
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
+            NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
                 destinos.forEach { destino ->
                     NavigationBarItem(
                         selected = rutaActual == destino.ruta,
@@ -51,7 +53,14 @@ fun AppNavigation() {
                             }
                         },
                         icon = { Text(destino.titulo.first().toString()) },
-                        label = { Text(destino.titulo) }
+                        label = { Text(destino.titulo) },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                            selectedTextColor = MaterialTheme.colorScheme.primary,
+                            indicatorColor = MaterialTheme.colorScheme.primary,
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     )
                 }
             }
