@@ -3,8 +3,6 @@ package com.remy.app.ui.screens
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -17,6 +15,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -29,13 +28,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import coil3.compose.AsyncImage
+import com.remy.app.R
+import com.remy.app.ui.viewmodel.CamaraViewModel
+import java.io.File
 import java.util.concurrent.Executors
 
 /**
@@ -50,17 +55,22 @@ private sealed interface EstadoPermiso {
 }
 
 /**
- * Prototipo de la función multimedia de la app (#25): pide el permiso de
- * cámara, muestra la vista previa, captura una foto con CameraX y la pinta.
+ * Prototipo de la función multimedia de la app (#25 y #26): pide el permiso
+ * de cámara, muestra la vista previa y captura una foto con CameraX. En
+ * paralelo permite elegir una imagen con el selector de fotos del sistema:
+ * la imagen se copia al almacenamiento interno, su ruta se guarda en
+ * preferencias y se vuelve a mostrar con Coil al reabrir la app (#26).
  * Si el permiso se deniega (o el dispositivo no tiene cámara), se ofrece el
- * selector de fotos del sistema como alternativa.
+ * selector de fotos como alternativa.
  */
 @Composable
-fun CamaraScreen() {
+fun CamaraScreen(
+    camara: CamaraViewModel = viewModel(factory = CamaraViewModel.Factory)
+) {
     val contexto = LocalContext.current
     var estadoPermiso by remember { mutableStateOf<EstadoPermiso>(EstadoPermiso.Comprobando) }
     var fotoCapturada by remember { mutableStateOf<Bitmap?>(null) }
-    var imagenGaleria by remember { mutableStateOf<Uri?>(null) }
+    val rutaImagenElegida by camara.rutaImagenElegida.collectAsStateWithLifecycle()
 
     val hayCamara = remember {
         contexto.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)
@@ -74,7 +84,9 @@ fun CamaraScreen() {
 
     val lanzadorGaleria = rememberLauncherForActivityResult(
         ActivityResultContracts.GetContent()
-    ) { uri -> imagenGaleria = uri }
+    ) { uri ->
+        if (uri != null) camara.guardarImagenElegida(uri)
+    }
 
     LaunchedEffect(Unit) {
         val concedido = ContextCompat.checkSelfPermission(
@@ -95,7 +107,11 @@ fun CamaraScreen() {
             )
 
             EstadoPermiso.Concedido -> if (hayCamara) {
-                CamaraConPermiso(alFoto = { fotoCapturada = it }, modifier = Modifier.weight(1f))
+                CamaraConPermiso(
+                    alFoto = { fotoCapturada = it },
+                    alElegirImagen = { lanzadorGaleria.launch("image/*") },
+                    modifier = Modifier.weight(1f)
+                )
             } else {
                 AlternativaGaleria(
                     mensaje = "Este dispositivo no tiene cámara. Elige una imagen de tu galería.",
@@ -115,8 +131,8 @@ fun CamaraScreen() {
         fotoCapturada?.let {
             Imagen(bitmap = it, descripcion = "Foto capturada")
         }
-        imagenGaleria?.let {
-            ImagenDeGaleria(uri = it, descripcion = "Imagen del selector de fotos")
+        rutaImagenElegida?.let { ruta ->
+            ImagenGuardada(ruta = ruta, descripcion = "Imagen elegida en el selector de fotos")
         }
     }
 }
@@ -124,10 +140,15 @@ fun CamaraScreen() {
 /**
  * Vista previa en vivo con CameraX y botón de disparo. La unión entre la
  * cámara y el ciclo de vida de la pantalla la hace `bindToLifecycle`, que
- * libera la cámara sola cuando la pantalla desaparece.
+ * libera la cámara sola cuando la pantalla desaparece. Se añade también un
+ * acceso directo al selector de fotos (#26), que no necesita permisos.
  */
 @Composable
-private fun CamaraConPermiso(alFoto: (Bitmap) -> Unit, modifier: Modifier = Modifier) {
+private fun CamaraConPermiso(
+    alFoto: (Bitmap) -> Unit,
+    alElegirImagen: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val contexto = LocalContext.current
     val cicloDeVida = LocalLifecycleOwner.current
     val captura = remember { ImageCapture.Builder().build() }
@@ -173,6 +194,9 @@ private fun CamaraConPermiso(alFoto: (Bitmap) -> Unit, modifier: Modifier = Modi
         ) {
             Text("Hacer foto")
         }
+        Button(onClick = alElegirImagen, modifier = Modifier.padding(bottom = 16.dp)) {
+            Text("Elegir imagen de la galería")
+        }
     }
 }
 
@@ -205,21 +229,24 @@ private fun Imagen(bitmap: Bitmap, descripcion: String) {
     )
 }
 
-/** Decodifica la imagen elegida en el selector de fotos y la muestra. */
+/**
+ * Muestra la imagen elegida en el selector y copiada al almacenamiento
+ * interno (#26), cargándola con Coil. El marcador de reserva cubre tanto la
+ * carga como un fallo de lectura, así que la pantalla nunca se queda en
+ * blanco ni se rompe.
+ */
 @Composable
-private fun ImagenDeGaleria(uri: Uri, descripcion: String) {
-    val contexto = LocalContext.current
-    var bitmap by remember(uri) { mutableStateOf<Bitmap?>(null) }
-
-    LaunchedEffect(uri) {
-        bitmap = withContext(Dispatchers.IO) {
-            contexto.contentResolver.openInputStream(uri)?.use { entrada ->
-                BitmapFactory.decodeStream(entrada)
-            }
-        }
-    }
-
-    bitmap?.let {
-        Imagen(bitmap = it, descripcion = descripcion)
-    }
+private fun ImagenGuardada(ruta: String, descripcion: String) {
+    val reserva = painterResource(R.drawable.ic_launcher_foreground)
+    AsyncImage(
+        model = File(ruta),
+        contentDescription = descripcion,
+        placeholder = reserva,
+        error = reserva,
+        fallback = reserva,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = 240.dp)
+    )
 }
