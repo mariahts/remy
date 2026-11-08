@@ -67,4 +67,23 @@ class PreferenciasRepositoryTest {
         assertEquals(setOf("Principal"), reabierta.filtrosActivos.first())
         assertEquals(7, reabierta.maximoFaltantes.first())
     }
+
+    @Test
+    fun primerArranque_noHayImagenElegida() = runBlocking {
+        assertEquals(null, repositorio.imagenElegida.first())
+    }
+
+    @Test
+    fun alReabrir_seRecuperaLaRutaDeLaImagenElegida() = runBlocking {
+        val ruta = File.createTempFile("imagen_elegida", ".jpg").absolutePath
+        repositorio.guardarImagenElegida(ruta)
+
+        alcance.cancel()
+        alcance.coroutineContext.job.join()
+
+        val reabierta = PreferenciasRepository(
+            PreferenceDataStoreFactory.create { archivo }
+        )
+        assertEquals(ruta, reabierta.imagenElegida.first())
+    }
 }

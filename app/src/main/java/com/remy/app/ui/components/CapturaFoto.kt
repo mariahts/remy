@@ -70,13 +70,16 @@ fun PermisoCamara(alCambiar: (EstadoPermiso) -> Unit) {
  * Vista previa en vivo con CameraX y botón de disparo (#25). La unión entre la
  * cámara y el ciclo de vida de la pantalla la hace `bindToLifecycle`, que
  * libera la cámara sola cuando la pantalla desaparece. Si la captura falla,
- * se avisa por `alFallar` y la pantalla sigue funcionando.
+ * se avisa por `alFallar` y la pantalla sigue funcionando. Si se pasa
+ * `alElegirImagen`, se añade un botón para abrir el selector del sistema
+ * (#26), que no necesita permisos.
  */
 @Composable
 fun CamaraConPermiso(
     alFoto: (Bitmap) -> Unit,
     modifier: Modifier = Modifier,
     alFallar: (String) -> Unit = {},
+    alElegirImagen: (() -> Unit)? = null,
 ) {
     val contexto = LocalContext.current
     val cicloDeVida = LocalLifecycleOwner.current
@@ -126,6 +129,11 @@ fun CamaraConPermiso(
             modifier = Modifier.padding(16.dp)
         ) {
             Text("Hacer foto")
+        }
+        if (alElegirImagen != null) {
+            Button(onClick = alElegirImagen, modifier = Modifier.padding(bottom = 16.dp)) {
+                Text("Elegir imagen de la galería")
+            }
         }
     }
 }
