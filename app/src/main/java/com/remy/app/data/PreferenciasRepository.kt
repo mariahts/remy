@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -27,6 +28,10 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
     val maximoFaltantes: Flow<Int> =
         dataStore.data.map { it[CLAVE_MAXIMO_FALTANTES] ?: MAXIMO_POR_DEFECTO }
 
+    /** Ruta absoluta de la imagen elegida en el selector de fotos (#26); null si aún no hay. */
+    val imagenElegida: Flow<String?> =
+        dataStore.data.map { it[CLAVE_IMAGEN_ELEGIDA] }
+
     suspend fun guardarFiltros(filtros: Set<String>) {
         dataStore.edit { it[CLAVE_FILTROS] = filtros }
     }
@@ -35,9 +40,15 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { it[CLAVE_MAXIMO_FALTANTES] = valor }
     }
 
+    /** Guarda la ruta de la imagen copiada al almacenamiento interno para que sobreviva al reinicio. */
+    suspend fun guardarImagenElegida(ruta: String) {
+        dataStore.edit { it[CLAVE_IMAGEN_ELEGIDA] = ruta }
+    }
+
     companion object {
         val CLAVE_FILTROS = stringSetPreferencesKey("filtros_activos")
         val CLAVE_MAXIMO_FALTANTES = intPreferencesKey("maximo_faltantes")
+        val CLAVE_IMAGEN_ELEGIDA = stringPreferencesKey("imagen_elegida")
         const val MAXIMO_POR_DEFECTO = 3
 
         fun delContexto(contexto: Context): PreferenciasRepository =
