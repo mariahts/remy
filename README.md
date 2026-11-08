@@ -102,23 +102,20 @@ y sigue funcionando con el selector de fotos del sistema.
 No se hacen commits directos a `main`: está protegida y exige una aprobación.
 El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
 
-## Estado actual (Entrega 3, 4 de noviembre de 2026)
-- Base de datos Room en la versión 4 con migraciones explícitas: despensa
-  (#22 y #28), recetas e ingredientes con su relación (#23) y precarga del
-  catálogo de 20 recetas y 30 alimentos en el primer arranque (#30).
-- Preferencias con DataStore: filtros de tipo de plato y máximo de
-  ingredientes faltantes que se recuperan al reabrir la app (#29).
-- Pantallas de listado (#31) y detalle (#32) de recetas, con navegación desde
-  la tarjeta y vuelta atrás.
-- Sugerencias: algoritmo que separa recetas completas de casi cocinables por
-  identificador de alimento (#33) y pantalla que muestra los dos grupos con el
-  listado de lo que falta (#34).
-- Pruebas: 14 unitarias y 9 instrumentadas en verde, más el recorrido manual;
-  el registro está en `docs/pruebas.md`.
-- Prototipo de cámara con CameraX: permiso, vista previa y captura (#25).
-- Pendientes: tema (#8), bocetos (#9 y #10) y pantalla de despensa (#24,
-  bloqueada hasta que aplique el tema); filtros por tiempo, calorías y región
-  (#37); receta marcada como cocinada con foto (#35).
+## Estado actual (8 de noviembre de 2026)
+- Base de datos Room en la versión 5 con migraciones explícitas: despensa
+  (#22 y #28), recetas e ingredientes (#23), precarga del catálogo (#30) y
+  receta cocinada con fecha y foto (#35).
+- Tema de la app (#8): paleta, tipografía y formas aplicados en todas las
+  pantallas, con su documento en `docs/Identidad visual de REMY.md`.
+- Preferencias con DataStore (#29), listado (#31) y detalle (#32) de recetas,
+  y sugerencias con los dos grupos (#33 y #34).
+- Receta marcada como cocinada con foto (#35) e imagen del selector guardada
+  en el almacenamiento interno y mostrada con Coil (#26).
+- Pruebas: 20 pruebas unitarias en verde; el registro está en `docs/pruebas.md`.
+- Prototipo de cámara con CameraX (#25).
+- Pendientes: bocetos (#9 y #10), filtros por tiempo, calorías y región
+  (#37) y prueba en dispositivo físico (#48).
 
 ## Documentación
 La memoria del proyecto (Word) se entrega en el Aula Virtual. En la carpeta
