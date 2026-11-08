@@ -77,14 +77,9 @@ y qué queda pendiente. Versión del 8 de noviembre de 2026 sobre la rama `dev`
 
 ## Limitaciones y pendientes
 
-- La pantalla de despensa (#24) sigue abierta: sus 5 criterios están
-  cumplidos y la issue se cierra con la PR #70; la issue #8 (tema) ya está
-  cerrada.
 - Los filtros guardados con DataStore son por tipo de plato; tiempo,
   calorías, macronutrientes y región quedan para la issue #37.
 - La prueba manual de «cocinar con foto y reiniciar» (#35) queda para
   dispositivo real; el flujo está cubierto por tests unitarios.
 - No se ha probado en un dispositivo físico (issue #48): todo se verificó en
   el emulador.
-- La PR #70 (`dev` → `main`, con el README del 8 de noviembre) está pendiente
-  de fusión; al fusionarla se cierran #24 y de #30 a #34.
