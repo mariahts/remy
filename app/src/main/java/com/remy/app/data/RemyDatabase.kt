@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [Alimento::class, Receta::class, Ingrediente::class],
-    version = 4
+    version = 5
 )
 abstract class RemyDatabase : RoomDatabase() {
     abstract fun alimentoDao(): AlimentoDao
@@ -63,13 +63,23 @@ abstract class RemyDatabase : RoomDatabase() {
             }
         }
 
+        /** Añade la marca de cocción (fecha y foto del plato) a las recetas (#35). */
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE `recetas` ADD COLUMN `fechaCocinada` INTEGER")
+                db.execSQL("ALTER TABLE `recetas` ADD COLUMN `fotoCocinada` TEXT")
+            }
+        }
+
         fun obtener(contexto: Context): RemyDatabase =
             instancia ?: synchronized(this) {
                 instancia ?: Room.databaseBuilder(
                     contexto.applicationContext,
                     RemyDatabase::class.java,
                     "remy.db"
-                ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).build().also { instancia = it }
+                ).addMigrations(
+                    MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5
+                ).build().also { instancia = it }
             }
     }
 }
