@@ -1,27 +1,18 @@
 package com.remy.app.ui.screens
 
-import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,28 +22,17 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import coil3.compose.AsyncImage
 import com.remy.app.R
+import com.remy.app.ui.components.AlternativaGaleria
+import com.remy.app.ui.components.CamaraConPermiso
+import com.remy.app.ui.components.EstadoPermiso
+import com.remy.app.ui.components.PermisoCamara
 import com.remy.app.ui.viewmodel.CamaraViewModel
 import java.io.File
-import java.util.concurrent.Executors
-
-/**
- * Estado del permiso de cámara. Se modela aparte para no quedarnos en un
- * limbo mientras el sistema responde: mientras `Comprobando`, no se pinta
- * ni la cámara ni el mensaje de error.
- */
-private sealed interface EstadoPermiso {
-    data object Comprobando : EstadoPermiso
-    data object Concedido : EstadoPermiso
-    data object Denegado : EstadoPermiso
-}
 
 /**
  * Prototipo de la función multimedia de la app (#25 y #26): pide el permiso
@@ -61,7 +41,10 @@ private sealed interface EstadoPermiso {
  * la imagen se copia al almacenamiento interno, su ruta se guarda en
  * preferencias y se vuelve a mostrar con Coil al reabrir la app (#26).
  * Si el permiso se deniega (o el dispositivo no tiene cámara), se ofrece el
- * selector de fotos como alternativa.
+ * selector de fotos del sistema como alternativa.
+ *
+ * La cámara y el aviso de error viven ahora en `ui/components/CapturaFoto.kt`,
+ * compartidos con el flujo de cocción de la #35.
  */
 @Composable
 fun CamaraScreen(
@@ -71,15 +54,10 @@ fun CamaraScreen(
     var estadoPermiso by remember { mutableStateOf<EstadoPermiso>(EstadoPermiso.Comprobando) }
     var fotoCapturada by remember { mutableStateOf<Bitmap?>(null) }
     val rutaImagenElegida by camara.rutaImagenElegida.collectAsStateWithLifecycle()
+    var mensajeError by remember { mutableStateOf<String?>(null) }
 
     val hayCamara = remember {
         contexto.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)
-    }
-
-    val lanzadorPermiso = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { concedido ->
-        estadoPermiso = if (concedido) EstadoPermiso.Concedido else EstadoPermiso.Denegado
     }
 
     val lanzadorGaleria = rememberLauncherForActivityResult(
@@ -88,16 +66,7 @@ fun CamaraScreen(
         if (uri != null) camara.guardarImagenElegida(uri)
     }
 
-    LaunchedEffect(Unit) {
-        val concedido = ContextCompat.checkSelfPermission(
-            contexto, Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-        if (concedido) {
-            estadoPermiso = EstadoPermiso.Concedido
-        } else {
-            lanzadorPermiso.launch(Manifest.permission.CAMERA)
-        }
-    }
+    PermisoCamara { estadoPermiso = it }
 
     Column(modifier = Modifier.fillMaxSize()) {
         when (estadoPermiso) {
@@ -108,7 +77,8 @@ fun CamaraScreen(
 
             EstadoPermiso.Concedido -> if (hayCamara) {
                 CamaraConPermiso(
-                    alFoto = { fotoCapturada = it },
+                    alFoto = { fotoCapturada = it; mensajeError = null },
+                    alFallar = { mensajeError = it },
                     alElegirImagen = { lanzadorGaleria.launch("image/*") },
                     modifier = Modifier.weight(1f)
                 )
@@ -128,93 +98,20 @@ fun CamaraScreen(
             )
         }
 
+        mensajeError?.let {
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        }
+
         fotoCapturada?.let {
             Imagen(bitmap = it, descripcion = "Foto capturada")
         }
         rutaImagenElegida?.let { ruta ->
             ImagenGuardada(ruta = ruta, descripcion = "Imagen elegida en el selector de fotos")
-        }
-    }
-}
-
-/**
- * Vista previa en vivo con CameraX y botón de disparo. La unión entre la
- * cámara y el ciclo de vida de la pantalla la hace `bindToLifecycle`, que
- * libera la cámara sola cuando la pantalla desaparece. Se añade también un
- * acceso directo al selector de fotos (#26), que no necesita permisos.
- */
-@Composable
-private fun CamaraConPermiso(
-    alFoto: (Bitmap) -> Unit,
-    alElegirImagen: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val contexto = LocalContext.current
-    val cicloDeVida = LocalLifecycleOwner.current
-    val captura = remember { ImageCapture.Builder().build() }
-    val previewView = remember { PreviewView(contexto) }
-
-    LaunchedEffect(cicloDeVida) {
-        val proveedorFuture = ProcessCameraProvider.getInstance(contexto)
-        proveedorFuture.addListener({
-            val proveedor = proveedorFuture.get()
-            val vistaPrevia = Preview.Builder().build().also {
-                it.setSurfaceProvider(previewView.surfaceProvider)
-            }
-            proveedor.unbindAll()
-            proveedor.bindToLifecycle(
-                cicloDeVida,
-                CameraSelector.DEFAULT_BACK_CAMERA,
-                vistaPrevia,
-                captura
-            )
-        }, ContextCompat.getMainExecutor(contexto))
-    }
-
-    Column(modifier = modifier) {
-        AndroidView(factory = { previewView }, modifier = Modifier.fillMaxWidth().weight(1f))
-        Button(
-            onClick = {
-                captura.takePicture(
-                    ContextCompat.getMainExecutor(contexto),
-                    object : ImageCapture.OnImageCapturedCallback() {
-                        override fun onCaptureSuccess(image: androidx.camera.core.ImageProxy) {
-                            val bitmap = image.toBitmap()
-                            image.close()
-                            alFoto(bitmap)
-                        }
-
-                        override fun onError(exception: ImageCaptureException) {
-                            exception.printStackTrace()
-                        }
-                    }
-                )
-            },
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text("Hacer foto")
-        }
-        Button(onClick = alElegirImagen, modifier = Modifier.padding(bottom = 16.dp)) {
-            Text("Elegir imagen de la galería")
-        }
-    }
-}
-
-/**
- * Caso de error del prototipo: sin permiso (o sin cámara física) se explica
- * qué pasa y se ofrece el selector de fotos del sistema, que no necesita
- * ningún permiso.
- */
-@Composable
-private fun AlternativaGaleria(
-    mensaje: String,
-    alElegirImagen: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier.padding(16.dp)) {
-        Text(text = mensaje, style = MaterialTheme.typography.bodyMedium)
-        Button(onClick = alElegirImagen, modifier = Modifier.padding(top = 16.dp)) {
-            Text("Elegir de la galería")
         }
     }
 }

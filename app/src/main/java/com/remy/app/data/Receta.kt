@@ -10,6 +10,8 @@ import androidx.room.TypeConverters
  * Catálogo de recetas. Campos del diagrama entidad-relación (#11):
  * Id, Nombre, Cantidad_kcals, Cantidad_proteinas, Region_origen, Tipo_plato.
  * Tiempo y pasos se añaden en la #30 para el detalle de la #32.
+ * Fecha y foto de cocción se añaden en la #35: mientras `fechaCocinada` sea
+ * null, la receta sigue sin cocinar.
  */
 @Entity(tableName = "recetas")
 @TypeConverters(ConvertidoresReceta::class)
@@ -21,7 +23,11 @@ data class Receta(
     val regionOrigen: String = "",
     val tipoPlato: String = "",
     @ColumnInfo(defaultValue = "0") val tiempoMinutos: Int = 0,
-    @ColumnInfo(defaultValue = "''") val pasos: List<String> = emptyList()
+    @ColumnInfo(defaultValue = "''") val pasos: List<String> = emptyList(),
+    /** Instante (en milisegundos) en que se cocinó por última vez; null si nunca. */
+    val fechaCocinada: Long? = null,
+    /** Ruta absoluta de la foto del plato dentro del almacenamiento interno. */
+    val fotoCocinada: String? = null
 )
 
 /** Guarda los pasos como líneas de texto, uno por línea. */
