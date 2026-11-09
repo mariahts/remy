@@ -12,6 +12,3 @@ val RemyShapes = Shapes(
     large = RoundedCornerShape(24.dp),       // tarjetas de alimentos y recetas
     extraLarge = RoundedCornerShape(28.dp)   // hojas inferiores y diálogos
 )
-
-// Forma de "píldora": botones, chips, buscador, pestañas de la barra inferior.
-val PillShape = RoundedCornerShape(percent = 50)

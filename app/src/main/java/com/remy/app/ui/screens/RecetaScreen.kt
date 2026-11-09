@@ -48,12 +48,11 @@ import com.remy.app.ui.components.CamaraConPermiso
 import com.remy.app.ui.components.EstadoPermiso
 import com.remy.app.ui.components.PermisoCamara
 import com.remy.app.ui.components.fechaEnEspanol
+import com.remy.app.ui.components.formatoCantidad
 import com.remy.app.ui.viewmodel.RecetaDetalleViewModel
 import com.remy.app.ui.viewmodel.RecetasViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-
-private fun Double.formato(): String = if (this % 1.0 == 0.0) toLong().toString() else toString()
 
 @Composable
 fun RecetasScreen(
@@ -373,7 +372,7 @@ private fun ContenidoDetalle(
             detalle.ingredientes.forEach { item ->
                 val alimento = item.alimento?.nombre ?: "Alimento ${item.ingrediente.alimentoId}"
                 Text(
-                    "· ${item.ingrediente.cantidad.formato()} ${item.ingrediente.unidad} de $alimento",
+                    "· ${item.ingrediente.cantidad.formatoCantidad()} ${item.ingrediente.unidad} de $alimento",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

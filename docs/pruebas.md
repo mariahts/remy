@@ -22,13 +22,11 @@ y qué queda pendiente. Versión del 8 de noviembre de 2026 sobre la rama `dev`
 
 | Suite | Tests | Qué comprueba |
 |---|---|---|
-| `ExampleUnitTest` | 1 | Ejemplo de la plantilla del proyecto. |
 | `ValidacionAlimentoTest` | 6 | Validación del formulario de despensa: nombre vacío, cantidad cero o no numérica, unidad vacía; acepta coma decimal. |
 | `AlgoritmoSugerenciasTest` | 4 | Clasificación en completas y casi cocinables por identificador de alimento, máximo configurable de faltantes y alimentos repetidos contados una sola vez. |
-| `PreferenciasRepositoryTest` | 5 | Valores por defecto de DataStore, guardar y recuperar filtros y máximo, reapertura de la app, y persistencia de la ruta de la imagen elegida (issue #26). |
+| `PreferenciasRepositoryTest` | 3 | Valores por defecto de DataStore, guardar y recuperar filtros y m?ximo, y reapertura de la app (persistencia). |
 | `AlmacenamientoFotosTest` | 3 | Nombres de archivo de la foto del plato (`receta_<id>_<fecha>.jpg`) y copia de la imagen al almacenamiento interno (issue #35). |
 | `FechaEspanolTest` | 3 | Formato de fecha en español para la tarjeta «Cocinada el …» (issue #35). |
-| `CopiaImagenTest` | 4 | Extensión del archivo según el MIME y copia byte a byte creando la carpeta (issue #26). |
 
 ### Instrumentadas (emulador) — 9 tests, 0 fallos
 
@@ -71,9 +69,12 @@ y qué queda pendiente. Versión del 8 de noviembre de 2026 sobre la rama `dev`
    rehizo el `onCreate` de `MainActivity` y eliminó la llamada a
    `PrecargaRecetas.siHaceFalta(...)`. Detectada al revisar la PR #65; se
    restauró en la PR #67 y se comprobó con instalación limpia.
-6. **Conflicto de `CamaraScreen.kt` entre #35 y #26**: ambas tocaban la misma
-   pantalla; se resolvió en la PR #69 extrayendo los componentes compartidos
-   (`CapturaFoto.kt`) y uniendo la cámara con la galería.
+6. **Conflicto entre #35 y #26 en la pantalla de c?mara**: ambas tocaban la
+   misma pantalla (entonces `CamaraScreen.kt`); se resolvi? en la PR #69
+   extrayendo los componentes compartidos (`PermisoCamara`, `CamaraConPermiso`,
+   `AlternativaGaleria`, `EstadoPermiso`) a `ui/components/CapturaFoto.kt`. La
+   pantalla de c?mara independiente se retir? despu?s porque su funcionalidad ya
+   estaba integrada en el flujo de cocci?n.
 
 ## Limitaciones y pendientes
 

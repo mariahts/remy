@@ -17,7 +17,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.remy.app.ui.screens.CamaraScreen
 import com.remy.app.ui.screens.DespensaScreen
 import com.remy.app.ui.screens.RecetaDetalleScreen
 import com.remy.app.ui.screens.RecetasScreen
@@ -32,7 +31,6 @@ fun AppNavigation() {
         Destino(Routes.DESPENSA, "Despensa"),
         Destino(Routes.RECETAS, "Recetas"),
         Destino(Routes.SUGERENCIAS, "Sugerencias"),
-        Destino(Routes.CAMARA, "Cámara"), // pestaña de prueba del prototipo de #25
     )
     val backStackEntry by navController.currentBackStackEntryAsState()
     val rutaActual = backStackEntry?.destination?.route
@@ -85,7 +83,6 @@ fun AppNavigation() {
                 )
             }
             composable(Routes.SUGERENCIAS) { SugerenciasScreen() }
-            composable(Routes.CAMARA) { CamaraScreen() }
         }
     }
 }
