@@ -1,6 +1,5 @@
 package com.remy.app.ui.theme
 
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 // ---------------------------------------------------------------------------
@@ -36,8 +35,3 @@ val Orange100 = Color(0xFFFFEDD5)
 // Índigo (chips informativos: kcal y proteína)
 val Indigo700 = Color(0xFF3730A3)
 val Indigo100 = Color(0xFFE0E7FF)
-
-// Fondo con degradado: blanco arriba, menta abajo (se ve en la cabecera de Despensa)
-val RemyBackgroundBrush: Brush = Brush.verticalGradient(
-    colors = listOf(Color.White, Mint)
-)

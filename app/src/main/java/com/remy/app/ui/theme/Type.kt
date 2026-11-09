@@ -6,21 +6,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Los bocetos usan una sans-serif geométrica y redondeada (parece Plus Jakarta Sans).
-// Mientras no se añadan los archivos de la fuente, se usa la del sistema.
-// Para activarla: copiar los .ttf a app/src/main/res/font/ (nombres en minúsculas y
-// con guiones bajos), añadir los imports de Font y de androidx.compose.ui.res.*
-// y cambiar la línea de RemyFontFamily por el bloque comentado.
+// Los bocetos usan una sans-serif geométrica y redondeada (Plus Jakarta Sans).
+// Se usa la fuente del sistema mientras no se incluyan los archivos .ttf en res/font.
 private val RemyFontFamily: FontFamily = FontFamily.Default
-/*
-private val RemyFontFamily = FontFamily(
-    Font(R.font.plus_jakarta_sans_regular, FontWeight.Normal),
-    Font(R.font.plus_jakarta_sans_medium, FontWeight.Medium),
-    Font(R.font.plus_jakarta_sans_semibold, FontWeight.SemiBold),
-    Font(R.font.plus_jakarta_sans_bold, FontWeight.Bold),
-    Font(R.font.plus_jakarta_sans_extrabold, FontWeight.ExtraBold),
-)
-*/
 
 val Typography = Typography(
     // Cantidad grande del selector ("500 g")

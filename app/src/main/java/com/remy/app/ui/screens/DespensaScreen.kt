@@ -33,10 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.remy.app.data.Alimento
+import com.remy.app.ui.components.formatoCantidad
 import com.remy.app.ui.viewmodel.DespensaViewModel
 import com.remy.app.ui.viewmodel.ErroresAlimento
-
-private fun Double.formato(): String = if (this % 1.0 == 0.0) toLong().toString() else toString()
 
 @Composable
 fun DespensaScreen(viewModel: DespensaViewModel = viewModel(factory = DespensaViewModel.Factory)) {    val alimentos by viewModel.alimentos.collectAsStateWithLifecycle()
@@ -83,7 +82,7 @@ fun DespensaScreen(viewModel: DespensaViewModel = viewModel(factory = DespensaVi
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(alimento.nombre, style = MaterialTheme.typography.titleMedium)
-                                Text("${alimento.cantidad.formato()} ${alimento.unidad}")
+                                Text("${alimento.cantidad.formatoCantidad()} ${alimento.unidad}")
                             }
                             TextButton(onClick = { abrirFormulario(alimento) }) { Text("Editar") }
                             TextButton(onClick = { viewModel.borrar(alimento) }) { Text("Borrar") }
@@ -112,7 +111,7 @@ private fun FormularioAlimentoDialog(
     onCerrar: () -> Unit,
 ) {
     var nombre by rememberSaveable { mutableStateOf(alimento?.nombre ?: "") }
-    var cantidad by rememberSaveable { mutableStateOf(alimento?.cantidad?.formato() ?: "") }
+    var cantidad by rememberSaveable { mutableStateOf(alimento?.cantidad?.formatoCantidad() ?: "") }
     var unidad by rememberSaveable { mutableStateOf(alimento?.unidad ?: "") }
     var errores by remember { mutableStateOf(ErroresAlimento()) }
 
