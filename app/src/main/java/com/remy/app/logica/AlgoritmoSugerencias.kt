@@ -38,8 +38,8 @@ fun clasificarRecetas(
 
     for (item in recetas) {
         val faltantes = item.ingredientes
-            .filter { it.alimentoId !in alimentoIdsEnDespensa }
-            .map { Faltante(it.alimentoId) }
+            .filter { it.ingrediente.alimentoId !in alimentoIdsEnDespensa }
+            .map { Faltante(it.ingrediente.alimentoId) }
 
         when {
             faltantes.isEmpty() -> completas += RecetaCompleta(item)
