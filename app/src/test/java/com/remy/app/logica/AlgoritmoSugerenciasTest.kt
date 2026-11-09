@@ -1,6 +1,7 @@
 package com.remy.app.logica
 
 import com.remy.app.data.Ingrediente
+import com.remy.app.data.IngredienteConAlimento
 import com.remy.app.data.Receta
 import com.remy.app.data.RecetaConIngredientes
 import org.junit.Assert.assertEquals
@@ -16,12 +17,15 @@ class AlgoritmoSugerenciasTest {
         RecetaConIngredientes(
             receta = Receta(id = id, nombre = nombre),
             ingredientes = alimentoIds.mapIndexed { indice, alimentoId ->
-                Ingrediente(
-                    id = (indice + 1).toLong(),
-                    recetaId = id,
-                    alimentoId = alimentoId,
-                    cantidad = 100.0,
-                    unidad = "g"
+                IngredienteConAlimento(
+                    ingrediente = Ingrediente(
+                        id = (indice + 1).toLong(),
+                        recetaId = id,
+                        alimentoId = alimentoId,
+                        cantidad = 100.0,
+                        unidad = "g"
+                    ),
+                    alimento = null
                 )
             }
         )
@@ -70,8 +74,14 @@ class AlgoritmoSugerenciasTest {
         val conRepetido = RecetaConIngredientes(
             receta = Receta(id = 40, nombre = "Doble"),
             ingredientes = listOf(
-                Ingrediente(id = 1, recetaId = 40, alimentoId = 1L, cantidad = 50.0, unidad = "g"),
-                Ingrediente(id = 2, recetaId = 40, alimentoId = 1L, cantidad = 50.0, unidad = "g")
+                IngredienteConAlimento(
+                    Ingrediente(id = 1, recetaId = 40, alimentoId = 1L, cantidad = 50.0, unidad = "g"),
+                    alimento = null
+                ),
+                IngredienteConAlimento(
+                    Ingrediente(id = 2, recetaId = 40, alimentoId = 1L, cantidad = 50.0, unidad = "g"),
+                    alimento = null
+                )
             )
         )
 
