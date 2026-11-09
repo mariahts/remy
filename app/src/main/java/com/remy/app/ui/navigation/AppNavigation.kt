@@ -1,15 +1,32 @@
 package com.remy.app.ui.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.NavigationBar
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.outlined.Kitchen
+import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -21,45 +38,80 @@ import com.remy.app.ui.screens.DespensaScreen
 import com.remy.app.ui.screens.RecetaDetalleScreen
 import com.remy.app.ui.screens.RecetasScreen
 import com.remy.app.ui.screens.SugerenciasScreen
+import com.remy.app.ui.theme.PillShape
 
-private data class Destino(val ruta: String, val titulo: String)
+private data class Destino(val ruta: String, val titulo: String, val icono: ImageVector)
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     val destinos = listOf(
-        Destino(Routes.DESPENSA, "Despensa"),
-        Destino(Routes.RECETAS, "Recetas"),
-        Destino(Routes.SUGERENCIAS, "Sugerencias"),
+        Destino(Routes.DESPENSA, "Despensa", Icons.Outlined.Kitchen),
+        Destino(Routes.RECETAS, "Recetas", Icons.Outlined.MenuBook),
+        Destino(Routes.SUGERENCIAS, "Sugerencias", Icons.Filled.AutoAwesome),
     )
     val backStackEntry by navController.currentBackStackEntryAsState()
     val rutaActual = backStackEntry?.destination?.route
 
+    val irA: (String) -> Unit = { ruta ->
+        navController.navigate(ruta) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
     Scaffold(
         bottomBar = {
-            NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(6.dp, RectangleShape, ambientColor = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.04f), spotColor = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.08f))
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(horizontal = 8.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 destinos.forEach { destino ->
-                    NavigationBarItem(
-                        selected = rutaActual == destino.ruta,
-                        onClick = {
-                            navController.navigate(destino.ruta) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        icon = { Text(destino.titulo.first().toString()) },
-                        label = { Text(destino.titulo) },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.onPrimary,
-                            selectedTextColor = MaterialTheme.colorScheme.primary,
-                            indicatorColor = MaterialTheme.colorScheme.primary,
-                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    )
+                    val activa = rutaActual == destino.ruta
+                    val colorTexto = if (activa) {
+                        androidx.compose.ui.graphics.Color.White
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    }
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(PillShape)
+                            .background(
+                                if (activa) MaterialTheme.colorScheme.primary
+                                else androidx.compose.ui.graphics.Color.Transparent
+                            )
+                            .clickable(onClick = { irA(destino.ruta) })
+                            .padding(vertical = 8.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(2.dp)
+                        ) {
+                            Icon(
+                                destino.icono,
+                                contentDescription = destino.titulo,
+                                tint = colorTexto,
+                                modifier = Modifier.size(22.dp)
+                            )
+                            Text(
+                                destino.titulo,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = colorTexto,
+                                fontWeight = if (activa) FontWeight.Bold else FontWeight.SemiBold,
+                                maxLines = 1
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -69,7 +121,9 @@ fun AppNavigation() {
             startDestination = Routes.DESPENSA,
             modifier = Modifier.padding(padding)
         ) {
-            composable(Routes.DESPENSA) { DespensaScreen() }
+            composable(Routes.DESPENSA) {
+                DespensaScreen(onVerSugerencias = { irA(Routes.SUGERENCIAS) })
+            }
             composable(Routes.RECETAS) {
                 RecetasScreen(onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) })
             }
@@ -82,7 +136,12 @@ fun AppNavigation() {
                     onVolver = { navController.popBackStack() }
                 )
             }
-            composable(Routes.SUGERENCIAS) { SugerenciasScreen() }
+            composable(Routes.SUGERENCIAS) {
+                SugerenciasScreen(
+                    onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
+                    onIrADespensa = { irA(Routes.DESPENSA) }
+                )
+            }
         }
     }
 }

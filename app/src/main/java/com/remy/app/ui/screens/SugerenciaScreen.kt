@@ -1,27 +1,84 @@
 package com.remy.app.ui.screens
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.FilterChip
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.ExpandLess
+import androidx.compose.material.icons.outlined.ExpandMore
+import androidx.compose.material.icons.outlined.FitnessCenter
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Lightbulb
+import androidx.compose.material.icons.outlined.LocalFireDepartment
+import androidx.compose.material.icons.outlined.Remove
+import androidx.compose.material.icons.outlined.Restaurant
+import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.outlined.Tune
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.remy.app.R
 import com.remy.app.data.RecetaConIngredientes
+import com.remy.app.ui.components.FotoReceta
+import com.remy.app.ui.components.MetaPill
+import com.remy.app.ui.components.PersonCircle
+import com.remy.app.ui.components.RemyCta
+import com.remy.app.ui.components.RemyHeaderSombra
+import com.remy.app.ui.components.SectionCard
+import com.remy.app.ui.components.categoriaDe
+import com.remy.app.ui.components.emojiDe
+import com.remy.app.ui.theme.PillShape
+import com.remy.app.ui.theme.RemyShapes
 import com.remy.app.ui.viewmodel.CasiCocinableVista
+import com.remy.app.ui.viewmodel.FaltanteVista
 import com.remy.app.ui.viewmodel.GruposSugerencias
 import com.remy.app.ui.viewmodel.PreferenciasViewModel
 import com.remy.app.ui.viewmodel.SugerenciasViewModel
@@ -29,129 +86,1153 @@ import com.remy.app.ui.viewmodel.SugerenciasViewModel
 private val TIPOS_DE_PLATO = listOf("Entrante", "Principal", "Postre")
 
 /**
- * Pantalla de sugerencias (#34): los dos grupos del algoritmo de #33 —
- * se puede cocinar ya y casi cocinables con sus faltantes — más los
- * filtros y el máximo persistentes de #29.
+ * Pantalla de sugerencias (#34): estado de configuración con filtros
+ * persistentes de #29 (tipo de plato, máximo de faltantes) y, al pulsar
+ * "Mostrar sugerencias", los resultados del algoritmo de #33 agrupados
+ * en "se puede cocinar ya" y "casi cocinable" con sus faltantes.
+ *
+ * §2.6 (filtros) y §2.8 (resultados) del SPEC son dos vistas de la misma
+ * pestaña; el botón "Mostrar sugerencias" / "Volver a filtros" alterna.
  */
 @Composable
 fun SugerenciasScreen(
+    onRecetaClick: (Long) -> Unit = {},
+    onIrADespensa: () -> Unit = {},
     preferencias: PreferenciasViewModel = viewModel(factory = PreferenciasViewModel.Factory),
     sugerencias: SugerenciasViewModel = viewModel(factory = SugerenciasViewModel.Factory)
 ) {
     val filtrosActivos by preferencias.filtrosActivos.collectAsStateWithLifecycle()
     val maximoFaltantes by preferencias.maximoFaltantes.collectAsStateWithLifecycle()
     val grupos by sugerencias.grupos.collectAsStateWithLifecycle()
+    var viendoResultados by rememberSaveable { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text("Sugerencias", style = MaterialTheme.typography.headlineMedium)
+    if (viendoResultados) {
+        PantallaResultados(
+            filtrosActivos = filtrosActivos,
+            maximoFaltantes = maximoFaltantes,
+            grupos = grupos,
+            onVolverFiltros = { viendoResultados = false },
+            onRecetaClick = onRecetaClick,
+            onIrADespensa = onIrADespensa
+        )
+    } else {
+        PantallaFiltros(
+            filtrosActivos = filtrosActivos,
+            maximoFaltantes = maximoFaltantes,
+            grupos = grupos,
+            preferencias = preferencias,
+            onMostrar = { viendoResultados = true }
+        )
+    }
+}
 
-        // Preferencias de #29: los filtros se guardan y el máximo alimenta
-        // al algoritmo de #33, que recalcula los grupos al cambiar
-        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text("Filtrar por tipo de plato", style = MaterialTheme.typography.titleMedium)
-            Text(
-                "Los filtros quedan guardados: se recuperan al volver a abrir la app.",
-                style = MaterialTheme.typography.bodySmall
+// ---------------------------------------------------------------------------
+// §2.6 — Configuración de filtros
+// ---------------------------------------------------------------------------
+@Composable
+private fun PantallaFiltros(
+    filtrosActivos: Set<String>,
+    maximoFaltantes: Int,
+    grupos: GruposSugerencias,
+    preferencias: PreferenciasViewModel,
+    onMostrar: () -> Unit
+) {
+    val total = grupos.completas.size + grupos.casiCocinables.size
+
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            RemyHeaderSombra(
+                titulo = "Sugerencias",
+                bg = MaterialTheme.colorScheme.background,
+                logoSize = 32.dp,
+                trailing = { PersonCircle(size = 32.dp) }
             )
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                TIPOS_DE_PLATO.forEach { tipo ->
-                    FilterChip(
-                        selected = tipo in filtrosActivos,
-                        onClick = { preferencias.alternarFiltro(tipo) },
-                        label = { Text(tipo) }
+        }
+    ) { inner ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(inner)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            HeroPreferencias()
+
+            FiltroTipoDePlato(filtrosActivos = filtrosActivos, alternar = preferencias::alternarFiltro)
+
+            FiltroMaxFaltantes(
+                maximoFaltantes = maximoFaltantes,
+                cambiar = preferencias::cambiarMaximoFaltantes
+            )
+
+            // ChefMotivation (§2.6): cuenta real de recetas encajando
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RemyShapes.extraLarge)
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                    .padding(14.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary),
+                    contentAlignment = Alignment.Center
+                ) {
+                    androidx.compose.material3.Icon(
+                        Icons.Filled.AutoAwesome,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(
+                        "$total recetas encajan con estos filtros",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(
+                        "Aprovecharás tus ingredientes frescos hoy.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            // CTA §2.6: h56 r16 con flecha
+            RemyCta(
+                text = "Mostrar sugerencias",
+                onClick = onMostrar,
+                modifier = Modifier.fillMaxWidth(),
+                height = 56.dp,
+                iconAfter = Icons.Filled.ArrowForward,
+                fontSize = 14.sp
+            )
+        }
+    }
+}
+
+/** HeroCard §2.6: píldora "INSPIRACIÓN A MEDIDA" + titular + bajada. */
+@Composable
+private fun HeroPreferencias() {
+    SectionCard(
+        shape = RemyShapes.large,
+        bg = MaterialTheme.colorScheme.surfaceVariant,
+        border = null,
+        glow = true,
+        padding = PaddingValues(16.dp)
+    ) {
+        Box(modifier = Modifier.fillMaxWidth()) {
+            // círculo decorativo esquina inferior derecha (mockup: blur 24px)
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .size(96.dp)
+                    .padding(0.dp)
+                    .offset(x = 34.dp, y = 34.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.10f))
+            )
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .clip(PillShape)
+                        .background(Color.White)
+                        .padding(horizontal = 10.dp, vertical = 4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    androidx.compose.material3.Icon(
+                        Icons.Outlined.Tune,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Text(
+                        "INSPIRACIÓN A MEDIDA",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        letterSpacing = 0.8.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    "Filtra tus recetas ideales",
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    "Configura tus preferencias antes de descubrir qué cocinar hoy con tu despensa.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    lineHeight = 18.sp
+                )
+            }
+        }
+    }
+}
+
+/** Card "Tipo de plato" (§2.6 fila 2) con chips funcionales de #29. */
+@Composable
+private fun FiltroTipoDePlato(
+    filtrosActivos: Set<String>,
+    alternar: (String) -> Unit
+) {
+    var expandido by rememberSaveable { mutableStateOf(true) }
+
+    SectionCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RemyShapes.extraLarge,
+        bg = Color.White,
+        border = null,
+        padding = PaddingValues(16.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CuadroIcono(44.dp, Color(0xFFFFF7ED), Icons.Outlined.Restaurant, Color(0xFFEA580C))
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text(
+                            "Categoría culinaria",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text("Tipo de plato", style = MaterialTheme.typography.titleMedium)
+                    }
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (filtrosActivos.isNotEmpty()) {
+                        Row(
+                            modifier = Modifier
+                                .clip(PillShape)
+                                .background(MaterialTheme.colorScheme.background)
+                                .padding(horizontal = 10.dp, vertical = 6.dp),
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            androidx.compose.material3.Icon(
+                                Icons.Outlined.Restaurant,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(14.dp)
+                            )
+                            Text(
+                                text = if (filtrosActivos.size == 1) filtrosActivos.first()
+                                else "${filtrosActivos.size} activos",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1
+                            )
+                        }
+                    }
+                    BotonMini(
+                        icon = if (expandido) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
+                        onClick = { expandido = !expandido }
+                    )
+                }
+            }
+
+            if (expandido) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RemyShapes.medium)
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        "Los filtros quedan guardados: se recuperan al volver a abrir la app.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Row(
+                        modifier = Modifier.horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        TIPOS_DE_PLATO.forEach { tipo ->
+                            FiltroChip(
+                                label = tipo,
+                                active = tipo in filtrosActivos,
+                                onClick = { alternar(tipo) }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/** Card "Máx. faltantes" (adaptación funcional del mockup) con stepper 0..10. */
+@Composable
+private fun FiltroMaxFaltantes(
+    maximoFaltantes: Int,
+    cambiar: (Int) -> Unit
+) {
+    var expandido by rememberSaveable { mutableStateOf(true) }
+
+    SectionCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RemyShapes.extraLarge,
+        bg = Color.White,
+        border = null,
+        padding = PaddingValues(16.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CuadroIcono(44.dp, Color(0xFFF0F9FF), Icons.Outlined.Remove, Color(0xFF0284C7))
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text(
+                            "Ingredientes prescindibles",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text("Máx. faltantes", style = MaterialTheme.typography.titleMedium)
+                    }
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .clip(PillShape)
+                            .background(MaterialTheme.colorScheme.background)
+                            .padding(horizontal = 10.dp, vertical = 6.dp)
+                    ) {
+                        Text(
+                            "Máx $maximoFaltantes",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    BotonMini(
+                        icon = if (expandido) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
+                        onClick = { expandido = !expandido }
+                    )
+                }
+            }
+
+            if (expandido) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RemyShapes.medium)
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        BotonMini(
+                            icon = Icons.Outlined.Remove,
+                            enabled = maximoFaltantes > 0,
+                            onClick = { cambiar((maximoFaltantes - 1).coerceAtLeast(0)) }
+                        )
+                        Text(
+                            "$maximoFaltantes",
+                            modifier = Modifier.width(48.dp),
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+                        BotonMini(
+                            icon = Icons.Outlined.Add,
+                            enabled = maximoFaltantes < 10,
+                            onClick = { cambiar((maximoFaltantes + 1).coerceAtMost(10)) }
+                        )
+                        Text(
+                            "de 10",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Text(
+                        "0 = solo recetas que ya tienes en casa; hasta 10 ingredientes que pueden faltar.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// §2.8 — Resultados
+// ---------------------------------------------------------------------------
+@Composable
+private fun PantallaResultados(
+    filtrosActivos: Set<String>,
+    maximoFaltantes: Int,
+    grupos: GruposSugerencias,
+    onVolverFiltros: () -> Unit,
+    onRecetaClick: (Long) -> Unit,
+    onIrADespensa: () -> Unit
+) {
+    // "Completo" = lista completa (100% match + casi listas);
+    // "Incompleto" = solo las recetas a las que les falta algo.
+    var verCompleto by rememberSaveable { mutableStateOf(true) }
+
+    val completasVisibles = if (verCompleto) grupos.completas else emptyList()
+    val casiVisibles = grupos.casiCocinables
+    val mostradas = completasVisibles.size + casiVisibles.size
+
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        topBar = {
+            TopBarResultados(onVolverFiltros = onVolverFiltros)
+        }
+    ) { inner ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(inner)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Spacer(Modifier.height(4.dp))
+
+            // Filtros activos (§2.8) + botón "Ajustar"
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (filtrosActivos.isEmpty()) {
+                        MetaPill(
+                            text = "Sin filtros de tipo",
+                            bg = Color(0xFFF1F5F9),
+                            fg = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    } else {
+                        filtrosActivos.sorted().forEach { tipo ->
+                            MetaPill(
+                                text = tipo,
+                                icon = Icons.Outlined.Restaurant,
+                                tint = MaterialTheme.colorScheme.primary,
+                                bg = Color(0xFFF1F5F9),
+                                fg = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                    MetaPill(
+                        text = "Máx $maximoFaltantes faltantes",
+                        icon = Icons.Filled.Bolt,
+                        tint = MaterialTheme.colorScheme.primary,
+                        bg = MaterialTheme.colorScheme.primaryContainer,
+                        fg = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .clip(PillShape)
+                        .clickable(onClick = onVolverFiltros)
+                        .padding(horizontal = 8.dp, vertical = 6.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    androidx.compose.material3.Icon(
+                        Icons.Outlined.Tune,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Text(
+                        "Ajustar",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
+
+            // Segmentado Completo / Incompleto
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Segmento(
+                    label = "Completo",
+                    active = verCompleto,
+                    modifier = Modifier.weight(1f),
+                    onClick = { verCompleto = true }
+                )
+                Segmento(
+                    label = "Incompleto",
+                    active = !verCompleto,
+                    modifier = Modifier.weight(1f),
+                    onClick = { verCompleto = false }
+                )
+            }
+
+            if (!grupos.hayAlgunaSugerencia) {
+                EstadoVacioResultados(onVolverFiltros = onVolverFiltros, onIrADespensa = onIrADespensa)
+                return@Column
+            }
+
+            // Contador
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primaryContainer),
+                    contentAlignment = Alignment.Center
+                ) {
+                    androidx.compose.material3.Icon(
+                        Icons.Filled.AutoAwesome,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(14.dp)
+                    )
+                }
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    "$mostradas recetas sugeridas",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+
+            // Sección "100% MATCH" (título implícito en el mockup)
+            if (completasVisibles.isNotEmpty()) {
+                Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                    completasVisibles.forEach { receta ->
+                        TarjetaSugerida(
+                            receta = receta,
+                            esCompleta = true,
+                            faltantes = emptyList(),
+                            onRecetaClick = onRecetaClick
+                        )
+                    }
+                }
+            }
+
+            // Sección "Casi listas"
+            if (casiVisibles.isNotEmpty()) {
+                EncabezadoCasi(total = casiVisibles.size)
+
+                Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                    casiVisibles.forEach { casi ->
+                        TarjetaSugerida(
+                            receta = casi.receta,
+                            esCompleta = false,
+                            faltantes = casi.faltantes,
+                            onRecetaClick = onRecetaClick
+                        )
+                    }
+                }
+
+                if (!verCompleto && completasVisibles.isEmpty()) {
+                    Text(
+                        "Si quitas ingredientes faltantes de tu despensa, aparecerán aquí recetas 100% listas.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                ChefTipResultados()
+            }
+
+            if (!verCompleto && casiVisibles.isEmpty()) {
+                Text(
+                    "Todas las sugerencias actuales están completas: puedes cocinarlas ya.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            // CTA final (§2.8): añadir alimentos → pestaña Despensa
+            if (casiVisibles.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .clip(PillShape)
+                            .background(MaterialTheme.colorScheme.primary)
+                            .clickable(onClick = onIrADespensa)
+                            .padding(horizontal = 24.dp, vertical = 10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        androidx.compose.material3.Icon(
+                            Icons.Filled.AddCircle,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Text(
+                            "Añadir alimentos a tu despensa (+${casiVisibles.size} recetas)",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Color.White,
+                            fontWeight = FontWeight.SemiBold,
+                            maxLines = 1
+                        )
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(8.dp))
+        }
+    }
+}
+
+/** TopBar de resultados (§2.8): volver a filtros + logo/REMY + persona. */
+@Composable
+private fun TopBarResultados(onVolverFiltros: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            modifier = Modifier
+                .height(40.dp)
+                .clip(PillShape)
+                .background(Color(0xFFF1F5F9))
+                .clickable(onClick = onVolverFiltros)
+                .padding(horizontal = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            androidx.compose.material3.Icon(
+                Icons.Filled.KeyboardArrowLeft,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp)
+            )
+            Text(
+                "Volver a filtros",
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1
+            )
+        }
+        Image(
+            painter = painterResource(R.drawable.remy_logo),
+            contentDescription = "Logotipo de REMY",
+            modifier = Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+        )
+        Column {
+            Text(
+                "REMY",
+                style = MaterialTheme.typography.labelSmall,
+                color = Color(0xFF22C55E),
+                letterSpacing = 1.6.sp
+            )
+            Text("Sugerencias", style = MaterialTheme.typography.titleLarge)
+        }
+        Spacer(Modifier.weight(1f))
+        PersonCircle(size = 32.dp)
+    }
+}
+
+/** Encabezado "Casi listas (Ingredientes prescindibles)" (§2.8). */
+@Composable
+private fun EncabezadoCasi(total: Int) {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFFF1F5F9)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    androidx.compose.material3.Icon(
+                        Icons.Outlined.Info,
+                        contentDescription = null,
+                        tint = Color(0xFFD97706),
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+                Text(
+                    "Casi listas (Ingredientes prescindibles)",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            MetaPill(
+                text = "Falta opcional ($total)",
+                bg = Color(0xFFF1F5F9),
+                fg = Color(0xFFD97706),
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+        Text(
+            "Recetas cuyo sabor principal y estructura están cubiertos por tu despensa; solo faltan toppings, hierbas frescas o aderezos secundarios que puedes omitir o sustituir fácilmente.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            lineHeight = 17.sp
+        )
+    }
+}
+
+/** Tarjeta de receta sugerida (§2.8): foto con gradiente, macros, chips, CTA. */
+@Composable
+private fun TarjetaSugerida(
+    receta: RecetaConIngredientes,
+    esCompleta: Boolean,
+    faltantes: List<FaltanteVista>,
+    onRecetaClick: (Long) -> Unit
+) {
+    val datos = receta.receta
+    var marcada by rememberSaveable(datos.id) { mutableStateOf(false) }
+    val ingredientes = receta.ingredientes
+
+    SectionCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RemyShapes.medium,
+        bg = Color.White,
+        border = null,
+        padding = PaddingValues.Zero
+    ) {
+        // Foto + gradiente overlay + badges (§2.8)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(176.dp)
+                .clip(RemyShapes.medium)
+        ) {
+            FotoReceta(nombre = datos.nombre, modifier = Modifier.fillMaxSize())
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(
+                                Color.Transparent,
+                                Color.Black.copy(alpha = 0.20f),
+                                Color.Black.copy(alpha = 0.70f)
+                            )
+                        )
+                    )
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter)
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (datos.tiempoMinutos > 0) {
+                    MetaPill(
+                        text = "${datos.tiempoMinutos} min",
+                        icon = Icons.Outlined.Schedule,
+                        tint = MaterialTheme.colorScheme.primary,
+                        bg = Color.White.copy(alpha = 0.9f),
+                        fg = MaterialTheme.colorScheme.onSurface
+                    )
+                } else {
+                    Spacer(Modifier.size(1.dp))
+                }
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(
+                            if (marcada) MaterialTheme.colorScheme.primary
+                            else Color.White.copy(alpha = 0.9f)
+                        )
+                        .clickable { marcada = !marcada },
+                    contentAlignment = Alignment.Center
+                ) {
+                    androidx.compose.material3.Icon(
+                        Icons.Filled.Bookmark,
+                        contentDescription = "Guardar receta",
+                        tint = if (marcada) Color.White else MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(18.dp)
                     )
                 }
             }
         }
 
-        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(
-                "Máximo de ingredientes faltantes: $maximoFaltantes",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                TextButton(
-                    onClick = { preferencias.cambiarMaximoFaltantes((maximoFaltantes - 1).coerceAtLeast(0)) },
-                    enabled = maximoFaltantes > 0
-                ) { Text("−") }
-                Text(
-                    "$maximoFaltantes",
-                    modifier = Modifier.padding(horizontal = 12.dp),
-                    style = MaterialTheme.typography.headlineSmall
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(datos.nombre, style = MaterialTheme.typography.titleLarge, lineHeight = 20.sp)
+
+            // Macros
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                MetaPill(
+                    text = "${datos.kcal} kcal",
+                    icon = Icons.Outlined.LocalFireDepartment,
+                    tint = Color(0xFFD97706),
+                    bg = Color(0xFFF1F5F9),
+                    fg = MaterialTheme.colorScheme.onSurface
                 )
-                TextButton(
-                    onClick = { preferencias.cambiarMaximoFaltantes((maximoFaltantes + 1).coerceAtMost(10)) },
-                    enabled = maximoFaltantes < 10
-                ) { Text("+") }
+                MetaPill(
+                    text = "${datos.proteinas}g Proteína",
+                    icon = Icons.Outlined.FitnessCenter,
+                    tint = MaterialTheme.colorScheme.primary,
+                    bg = Color(0xFFF1F5F9),
+                    fg = MaterialTheme.colorScheme.onSurface
+                )
+                if (!esCompleta && datos.tiempoMinutos > 0) {
+                    MetaPill(
+                        text = "Listo en ${datos.tiempoMinutos} min",
+                        icon = Icons.Filled.Bolt,
+                        tint = MaterialTheme.colorScheme.primary,
+                        bg = MaterialTheme.colorScheme.primaryContainer,
+                        fg = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
             }
-        }
 
-        if (!grupos.hayAlgunaSugerencia) {
-            Text(
-                "Aún no hay sugerencias: revisa los filtros o los ingredientes de la despensa.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+            if (ingredientes.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    ingredientes.take(4).forEach { ing ->
+                        ChipResultado(nombre = ing.alimento?.nombre ?: "Ingrediente")
+                    }
+                }
+            }
+
+            if (!esCompleta && faltantes.isNotEmpty()) {
+                AvisoFaltantes(faltantes)
+            }
+
+            RemyCta(
+                text = "Ver receta",
+                onClick = { onRecetaClick(datos.id) },
+                modifier = Modifier.fillMaxWidth(),
+                height = 44.dp,
+                iconAfter = Icons.Filled.ArrowForward,
+                fontSize = 13.sp
             )
-        } else {
-            Grupos(grupos)
         }
     }
 }
 
+/** Chip blanco con punto de color (§2.8 IngredientChips). */
 @Composable
-private fun Grupos(grupos: GruposSugerencias) {
-    if (grupos.completas.isNotEmpty()) {
-        Text(
-            "Se puede cocinar ya (${grupos.completas.size})",
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.primary
+private fun ChipResultado(nombre: String) {
+    val cat = categoriaDe(nombre)
+    Row(
+        modifier = Modifier
+            .clip(PillShape)
+            .background(Color.White)
+            .border(1.dp, Color(0x4D64748B), PillShape)
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(8.dp)
+                .clip(CircleShape)
+                .background(cat.colors.fg)
         )
-        grupos.completas.forEach { receta -> Tarjeta(receta) }
-    }
-
-    if (grupos.casiCocinables.isNotEmpty()) {
         Text(
-            "Casi cocinable (${grupos.casiCocinables.size})",
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.tertiary
+            nombre,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurface,
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
-        grupos.casiCocinables.forEach { casi -> TarjetaCasi(casi) }
     }
 }
 
+/** WarningBox (§2.8): faltantes prescindibles de la receta casi cocinable. */
 @Composable
-private fun Tarjeta(receta: RecetaConIngredientes) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(receta.receta.nombre, style = MaterialTheme.typography.titleMedium)
+private fun AvisoFaltantes(faltantes: List<FaltanteVista>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RemyShapes.small)
+            .background(Color(0xFFF1F5F9))
+            .border(1.dp, Color(0x8064748B), RemyShapes.small)
+            .padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
+            ) {
+                androidx.compose.material3.Icon(
+                    Icons.Outlined.Warning,
+                    contentDescription = null,
+                    tint = Color(0xFFD97706),
+                    modifier = Modifier.size(14.dp)
+                )
+                Text(
+                    "Ingrediente prescindible que te falta: ${faltantes.size}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Color(0xFFD97706),
+                    maxLines = 2
+                )
+            }
             Text(
-                "${receta.receta.tiempoMinutos} min · ${receta.receta.tipoPlato} · ${receta.receta.regionOrigen}",
-                style = MaterialTheme.typography.bodySmall
+                "OPCIONAL",
+                style = MaterialTheme.typography.labelSmall,
+                color = Color(0xFFD97706),
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Row(
+            modifier = Modifier
+                .clip(RemyShapes.small)
+                .background(Color.White)
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+        ) {
+            Text(
+                text = faltantes.joinToString(" · ") { "${emojiDe(it.nombre)} ${it.nombre}" },
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+        Text(
+            "Prescindible: aporta el toque final, pero puedes omitirlo o sustituirlo sin afectar al plato principal.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+/** ChefTip de resultados (§2.8). */
+@Composable
+private fun ChefTipResultados() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RemyShapes.medium)
+            .background(Color(0xFFF1F5F9))
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primaryContainer),
+            contentAlignment = Alignment.Center
+        ) {
+            androidx.compose.material3.Icon(
+                Icons.Outlined.Lightbulb,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(22.dp)
+            )
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "CONSEJO DEL CHEF REMY",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Color(0xFF22C55E),
+                    letterSpacing = 0.8.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                androidx.compose.material3.Icon(
+                    Icons.Filled.AutoAwesome,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(14.dp)
+                )
+            }
+            Text(
+                "Los ingredientes prescindibles como hierbas frescas o especias aromáticas pueden sustituirse por una pizca de orégano seco, pimienta negra o un golpe de calor al final para intensificar los sabores de tu despensa sin gastar de más.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                lineHeight = 17.sp
             )
         }
     }
 }
 
+/** Estado vacío de resultados. */
 @Composable
-private fun TarjetaCasi(casi: CasiCocinableVista) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(casi.receta.receta.nombre, style = MaterialTheme.typography.titleMedium)
-            Text(
-                "${casi.receta.receta.tiempoMinutos} min · ${casi.receta.receta.tipoPlato}",
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                "Falta: " + casi.faltantes.joinToString(", ") { it.nombre },
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.tertiary
-            )
+private fun EstadoVacioResultados(onVolverFiltros: () -> Unit, onIrADespensa: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(
+            "Aún no hay sugerencias: revisa los filtros o los ingredientes de tu despensa.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            RemyCta(text = "Revisar filtros", onClick = onVolverFiltros, height = 44.dp, fontSize = 13.sp)
+            RemyCta(text = "Ir a la despensa", onClick = onIrADespensa, height = 44.dp, fontSize = 13.sp)
         }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Utilidades compartidas
+// ---------------------------------------------------------------------------
+
+/** Cuadro de icono 44×44 r12 de las FilterCards (§2.6). */
+@Composable
+private fun CuadroIcono(size: Dp, bg: Color, icono: ImageVector, tint: Color) {
+    Box(
+        modifier = Modifier
+            .size(size)
+            .clip(RoundedCornerShape(12.dp))
+            .background(bg),
+        contentAlignment = Alignment.Center
+    ) {
+        androidx.compose.material3.Icon(
+            icono,
+            contentDescription = null,
+            tint = tint,
+            modifier = Modifier.size(22.dp)
+        )
+    }
+}
+
+/** Botón circular 32×32 (expand/collapse y steppers). */
+@Composable
+private fun BotonMini(
+    icon: ImageVector,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    Box(
+        modifier = Modifier
+            .size(32.dp)
+            .clip(PillShape)
+            .background(Color(0xFFF1F5F9))
+            .clickable(enabled = enabled, onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        androidx.compose.material3.Icon(
+            icon,
+            contentDescription = null,
+            tint = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
+            modifier = Modifier.size(18.dp)
+        )
+    }
+}
+
+/** Chip de filtro activo/inactivo (misma pinta que FilterPill, 32dp). */
+@Composable
+private fun FiltroChip(label: String, active: Boolean, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .height(32.dp)
+            .clip(PillShape)
+            .background(if (active) MaterialTheme.colorScheme.primary else Color.White)
+            .border(
+                1.dp,
+                if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer,
+                PillShape
+            )
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            label,
+            color = if (active) Color.White else MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = if (active) FontWeight.Bold else FontWeight.SemiBold,
+            maxLines = 1
+        )
+    }
+}
+
+/** Segmento Completo / Incompleto (§2.8 ToggleSegment). */
+@Composable
+private fun Segmento(label: String, active: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Row(
+        modifier = modifier
+            .height(40.dp)
+            .clip(PillShape)
+            .background(if (active) MaterialTheme.colorScheme.primary else Color.White)
+            .then(
+                if (active) Modifier
+                else Modifier.border(1.dp, Color(0x8064748B), PillShape)
+            )
+            .clickable(onClick = onClick),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            label,
+            color = if (active) Color.White else MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.SemiBold
+        )
     }
 }
