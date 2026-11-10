@@ -12,7 +12,9 @@ data class FiltrosSugerencias(
     val tiempoMaximoMinutos: Int = SIN_LIMITE,
     val kcalMaximas: Int = SIN_LIMITE,
     val proteinasMinimas: Int = SIN_LIMITE,
-    val region: String = ""
+    val region: String = "",
+    /** Identificadores de ingredientes que se permiten como faltantes. */
+    val faltantesPermitidos: Set<Long> = emptySet()
 ) {
     val hayFiltros: Boolean
         get() = tiposDePlato.isNotEmpty() ||
@@ -20,7 +22,8 @@ data class FiltrosSugerencias(
             tiempoMaximoMinutos > SIN_LIMITE ||
             kcalMaximas > SIN_LIMITE ||
             proteinasMinimas > SIN_LIMITE ||
-            region.isNotBlank()
+            region.isNotBlank() ||
+            faltantesPermitidos.isNotEmpty()
 
     companion object {
         const val SIN_LIMITE = 0

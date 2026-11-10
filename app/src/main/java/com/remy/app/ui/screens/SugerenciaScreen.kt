@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material.icons.outlined.FitnessCenter
@@ -43,6 +44,7 @@ import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.Warning
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -83,6 +85,7 @@ import com.remy.app.ui.components.categoriaDe
 import com.remy.app.ui.components.emojiDe
 import com.remy.app.ui.theme.PillShape
 import com.remy.app.ui.theme.RemyShapes
+import com.remy.app.ui.theme.Slate300
 import com.remy.app.ui.viewmodel.CasiCocinableVista
 import com.remy.app.ui.viewmodel.FaltanteVista
 import com.remy.app.ui.viewmodel.GruposSugerencias
@@ -134,6 +137,7 @@ fun SugerenciasScreen(
                     regiones = regiones,
                     onAlternarTipo = preferencias::alternarTipoDePlato,
                     onCambiarMaximo = preferencias::cambiarMaximoFaltantes,
+                    onAlternarFaltante = preferencias::alternarFaltantePermitido,
                     onCambiarTiempo = preferencias::cambiarTiempoMaximo,
                     onCambiarCalorias = preferencias::cambiarKcalMaximas,
                     onCambiarProteinas = preferencias::cambiarProteinasMinimas,
@@ -197,7 +201,8 @@ internal fun PantallaFiltros(
     onCambiarRegion: (String) -> Unit,
     onLimpiarFiltros: () -> Unit,
     onMostrar: () -> Unit,
-    onPerfilClick: () -> Unit = {}
+    onPerfilClick: () -> Unit = {},
+    onAlternarFaltante: (Long) -> Unit = {}
 ) {
     val total = grupos.completas.size + grupos.casiCocinables.size
 
@@ -255,7 +260,10 @@ internal fun PantallaFiltros(
 
             FiltroMaxFaltantes(
                 maximoFaltantes = filtros.maximoFaltantes,
-                cambiar = onCambiarMaximo
+                faltantesDisponibles = grupos.faltantesDisponibles,
+                faltantesPermitidos = filtros.faltantesPermitidos,
+                cambiarMaximo = onCambiarMaximo,
+                alternarFaltante = onAlternarFaltante
             )
 
             FiltroOpciones(
@@ -538,11 +546,14 @@ private fun FiltroTipoDePlato(
     }
 }
 
-/** Card "Máx. faltantes" (adaptación funcional del mockup) con stepper 0..10. */
+/** Ingredientes que pueden faltar o no tener cantidad suficiente. */
 @Composable
 private fun FiltroMaxFaltantes(
     maximoFaltantes: Int,
-    cambiar: (Int) -> Unit
+    faltantesDisponibles: List<FaltanteVista>,
+    faltantesPermitidos: Set<Long>,
+    cambiarMaximo: (Int) -> Unit,
+    alternarFaltante: (Long) -> Unit
 ) {
     var expandido by rememberSaveable { mutableStateOf(true) }
 
@@ -563,7 +574,7 @@ private fun FiltroMaxFaltantes(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    CuadroIcono(44.dp, Color(0xFFF0F9FF), Icons.Outlined.Remove, Color(0xFF0284C7))
+                    CuadroIcono(44.dp, Color(0xFFF0F9FF), Icons.Outlined.Tune, Color(0xFF0284C7))
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Text(
                             "Ingredientes prescindibles",
@@ -603,8 +614,8 @@ private fun FiltroMaxFaltantes(
                         .fillMaxWidth()
                         .clip(RemyShapes.medium)
                         .background(MaterialTheme.colorScheme.background)
-                        .padding(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                        .padding(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -613,7 +624,7 @@ private fun FiltroMaxFaltantes(
                         BotonMini(
                             icon = Icons.Outlined.Remove,
                             enabled = maximoFaltantes > 0,
-                            onClick = { cambiar((maximoFaltantes - 1).coerceAtLeast(0)) }
+                            onClick = { cambiarMaximo((maximoFaltantes - 1).coerceAtLeast(0)) }
                         )
                         Text(
                             "$maximoFaltantes",
@@ -625,7 +636,7 @@ private fun FiltroMaxFaltantes(
                         BotonMini(
                             icon = Icons.Outlined.Add,
                             enabled = maximoFaltantes < 10,
-                            onClick = { cambiar((maximoFaltantes + 1).coerceAtMost(10)) }
+                            onClick = { cambiarMaximo((maximoFaltantes + 1).coerceAtMost(10)) }
                         )
                         Text(
                             "de 10",
@@ -633,11 +644,74 @@ private fun FiltroMaxFaltantes(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
+
                     Text(
-                        "0 = solo recetas que ya tienes en casa; hasta 10 ingredientes que pueden faltar.",
+                        "Elige qué ingredientes pueden faltar o no tener la cantidad exacta. Si no eliges ninguno, se permiten todos hasta el máximo indicado.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+
+                    if (faltantesDisponibles.isEmpty()) {
+                        Text(
+                            "Ahora mismo no hay ingredientes que falten o estén incompletos para las recetas disponibles.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    } else {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            faltantesDisponibles.forEach { faltante ->
+                                val activo = faltante.alimentoId in faltantesPermitidos
+                                val texto = if (faltante.insuficiente) {
+                                    "${faltante.nombre} · cantidad insuficiente"
+                                } else {
+                                    "${faltante.nombre} · te falta"
+                                }
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clip(RemyShapes.small)
+                                        .background(if (activo) MaterialTheme.colorScheme.primaryContainer else Color.White)
+                                        .border(
+                                            1.dp,
+                                            if (activo) MaterialTheme.colorScheme.primary else Color(0xFFE2E8F0),
+                                            RemyShapes.small
+                                        )
+                                        .clickable { alternarFaltante(faltante.alimentoId) }
+                                        .padding(horizontal = 12.dp, vertical = 10.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        texto,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = if (activo) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .size(22.dp)
+                                            .clip(CircleShape)
+                                            .background(if (activo) MaterialTheme.colorScheme.primary else Color.Transparent)
+                                            .border(
+                                                1.5.dp,
+                                                if (activo) MaterialTheme.colorScheme.primary else Slate300,
+                                                CircleShape
+                                            ),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        if (activo) {
+                                            Icon(
+                                                Icons.Outlined.Check,
+                                                contentDescription = null,
+                                                tint = Color.White,
+                                                modifier = Modifier.size(14.dp)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1287,35 +1361,38 @@ private fun AvisoFaltantes(faltantes: List<FaltanteVista>) {
                     modifier = Modifier.size(14.dp)
                 )
                 Text(
-                    "Ingrediente prescindible que te falta: ${faltantes.size}",
+                    "Te falta o no tienes suficiente: ${faltantes.size}",
                     style = MaterialTheme.typography.labelSmall,
                     color = Color(0xFFD97706),
                     maxLines = 2
                 )
             }
             Text(
-                "OPCIONAL",
+                "PENDIENTE",
                 style = MaterialTheme.typography.labelSmall,
                 color = Color(0xFFD97706),
                 fontWeight = FontWeight.Bold
             )
         }
-        Row(
+        Column(
             modifier = Modifier
+                .fillMaxWidth()
                 .clip(RemyShapes.small)
                 .background(Color.White)
-                .padding(horizontal = 8.dp, vertical = 4.dp)
+                .padding(horizontal = 8.dp, vertical = 6.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Text(
-                text = faltantes.joinToString(" · ") { "${emojiDe(it.nombre)} ${it.nombre}" },
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
+            faltantes.forEach { f ->
+                val motivo = if (f.insuficiente) "cantidad insuficiente" else "te falta"
+                Text(
+                    text = "${emojiDe(f.nombre)} ${f.nombre} · $motivo",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
         Text(
-            "Prescindible: aporta el toque final, pero puedes omitirlo o sustituirlo sin afectar al plato principal.",
+            "Puedes elegir en los filtros qué ingredientes permitir cuando falten o no tengas la cantidad exacta.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
