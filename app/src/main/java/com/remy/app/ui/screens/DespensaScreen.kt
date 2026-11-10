@@ -79,6 +79,7 @@ import com.remy.app.ui.components.FilterPill
 import com.remy.app.ui.components.IconCircle
 import com.remy.app.ui.components.PantallaCargando
 import com.remy.app.ui.components.PantallaError
+import com.remy.app.ui.components.PersonCircle
 import com.remy.app.ui.components.RemyCta
 import com.remy.app.ui.components.SearchPill
 import com.remy.app.ui.components.SectionCard
@@ -132,7 +133,8 @@ private fun iconoDe(nombre: String): ImageVector = when {
 @Composable
 fun DespensaScreen(
     viewModel: DespensaViewModel = viewModel(factory = DespensaViewModel.Factory),
-    onVerSugerencias: () -> Unit = {}
+    onVerSugerencias: () -> Unit = {},
+    onPerfilClick: () -> Unit = {}
 ) {
     val estado by viewModel.estado.collectAsStateWithLifecycle()
     val alimentos = when (val actual = estado) {
@@ -159,7 +161,7 @@ fun DespensaScreen(
     Scaffold(
         contentWindowInsets = WindowInsets(0),
         containerColor = Mint,
-        topBar = { DespensaHeader() },
+        topBar = { DespensaHeader(onPerfilClick = onPerfilClick) },
         floatingActionButton = {
             Box(
                 modifier = Modifier
@@ -422,7 +424,7 @@ private fun ChipCategoria(nombre: String) {
 }
 
 @Composable
-private fun DespensaHeader(modifier: Modifier = Modifier) {
+private fun DespensaHeader(modifier: Modifier = Modifier, onPerfilClick: () -> Unit = {}) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -448,12 +450,7 @@ private fun DespensaHeader(modifier: Modifier = Modifier) {
                 )
                 Text("Despensa", style = MaterialTheme.typography.headlineMedium, color = Slate900)
             }
-            Box(
-                modifier = Modifier.size(32.dp).clip(CircleShape).background(Green600),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(Icons.Outlined.Person, contentDescription = "Perfil", tint = Color.White, modifier = Modifier.size(18.dp))
-            }
+            PersonCircle(size = 32.dp, onClick = onPerfilClick)
         }
         HorizontalDivider(color = MintBorder, thickness = 1.dp)
     }
@@ -658,7 +655,7 @@ private fun ConfirmarBorrarDialog(
 }
 
 // ---------------------------------------------------------------------------
-// Formulario de alimento (añadir/editar) — funcionalidad intacta, estilo mockup
+// Formulario de alimento (añadir/editar) — funcionalidad intacta, estilo mejorado
 // ---------------------------------------------------------------------------
 @Composable
 private fun FormularioAlimentoDialog(
@@ -670,6 +667,7 @@ private fun FormularioAlimentoDialog(
     var cantidad by rememberSaveable { mutableStateOf(alimento?.cantidad?.formatoCantidad() ?: "") }
     var unidad by rememberSaveable { mutableStateOf(alimento?.unidad ?: "") }
     var errores by remember { mutableStateOf(ErroresAlimento()) }
+    val unidadesRapidas = listOf("g", "kg", "ml", "l", "ud")
 
     AlertDialog(
         onDismissRequest = onCerrar,
@@ -683,7 +681,7 @@ private fun FormularioAlimentoDialog(
             )
         },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
                     if (alimento == null) "Indica el nombre, la cantidad y la unidad del ingrediente."
                     else "Actualiza los datos del ingrediente.",
@@ -701,11 +699,36 @@ private fun FormularioAlimentoDialog(
                     error = errores.cantidad,
                     keyboardType = KeyboardType.Decimal
                 )
-                FormField(
-                    value = unidad, onValueChange = { unidad = it },
-                    label = "Unidad (g, ml, u...)", isError = errores.unidad != null,
-                    error = errores.unidad
-                )
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    FormField(
+                        value = unidad, onValueChange = { unidad = it },
+                        label = "Unidad", isError = errores.unidad != null,
+                        error = errores.unidad
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        unidadesRapidas.forEach { u ->
+                            val activa = unidad.trim().equals(u, ignoreCase = true)
+                            Box(
+                                modifier = Modifier
+                                    .clip(PillShape)
+                                    .background(if (activa) Green600 else Color.White)
+                                    .border(1.dp, if (activa) Green600 else Green100, PillShape)
+                                    .clickable { unidad = u }
+                                    .padding(horizontal = 12.dp, vertical = 6.dp)
+                            ) {
+                                Text(
+                                    u,
+                                    color = if (activa) Color.White else Slate600,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = if (activa) FontWeight.Bold else FontWeight.SemiBold
+                                )
+                            }
+                        }
+                    }
+                }
             }
         },
         confirmButton = {

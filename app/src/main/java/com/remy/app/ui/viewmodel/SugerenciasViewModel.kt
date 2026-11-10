@@ -27,7 +27,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
 /** Un ingrediente que falta en una receta, con su nombre para mostrarlo. */
-data class FaltanteVista(val nombre: String)
+data class FaltanteVista(
+    val alimentoId: Long,
+    val nombre: String,
+    val insuficiente: Boolean = false
+)
 
 /** Una de las casi cocinables: la receta y exactamente lo que le falta. */
 data class CasiCocinableVista(val receta: RecetaConIngredientes, val faltantes: List<FaltanteVista>)
@@ -35,7 +39,9 @@ data class CasiCocinableVista(val receta: RecetaConIngredientes, val faltantes: 
 /** Los dos grupos que muestra la pantalla de sugerencias (#34). */
 data class GruposSugerencias(
     val completas: List<RecetaConIngredientes> = emptyList(),
-    val casiCocinables: List<CasiCocinableVista> = emptyList()
+    val casiCocinables: List<CasiCocinableVista> = emptyList(),
+    /** Faltantes detectados (ausentes o con cantidad insuficiente) para poder elegirlos. */
+    val faltantesDisponibles: List<FaltanteVista> = emptyList()
 ) {
     val hayAlgunaSugerencia: Boolean
         get() = completas.isNotEmpty() || casiCocinables.isNotEmpty()
@@ -76,9 +82,27 @@ class SugerenciasViewModel(
                 val filtradas = filtrarRecetas(recetas, filtros)
                 val resultado = clasificarRecetas(
                     recetas = filtradas,
-                    alimentoIdsEnDespensa = despensa.map { it.id }.toSet(),
-                    maximoFaltantes = filtros.maximoFaltantes
+                    despensa = despensa,
+                    maximoFaltantes = filtros.maximoFaltantes,
+                    faltantesPermitidos = filtros.faltantesPermitidos
                 )
+                val candidatos = clasificarRecetas(
+                    recetas = filtradas,
+                    despensa = despensa,
+                    maximoFaltantes = PreferenciasRepository.MAXIMO_MAXIMO,
+                    faltantesPermitidos = emptySet()
+                )
+                val faltantesDisponibles = candidatos.casiCocinables
+                    .flatMap { it.faltantes }
+                    .distinctBy { it.alimentoId }
+                    .map { f ->
+                        FaltanteVista(
+                            alimentoId = f.alimentoId,
+                            nombre = nombres[f.alimentoId] ?: "Alimento ${f.alimentoId}",
+                            insuficiente = f.motivo == com.remy.app.logica.MotivoFaltante.CANTIDAD_INSUFICIENTE
+                        )
+                    }
+                    .sortedBy { it.nombre.lowercase() }
 
                 GruposSugerencias(
                     completas = resultado.completas.map { it.receta },
@@ -86,10 +110,15 @@ class SugerenciasViewModel(
                         CasiCocinableVista(
                             receta = casi.receta,
                             faltantes = casi.faltantes.map { faltante ->
-                                FaltanteVista(nombres[faltante.alimentoId] ?: "Alimento ${faltante.alimentoId}")
+                                FaltanteVista(
+                                    alimentoId = faltante.alimentoId,
+                                    nombre = nombres[faltante.alimentoId] ?: "Alimento ${faltante.alimentoId}",
+                                    insuficiente = faltante.motivo == com.remy.app.logica.MotivoFaltante.CANTIDAD_INSUFICIENTE
+                                )
                             }
                         )
-                    }
+                    },
+                    faltantesDisponibles = faltantesDisponibles
                 )
             }
                 .map<GruposSugerencias, EstadoCarga<GruposSugerencias>> { EstadoCarga.Datos(it) }

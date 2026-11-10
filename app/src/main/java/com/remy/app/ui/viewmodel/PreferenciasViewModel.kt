@@ -30,6 +30,19 @@ class PreferenciasViewModel(private val repositorio: PreferenciasRepository) : V
         viewModelScope.launch { repositorio.guardarMaximoFaltantes(valor) }
     }
 
+    fun alternarFaltantePermitido(id: Long) {
+        viewModelScope.launch {
+            val actuales = repositorio.filtros.first().faltantesPermitidos
+            repositorio.guardarFaltantesPermitidos(
+                if (id in actuales) actuales - id else actuales + id
+            )
+        }
+    }
+
+    fun limpiarFaltantesPermitidos() {
+        viewModelScope.launch { repositorio.guardarFaltantesPermitidos(emptySet()) }
+    }
+
     fun cambiarTiempoMaximo(minutos: Int) {
         viewModelScope.launch { repositorio.guardarTiempoMaximo(minutos) }
     }

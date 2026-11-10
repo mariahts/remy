@@ -37,6 +37,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.remy.app.ui.screens.DespensaScreen
 import com.remy.app.ui.screens.InicioScreen
+import com.remy.app.ui.screens.PerfilScreen
 import com.remy.app.ui.screens.RecetaDetalleScreen
 import com.remy.app.ui.screens.RecetasScreen
 import com.remy.app.ui.screens.SugerenciasScreen
@@ -71,10 +72,10 @@ fun AppNavigation() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .shadow(6.dp, RectangleShape, ambientColor = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.04f), spotColor = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.08f))
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(horizontal = 8.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    .shadow(10.dp, RectangleShape, ambientColor = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.06f), spotColor = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.10f))
+                    .background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.98f))
+                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 destinos.forEach { destino ->
@@ -93,7 +94,7 @@ fun AppNavigation() {
                                 else androidx.compose.ui.graphics.Color.Transparent
                             )
                             .clickable(onClick = { irA(destino.ruta) })
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = 8.dp, horizontal = 4.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
@@ -125,13 +126,22 @@ fun AppNavigation() {
             modifier = Modifier.padding(padding)
         ) {
             composable(Routes.INICIO) {
-                InicioScreen(onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) })
+                InicioScreen(
+                    onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
+                )
             }
             composable(Routes.DESPENSA) {
-                DespensaScreen(onVerSugerencias = { irA(Routes.SUGERENCIAS) })
+                DespensaScreen(
+                    onVerSugerencias = { irA(Routes.SUGERENCIAS) },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
+                )
             }
             composable(Routes.RECETAS) {
-                RecetasScreen(onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) })
+                RecetasScreen(
+                    onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
+                )
             }
             composable(
                 route = Routes.RECETA_DETALLE,
@@ -139,13 +149,21 @@ fun AppNavigation() {
             ) { entrada ->
                 RecetaDetalleScreen(
                     id = entrada.arguments?.getLong("id") ?: -1L,
-                    onVolver = { navController.popBackStack() }
+                    onVolver = { navController.popBackStack() },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
+                )
+            }
+            composable(Routes.PERFIL) {
+                PerfilScreen(
+                    onVolver = { navController.popBackStack() },
+                    onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) }
                 )
             }
             composable(Routes.SUGERENCIAS) {
                 SugerenciasScreen(
                     onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
-                    onIrADespensa = { irA(Routes.DESPENSA) }
+                    onIrADespensa = { irA(Routes.DESPENSA) },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
                 )
             }
         }

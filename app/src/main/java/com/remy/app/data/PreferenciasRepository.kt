@@ -34,8 +34,20 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
                 tiempoMaximoMinutos = (preferencias[CLAVE_TIEMPO_MAXIMO] ?: 0).coerceAtLeast(0),
                 kcalMaximas = (preferencias[CLAVE_KCAL_MAXIMAS] ?: 0).coerceAtLeast(0),
                 proteinasMinimas = (preferencias[CLAVE_PROTEINAS_MINIMAS] ?: 0).coerceAtLeast(0),
-                region = preferencias[CLAVE_REGION] ?: ""
+                region = preferencias[CLAVE_REGION] ?: "",
+                faltantesPermitidos = (preferencias[CLAVE_FALTANTES_PERMITIDOS] ?: emptySet())
+                    .mapNotNull { it.toLongOrNull() }
+                    .toSet()
             )
+        }
+
+    /** Identificadores de las recetas marcadas como favoritas. */
+    val favoritas: Flow<Set<Long>> = dataStore.data
+        .catch { emit(emptyPreferences()) }
+        .map { preferencias ->
+            (preferencias[CLAVE_FAVORITAS] ?: emptySet())
+                .mapNotNull { it.toLongOrNull() }
+                .toSet()
         }
 
     suspend fun guardarTiposDePlato(tipos: Set<String>) {
@@ -62,6 +74,10 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { it[CLAVE_REGION] = region.trim() }
     }
 
+    suspend fun guardarFaltantesPermitidos(ids: Set<Long>) {
+        dataStore.edit { it[CLAVE_FALTANTES_PERMITIDOS] = ids.map { id -> id.toString() }.toSet() }
+    }
+
     suspend fun limpiarFiltros() {
         dataStore.edit { preferencias ->
             preferencias.remove(CLAVE_FILTROS)
@@ -70,6 +86,15 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
             preferencias.remove(CLAVE_KCAL_MAXIMAS)
             preferencias.remove(CLAVE_PROTEINAS_MINIMAS)
             preferencias.remove(CLAVE_REGION)
+            preferencias.remove(CLAVE_FALTANTES_PERMITIDOS)
+        }
+    }
+
+    suspend fun alternarFavorita(id: Long) {
+        dataStore.edit { preferencias ->
+            val actual = preferencias[CLAVE_FAVORITAS] ?: emptySet()
+            val clave = id.toString()
+            preferencias[CLAVE_FAVORITAS] = if (clave in actual) actual - clave else actual + clave
         }
     }
 
@@ -80,6 +105,8 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
         val CLAVE_KCAL_MAXIMAS = intPreferencesKey("kcal_maximas")
         val CLAVE_PROTEINAS_MINIMAS = intPreferencesKey("proteinas_minimas")
         val CLAVE_REGION = stringPreferencesKey("region")
+        val CLAVE_FALTANTES_PERMITIDOS = stringSetPreferencesKey("faltantes_permitidos")
+        val CLAVE_FAVORITAS = stringSetPreferencesKey("recetas_favoritas")
 
         const val MAXIMO_POR_DEFECTO = 3
         const val MAXIMO_MAXIMO = 10
