@@ -61,8 +61,8 @@ class RecetaDaoTest {
         assertEquals("Salsa de tomate", leida!!.receta.nombre)
         assertEquals(1, leida.ingredientes.size)
         // El ingrediente referencia al alimento por identificador, no por nombre
-        assertEquals(idTomate, leida.ingredientes.first().alimentoId)
-        assertEquals(500.0, leida.ingredientes.first().cantidad, 0.0)
+        assertEquals(idTomate, leida.ingredientes.first().ingrediente.alimentoId)
+        assertEquals(500.0, leida.ingredientes.first().ingrediente.cantidad, 0.0)
     }
 
     @Test
