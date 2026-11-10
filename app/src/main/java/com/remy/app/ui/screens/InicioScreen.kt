@@ -174,27 +174,14 @@ private fun ContenidoInicio(
                 mes = mesVisible,
                 hoy = hoy,
                 seleccionado = seleccionado,
-                diasConRegistro = porDia.keys,
                 onMesAnterior = { mesVisible = mesVisible.minusMonths(1) },
                 onMesSiguiente = { mesVisible = mesVisible.plusMonths(1) },
                 onSeleccionarDia = { diaSeleccionado = it.toString() }
             )
         }
 
-        item(key = "titulo-registro") {
-            Text(
-                "Registro del día",
-                style = MaterialTheme.typography.titleMedium,
-                color = Slate900
-            )
-        }
-
-        if (recetasDelDia.isEmpty()) {
-            item(key = "vacio") { RegistroVacio(seleccionado) }
-        } else {
-            items(recetasDelDia, key = { "reg-${it.receta.id}-${seleccionado}" }) { item ->
-                RegistroCocinado(item = item, onClick = { onRecetaClick(item.receta.id) })
-            }
+        items(recetasDelDia, key = { "reg-${it.receta.id}" }) { item ->
+            RegistroCocinado(item = item, onClick = { onRecetaClick(item.receta.id) })
         }
     }
 }
@@ -204,7 +191,6 @@ private fun CalendarioMensual(
     mes: YearMonth,
     hoy: LocalDate,
     seleccionado: LocalDate,
-    diasConRegistro: Set<LocalDate>,
     onMesAnterior: () -> Unit,
     onMesSiguiente: () -> Unit,
     onSeleccionarDia: (LocalDate) -> Unit,
@@ -269,7 +255,6 @@ private fun CalendarioMensual(
                                     fecha = fecha,
                                     esHoy = fecha == hoy,
                                     seleccionado = fecha == seleccionado,
-                                    tieneRegistro = fecha in diasConRegistro,
                                     onClick = { onSeleccionarDia(fecha) },
                                     modifier = Modifier.weight(1f)
                                 )
@@ -289,7 +274,6 @@ private fun DiaCalendario(
     fecha: LocalDate,
     esHoy: Boolean,
     seleccionado: Boolean,
-    tieneRegistro: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -330,48 +314,12 @@ private fun DiaCalendario(
                 .clip(CircleShape)
                 .background(
                     when {
-                        tieneRegistro && seleccionado -> androidx.compose.ui.graphics.Color.White
-                        tieneRegistro -> Green600
+                        seleccionado && esHoy -> androidx.compose.ui.graphics.Color.White
+                        seleccionado -> Green600
                         else -> androidx.compose.ui.graphics.Color.Transparent
                     }
                 )
         )
-    }
-}
-
-@Composable
-private fun RegistroVacio(dia: LocalDate) {
-    SectionCard(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RemyShapes.large,
-        padding = PaddingValues(20.dp)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(56.dp)
-                    .clip(CircleShape)
-                    .background(Green200),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(Icons.Outlined.Restaurant, contentDescription = null, tint = Green600)
-            }
-            Text(
-                "Sin recetas cocinadas",
-                style = MaterialTheme.typography.titleSmall,
-                color = Slate900
-            )
-            Text(
-                "No hay ningún registro para este día.",
-                style = MaterialTheme.typography.bodySmall,
-                color = Slate600,
-                textAlign = TextAlign.Center
-            )
-        }
     }
 }
 
