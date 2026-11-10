@@ -38,23 +38,49 @@ class PreferenciasRepositoryTest {
 
     @Test
     fun primerArranque_devuelveValoresPorDefecto() = runBlocking {
-        assertEquals(emptySet<String>(), repositorio.filtrosActivos.first())
-        assertEquals(3, repositorio.maximoFaltantes.first())
+        val filtros = repositorio.filtros.first()
+
+        assertEquals(FiltrosSugerencias(), filtros)
+        assertEquals(3, filtros.maximoFaltantes)
+        assertEquals(false, filtros.hayFiltros)
     }
 
     @Test
-    fun guardarYLeer_filtrosYMaximo() = runBlocking {
-        repositorio.guardarFiltros(setOf("Entrante", "Postre"))
+    fun guardarYLeer_todosLosFiltros() = runBlocking {
+        repositorio.guardarTiposDePlato(setOf("Entrante", "Postre"))
         repositorio.guardarMaximoFaltantes(5)
+        repositorio.guardarTiempoMaximo(30)
+        repositorio.guardarKcalMaximas(500)
+        repositorio.guardarProteinasMinimas(20)
+        repositorio.guardarRegion("Mediterráneo")
 
-        assertEquals(setOf("Entrante", "Postre"), repositorio.filtrosActivos.first())
-        assertEquals(5, repositorio.maximoFaltantes.first())
+        val filtros = repositorio.filtros.first()
+        assertEquals(setOf("Entrante", "Postre"), filtros.tiposDePlato)
+        assertEquals(5, filtros.maximoFaltantes)
+        assertEquals(30, filtros.tiempoMaximoMinutos)
+        assertEquals(500, filtros.kcalMaximas)
+        assertEquals(20, filtros.proteinasMinimas)
+        assertEquals("Mediterráneo", filtros.region)
+        assertEquals(true, filtros.hayFiltros)
+    }
+
+    @Test
+    fun maximoFaltantes_seLimitaAlRangoValido() = runBlocking {
+        repositorio.guardarMaximoFaltantes(25)
+        assertEquals(PreferenciasRepository.MAXIMO_MAXIMO, repositorio.filtros.first().maximoFaltantes)
+
+        repositorio.guardarMaximoFaltantes(-4)
+        assertEquals(0, repositorio.filtros.first().maximoFaltantes)
     }
 
     @Test
     fun alReabrir_seRecuperaLoGuardado() = runBlocking {
-        repositorio.guardarFiltros(setOf("Principal"))
+        repositorio.guardarTiposDePlato(setOf("Principal"))
         repositorio.guardarMaximoFaltantes(7)
+        repositorio.guardarTiempoMaximo(45)
+        repositorio.guardarKcalMaximas(700)
+        repositorio.guardarProteinasMinimas(30)
+        repositorio.guardarRegion("Cantábrico")
 
         // Se cierra la instancia actual y se abre otra sobre el mismo fichero,
         // igual que al reabrir la app
@@ -64,7 +90,26 @@ class PreferenciasRepositoryTest {
         val reabierta = PreferenciasRepository(
             PreferenceDataStoreFactory.create { archivo }
         )
-        assertEquals(setOf("Principal"), reabierta.filtrosActivos.first())
-        assertEquals(7, reabierta.maximoFaltantes.first())
+        val filtros = reabierta.filtros.first()
+        assertEquals(setOf("Principal"), filtros.tiposDePlato)
+        assertEquals(7, filtros.maximoFaltantes)
+        assertEquals(45, filtros.tiempoMaximoMinutos)
+        assertEquals(700, filtros.kcalMaximas)
+        assertEquals(30, filtros.proteinasMinimas)
+        assertEquals("Cantábrico", filtros.region)
+    }
+
+    @Test
+    fun limpiarFiltros_vuelveAlEstadoPorDefecto() = runBlocking {
+        repositorio.guardarTiposDePlato(setOf("Postre"))
+        repositorio.guardarMaximoFaltantes(8)
+        repositorio.guardarTiempoMaximo(15)
+        repositorio.guardarKcalMaximas(300)
+        repositorio.guardarProteinasMinimas(10)
+        repositorio.guardarRegion("Europeo")
+
+        repositorio.limpiarFiltros()
+
+        assertEquals(FiltrosSugerencias(), repositorio.filtros.first())
     }
 }
