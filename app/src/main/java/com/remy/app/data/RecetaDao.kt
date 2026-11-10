@@ -28,6 +28,11 @@ interface RecetaDao {
     @Query("SELECT * FROM recetas ORDER BY nombre")
     fun observarTodas(): Flow<List<RecetaConIngredientes>>
 
+    /** Recetas ya cocinadas, de la más reciente a la más antigua (#44). */
+    @Transaction
+    @Query("SELECT * FROM recetas WHERE fechaCocinada IS NOT NULL ORDER BY fechaCocinada DESC")
+    fun observarCocinadas(): Flow<List<RecetaConIngredientes>>
+
     @Query("SELECT COUNT(*) FROM recetas")
     suspend fun contar(): Int
 

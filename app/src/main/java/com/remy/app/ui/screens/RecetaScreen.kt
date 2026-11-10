@@ -112,6 +112,7 @@ import com.remy.app.ui.components.SectionCard
 import com.remy.app.ui.components.categoriaDe
 import com.remy.app.ui.components.emojiDe
 import com.remy.app.ui.components.fechaEnEspanol
+import com.remy.app.ui.components.FotoDelPlato
 import com.remy.app.ui.theme.Amber100
 import com.remy.app.ui.theme.Amber600
 import com.remy.app.ui.theme.DetailDarkPill
@@ -1436,44 +1437,6 @@ private fun FotoDeGaleria(uri: Uri, modifier: Modifier = Modifier) {
         )
 
         else -> Text("Cargando la imagen…", modifier = modifier.padding(16.dp), color = Slate600)
-    }
-}
-
-/** Foto guardada en el almacenamiento interno; si falta, muestra un marcador de reserva. */
-@Composable
-private fun FotoDelPlato(
-    ruta: String?,
-    modifier: Modifier = Modifier,
-    contentScale: ContentScale = ContentScale.Fit
-) {
-    var bitmap by remember(ruta) { mutableStateOf<Bitmap?>(null) }
-    var fallo by remember(ruta) { mutableStateOf(false) }
-
-    LaunchedEffect(ruta) {
-        if (ruta == null) {
-            fallo = true
-        } else {
-            val resultado = withContext(Dispatchers.IO) { BitmapFactory.decodeFile(ruta) }
-            if (resultado == null) fallo = true else bitmap = resultado
-        }
-    }
-
-    when {
-        bitmap != null -> Image(
-            bitmap = bitmap!!.asImageBitmap(),
-            contentDescription = "Foto del plato cocinado",
-            modifier = modifier,
-            contentScale = contentScale
-        )
-
-        fallo -> Text(
-            if (ruta == null) "Sin foto del plato." else "No se ha podido cargar la foto del plato.",
-            style = MaterialTheme.typography.bodySmall,
-            color = Slate500,
-            modifier = modifier.padding(8.dp)
-        )
-
-        else -> Text("Cargando la foto del plato…", style = MaterialTheme.typography.bodySmall, color = Slate500, modifier = modifier.padding(8.dp))
     }
 }
 
