@@ -655,7 +655,7 @@ private fun ConfirmarBorrarDialog(
 }
 
 // ---------------------------------------------------------------------------
-// Formulario de alimento (añadir/editar) — funcionalidad intacta, estilo mockup
+// Formulario de alimento (añadir/editar) — funcionalidad intacta, estilo mejorado
 // ---------------------------------------------------------------------------
 @Composable
 private fun FormularioAlimentoDialog(
@@ -667,6 +667,7 @@ private fun FormularioAlimentoDialog(
     var cantidad by rememberSaveable { mutableStateOf(alimento?.cantidad?.formatoCantidad() ?: "") }
     var unidad by rememberSaveable { mutableStateOf(alimento?.unidad ?: "") }
     var errores by remember { mutableStateOf(ErroresAlimento()) }
+    val unidadesRapidas = listOf("g", "kg", "ml", "l", "ud")
 
     AlertDialog(
         onDismissRequest = onCerrar,
@@ -680,7 +681,7 @@ private fun FormularioAlimentoDialog(
             )
         },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
                     if (alimento == null) "Indica el nombre, la cantidad y la unidad del ingrediente."
                     else "Actualiza los datos del ingrediente.",
@@ -698,11 +699,36 @@ private fun FormularioAlimentoDialog(
                     error = errores.cantidad,
                     keyboardType = KeyboardType.Decimal
                 )
-                FormField(
-                    value = unidad, onValueChange = { unidad = it },
-                    label = "Unidad (g, ml, u...)", isError = errores.unidad != null,
-                    error = errores.unidad
-                )
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    FormField(
+                        value = unidad, onValueChange = { unidad = it },
+                        label = "Unidad", isError = errores.unidad != null,
+                        error = errores.unidad
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        unidadesRapidas.forEach { u ->
+                            val activa = unidad.trim().equals(u, ignoreCase = true)
+                            Box(
+                                modifier = Modifier
+                                    .clip(PillShape)
+                                    .background(if (activa) Green600 else Color.White)
+                                    .border(1.dp, if (activa) Green600 else Green100, PillShape)
+                                    .clickable { unidad = u }
+                                    .padding(horizontal = 12.dp, vertical = 6.dp)
+                            ) {
+                                Text(
+                                    u,
+                                    color = if (activa) Color.White else Slate600,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    fontWeight = if (activa) FontWeight.Bold else FontWeight.SemiBold
+                                )
+                            }
+                        }
+                    }
+                }
             }
         },
         confirmButton = {
