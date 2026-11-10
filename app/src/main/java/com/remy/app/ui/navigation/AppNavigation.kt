@@ -132,7 +132,10 @@ fun AppNavigation() {
                 )
             }
             composable(Routes.DESPENSA) {
-                DespensaScreen(onVerSugerencias = { irA(Routes.SUGERENCIAS) })
+                DespensaScreen(
+                    onVerSugerencias = { irA(Routes.SUGERENCIAS) },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
+                )
             }
             composable(Routes.RECETAS) {
                 RecetasScreen(

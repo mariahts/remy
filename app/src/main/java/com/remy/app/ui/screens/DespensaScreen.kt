@@ -79,6 +79,7 @@ import com.remy.app.ui.components.FilterPill
 import com.remy.app.ui.components.IconCircle
 import com.remy.app.ui.components.PantallaCargando
 import com.remy.app.ui.components.PantallaError
+import com.remy.app.ui.components.PersonCircle
 import com.remy.app.ui.components.RemyCta
 import com.remy.app.ui.components.SearchPill
 import com.remy.app.ui.components.SectionCard
@@ -132,7 +133,8 @@ private fun iconoDe(nombre: String): ImageVector = when {
 @Composable
 fun DespensaScreen(
     viewModel: DespensaViewModel = viewModel(factory = DespensaViewModel.Factory),
-    onVerSugerencias: () -> Unit = {}
+    onVerSugerencias: () -> Unit = {},
+    onPerfilClick: () -> Unit = {}
 ) {
     val estado by viewModel.estado.collectAsStateWithLifecycle()
     val alimentos = when (val actual = estado) {
@@ -159,7 +161,7 @@ fun DespensaScreen(
     Scaffold(
         contentWindowInsets = WindowInsets(0),
         containerColor = Mint,
-        topBar = { DespensaHeader() },
+        topBar = { DespensaHeader(onPerfilClick = onPerfilClick) },
         floatingActionButton = {
             Box(
                 modifier = Modifier
@@ -422,7 +424,7 @@ private fun ChipCategoria(nombre: String) {
 }
 
 @Composable
-private fun DespensaHeader(modifier: Modifier = Modifier) {
+private fun DespensaHeader(modifier: Modifier = Modifier, onPerfilClick: () -> Unit = {}) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -448,12 +450,7 @@ private fun DespensaHeader(modifier: Modifier = Modifier) {
                 )
                 Text("Despensa", style = MaterialTheme.typography.headlineMedium, color = Slate900)
             }
-            Box(
-                modifier = Modifier.size(32.dp).clip(CircleShape).background(Green600),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(Icons.Outlined.Person, contentDescription = "Perfil", tint = Color.White, modifier = Modifier.size(18.dp))
-            }
+            PersonCircle(size = 32.dp, onClick = onPerfilClick)
         }
         HorizontalDivider(color = MintBorder, thickness = 1.dp)
     }
