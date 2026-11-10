@@ -2,6 +2,7 @@ package com.remy.app.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -66,12 +67,17 @@ fun RemyHeader(
 
 /** Círculo de perfil verde con icono de persona (mockup: Circle 32/36 #16A34A). */
 @Composable
-fun PersonCircle(size: Dp = 32.dp, modifier: Modifier = Modifier) {
+fun PersonCircle(
+    size: Dp = 32.dp,
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null
+) {
     Box(
         modifier = modifier
             .size(size)
             .clip(CircleShape)
-            .background(Green600),
+            .background(Green600)
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         contentAlignment = Alignment.Center
     ) {
         Icon(

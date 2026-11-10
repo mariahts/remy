@@ -84,6 +84,7 @@ import java.util.Locale
 @Composable
 fun InicioScreen(
     onRecetaClick: (Long) -> Unit,
+    onPerfilClick: () -> Unit = {},
     viewModel: CocinadasViewModel = viewModel(factory = CocinadasViewModel.Factory),
 ) {
     val estado by viewModel.estado.collectAsStateWithLifecycle()
@@ -93,7 +94,7 @@ fun InicioScreen(
             titulo = "Inicio",
             bg = Green100,
             logoSize = 40.dp,
-            trailing = { PersonCircle(36.dp) }
+            trailing = { PersonCircle(36.dp, onClick = onPerfilClick) }
         )
 
         Box(modifier = Modifier.weight(1f).fillMaxWidth()) {

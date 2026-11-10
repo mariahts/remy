@@ -104,6 +104,7 @@ private val TIPOS_DE_PLATO = listOf("Entrante", "Principal", "Postre")
 fun SugerenciasScreen(
     onRecetaClick: (Long) -> Unit = {},
     onIrADespensa: () -> Unit = {},
+    onPerfilClick: () -> Unit = {},
     preferencias: PreferenciasViewModel = viewModel(factory = PreferenciasViewModel.Factory),
     sugerencias: SugerenciasViewModel = viewModel(factory = SugerenciasViewModel.Factory)
 ) {
@@ -114,7 +115,7 @@ fun SugerenciasScreen(
 
     when (val actual = estado) {
         is EstadoCarga.Cargando,
-        is EstadoCarga.Error -> PantallaEstadoSugerencias(actual, sugerencias::reintentar)
+        is EstadoCarga.Error -> PantallaEstadoSugerencias(actual, sugerencias::reintentar, onPerfilClick)
 
         is EstadoCarga.Datos -> {
             if (viendoResultados) {
@@ -123,7 +124,8 @@ fun SugerenciasScreen(
                     grupos = actual.datos,
                     onVolverFiltros = { viendoResultados = false },
                     onRecetaClick = onRecetaClick,
-                    onIrADespensa = onIrADespensa
+                    onIrADespensa = onIrADespensa,
+                    onPerfilClick = onPerfilClick
                 )
             } else {
                 PantallaFiltros(
@@ -137,7 +139,8 @@ fun SugerenciasScreen(
                     onCambiarProteinas = preferencias::cambiarProteinasMinimas,
                     onCambiarRegion = preferencias::cambiarRegion,
                     onLimpiarFiltros = preferencias::limpiarFiltros,
-                    onMostrar = { viendoResultados = true }
+                    onMostrar = { viendoResultados = true },
+                    onPerfilClick = onPerfilClick
                 )
             }
         }
@@ -145,7 +148,11 @@ fun SugerenciasScreen(
 }
 
 @Composable
-private fun PantallaEstadoSugerencias(estado: EstadoCarga<*>, onReintentar: () -> Unit) {
+private fun PantallaEstadoSugerencias(
+    estado: EstadoCarga<*>,
+    onReintentar: () -> Unit,
+    onPerfilClick: () -> Unit = {}
+) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -153,7 +160,7 @@ private fun PantallaEstadoSugerencias(estado: EstadoCarga<*>, onReintentar: () -
                 titulo = "Sugerencias",
                 bg = MaterialTheme.colorScheme.background,
                 logoSize = 32.dp,
-                trailing = { PersonCircle(size = 32.dp) }
+                trailing = { PersonCircle(size = 32.dp, onClick = onPerfilClick) }
             )
         }
     ) { inner ->
@@ -189,7 +196,8 @@ internal fun PantallaFiltros(
     onCambiarProteinas: (Int) -> Unit,
     onCambiarRegion: (String) -> Unit,
     onLimpiarFiltros: () -> Unit,
-    onMostrar: () -> Unit
+    onMostrar: () -> Unit,
+    onPerfilClick: () -> Unit = {}
 ) {
     val total = grupos.completas.size + grupos.casiCocinables.size
 
@@ -200,7 +208,7 @@ internal fun PantallaFiltros(
                 titulo = "Sugerencias",
                 bg = MaterialTheme.colorScheme.background,
                 logoSize = 32.dp,
-                trailing = { PersonCircle(size = 32.dp) }
+                trailing = { PersonCircle(size = 32.dp, onClick = onPerfilClick) }
             )
         }
     ) { inner ->
@@ -737,7 +745,8 @@ private fun PantallaResultados(
     grupos: GruposSugerencias,
     onVolverFiltros: () -> Unit,
     onRecetaClick: (Long) -> Unit,
-    onIrADespensa: () -> Unit
+    onIrADespensa: () -> Unit,
+    onPerfilClick: () -> Unit = {}
 ) {
     // "Completo" = lista completa (100% match + casi listas);
     // "Incompleto" = solo las recetas a las que les falta algo.
@@ -763,7 +772,7 @@ private fun PantallaResultados(
     Scaffold(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         topBar = {
-            TopBarResultados(onVolverFiltros = onVolverFiltros)
+            TopBarResultados(onVolverFiltros = onVolverFiltros, onPerfilClick = onPerfilClick)
         }
     ) { inner ->
         Column(
@@ -975,7 +984,7 @@ private fun PantallaResultados(
 
 /** TopBar de resultados (§2.8): volver a filtros + logo/REMY + persona. */
 @Composable
-private fun TopBarResultados(onVolverFiltros: () -> Unit) {
+private fun TopBarResultados(onVolverFiltros: () -> Unit, onPerfilClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -1025,7 +1034,7 @@ private fun TopBarResultados(onVolverFiltros: () -> Unit) {
             Text("Sugerencias", style = MaterialTheme.typography.titleLarge)
         }
         Spacer(Modifier.weight(1f))
-        PersonCircle(size = 32.dp)
+        PersonCircle(size = 32.dp, onClick = onPerfilClick)
     }
 }
 

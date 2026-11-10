@@ -95,6 +95,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.remy.app.data.Receta
+import com.remy.app.data.PreferenciasRepository
 import com.remy.app.data.RecetaConIngredientes
 import com.remy.app.data.RecetaDetalle
 import com.remy.app.ui.components.AlternativaGaleria
@@ -152,6 +153,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun RecetasScreen(
     onRecetaClick: (Long) -> Unit,
+    onPerfilClick: () -> Unit = {},
     viewModel: RecetasViewModel = viewModel(factory = RecetasViewModel.Factory),
 ) {
     val estado by viewModel.estado.collectAsStateWithLifecycle()
@@ -161,7 +163,7 @@ fun RecetasScreen(
             titulo = "Recetas Guardadas",
             bg = Green100,
             logoSize = 40.dp,
-            trailing = { PersonCircle(36.dp) }
+            trailing = { PersonCircle(36.dp, onClick = onPerfilClick) }
         )
 
         Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
@@ -391,6 +393,7 @@ private fun TarjetaReceta(item: RecetaConIngredientes, onClick: () -> Unit) {
 fun RecetaDetalleScreen(
     id: Long,
     onVolver: () -> Unit,
+    onPerfilClick: () -> Unit = {},
     viewModel: RecetaDetalleViewModel = viewModel(factory = RecetaDetalleViewModel.Factory),
 ) {
     LaunchedEffect(id) { viewModel.cargar(id) }
@@ -436,7 +439,8 @@ fun RecetaDetalleScreen(
                         capturando = false
                         viewModel.limpiarCoccion()
                     },
-                    onCompartir = {}
+                    onCompartir = {},
+                    onPerfilClick = onPerfilClick
                 )
                 CapturaPlato(
                     estadoCoccion = estadoCoccion,
@@ -455,6 +459,7 @@ fun RecetaDetalleScreen(
                 onVolver = onVolver,
                 onEmpezarCoccion = { capturando = true },
                 onLimpiarAviso = { viewModel.limpiarCoccion() },
+                onPerfilClick = onPerfilClick,
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -468,14 +473,17 @@ private fun DetalleReceta(
     onVolver: () -> Unit,
     onEmpezarCoccion: () -> Unit,
     onLimpiarAviso: () -> Unit,
+    onPerfilClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val receta = detalle.receta
     val scroll = rememberScrollState()
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-
-    var fav by rememberSaveable(receta.id) { mutableStateOf(true) }
+    val preferencias = remember { PreferenciasRepository.delContexto(context) }
+    val favoritas by preferencias.favoritas.collectAsStateWithLifecycle(initialValue = emptySet())
+    val fav = receta.id in favoritas
+    val onFav: () -> Unit = { scope.launch { preferencias.alternarFavorita(receta.id) } }
     var porciones by rememberSaveable(receta.id) { mutableStateOf(1) }
     val checks = remember { mutableStateMapOf<Long, Boolean>() }
     val pasosHechos = remember { mutableStateMapOf<Int, Boolean>() }
@@ -494,9 +502,10 @@ private fun DetalleReceta(
         topBar = {
             DetalleTopBar(
                 fav = fav,
-                onFav = { fav = !fav },
+                onFav = onFav,
                 onVolver = onVolver,
-                onCompartir = compartir
+                onCompartir = compartir,
+                onPerfilClick = onPerfilClick
             )
         },
         bottomBar = {
@@ -519,7 +528,7 @@ private fun DetalleReceta(
                 totalIngredientes = detalle.ingredientes.size,
                 enDespensa = detalle.ingredientes.count { it.alimento != null },
                 fav = fav,
-                onFav = { fav = !fav },
+                onFav = onFav,
                 onCompartir = compartir
             )
             TitleCard(receta)
@@ -543,7 +552,8 @@ private fun DetalleTopBar(
     fav: Boolean,
     onFav: () -> Unit,
     onVolver: () -> Unit,
-    onCompartir: () -> Unit
+    onCompartir: () -> Unit,
+    onPerfilClick: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -580,7 +590,7 @@ private fun DetalleTopBar(
         IconButton(onClick = onCompartir, modifier = Modifier.size(44.dp)) {
             Icon(Icons.Outlined.Share, contentDescription = "Compartir", tint = Slate700, modifier = Modifier.size(22.dp))
         }
-        PersonCircle(32.dp)
+        PersonCircle(32.dp, onClick = onPerfilClick)
     }
 }
 

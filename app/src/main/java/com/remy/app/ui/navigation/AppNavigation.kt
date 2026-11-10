@@ -37,6 +37,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.remy.app.ui.screens.DespensaScreen
 import com.remy.app.ui.screens.InicioScreen
+import com.remy.app.ui.screens.PerfilScreen
 import com.remy.app.ui.screens.RecetaDetalleScreen
 import com.remy.app.ui.screens.RecetasScreen
 import com.remy.app.ui.screens.SugerenciasScreen
@@ -125,13 +126,19 @@ fun AppNavigation() {
             modifier = Modifier.padding(padding)
         ) {
             composable(Routes.INICIO) {
-                InicioScreen(onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) })
+                InicioScreen(
+                    onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
+                )
             }
             composable(Routes.DESPENSA) {
                 DespensaScreen(onVerSugerencias = { irA(Routes.SUGERENCIAS) })
             }
             composable(Routes.RECETAS) {
-                RecetasScreen(onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) })
+                RecetasScreen(
+                    onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
+                )
             }
             composable(
                 route = Routes.RECETA_DETALLE,
@@ -139,13 +146,21 @@ fun AppNavigation() {
             ) { entrada ->
                 RecetaDetalleScreen(
                     id = entrada.arguments?.getLong("id") ?: -1L,
-                    onVolver = { navController.popBackStack() }
+                    onVolver = { navController.popBackStack() },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
+                )
+            }
+            composable(Routes.PERFIL) {
+                PerfilScreen(
+                    onVolver = { navController.popBackStack() },
+                    onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) }
                 )
             }
             composable(Routes.SUGERENCIAS) {
                 SugerenciasScreen(
                     onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
-                    onIrADespensa = { irA(Routes.DESPENSA) }
+                    onIrADespensa = { irA(Routes.DESPENSA) },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
                 )
             }
         }
