@@ -36,7 +36,9 @@ import androidx.compose.material.icons.outlined.FitnessCenter
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.LocalFireDepartment
+import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Remove
+import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Tune
@@ -66,9 +68,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.remy.app.R
+import com.remy.app.data.FiltrosSugerencias
 import com.remy.app.data.RecetaConIngredientes
+import com.remy.app.ui.EstadoCarga
 import com.remy.app.ui.components.FotoReceta
 import com.remy.app.ui.components.MetaPill
+import com.remy.app.ui.components.PantallaCargando
+import com.remy.app.ui.components.PantallaError
 import com.remy.app.ui.components.PersonCircle
 import com.remy.app.ui.components.RemyCta
 import com.remy.app.ui.components.RemyHeaderSombra
@@ -101,28 +107,70 @@ fun SugerenciasScreen(
     preferencias: PreferenciasViewModel = viewModel(factory = PreferenciasViewModel.Factory),
     sugerencias: SugerenciasViewModel = viewModel(factory = SugerenciasViewModel.Factory)
 ) {
-    val filtrosActivos by preferencias.filtrosActivos.collectAsStateWithLifecycle()
-    val maximoFaltantes by preferencias.maximoFaltantes.collectAsStateWithLifecycle()
-    val grupos by sugerencias.grupos.collectAsStateWithLifecycle()
+    val filtros by preferencias.filtros.collectAsStateWithLifecycle()
+    val estado by sugerencias.estado.collectAsStateWithLifecycle()
+    val regiones by sugerencias.regiones.collectAsStateWithLifecycle()
     var viendoResultados by rememberSaveable { mutableStateOf(false) }
 
-    if (viendoResultados) {
-        PantallaResultados(
-            filtrosActivos = filtrosActivos,
-            maximoFaltantes = maximoFaltantes,
-            grupos = grupos,
-            onVolverFiltros = { viendoResultados = false },
-            onRecetaClick = onRecetaClick,
-            onIrADespensa = onIrADespensa
-        )
-    } else {
-        PantallaFiltros(
-            filtrosActivos = filtrosActivos,
-            maximoFaltantes = maximoFaltantes,
-            grupos = grupos,
-            preferencias = preferencias,
-            onMostrar = { viendoResultados = true }
-        )
+    when (val actual = estado) {
+        is EstadoCarga.Cargando,
+        is EstadoCarga.Error -> PantallaEstadoSugerencias(actual, sugerencias::reintentar)
+
+        is EstadoCarga.Datos -> {
+            if (viendoResultados) {
+                PantallaResultados(
+                    filtros = filtros,
+                    grupos = actual.datos,
+                    onVolverFiltros = { viendoResultados = false },
+                    onRecetaClick = onRecetaClick,
+                    onIrADespensa = onIrADespensa
+                )
+            } else {
+                PantallaFiltros(
+                    filtros = filtros,
+                    grupos = actual.datos,
+                    regiones = regiones,
+                    onAlternarTipo = preferencias::alternarTipoDePlato,
+                    onCambiarMaximo = preferencias::cambiarMaximoFaltantes,
+                    onCambiarTiempo = preferencias::cambiarTiempoMaximo,
+                    onCambiarCalorias = preferencias::cambiarKcalMaximas,
+                    onCambiarProteinas = preferencias::cambiarProteinasMinimas,
+                    onCambiarRegion = preferencias::cambiarRegion,
+                    onLimpiarFiltros = preferencias::limpiarFiltros,
+                    onMostrar = { viendoResultados = true }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PantallaEstadoSugerencias(estado: EstadoCarga<*>, onReintentar: () -> Unit) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            RemyHeaderSombra(
+                titulo = "Sugerencias",
+                bg = MaterialTheme.colorScheme.background,
+                logoSize = 32.dp,
+                trailing = { PersonCircle(size = 32.dp) }
+            )
+        }
+    ) { inner ->
+        when (estado) {
+            is EstadoCarga.Cargando -> PantallaCargando(
+                mensaje = "Calculando tus sugerencias…",
+                modifier = Modifier.padding(inner)
+            )
+
+            is EstadoCarga.Error -> PantallaError(
+                mensaje = estado.mensaje,
+                onReintentar = onReintentar,
+                modifier = Modifier.padding(inner)
+            )
+
+            is EstadoCarga.Datos -> Unit
+        }
     }
 }
 
@@ -130,11 +178,17 @@ fun SugerenciasScreen(
 // §2.6 — Configuración de filtros
 // ---------------------------------------------------------------------------
 @Composable
-private fun PantallaFiltros(
-    filtrosActivos: Set<String>,
-    maximoFaltantes: Int,
+internal fun PantallaFiltros(
+    filtros: FiltrosSugerencias,
     grupos: GruposSugerencias,
-    preferencias: PreferenciasViewModel,
+    regiones: List<String>,
+    onAlternarTipo: (String) -> Unit,
+    onCambiarMaximo: (Int) -> Unit,
+    onCambiarTiempo: (Int) -> Unit,
+    onCambiarCalorias: (Int) -> Unit,
+    onCambiarProteinas: (Int) -> Unit,
+    onCambiarRegion: (String) -> Unit,
+    onLimpiarFiltros: () -> Unit,
     onMostrar: () -> Unit
 ) {
     val total = grupos.completas.size + grupos.casiCocinables.size
@@ -160,11 +214,104 @@ private fun PantallaFiltros(
         ) {
             HeroPreferencias()
 
-            FiltroTipoDePlato(filtrosActivos = filtrosActivos, alternar = preferencias::alternarFiltro)
+            if (filtros.hayFiltros) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .clip(PillShape)
+                            .clickable(onClick = onLimpiarFiltros)
+                            .padding(horizontal = 12.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        androidx.compose.material3.Icon(
+                            Icons.Outlined.RestartAlt,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Text(
+                            "Limpiar filtros",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+            }
+
+            FiltroTipoDePlato(filtrosActivos = filtros.tiposDePlato, alternar = onAlternarTipo)
 
             FiltroMaxFaltantes(
-                maximoFaltantes = maximoFaltantes,
-                cambiar = preferencias::cambiarMaximoFaltantes
+                maximoFaltantes = filtros.maximoFaltantes,
+                cambiar = onCambiarMaximo
+            )
+
+            FiltroOpciones(
+                icono = Icons.Outlined.Schedule,
+                fondoIcono = Color(0xFFF3E8FF),
+                colorIcono = Color(0xFF8B5CF6),
+                etiqueta = "Tiempo de preparación",
+                titulo = "Tiempo máximo",
+                seleccionado = filtros.tiempoMaximoMinutos,
+                opciones = listOf(
+                    "Sin límite" to 0,
+                    "15 min" to 15,
+                    "30 min" to 30,
+                    "45 min" to 45,
+                    "60 min" to 60
+                ),
+                resumen = if (filtros.tiempoMaximoMinutos > 0) "Hasta ${filtros.tiempoMaximoMinutos} min" else "Sin límite",
+                onSeleccionar = onCambiarTiempo
+            )
+
+            FiltroOpciones(
+                icono = Icons.Outlined.LocalFireDepartment,
+                fondoIcono = Color(0xFFFFF7ED),
+                colorIcono = Color(0xFFEA580C),
+                etiqueta = "Aporte energético",
+                titulo = "Calorías máximas",
+                seleccionado = filtros.kcalMaximas,
+                opciones = listOf(
+                    "Sin límite" to 0,
+                    "300 kcal" to 300,
+                    "500 kcal" to 500,
+                    "700 kcal" to 700
+                ),
+                resumen = if (filtros.kcalMaximas > 0) "Hasta ${filtros.kcalMaximas} kcal" else "Sin límite",
+                onSeleccionar = onCambiarCalorias
+            )
+
+            FiltroOpciones(
+                icono = Icons.Outlined.FitnessCenter,
+                fondoIcono = Color(0xFFDCFCE7),
+                colorIcono = Color(0xFF16A34A),
+                etiqueta = "Macronutrientes",
+                titulo = "Proteínas mínimas",
+                seleccionado = filtros.proteinasMinimas,
+                opciones = listOf(
+                    "Sin límite" to 0,
+                    "10 g" to 10,
+                    "20 g" to 20,
+                    "30 g" to 30
+                ),
+                resumen = if (filtros.proteinasMinimas > 0) "Desde ${filtros.proteinasMinimas} g" else "Sin límite",
+                onSeleccionar = onCambiarProteinas
+            )
+
+            FiltroOpciones(
+                icono = Icons.Outlined.Public,
+                fondoIcono = Color(0xFFF0F9FF),
+                colorIcono = Color(0xFF0284C7),
+                etiqueta = "Procedencia",
+                titulo = "Región",
+                seleccionado = filtros.region,
+                opciones = listOf("Todas" to "") + regiones.map { it to it },
+                resumen = filtros.region.ifBlank { "Todas" },
+                onSeleccionar = onCambiarRegion
             )
 
             // ChefMotivation (§2.6): cuenta real de recetas encajando
@@ -489,13 +636,104 @@ private fun FiltroMaxFaltantes(
     }
 }
 
+/** Card genérica de un filtro de opción única (#37), plegada por defecto. */
+@Composable
+private fun <T> FiltroOpciones(
+    icono: ImageVector,
+    fondoIcono: Color,
+    colorIcono: Color,
+    etiqueta: String,
+    titulo: String,
+    seleccionado: T,
+    opciones: List<Pair<String, T>>,
+    resumen: String,
+    onSeleccionar: (T) -> Unit
+) {
+    var expandido by rememberSaveable { mutableStateOf(false) }
+
+    SectionCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RemyShapes.extraLarge,
+        bg = Color.White,
+        border = null,
+        padding = PaddingValues(16.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { expandido = !expandido },
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CuadroIcono(44.dp, fondoIcono, icono, colorIcono)
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text(
+                            etiqueta,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(titulo, style = MaterialTheme.typography.titleMedium)
+                    }
+                }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .clip(PillShape)
+                            .background(MaterialTheme.colorScheme.background)
+                            .padding(horizontal = 10.dp, vertical = 6.dp)
+                    ) {
+                        Text(
+                            resumen,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1
+                        )
+                    }
+                    BotonMini(
+                        icon = if (expandido) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
+                        onClick = { expandido = !expandido }
+                    )
+                }
+            }
+
+            if (expandido) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RemyShapes.medium)
+                        .background(MaterialTheme.colorScheme.background)
+                        .horizontalScroll(rememberScrollState())
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    opciones.forEach { (label, valor) ->
+                        FiltroChip(
+                            label = label,
+                            active = valor == seleccionado,
+                            onClick = { onSeleccionar(valor) }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 // ---------------------------------------------------------------------------
 // §2.8 — Resultados
 // ---------------------------------------------------------------------------
 @Composable
 private fun PantallaResultados(
-    filtrosActivos: Set<String>,
-    maximoFaltantes: Int,
+    filtros: FiltrosSugerencias,
     grupos: GruposSugerencias,
     onVolverFiltros: () -> Unit,
     onRecetaClick: (Long) -> Unit,
@@ -508,6 +746,19 @@ private fun PantallaResultados(
     val completasVisibles = if (verCompleto) grupos.completas else emptyList()
     val casiVisibles = grupos.casiCocinables
     val mostradas = completasVisibles.size + casiVisibles.size
+    val etiquetas = buildList {
+        filtros.tiposDePlato.sorted().forEach { add(it to Icons.Outlined.Restaurant) }
+        if (filtros.tiempoMaximoMinutos > 0) {
+            add("Hasta ${filtros.tiempoMaximoMinutos} min" to Icons.Outlined.Schedule)
+        }
+        if (filtros.kcalMaximas > 0) {
+            add("Hasta ${filtros.kcalMaximas} kcal" to Icons.Outlined.LocalFireDepartment)
+        }
+        if (filtros.proteinasMinimas > 0) {
+            add("Desde ${filtros.proteinasMinimas} g de proteína" to Icons.Outlined.FitnessCenter)
+        }
+        if (filtros.region.isNotBlank()) add(filtros.region to Icons.Outlined.Public)
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -538,17 +789,17 @@ private fun PantallaResultados(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (filtrosActivos.isEmpty()) {
+                    if (etiquetas.isEmpty()) {
                         MetaPill(
-                            text = "Sin filtros de tipo",
+                            text = "Sin filtros",
                             bg = Color(0xFFF1F5F9),
                             fg = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     } else {
-                        filtrosActivos.sorted().forEach { tipo ->
+                        etiquetas.forEach { (texto, icono) ->
                             MetaPill(
-                                text = tipo,
-                                icon = Icons.Outlined.Restaurant,
+                                text = texto,
+                                icon = icono,
                                 tint = MaterialTheme.colorScheme.primary,
                                 bg = Color(0xFFF1F5F9),
                                 fg = MaterialTheme.colorScheme.onSurface
@@ -556,7 +807,7 @@ private fun PantallaResultados(
                         }
                     }
                     MetaPill(
-                        text = "Máx $maximoFaltantes faltantes",
+                        text = "Máx ${filtros.maximoFaltantes} faltantes",
                         icon = Icons.Filled.Bolt,
                         tint = MaterialTheme.colorScheme.primary,
                         bg = MaterialTheme.colorScheme.primaryContainer,

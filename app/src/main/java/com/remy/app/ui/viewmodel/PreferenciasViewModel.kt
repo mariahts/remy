@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.remy.app.data.FiltrosSugerencias
 import com.remy.app.data.PreferenciasRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,21 +16,38 @@ import kotlinx.coroutines.launch
 
 class PreferenciasViewModel(private val repositorio: PreferenciasRepository) : ViewModel() {
 
-    val filtrosActivos: StateFlow<Set<String>> = repositorio.filtrosActivos
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptySet())
+    val filtros: StateFlow<FiltrosSugerencias> = repositorio.filtros
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), FiltrosSugerencias())
 
-    val maximoFaltantes: StateFlow<Int> = repositorio.maximoFaltantes
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), PreferenciasRepository.MAXIMO_POR_DEFECTO)
-
-    fun alternarFiltro(filtro: String) {
+    fun alternarTipoDePlato(tipo: String) {
         viewModelScope.launch {
-            val actual = repositorio.filtrosActivos.first()
-            repositorio.guardarFiltros(if (filtro in actual) actual - filtro else actual + filtro)
+            val actuales = repositorio.filtros.first().tiposDePlato
+            repositorio.guardarTiposDePlato(if (tipo in actuales) actuales - tipo else actuales + tipo)
         }
     }
 
     fun cambiarMaximoFaltantes(valor: Int) {
         viewModelScope.launch { repositorio.guardarMaximoFaltantes(valor) }
+    }
+
+    fun cambiarTiempoMaximo(minutos: Int) {
+        viewModelScope.launch { repositorio.guardarTiempoMaximo(minutos) }
+    }
+
+    fun cambiarKcalMaximas(kcal: Int) {
+        viewModelScope.launch { repositorio.guardarKcalMaximas(kcal) }
+    }
+
+    fun cambiarProteinasMinimas(gramos: Int) {
+        viewModelScope.launch { repositorio.guardarProteinasMinimas(gramos) }
+    }
+
+    fun cambiarRegion(region: String) {
+        viewModelScope.launch { repositorio.guardarRegion(region) }
+    }
+
+    fun limpiarFiltros() {
+        viewModelScope.launch { repositorio.limpiarFiltros() }
     }
 
     companion object {

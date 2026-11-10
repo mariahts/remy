@@ -12,10 +12,19 @@ import com.remy.app.data.RecetaConIngredientes
 import com.remy.app.data.RecetaRepository
 import com.remy.app.data.RemyDatabase
 import com.remy.app.logica.clasificarRecetas
+import com.remy.app.logica.filtrarRecetas
+import com.remy.app.ui.EstadoCarga
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 
 /** Un ingrediente que falta en una receta, con su nombre para mostrarlo. */
 data class FaltanteVista(val nombre: String)
@@ -33,46 +42,65 @@ data class GruposSugerencias(
 }
 
 /**
- * Calcula las sugerencias con el algoritmo de #33: junta la despensa, el
- * catálogo de recetas, el máximo de faltantes guardado en preferencias y los
- * filtros de tipo de plato de #29. Toda la lógica vive aquí; el Composable
- * solo pinta lo que llega en [grupos].
+ * Calcula las sugerencias con el algoritmo de #33 y los filtros de #37: junta
+ * la despensa, el catálogo, el máximo de faltantes y el resto de filtros
+ * guardados en DataStore. La pantalla solo pinta lo que llega en [estado].
  */
 class SugerenciasViewModel(
-    recetas: RecetaRepository,
+    private val recetas: RecetaRepository,
     alimentos: AlimentoRepository,
     preferencias: PreferenciasRepository
 ) : ViewModel() {
 
-    val grupos: StateFlow<GruposSugerencias> = combine(
-        recetas.recetas,
-        alimentos.alimentos,
-        alimentos.catalogo,
-        preferencias.maximoFaltantes,
-        preferencias.filtrosActivos
-    ) { recetas, despensa, catalogo, maximo, filtros ->
-        val nombres = catalogo.associate { it.id to it.nombre }
-        val filtradas = if (filtros.isEmpty()) recetas
-        else recetas.filter { it.receta.tipoPlato in filtros }
+    private val reintentos = MutableStateFlow(0)
 
-        val resultado = clasificarRecetas(
-            recetas = filtradas,
-            alimentoIdsEnDespensa = despensa.map { it.id }.toSet(),
-            maximoFaltantes = maximo
-        )
+    val regiones: StateFlow<List<String>> = recetas.recetas
+        .map { lista ->
+            lista.map { it.receta.regionOrigen.trim() }
+                .filter { it.isNotEmpty() }
+                .distinct()
+                .sorted()
+        }
+        .catch { emit(emptyList()) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-        GruposSugerencias(
-            completas = resultado.completas.map { it.receta },
-            casiCocinables = resultado.casiCocinables.map { casi ->
-                CasiCocinableVista(
-                    receta = casi.receta,
-                    faltantes = casi.faltantes.map { faltante ->
-                        FaltanteVista(nombres[faltante.alimentoId] ?: "Alimento ${faltante.alimentoId}")
+    val estado: StateFlow<EstadoCarga<GruposSugerencias>> = reintentos
+        .flatMapLatest {
+            combine(
+                recetas.recetas,
+                alimentos.alimentos,
+                alimentos.catalogo,
+                preferencias.filtros
+            ) { recetas, despensa, catalogo, filtros ->
+                val nombres = catalogo.associate { it.id to it.nombre }
+                val filtradas = filtrarRecetas(recetas, filtros)
+                val resultado = clasificarRecetas(
+                    recetas = filtradas,
+                    alimentoIdsEnDespensa = despensa.map { it.id }.toSet(),
+                    maximoFaltantes = filtros.maximoFaltantes
+                )
+
+                GruposSugerencias(
+                    completas = resultado.completas.map { it.receta },
+                    casiCocinables = resultado.casiCocinables.map { casi ->
+                        CasiCocinableVista(
+                            receta = casi.receta,
+                            faltantes = casi.faltantes.map { faltante ->
+                                FaltanteVista(nombres[faltante.alimentoId] ?: "Alimento ${faltante.alimentoId}")
+                            }
+                        )
                     }
                 )
             }
-        )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), GruposSugerencias())
+                .map<GruposSugerencias, EstadoCarga<GruposSugerencias>> { EstadoCarga.Datos(it) }
+                .onStart { emit(EstadoCarga.Cargando) }
+                .catch { emit(EstadoCarga.Error("No se han podido calcular las sugerencias.")) }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), EstadoCarga.Cargando)
+
+    fun reintentar() {
+        reintentos.update { it + 1 }
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
