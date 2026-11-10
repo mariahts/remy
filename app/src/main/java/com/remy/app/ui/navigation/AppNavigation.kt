@@ -72,10 +72,10 @@ fun AppNavigation() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .shadow(6.dp, RectangleShape, ambientColor = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.04f), spotColor = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.08f))
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(horizontal = 8.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    .shadow(10.dp, RectangleShape, ambientColor = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.06f), spotColor = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.10f))
+                    .background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.98f))
+                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 destinos.forEach { destino ->
@@ -94,7 +94,7 @@ fun AppNavigation() {
                                 else androidx.compose.ui.graphics.Color.Transparent
                             )
                             .clickable(onClick = { irA(destino.ruta) })
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = 8.dp, horizontal = 4.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
