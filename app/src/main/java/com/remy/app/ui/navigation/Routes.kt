@@ -1,9 +1,9 @@
 package com.remy.app.ui.navigation
 
 object Routes {
+    const val INICIO = "inicio"
     const val DESPENSA = "despensa"
     const val RECETAS = "recetas"
-    const val COCINADAS = "cocinadas"
     const val SUGERENCIAS = "sugerencias"
     const val RECETA_DETALLE = "receta/{id}"
 

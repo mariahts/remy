@@ -25,6 +25,7 @@ cocinan en casa con poco tiempo y presupuesto ajustado.
 - Al cocinar una receta descuenta los ingredientes y guarda una foto del plato.
 
 ## Funcionalidades de la primera versión
+- Pantalla de inicio con calendario y registro de las recetas cocinadas por día.
 - Despensa personal: alimentos, cantidades y unidades (Room).
 - Catálogo de al menos 20 recetas con tiempo e información nutricional.
 - Sugerencias según la despensa: completas y con pocos ingredientes faltantes.
@@ -34,14 +35,14 @@ cocinan en casa con poco tiempo y presupuesto ajustado.
 - Estados de carga y de error con opción de reintentar en las pantallas que
   consultan Room (#46).
 - Marcar una receta como cocinada, con fecha y fotografía del plato
-  (función multimedia), e historial de recetas cocinadas.
+  (función multimedia), y registro de lo cocinado en el calendario.
 - Al marcar una receta como cocinada se descuentan de la despensa los
   ingredientes que había, sin bajar nunca de cero (#36).
 
 ## Si hay tiempo
 Registro e inicio de sesión, lista de la compra con cálculo de gasto, planes de
-comidas y calendario, valoraciones, recetas propias con foto, modo sin
-conexión, sugerencias por patrones de consumo y funciones sociales.
+comidas, valoraciones, recetas propias con foto, modo sin conexión, sugerencias
+por patrones de consumo y funciones sociales.
 
 ## Tecnologías
 - Kotlin y Jetpack Compose (Material 3)
@@ -60,7 +61,7 @@ El código está en `app/src/main/java/com/remy/app/`:
   preferencias de filtros con DataStore).
 - `domain/model`: clases de negocio, como Receta o Alimento.
 - `ui`: interfaz con Jetpack Compose.
-  - `screens`: pantallas (despensa, recetas, cocinadas y sugerencias).
+  - `screens`: pantallas (inicio, despensa, recetas y sugerencias).
   - `components`: elementos reutilizables.
   - `navigation`: rutas y navegación entre pantallas.
   - `viewmodel`: ViewModels de cada pantalla.
@@ -81,11 +82,12 @@ La app pide permiso de cámara al marcar una receta como cocinada y elegir la
 cámara; se puede denegar y seguir funcionando con el selector de fotos del
 sistema.
 
-### Cómo probar el recorrido principal (Entrega 4)
-1. Instalar la APK o pulsar Run: la app abre la pestaña Despensa y, en la
-   primera instalación, entran el catálogo de 20 recetas y 30 alimentos.
-2. Añadir un alimento con el botón flotante; probar a guardar con cantidad 0
-   para ver el mensaje de validación.
+### Cómo probar el recorrido principal
+1. Instalar la APK o pulsar Run: la app abre la pantalla de Inicio con el
+   calendario y, en la primera instalación, entran el catálogo de 20 recetas y
+   30 alimentos.
+2. Pestaña Despensa: añadir un alimento con el botón flotante; probar a guardar
+   con cantidad 0 para ver el mensaje de validación.
 3. Pestaña Recetas: tocar una tarjeta para abrir el detalle (ingredientes,
    pasos y nutrición) y volver con «Volver al listado».
 4. Pestaña Sugerencias: con la despensa completa aparecen «Se puede cocinar
@@ -96,9 +98,9 @@ sistema.
    comprobar que la lista y el contador cambian. Cerrar y abrir la app: los
    filtros se conservan (DataStore); «Limpiar filtros» vuelve al estado inicial.
 6. Abrir una receta, pulsar «Empezar a cocinar», bajar hasta «Marcar como
-   cocinada» y confirmar con foto o sin ella: la receta aparece en la pestaña
-   Cocinadas con la fecha del día y la despensa descuenta los ingredientes
-   (sin bajar nunca de cero).
+   cocinada» y confirmar con foto o sin ella: la receta queda registrada en el
+   calendario de Inicio en el día correspondiente y la despensa descuenta los
+   ingredientes (sin bajar nunca de cero).
 
 ## Organización del equipo
 - Tablero Kanban (GitHub Project): https://github.com/users/mariahts/projects/1
@@ -122,10 +124,10 @@ El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
   pantallas, con su documento en `docs/Identidad visual de REMY.md`.
 - Preferencias con DataStore (#29), listado (#31) y detalle (#32) de recetas,
   y sugerencias con los dos grupos (#33 y #34).
-- Receta marcada como cocinada con foto (#35), historial de recetas cocinadas
-  (#44) y descuento automático de la despensa al cocinar (#36).
-- Navegación con cuatro pestañas: Despensa, Recetas, Cocinadas y Sugerencias
-  (#45).
+- Receta marcada como cocinada con foto (#35), registro de recetas cocinadas
+  en el calendario de Inicio (#44) y descuento automático de la despensa al
+  cocinar (#36).
+- Navegación con cuatro pestañas: Inicio, Despensa, Recetas y Sugerencias (#45).
 - Filtros completos de #37: tipo de plato, tiempo máximo, calorías máximas,
   proteínas mínimas, región y máximo de faltantes, persistidos en DataStore y
   con opción de limpiarlos.
