@@ -157,6 +157,10 @@ fun RecetasScreen(
     viewModel: RecetasViewModel = viewModel(factory = RecetasViewModel.Factory),
 ) {
     val estado by viewModel.estado.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val preferencias = remember { PreferenciasRepository.delContexto(context) }
+    val favoritas by preferencias.favoritas.collectAsStateWithLifecycle(initialValue = emptySet())
+    val scope = rememberCoroutineScope()
 
     Column(modifier = Modifier.fillMaxSize().background(Green100)) {
         RemyHeaderSombra(
@@ -214,7 +218,12 @@ fun RecetasScreen(
                             item(key = "tarjetas") {
                                 Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
                                     filtradas.forEach { item ->
-                                        TarjetaReceta(item) { onRecetaClick(item.receta.id) }
+                                        TarjetaReceta(
+                                            item = item,
+                                            esFavorita = item.receta.id in favoritas,
+                                            onToggleFavorita = { scope.launch { preferencias.alternarFavorita(item.receta.id) } },
+                                            onClick = { onRecetaClick(item.receta.id) }
+                                        )
                                     }
                                 }
                             }
@@ -288,9 +297,13 @@ private fun ChipIngrediente(nombre: String) {
 }
 
 @Composable
-private fun TarjetaReceta(item: RecetaConIngredientes, onClick: () -> Unit) {
+private fun TarjetaReceta(
+    item: RecetaConIngredientes,
+    esFavorita: Boolean = false,
+    onToggleFavorita: () -> Unit = {},
+    onClick: () -> Unit
+) {
     val receta = item.receta
-    var marcada by rememberSaveable(receta.id) { mutableStateOf(true) }
 
     SectionCard(
         modifier = Modifier.fillMaxWidth(),
@@ -327,13 +340,13 @@ private fun TarjetaReceta(item: RecetaConIngredientes, onClick: () -> Unit) {
                     .size(36.dp)
                     .clip(CircleShape)
                     .background(Color.White.copy(alpha = 0.92f))
-                    .clickable { marcada = !marcada },
+                    .clickable { onToggleFavorita() },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     Icons.Filled.Bookmark,
                     contentDescription = "Guardar receta",
-                    tint = if (marcada) Green600 else Slate500,
+                    tint = if (esFavorita) Green600 else Slate500,
                     modifier = Modifier.size(20.dp)
                 )
             }
