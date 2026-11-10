@@ -45,6 +45,9 @@ import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
 
+private const val DEMO_CORREO = "demo@remy.app"
+private const val DEMO_CONTRASENA = "Demo1234!"
+
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
     var correo by remember { mutableStateOf("") }
@@ -180,6 +183,45 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             enabled = !cargando
         ) {
             Text("Continuar con Google")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "Acceso de prueba (sin registrarte)",
+            style = MaterialTheme.typography.titleSmall,
+            color = Slate900,
+            fontWeight = FontWeight.SemiBold
+        )
+        Text(
+            text = "Correo: $DEMO_CORREO\nContraseña: $DEMO_CONTRASENA",
+            style = MaterialTheme.typography.bodyMedium,
+            color = Slate500,
+            textAlign = TextAlign.Center
+        )
+        Button(
+            onClick = {
+                scope.launch {
+                    cargando = true
+                    mensaje = null
+                    correo = DEMO_CORREO
+                    contrasena = DEMO_CONTRASENA
+                    try {
+                        auth.signInWith(Email) {
+                            email = DEMO_CORREO
+                            password = DEMO_CONTRASENA
+                        }
+                    } catch (e: Exception) {
+                        mensaje = e.message ?: "No se ha podido iniciar sesión con la cuenta de prueba."
+                    } finally {
+                        cargando = false
+                    }
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !cargando
+        ) {
+            Text("Entrar con cuenta de prueba")
         }
     }
 }
