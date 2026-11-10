@@ -26,6 +26,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.remy.app.data.RecetaConIngredientes
+import io.github.jan.supabase.auth.auth
 import com.remy.app.ui.components.ContenidoConEstado
 import com.remy.app.ui.components.FotoDelPlato
 import com.remy.app.ui.components.FotoReceta
@@ -122,7 +126,12 @@ private fun ContenidoInicio(
     val seleccionado = runCatching { LocalDate.parse(diaSeleccionado) }.getOrDefault(hoy)
 
     val recetasDelDia = porDia[seleccionado].orEmpty()
-    val nombre = "María" // Se sustituirá por el nombre de la cuenta cuando se añada el inicio de sesión
+    val usuario = com.remy.app.data.SupabaseClientProvider.client.auth.currentUserOrNull()
+    val nombre = usuario?.userMetadata?.get("full_name")?.toString()?.trim('"')
+        ?: usuario?.userMetadata?.get("name")?.toString()?.trim('"')
+        ?: usuario?.email?.substringBefore('@')
+        ?: "María"
+    val scope = rememberCoroutineScope()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -142,6 +151,15 @@ private fun ContenidoInicio(
                     color = Slate900,
                     fontWeight = FontWeight.Bold
                 )
+                if (usuario != null) {
+                    TextButton(onClick = {
+                        scope.launch {
+                            com.remy.app.data.SupabaseClientProvider.client.auth.signOut()
+                        }
+                    }) {
+                        Text("Cerrar sesión", color = Green600)
+                    }
+                }
             }
         }
 
