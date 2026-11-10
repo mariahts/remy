@@ -74,12 +74,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.remy.app.R
 import com.remy.app.data.Alimento
+import com.remy.app.ui.EstadoCarga
 import com.remy.app.ui.components.FilterPill
 import com.remy.app.ui.components.IconCircle
+import com.remy.app.ui.components.PantallaCargando
+import com.remy.app.ui.components.PantallaError
 import com.remy.app.ui.components.RemyCta
 import com.remy.app.ui.components.SearchPill
 import com.remy.app.ui.components.SectionCard
 import com.remy.app.ui.components.categoriaDe
+import com.remy.app.ui.components.formatoCantidad
 import com.remy.app.ui.theme.Amber600
 import com.remy.app.ui.theme.DetailGreen900
 import com.remy.app.ui.theme.DialogShape24
@@ -100,8 +104,6 @@ import com.remy.app.ui.theme.Slate600
 import com.remy.app.ui.theme.Slate900
 import com.remy.app.ui.viewmodel.DespensaViewModel
 import com.remy.app.ui.viewmodel.ErroresAlimento
-
-private fun Double.formato(): String = if (this % 1.0 == 0.0) toLong().toString() else toString()
 
 // Estado cosmético derivado de la categoría (los mockups muestran estas etiquetas)
 private data class EstadoInfo(val texto: String, val color: Color, val conCalendario: Boolean = false)
@@ -132,7 +134,11 @@ fun DespensaScreen(
     viewModel: DespensaViewModel = viewModel(factory = DespensaViewModel.Factory),
     onVerSugerencias: () -> Unit = {}
 ) {
-    val alimentos by viewModel.alimentos.collectAsStateWithLifecycle()
+    val estado by viewModel.estado.collectAsStateWithLifecycle()
+    val alimentos = when (val actual = estado) {
+        is EstadoCarga.Datos -> actual.datos
+        else -> emptyList()
+    }
     var mostrarFormulario by rememberSaveable { mutableStateOf(false) }
     var editando by remember { mutableStateOf<Alimento?>(null) }
     var confirmandoBorrado by remember { mutableStateOf<Alimento?>(null) }
@@ -174,6 +180,23 @@ fun DespensaScreen(
                 .padding(padding)
                 .fillMaxSize()
         ) {
+            when (estado) {
+                is EstadoCarga.Cargando -> {
+                    PantallaCargando("Cargando tu despensa…")
+                    return@Column
+                }
+
+                is EstadoCarga.Error -> {
+                    PantallaError(
+                        mensaje = (estado as EstadoCarga.Error).mensaje,
+                        onReintentar = viewModel::reintentar
+                    )
+                    return@Column
+                }
+
+                is EstadoCarga.Datos -> Unit
+            }
+
             if (alimentos.isEmpty()) {
                 Column(
                     modifier = Modifier.fillMaxSize().padding(24.dp),
@@ -476,7 +499,7 @@ private fun FoodItemCard(
                     modifier = Modifier.padding(top = 3.dp)
                 ) {
                     Text(
-                        "${alimento.cantidad.formato()} ${alimento.unidad}",
+                        "${alimento.cantidad.formatoCantidad()} ${alimento.unidad}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = Green600,
                         fontWeight = FontWeight.Medium
@@ -580,7 +603,7 @@ private fun ConfirmarBorrarDialog(
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.padding(top = 2.dp)) {
                             Text(
-                                "${alimento.cantidad.formato()} ${alimento.unidad}",
+                                "${alimento.cantidad.formatoCantidad()} ${alimento.unidad}",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = Green600,
                                 fontWeight = FontWeight.Medium
@@ -644,7 +667,7 @@ private fun FormularioAlimentoDialog(
     onCerrar: () -> Unit,
 ) {
     var nombre by rememberSaveable { mutableStateOf(alimento?.nombre ?: "") }
-    var cantidad by rememberSaveable { mutableStateOf(alimento?.cantidad?.formato() ?: "") }
+    var cantidad by rememberSaveable { mutableStateOf(alimento?.cantidad?.formatoCantidad() ?: "") }
     var unidad by rememberSaveable { mutableStateOf(alimento?.unidad ?: "") }
     var errores by remember { mutableStateOf(ErroresAlimento()) }
 

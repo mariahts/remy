@@ -9,16 +9,33 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.remy.app.data.Alimento
 import com.remy.app.data.AlimentoRepository
 import com.remy.app.data.RemyDatabase
+import com.remy.app.ui.EstadoCarga
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class DespensaViewModel(private val repositorio: AlimentoRepository) : ViewModel() {
 
-    val alimentos: StateFlow<List<Alimento>> = repositorio.alimentos
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    private val reintentos = MutableStateFlow(0)
+
+    val estado: StateFlow<EstadoCarga<List<Alimento>>> = reintentos
+        .flatMapLatest {
+            repositorio.alimentos
+                .map<List<Alimento>, EstadoCarga<List<Alimento>>> { EstadoCarga.Datos(it) }
+                .onStart { emit(EstadoCarga.Cargando) }
+                .catch { emit(EstadoCarga.Error("No se ha podido cargar la despensa.")) }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), EstadoCarga.Cargando)
 
     /** Devuelve los errores de validación; si no hay ninguno, guarda. */
     fun guardar(editando: Alimento?, nombre: String, cantidad: String, unidad: String): ErroresAlimento {
@@ -50,6 +67,10 @@ class DespensaViewModel(private val repositorio: AlimentoRepository) : ViewModel
 
     fun borrar(alimento: Alimento) {
         viewModelScope.launch { repositorio.borrar(alimento) }
+    }
+
+    fun reintentar() {
+        reintentos.update { it + 1 }
     }
 
     companion object {
