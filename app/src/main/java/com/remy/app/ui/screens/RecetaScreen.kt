@@ -99,6 +99,7 @@ import com.remy.app.data.RecetaConIngredientes
 import com.remy.app.data.RecetaDetalle
 import com.remy.app.ui.components.AlternativaGaleria
 import com.remy.app.ui.components.CamaraConPermiso
+import com.remy.app.ui.components.ContenidoConEstado
 import com.remy.app.ui.components.EmojiCircle
 import com.remy.app.ui.components.EstadoPermiso
 import com.remy.app.ui.components.FotoReceta
@@ -113,6 +114,7 @@ import com.remy.app.ui.components.categoriaDe
 import com.remy.app.ui.components.emojiDe
 import com.remy.app.ui.components.fechaEnEspanol
 import com.remy.app.ui.components.FotoDelPlato
+import com.remy.app.ui.components.formatoCantidad
 import com.remy.app.ui.theme.Amber100
 import com.remy.app.ui.theme.Amber600
 import com.remy.app.ui.theme.DetailDarkPill
@@ -147,19 +149,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-private fun Double.formato(): String = if (this % 1.0 == 0.0) toLong().toString() else toString()
-
 @Composable
 fun RecetasScreen(
     onRecetaClick: (Long) -> Unit,
     viewModel: RecetasViewModel = viewModel(factory = RecetasViewModel.Factory),
 ) {
-    val recetas by viewModel.recetas.collectAsStateWithLifecycle()
-    var query by rememberSaveable { mutableStateOf("") }
-    val filtradas = remember(recetas, query) {
-        if (query.isBlank()) recetas
-        else recetas.filter { it.receta.nombre.contains(query.trim(), ignoreCase = true) }
-    }
+    val estado by viewModel.estado.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.fillMaxSize().background(Green100)) {
         RemyHeaderSombra(
@@ -169,48 +164,62 @@ fun RecetasScreen(
             trailing = { PersonCircle(36.dp) }
         )
 
-        if (recetas.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Aún no hay recetas", style = MaterialTheme.typography.titleLarge, color = Slate600)
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 96.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                item(key = "contador") { PillContador(filtradas.size) }
-                item(key = "buscador") {
-                    SearchPill(
-                        value = query,
-                        onValueChange = { query = it },
-                        placeholder = "Buscar en tus recetas...",
-                        leadingIcon = Icons.Filled.Search,
-                        iconTint = Green600,
-                        trailingIcon = if (query.isNotEmpty()) Icons.Outlined.Close else Icons.Outlined.Tune,
-                        onTrailingClick = if (query.isNotEmpty()) ({ query = "" }) else null
-                    )
+        Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
+            ContenidoConEstado(
+                estado = estado,
+                onReintentar = viewModel::reintentar,
+                mensajeCargando = "Cargando tus recetas…"
+            ) { recetas ->
+                var query by rememberSaveable { mutableStateOf("") }
+                val filtradas = remember(recetas, query) {
+                    if (query.isBlank()) recetas
+                    else recetas.filter { it.receta.nombre.contains(query.trim(), ignoreCase = true) }
                 }
-                if (filtradas.isEmpty()) {
-                    item(key = "sin-resultados") {
-                        Text(
-                            "No encontramos recetas con «$query»",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Slate600,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth().padding(top = 24.dp)
-                        )
+
+                if (recetas.isEmpty()) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("Aún no hay recetas", style = MaterialTheme.typography.titleLarge, color = Slate600)
                     }
                 } else {
-                    item(key = "tarjetas") {
-                        Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                            filtradas.forEach { item ->
-                                TarjetaReceta(item) { onRecetaClick(item.receta.id) }
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 96.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        item(key = "contador") { PillContador(filtradas.size) }
+                        item(key = "buscador") {
+                            SearchPill(
+                                value = query,
+                                onValueChange = { query = it },
+                                placeholder = "Buscar en tus recetas...",
+                                leadingIcon = Icons.Filled.Search,
+                                iconTint = Green600,
+                                trailingIcon = if (query.isNotEmpty()) Icons.Outlined.Close else Icons.Outlined.Tune,
+                                onTrailingClick = if (query.isNotEmpty()) ({ query = "" }) else null
+                            )
+                        }
+                        if (filtradas.isEmpty()) {
+                            item(key = "sin-resultados") {
+                                Text(
+                                    "No encontramos recetas con «$query»",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Slate600,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth().padding(top = 24.dp)
+                                )
+                            }
+                        } else {
+                            item(key = "tarjetas") {
+                                Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                                    filtradas.forEach { item ->
+                                        TarjetaReceta(item) { onRecetaClick(item.receta.id) }
+                                    }
+                                }
                             }
                         }
+                        item(key = "pie") { PieRecetas() }
                     }
                 }
-                item(key = "pie") { PieRecetas() }
             }
         }
     }
@@ -981,10 +990,10 @@ private fun IngCard(
                 val nombre = par.alimento?.nombre ?: "Ingrediente"
                 FilaIngrediente(
                     nombre = nombre,
-                    cantidadTexto = "${(par.ingrediente.cantidad * porciones).formato()} ${par.ingrediente.unidad}",
+                    cantidadTexto = "${(par.ingrediente.cantidad * porciones).formatoCantidad()} ${par.ingrediente.unidad}",
                     enDespensa = par.alimento != null,
                     subtitulo = if (par.alimento != null) {
-                        "En despensa (${par.alimento.cantidad.formato()} ${par.alimento.unidad})"
+                        "En despensa (${par.alimento.cantidad.formatoCantidad()} ${par.alimento.unidad})"
                     } else {
                         "No está en tu despensa"
                     },

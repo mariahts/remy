@@ -1,4 +1,4 @@
-package com.remy.app.ui.viewmodel
+﻿package com.remy.app.ui.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
@@ -9,15 +9,38 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.remy.app.data.RecetaConIngredientes
 import com.remy.app.data.RecetaRepository
 import com.remy.app.data.RemyDatabase
+import com.remy.app.ui.EstadoCarga
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 
 /** Historial de recetas cocinadas con foto y fecha (#44). */
+@OptIn(ExperimentalCoroutinesApi::class)
 class CocinadasViewModel(private val repositorio: RecetaRepository) : ViewModel() {
 
-    val cocinadas: StateFlow<List<RecetaConIngredientes>> = repositorio.cocinadas
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    private val reintentos = MutableStateFlow(0)
+
+    val estado: StateFlow<EstadoCarga<List<RecetaConIngredientes>>> = reintentos
+        .flatMapLatest {
+            repositorio.cocinadas
+                .map<List<RecetaConIngredientes>, EstadoCarga<List<RecetaConIngredientes>>> {
+                    EstadoCarga.Datos(it)
+                }
+                .onStart { emit(EstadoCarga.Cargando) }
+                .catch { emit(EstadoCarga.Error("No se ha podido cargar el historial.")) }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), EstadoCarga.Cargando)
+
+    fun reintentar() {
+        reintentos.update { it + 1 }
+    }
 
     companion object {
         /** Crea el ViewModel real de la app, con la base de datos Room. */
