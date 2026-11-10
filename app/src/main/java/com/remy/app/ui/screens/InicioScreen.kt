@@ -69,6 +69,7 @@ import com.remy.app.ui.theme.Slate500
 import com.remy.app.ui.theme.Slate600
 import com.remy.app.ui.theme.Slate900
 import com.remy.app.ui.viewmodel.CocinadasViewModel
+import com.remy.app.ui.viewmodel.InicioDatos
 import java.time.Instant
 import java.time.LocalDate
 import java.time.YearMonth
@@ -77,9 +78,8 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 /**
- * Pantalla de inicio con calendario y registro de recetas cocinadas.
- * Los días con recetas marcadas se señalan en el calendario y, al
- * seleccionar un día, se muestra el registro de lo cocinado.
+ * Pantalla de inicio con calendario, registro de recetas cocinadas y
+ * una receta sugerida aleatoria para hoy.
  */
 @Composable
 fun InicioScreen(
@@ -101,9 +101,13 @@ fun InicioScreen(
             ContenidoConEstado(
                 estado = estado,
                 onReintentar = viewModel::reintentar,
-                mensajeCargando = "Cargando tu calendario…"
-            ) { cocinadas ->
-                ContenidoInicio(cocinadas = cocinadas, onRecetaClick = onRecetaClick)
+                mensajeCargando = "Cargando tu inicio…"
+            ) { datos ->
+                ContenidoInicio(
+                    cocinadas = datos.cocinadas,
+                    sugerencia = datos.sugerencia,
+                    onRecetaClick = onRecetaClick
+                )
             }
         }
     }
@@ -112,6 +116,7 @@ fun InicioScreen(
 @Composable
 private fun ContenidoInicio(
     cocinadas: List<RecetaConIngredientes>,
+    sugerencia: RecetaConIngredientes?,
     onRecetaClick: (Long) -> Unit,
 ) {
     val zona = ZoneId.systemDefault()
@@ -132,7 +137,6 @@ private fun ContenidoInicio(
         ?: usuario?.userMetadata?.get("name")?.toString()?.trim('"')
         ?: usuario?.email?.substringBefore('@')
         ?: "María"
-    val scope = rememberCoroutineScope()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -145,34 +149,24 @@ private fun ContenidoInicio(
                 shape = RemyShapes.extraLarge,
                 padding = PaddingValues(16.dp)
             ) {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
-                        text = saludoSegunHora(),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Slate600
-                    )
-                    Text(
-                        text = nombre,
+                        text = "${saludoSegunHora()}, $nombre",
                         style = MaterialTheme.typography.headlineSmall,
                         color = Slate900,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "Revisa tu calendario y lo que has cocinado cada día.",
+                        text = "Revisa tu calendario, lo que has cocinado y una receta recomendada para hoy.",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Slate500
+                        color = Slate600
                     )
-                    if (usuario != null) {
-                        TextButton(onClick = {
-                            scope.launch {
-                                com.remy.app.data.SupabaseClientProvider.client.auth.signOut()
-                            }
-                        }) {
-                            Text("Cerrar sesión", color = Green600)
-                        }
-                    }
                 }
             }
+        }
+
+        item(key = "sugerencia") {
+            SugerenciaDelDia(sugerencia = sugerencia, onRecetaClick = onRecetaClick)
         }
 
         item(key = "calendario") {
@@ -377,6 +371,84 @@ private fun RegistroVacio(dia: LocalDate) {
                 color = Slate600,
                 textAlign = TextAlign.Center
             )
+        }
+    }
+}
+
+@Composable
+private fun SugerenciaDelDia(
+    sugerencia: RecetaConIngredientes?,
+    onRecetaClick: (Long) -> Unit,
+) {
+    SectionCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RemyShapes.extraLarge,
+        border = null,
+        glow = false,
+        padding = PaddingValues(0.dp)
+    ) {
+        Column {
+            Box(modifier = Modifier.fillMaxWidth().height(170.dp)) {
+                if (sugerencia != null) {
+                    FotoReceta(sugerencia.receta.nombre, Modifier.fillMaxSize())
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Green200),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(Icons.Outlined.Restaurant, contentDescription = null, tint = Green600)
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(12.dp)
+                        .clip(PillShape)
+                        .background(Green600)
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                ) {
+                    Text(
+                        "Receta recomendada para hoy",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = androidx.compose.ui.graphics.Color.White,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                if (sugerencia != null) {
+                    Text(
+                        sugerencia.receta.nombre,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Slate900,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        "Una sugerencia aleatoria para inspirarte hoy en la cocina.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Slate600
+                    )
+                    RemyCta(
+                        text = "Ver receta",
+                        onClick = { onRecetaClick(sugerencia.receta.id) },
+                        modifier = Modifier.fillMaxWidth(),
+                        height = 44.dp,
+                        iconAfter = Icons.AutoMirrored.Filled.ArrowForward,
+                        fontSize = 14.sp
+                    )
+                } else {
+                    Text(
+                        "Aún no hay recetas disponibles para recomendar.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Slate600
+                    )
+                }
+            }
         }
     }
 }
