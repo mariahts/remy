@@ -89,7 +89,7 @@ class SugerenciasViewModel(
                 val candidatos = clasificarRecetas(
                     recetas = filtradas,
                     despensa = despensa,
-                    maximoFaltantes = PreferenciasRepository.MAXIMO_MAXIMO,
+                    maximoFaltantes = Int.MAX_VALUE,
                     faltantesPermitidos = emptySet()
                 )
                 val faltantesDisponibles = candidatos.casiCocinables

@@ -635,11 +635,11 @@ private fun FiltroMaxFaltantes(
                         )
                         BotonMini(
                             icon = Icons.Outlined.Add,
-                            enabled = maximoFaltantes < 10,
-                            onClick = { cambiarMaximo((maximoFaltantes + 1).coerceAtMost(10)) }
+                            enabled = maximoFaltantes < 20,
+                            onClick = { cambiarMaximo((maximoFaltantes + 1).coerceAtMost(20)) }
                         )
                         Text(
-                            "de 10",
+                            "de 20",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -658,54 +658,75 @@ private fun FiltroMaxFaltantes(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     } else {
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            faltantesDisponibles.forEach { faltante ->
-                                val activo = faltante.alimentoId in faltantesPermitidos
-                                val texto = if (faltante.insuficiente) {
-                                    "${faltante.nombre} · cantidad insuficiente"
-                                } else {
-                                    "${faltante.nombre} · te falta"
-                                }
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clip(RemyShapes.small)
-                                        .background(if (activo) MaterialTheme.colorScheme.primaryContainer else Color.White)
-                                        .border(
-                                            1.dp,
-                                            if (activo) MaterialTheme.colorScheme.primary else Color(0xFFE2E8F0),
-                                            RemyShapes.small
-                                        )
-                                        .clickable { alternarFaltante(faltante.alimentoId) }
-                                        .padding(horizontal = 12.dp, vertical = 10.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        texto,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = if (activo) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                    Box(
+                        var busqueda by rememberSaveable { mutableStateOf("") }
+                        val filtrados = if (busqueda.isBlank()) faltantesDisponibles
+                        else faltantesDisponibles.filter { it.nombre.contains(busqueda, ignoreCase = true) }
+
+                        androidx.compose.material3.OutlinedTextField(
+                            value = busqueda,
+                            onValueChange = { busqueda = it },
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true,
+                            label = { Text("Escribe para buscar un ingrediente") },
+                            placeholder = { Text("Ej.: tomate, huevo...") }
+                        )
+
+                        if (filtrados.isEmpty()) {
+                            Text(
+                                "No hay ingredientes que coincidan con \"$busqueda\".",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        } else {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                filtrados.forEach { faltante ->
+                                    val activo = faltante.alimentoId in faltantesPermitidos
+                                    val texto = if (faltante.insuficiente) {
+                                        "${faltante.nombre} · cantidad insuficiente"
+                                    } else {
+                                        "${faltante.nombre} · te falta"
+                                    }
+                                    Row(
                                         modifier = Modifier
-                                            .size(22.dp)
-                                            .clip(CircleShape)
-                                            .background(if (activo) MaterialTheme.colorScheme.primary else Color.Transparent)
+                                            .fillMaxWidth()
+                                            .clip(RemyShapes.small)
+                                            .background(if (activo) MaterialTheme.colorScheme.primaryContainer else Color.White)
                                             .border(
-                                                1.5.dp,
-                                                if (activo) MaterialTheme.colorScheme.primary else Slate300,
-                                                CircleShape
-                                            ),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        if (activo) {
-                                            Icon(
-                                                Icons.Outlined.Check,
-                                                contentDescription = null,
-                                                tint = Color.White,
-                                                modifier = Modifier.size(14.dp)
+                                                1.dp,
+                                                if (activo) MaterialTheme.colorScheme.primary else Color(0xFFE2E8F0),
+                                                RemyShapes.small
                                             )
+                                            .clickable { alternarFaltante(faltante.alimentoId) }
+                                            .padding(horizontal = 12.dp, vertical = 10.dp),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            texto,
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = if (activo) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                        Box(
+                                            modifier = Modifier
+                                                .size(22.dp)
+                                                .clip(CircleShape)
+                                                .background(if (activo) MaterialTheme.colorScheme.primary else Color.Transparent)
+                                                .border(
+                                                    1.5.dp,
+                                                    if (activo) MaterialTheme.colorScheme.primary else Slate300,
+                                                    CircleShape
+                                                ),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            if (activo) {
+                                                Icon(
+                                                    Icons.Outlined.Check,
+                                                    contentDescription = null,
+                                                    tint = Color.White,
+                                                    modifier = Modifier.size(14.dp)
+                                                )
+                                            }
                                         }
                                     }
                                 }
