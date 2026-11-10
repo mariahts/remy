@@ -140,25 +140,36 @@ private fun ContenidoInicio(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item(key = "saludo") {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    text = saludoSegunHora(),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = Slate600
-                )
-                Text(
-                    text = nombre,
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = Slate900,
-                    fontWeight = FontWeight.Bold
-                )
-                if (usuario != null) {
-                    TextButton(onClick = {
-                        scope.launch {
-                            com.remy.app.data.SupabaseClientProvider.client.auth.signOut()
+            SectionCard(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RemyShapes.extraLarge,
+                padding = PaddingValues(16.dp)
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(
+                        text = saludoSegunHora(),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Slate600
+                    )
+                    Text(
+                        text = nombre,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = Slate900,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Revisa tu calendario y lo que has cocinado cada día.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Slate500
+                    )
+                    if (usuario != null) {
+                        TextButton(onClick = {
+                            scope.launch {
+                                com.remy.app.data.SupabaseClientProvider.client.auth.signOut()
+                            }
+                        }) {
+                            Text("Cerrar sesión", color = Green600)
                         }
-                    }) {
-                        Text("Cerrar sesión", color = Green600)
                     }
                 }
             }
