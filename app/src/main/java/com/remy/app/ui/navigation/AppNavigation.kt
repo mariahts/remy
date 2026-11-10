@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.outlined.Kitchen
 import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -35,6 +36,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.remy.app.ui.screens.DespensaScreen
+import com.remy.app.ui.screens.CocinadasScreen
 import com.remy.app.ui.screens.RecetaDetalleScreen
 import com.remy.app.ui.screens.RecetasScreen
 import com.remy.app.ui.screens.SugerenciasScreen
@@ -48,6 +50,7 @@ fun AppNavigation() {
     val destinos = listOf(
         Destino(Routes.DESPENSA, "Despensa", Icons.Outlined.Kitchen),
         Destino(Routes.RECETAS, "Recetas", Icons.Outlined.MenuBook),
+        Destino(Routes.COCINADAS, "Cocinadas", Icons.Outlined.Restaurant),
         Destino(Routes.SUGERENCIAS, "Sugerencias", Icons.Filled.AutoAwesome),
     )
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -126,6 +129,12 @@ fun AppNavigation() {
             }
             composable(Routes.RECETAS) {
                 RecetasScreen(onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) })
+            }
+            composable(Routes.COCINADAS) {
+                CocinadasScreen(
+                    onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
+                    onIrARecetas = { irA(Routes.RECETAS) }
+                )
             }
             composable(
                 route = Routes.RECETA_DETALLE,
