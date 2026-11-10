@@ -11,9 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Kitchen
 import androidx.compose.material.icons.outlined.MenuBook
-import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -36,7 +36,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.remy.app.ui.screens.DespensaScreen
-import com.remy.app.ui.screens.CocinadasScreen
+import com.remy.app.ui.screens.InicioScreen
 import com.remy.app.ui.screens.RecetaDetalleScreen
 import com.remy.app.ui.screens.RecetasScreen
 import com.remy.app.ui.screens.SugerenciasScreen
@@ -48,9 +48,9 @@ private data class Destino(val ruta: String, val titulo: String, val icono: Imag
 fun AppNavigation() {
     val navController = rememberNavController()
     val destinos = listOf(
+        Destino(Routes.INICIO, "Inicio", Icons.Outlined.CalendarMonth),
         Destino(Routes.DESPENSA, "Despensa", Icons.Outlined.Kitchen),
         Destino(Routes.RECETAS, "Recetas", Icons.Outlined.MenuBook),
-        Destino(Routes.COCINADAS, "Cocinadas", Icons.Outlined.Restaurant),
         Destino(Routes.SUGERENCIAS, "Sugerencias", Icons.Filled.AutoAwesome),
     )
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -121,20 +121,17 @@ fun AppNavigation() {
     ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = Routes.DESPENSA,
+            startDestination = Routes.INICIO,
             modifier = Modifier.padding(padding)
         ) {
+            composable(Routes.INICIO) {
+                InicioScreen(onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) })
+            }
             composable(Routes.DESPENSA) {
                 DespensaScreen(onVerSugerencias = { irA(Routes.SUGERENCIAS) })
             }
             composable(Routes.RECETAS) {
                 RecetasScreen(onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) })
-            }
-            composable(Routes.COCINADAS) {
-                CocinadasScreen(
-                    onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
-                    onIrARecetas = { irA(Routes.RECETAS) }
-                )
             }
             composable(
                 route = Routes.RECETA_DETALLE,
