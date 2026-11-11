@@ -47,12 +47,18 @@ Capturas de la aplicación y de la maqueta en `capturas-pantallas/` (app) y `doc
 | `2421ed3` | La tarjeta «Tu receta de hoy» indica si la receta está lista para cocinar o cuántos ingredientes le faltan. |
 | `5ba7ebd` | La despensa de la cuenta de demostración se siembra con las mismas unidades que usan las recetas (gramos y mililitros). |
 | `8fd900a` | Los básicos de la bienvenida y el formulario de alta usan también esas unidades. |
+| `a4db655` | El botón principal deshabilitado mantiene el tono terracota en lugar de desvanecerse. |
+| `320326d` | La cabecera «Tu semana» muestra el mes, como en la maqueta. |
+| `be9282f` | Cada macronutriente tiene su propio icono en el detalle de la receta. |
 
 El cambio de unidades corrige un defecto real: antes la despensa de demostración se sembraba con
 `Cebolla 3 ud`, `Huevo 6 ud`, `Patata 4 ud` y `Pasta`, que no existe en el catálogo. Como el algoritmo de
 sugerencias compara cantidad y unidad, ninguna receta llegaba a considerarse completa y la aplicación
 mostraba «0 listas para cocinar». Con la corrección, la cuenta de demostración muestra tres recetas
 listas para cocinar («Pasta con tomate», «Pollo al curry» y «Tortilla de patatas»), igual que en la maqueta.
+
+Las capturas de esta revisión se han hecho con la versión de entrega (`assembleRelease`, con ofuscación
+y firma) instalada en el emulador, de modo que muestran exactamente la aplicación que se entrega.
 
 ---
 
