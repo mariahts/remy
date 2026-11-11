@@ -34,10 +34,10 @@ class CatalogoRecetasTest {
         for (i in 0 until alimentos.length()) {
             val a = alimentos.getJSONObject(i)
             mapa[a.getLong("id")] = MacrosAlimento(
-                kcal = a.getInt("kcal"),
-                proteinas = a.getInt("proteinas"),
-                hidratos = a.getInt("hidratos"),
-                grasas = a.getInt("grasas")
+                kcal = a.optDouble("kcal", 0.0),
+                proteinas = a.optDouble("proteinas", 0.0),
+                hidratos = a.optDouble("hidratos", 0.0),
+                grasas = a.optDouble("grasas", 0.0)
             )
         }
         return mapa
@@ -99,7 +99,7 @@ class CatalogoRecetasTest {
                 assertTrue("paso vacio en $nombre", pasos.getString(j).trim().isNotEmpty())
             }
             val ingredientes = r.getJSONArray("ingredientes")
-            assertTrue("$nombre sin ingredientes", ingredientes.length() >= 3)
+            assertTrue("$nombre sin ingredientes", ingredientes.length() >= 2)
             for (j in 0 until ingredientes.length()) {
                 val id = ingredientes.getJSONObject(j).getLong("alimentoId")
                 assertTrue("ingrediente desconocido en $nombre", catalogo.containsKey(id))

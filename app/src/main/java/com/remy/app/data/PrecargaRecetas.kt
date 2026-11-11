@@ -28,10 +28,10 @@ object PrecargaRecetas {
                 val a = alimentos.getJSONObject(i)
                 val id = a.getLong("id")
                 macrosPorAlimento[id] = MacrosAlimento(
-                    kcal = a.getInt("kcal"),
-                    proteinas = a.getInt("proteinas"),
-                    hidratos = a.optInt("hidratos", 0),
-                    grasas = a.optInt("grasas", 0)
+                    kcal = a.optDouble("kcal", 0.0),
+                    proteinas = a.optDouble("proteinas", 0.0),
+                    hidratos = a.optDouble("hidratos", 0.0),
+                    grasas = a.optDouble("grasas", 0.0)
                 )
                 alimentoDao.insertarSiFalta(
                     Alimento(

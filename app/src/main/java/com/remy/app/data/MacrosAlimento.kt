@@ -11,10 +11,10 @@ import kotlin.math.roundToInt
  * que lleva la receta.
  */
 data class MacrosAlimento(
-    val kcal: Int,
-    val proteinas: Int,
-    val hidratos: Int,
-    val grasas: Int
+    val kcal: Double,
+    val proteinas: Double,
+    val hidratos: Double,
+    val grasas: Double
 )
 
 /** Macros de una receta completa (totales de toda la receta). */

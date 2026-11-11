@@ -421,7 +421,7 @@
         {
             "nombre": "Sopa de verduras",
             "kcal": 388,
-            "proteinas": 6,
+            "proteinas": 7,
             "hidratos": 57,
             "grasas": 16,
             "regionOrigen": "Mediterráneo",
@@ -509,7 +509,7 @@
         {
             "nombre": "Crema de zanahoria",
             "kcal": 607,
-            "proteinas": 6,
+            "proteinas": 7,
             "hidratos": 46,
             "grasas": 46,
             "regionOrigen": "Mediterráneo",
@@ -1027,8 +1027,8 @@
         },
         {
             "nombre": "Macarrones con queso",
-            "kcal": 2456,
-            "proteinas": 98,
+            "kcal": 2457,
+            "proteinas": 99,
             "hidratos": 235,
             "grasas": 124,
             "regionOrigen": "Europeo",

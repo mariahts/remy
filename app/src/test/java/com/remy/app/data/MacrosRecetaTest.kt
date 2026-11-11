@@ -12,9 +12,9 @@ import org.junit.Test
 class MacrosRecetaTest {
 
     private val catalogo = mapOf(
-        1L to MacrosAlimento(kcal = 350, proteinas = 7, hidratos = 78, grasas = 1),
-        2L to MacrosAlimento(kcal = 165, proteinas = 31, hidratos = 0, grasas = 4),
-        6L to MacrosAlimento(kcal = 884, proteinas = 0, hidratos = 0, grasas = 100)
+        1L to MacrosAlimento(kcal = 350.0, proteinas = 7.0, hidratos = 78.0, grasas = 1.0),
+        2L to MacrosAlimento(kcal = 165.0, proteinas = 31.0, hidratos = 0.0, grasas = 4.0),
+        6L to MacrosAlimento(kcal = 884.0, proteinas = 0.0, hidratos = 0.0, grasas = 100.0)
     )
 
     private fun ingrediente(id: Long, cantidad: Double, unidad: String = "g") =
