@@ -13,8 +13,7 @@ import com.remy.app.data.AlmacenamientoFotos
 import com.remy.app.data.RecetaDetalle
 import com.remy.app.data.RecetaRepository
 import com.remy.app.data.RemyDatabase
-import java.util.Locale
-import kotlin.math.max
+import com.remy.app.logica.calcularDescuentoDespensa
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -125,66 +124,20 @@ class RecetaDetalleViewModel(
     }
 
     /** Descuenta de la despensa las cantidades necesarias para [racionesDeseadas]. */
-    private suspend fun descontarIngredientes(recetaId: Long, racionesDeseadas: Int) {
-        val detalle = repositorio.detalle(recetaId) ?: return
-        val porciones = detalle.receta.porciones.coerceAtLeast(1)
-        val raciones = racionesDeseadas.coerceAtLeast(1)
-        for (ing in detalle.ingredientes) {
-            val necesario = ing.ingrediente.cantidad * raciones / porciones.toDouble()
-            if (necesario <= 0.0) continue
-            val alimento = alimentoDao.porId(ing.ingrediente.alimentoId) ?: continue
-            if (!alimento.enDespensa) continue
-            val restante = restarCantidad(
-                disponible = alimento.cantidad,
-                unidadDisponible = alimento.unidad,
-                necesario = necesario,
-                unidadNecesaria = ing.ingrediente.unidad
-            ) ?: continue
-            alimentoDao.actualizar(alimento.copy(cantidad = max(0.0, restante)))
+    private suspend fun descontarIngredientes(recetaId: Long, racionesDeseadas: Int): List<String> {
+        val detalle = repositorio.detalle(recetaId) ?: return emptyList()
+        val ids = detalle.ingredientes.map { it.ingrediente.alimentoId }.distinct()
+        val despensa = ids.mapNotNull { id -> alimentoDao.porId(id)?.let { id to it } }.toMap()
+        val resultado = calcularDescuentoDespensa(
+            ingredientes = detalle.ingredientes,
+            porcionesReceta = detalle.receta.porciones,
+            racionesDeseadas = racionesDeseadas,
+            despensa = despensa
+        )
+        for (alimento in resultado.actualizaciones) {
+            alimentoDao.actualizar(alimento)
         }
-    }
-
-    /**
-     * Resta [necesario] de [disponible] si las unidades son compatibles.
-     * Devuelve la cantidad restante en la unidad de la despensa, o null si no se puede convertir.
-     */
-    private fun restarCantidad(
-        disponible: Double,
-        unidadDisponible: String,
-        necesario: Double,
-        unidadNecesaria: String
-    ): Double? {
-        val disp = normalizar(disponible, unidadDisponible)
-        val nec = normalizar(necesario, unidadNecesaria)
-        return if (disp != null && nec != null && disp.second == nec.second) {
-            val restanteBase = disp.first - nec.first
-            convertirDesdeBase(restanteBase, disp.second, unidadDisponible)
-        } else if (unidadDisponible.trim().equals(unidadNecesaria.trim(), ignoreCase = true)) {
-            disponible - necesario
-        } else {
-            null
-        }
-    }
-
-    private fun normalizar(cantidad: Double, unidad: String): Pair<Double, String>? {
-        val u = unidad.trim().lowercase(Locale.getDefault())
-        return when (u) {
-            "kg", "kilo", "kilos" -> cantidad * 1000.0 to "masa"
-            "g", "gr", "gramo", "gramos" -> cantidad to "masa"
-            "l", "litro", "litros" -> cantidad * 1000.0 to "volumen"
-            "ml", "mililitro", "mililitros" -> cantidad to "volumen"
-            "ud", "uds", "unidad", "unidades", "u" -> cantidad to "unidad"
-            else -> null
-        }
-    }
-
-    private fun convertirDesdeBase(cantidadBase: Double, familia: String, unidadDestino: String): Double {
-        val u = unidadDestino.trim().lowercase(Locale.getDefault())
-        return when (familia) {
-            "masa" -> if (u == "kg" || u == "kilo" || u == "kilos") cantidadBase / 1000.0 else cantidadBase
-            "volumen" -> if (u == "l" || u == "litro" || u == "litros") cantidadBase / 1000.0 else cantidadBase
-            else -> cantidadBase
-        }
+        return resultado.noDescontados
     }
 
     /** Descarta el aviso mostrado tras guardar. */
