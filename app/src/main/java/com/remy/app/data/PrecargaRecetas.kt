@@ -23,11 +23,19 @@ object PrecargaRecetas {
             val recetaDao = db.recetaDao()
 
             val alimentos = raiz.getJSONArray("alimentos")
+            val macrosPorAlimento = mutableMapOf<Long, MacrosAlimento>()
             for (i in 0 until alimentos.length()) {
                 val a = alimentos.getJSONObject(i)
+                val id = a.getLong("id")
+                macrosPorAlimento[id] = MacrosAlimento(
+                    kcal = a.getInt("kcal"),
+                    proteinas = a.getInt("proteinas"),
+                    hidratos = a.optInt("hidratos", 0),
+                    grasas = a.optInt("grasas", 0)
+                )
                 alimentoDao.insertarSiFalta(
                     Alimento(
-                        id = a.getLong("id"),
+                        id = id,
                         nombre = a.getString("nombre"),
                         kcal = a.getInt("kcal"),
                         proteinas = a.getInt("proteinas"),
@@ -45,12 +53,27 @@ object PrecargaRecetas {
             for (i in 0 until recetas.length()) {
                 val r = recetas.getJSONObject(i)
                 val pasosJson = r.getJSONArray("pasos")
+                val ingredientesJson = r.getJSONArray("ingredientes")
+                val ingredientes = (0 until ingredientesJson.length()).map { j ->
+                    val ing = ingredientesJson.getJSONObject(j)
+                    Ingrediente(
+                        recetaId = 0,
+                        alimentoId = ing.getLong("alimentoId"),
+                        cantidad = ing.getDouble("cantidad"),
+                        unidad = ing.getString("unidad")
+                    )
+                }
+                // Los macros de la receta se calculan siempre a partir de los
+                // alimentos del catálogo: esa tabla es la única fuente de verdad,
+                // así el valor que se guarda nunca se desincroniza de los
+                // ingredientes que lleva la receta.
+                val macros = macrosDeReceta(ingredientes, macrosPorAlimento)
                 val recetaCatalogo = Receta(
                     nombre = r.getString("nombre"),
-                    kcal = r.getInt("kcal"),
-                    proteinas = r.getInt("proteinas"),
-                    hidratos = r.optInt("hidratos", 0),
-                    grasas = r.optInt("grasas", 0),
+                    kcal = macros.kcal,
+                    proteinas = macros.proteinas,
+                    hidratos = macros.hidratos,
+                    grasas = macros.grasas,
                     regionOrigen = r.getString("regionOrigen"),
                     tipoPlato = r.getString("tipoPlato"),
                     tiempoMinutos = r.getInt("tiempoMinutos"),
@@ -59,16 +82,6 @@ object PrecargaRecetas {
                 )
 
                 if (!hayRecetas) {
-                    val ingredientesJson = r.getJSONArray("ingredientes")
-                    val ingredientes = (0 until ingredientesJson.length()).map { j ->
-                        val ing = ingredientesJson.getJSONObject(j)
-                        Ingrediente(
-                            recetaId = 0,
-                            alimentoId = ing.getLong("alimentoId"),
-                            cantidad = ing.getDouble("cantidad"),
-                            unidad = ing.getString("unidad")
-                        )
-                    }
                     recetaDao.insertarCompleta(recetaCatalogo, ingredientes)
                 } else {
                     val existente = recetaDao.porNombre(recetaCatalogo.nombre) ?: continue

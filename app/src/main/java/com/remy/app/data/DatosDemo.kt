@@ -11,7 +11,7 @@ object DatosDemo {
      * Se incrementa cuando cambian las cantidades o las unidades para que las
      * instalaciones antiguas vuelvan a sembrar la despensa con los datos nuevos.
      */
-    const val VERSION_DESPENSA_DEMO = 2
+    const val VERSION_DESPENSA_DEMO = 3
 
     /**
      * Alimentos del catálogo que se precargan en la despensa de la cuenta demo.
@@ -30,6 +30,7 @@ object DatosDemo {
         "Huevo" to (300.0 to "g"),
         "Leche" to (1000.0 to "ml"),
         "Patata" to (1000.0 to "g"),
+        "Pasta" to (500.0 to "g"),
         "Harina" to (1000.0 to "g"),
         "Queso" to (300.0 to "g"),
         "Sal" to (500.0 to "g")
