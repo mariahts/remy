@@ -12,6 +12,8 @@ import androidx.room.TypeConverters
  * Tiempo y pasos se añaden en la #30 para el detalle de la #32.
  * Fecha y foto de cocción se añaden en la #35: mientras `fechaCocinada` sea
  * null, la receta sigue sin cocinar.
+ * `kcal` y `proteinas` son totales de la receta; `porciones` indica para
+ * cuántas raciones, de modo que la interfaz pueda mostrarlos por porción.
  */
 @Entity(tableName = "recetas")
 @TypeConverters(ConvertidoresReceta::class)
@@ -24,6 +26,8 @@ data class Receta(
     val tipoPlato: String = "",
     @ColumnInfo(defaultValue = "0") val tiempoMinutos: Int = 0,
     @ColumnInfo(defaultValue = "''") val pasos: List<String> = emptyList(),
+    /** Número de raciones que rinde la receta (mínimo 1). */
+    @ColumnInfo(defaultValue = "1") val porciones: Int = 1,
     /** Instante (en milisegundos) en que se cocinó por última vez; null si nunca. */
     val fechaCocinada: Long? = null,
     /** Ruta absoluta de la foto del plato dentro del almacenamiento interno. */

@@ -1,1096 +1,1116 @@
-{
-  "alimentos": [
-    {
-      "id": 1,
-      "nombre": "Arroz",
-      "kcal": 350,
-      "proteinas": 7,
-      "regionOrigen": "Asiático",
-      "tipoPlato": "Cereal",
-      "cantidad": 1000,
-      "unidad": "g"
-    },
-    {
-      "id": 2,
-      "nombre": "Pechuga de pollo",
-      "kcal": 165,
-      "proteinas": 31,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Carne",
-      "cantidad": 500,
-      "unidad": "g"
-    },
-    {
-      "id": 3,
-      "nombre": "Tomate",
-      "kcal": 18,
-      "proteinas": 1,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Verdura",
-      "cantidad": 500,
-      "unidad": "g"
-    },
-    {
-      "id": 4,
-      "nombre": "Cebolla",
-      "kcal": 40,
-      "proteinas": 1,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Verdura",
-      "cantidad": 500,
-      "unidad": "g"
-    },
-    {
-      "id": 5,
-      "nombre": "Ajo",
-      "kcal": 149,
-      "proteinas": 6,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Verdura",
-      "cantidad": 100,
-      "unidad": "g"
-    },
-    {
-      "id": 6,
-      "nombre": "Aceite de oliva",
-      "kcal": 884,
-      "proteinas": 0,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Condimento",
-      "cantidad": 750,
-      "unidad": "ml"
-    },
-    {
-      "id": 7,
-      "nombre": "Huevo",
-      "kcal": 143,
-      "proteinas": 13,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Huevo",
-      "cantidad": 10,
-      "unidad": "g"
-    },
-    {
-      "id": 8,
-      "nombre": "Leche",
-      "kcal": 61,
-      "proteinas": 3,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Lácteo",
-      "cantidad": 1000,
-      "unidad": "ml"
-    },
-    {
-      "id": 9,
-      "nombre": "Queso",
-      "kcal": 402,
-      "proteinas": 25,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Lácteo",
-      "cantidad": 300,
-      "unidad": "g"
-    },
-    {
-      "id": 10,
-      "nombre": "Pan",
-      "kcal": 265,
-      "proteinas": 9,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Cereal",
-      "cantidad": 500,
-      "unidad": "g"
-    },
-    {
-      "id": 11,
-      "nombre": "Atún",
-      "kcal": 132,
-      "proteinas": 28,
-      "regionOrigen": "Cantábrico",
-      "tipoPlato": "Pescado",
-      "cantidad": 400,
-      "unidad": "g"
-    },
-    {
-      "id": 12,
-      "nombre": "Garbanzos cocidos",
-      "kcal": 164,
-      "proteinas": 9,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Legumbre",
-      "cantidad": 500,
-      "unidad": "g"
-    },
-    {
-      "id": 13,
-      "nombre": "Lentejas cocidas",
-      "kcal": 116,
-      "proteinas": 9,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Legumbre",
-      "cantidad": 500,
-      "unidad": "g"
-    },
-    {
-      "id": 14,
-      "nombre": "Zanahoria",
-      "kcal": 41,
-      "proteinas": 1,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Verdura",
-      "cantidad": 500,
-      "unidad": "g"
-    },
-    {
-      "id": 15,
-      "nombre": "Pimiento",
-      "kcal": 31,
-      "proteinas": 1,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Verdura",
-      "cantidad": 500,
-      "unidad": "g"
-    },
-    {
-      "id": 16,
-      "nombre": "Patata",
-      "kcal": 77,
-      "proteinas": 2,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Verdura",
-      "cantidad": 1000,
-      "unidad": "g"
-    },
-    {
-      "id": 17,
-      "nombre": "Bacalao",
-      "kcal": 82,
-      "proteinas": 18,
-      "regionOrigen": "Cantábrico",
-      "tipoPlato": "Pescado",
-      "cantidad": 600,
-      "unidad": "g"
-    },
-    {
-      "id": 18,
-      "nombre": "Nata",
-      "kcal": 335,
-      "proteinas": 2,
-      "regionOrigen": "Europeo",
-      "tipoPlato": "Lácteo",
-      "cantidad": 200,
-      "unidad": "ml"
-    },
-    {
-      "id": 19,
-      "nombre": "Azúcar",
-      "kcal": 387,
-      "proteinas": 0,
-      "regionOrigen": "Europeo",
-      "tipoPlato": "Condimento",
-      "cantidad": 500,
-      "unidad": "g"
-    },
-    {
-      "id": 20,
-      "nombre": "Harina",
-      "kcal": 364,
-      "proteinas": 10,
-      "regionOrigen": "Europeo",
-      "tipoPlato": "Cereal",
-      "cantidad": 1000,
-      "unidad": "g"
-    },
-    {
-      "id": 21,
-      "nombre": "Mantequilla",
-      "kcal": 717,
-      "proteinas": 1,
-      "regionOrigen": "Europeo",
-      "tipoPlato": "Lácteo",
-      "cantidad": 250,
-      "unidad": "g"
-    },
-    {
-      "id": 22,
-      "nombre": "Plátano",
-      "kcal": 89,
-      "proteinas": 1,
-      "regionOrigen": "Tropical",
-      "tipoPlato": "Fruta",
-      "cantidad": 500,
-      "unidad": "g"
-    },
-    {
-      "id": 23,
-      "nombre": "Fresa",
-      "kcal": 32,
-      "proteinas": 1,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Fruta",
-      "cantidad": 400,
-      "unidad": "g"
-    },
-    {
-      "id": 24,
-      "nombre": "Yogur natural",
-      "kcal": 59,
-      "proteinas": 10,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Lácteo",
-      "cantidad": 500,
-      "unidad": "g"
-    },
-    {
-      "id": 25,
-      "nombre": "Chocolate negro",
-      "kcal": 546,
-      "proteinas": 5,
-      "regionOrigen": "Europeo",
-      "tipoPlato": "Postre",
-      "cantidad": 200,
-      "unidad": "g"
-    },
-    {
-      "id": 26,
-      "nombre": "Champiñón",
-      "kcal": 22,
-      "proteinas": 3,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Verdura",
-      "cantidad": 400,
-      "unidad": "g"
-    },
-    {
-      "id": 27,
-      "nombre": "Espinacas",
-      "kcal": 23,
-      "proteinas": 3,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Verdura",
-      "cantidad": 300,
-      "unidad": "g"
-    },
-    {
-      "id": 28,
-      "nombre": "Camarón",
-      "kcal": 99,
-      "proteinas": 24,
-      "regionOrigen": "Cantábrico",
-      "tipoPlato": "Pescado",
-      "cantidad": 300,
-      "unidad": "g"
-    },
-    {
-      "id": 29,
-      "nombre": "Lechuga",
-      "kcal": 15,
-      "proteinas": 1,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Verdura",
-      "cantidad": 200,
-      "unidad": "g"
-    },
-    {
-      "id": 30,
-      "nombre": "Sal",
-      "kcal": 0,
-      "proteinas": 0,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Condimento",
-      "cantidad": 100,
-      "unidad": "g"
-    }
-  ],
-  "recetas": [
-    {
-      "nombre": "Ensalada mixta",
-      "kcal": 211,
-      "proteinas": 4,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Entrante",
-      "tiempoMinutos": 10,
-      "pasos": [
-        "Lavar la lechuga y el tomate bajo el grifo.",
-        "Cortar el tomate en rodajas y la cebolla en juliana.",
-        "Mezclar todo en un bol y aliñar con aceite de oliva y una pizca de sal."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 29,
-          "cantidad": 150,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 3,
-          "cantidad": 200,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 4,
-          "cantidad": 50,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 15,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 3,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Sopa de verduras",
-      "kcal": 388,
-      "proteinas": 6,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Entrante",
-      "tiempoMinutos": 35,
-      "pasos": [
-        "Pochear la cebolla y la zanahoria en una olla con aceite.",
-        "Añadir la patata en dados y cubrir con agua.",
-        "Cocer a fuego lento veinte minutos y triturar hasta obtener una crema lisa."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 4,
-          "cantidad": 100,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 14,
-          "cantidad": 150,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 16,
-          "cantidad": 200,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 15,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 4,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Ensalada de atún",
-      "kcal": 312,
-      "proteinas": 30,
-      "regionOrigen": "Cantábrico",
-      "tipoPlato": "Entrante",
-      "tiempoMinutos": 10,
-      "pasos": [
-        "Escurrir el atún y cortar el tomate en dados.",
-        "Trocear la cebolla finamente.",
-        "Mezclar los tres ingredientes y terminar con aceite y sal."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 11,
-          "cantidad": 100,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 3,
-          "cantidad": 150,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 4,
-          "cantidad": 50,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 15,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 3,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Crema de zanahoria",
-      "kcal": 607,
-      "proteinas": 6,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Entrante",
-      "tiempoMinutos": 30,
-      "pasos": [
-        "Rehogar la cebolla en aceite sin que se dore.",
-        "Añadir la zanahoria en rodajas y cubrir con agua.",
-        "Cocer veinte minutos, añadir la nata y triturar."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 4,
-          "cantidad": 50,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 14,
-          "cantidad": 400,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 18,
-          "cantidad": 100,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 10,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 3,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Revuelto de champiñones",
-      "kcal": 390,
-      "proteinas": 25,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Entrante",
-      "tiempoMinutos": 15,
-      "pasos": [
-        "Laminar los champiñones y la cebolla.",
-        "Sofreír en aceite a fuego medio.",
-        "Añadir los huevos batidos y remover hasta que cuajen."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 26,
-          "cantidad": 300,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 4,
-          "cantidad": 50,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 7,
-          "cantidad": 120,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 15,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 2,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Camarones al ajillo",
-      "kcal": 673,
-      "proteinas": 73,
-      "regionOrigen": "Cantábrico",
-      "tipoPlato": "Entrante",
-      "tiempoMinutos": 15,
-      "pasos": [
-        "Picar el ajo muy fino.",
-        "Calentar el aceite y dorar el ajo sin que se queme.",
-        "Añadir los camarones y cocinar tres minutos a fuego alto."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 28,
-          "cantidad": 300,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 5,
-          "cantidad": 15,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 40,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 3,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Arroz con pollo",
-      "kcal": 2064,
-      "proteinas": 148,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Principal",
-      "tiempoMinutos": 45,
-      "pasos": [
-        "Dorar el pollo en aceite y reservarlo.",
-        "Sofreír cebolla, pimiento y tomate.",
-        "Devolver el pollo, añadir el arroz y el doble de agua; cocer veinticinco minutos."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 1,
-          "cantidad": 300,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 2,
-          "cantidad": 400,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 3,
-          "cantidad": 100,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 15,
-          "cantidad": 100,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 4,
-          "cantidad": 100,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 30,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 5,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Tortilla de patatas",
-      "kcal": 1065,
-      "proteinas": 37,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Principal",
-      "tiempoMinutos": 40,
-      "pasos": [
-        "Cortar las patatas en láminas finas y freír con la cebolla.",
-        "Escurrir y mezclar con los huevos batidos.",
-        "Cocinar por cada lado a fuego medio hasta que cuaje."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 16,
-          "cantidad": 500,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 7,
-          "cantidad": 200,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 4,
-          "cantidad": 100,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 40,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 4,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Lentejas estofadas",
-      "kcal": 608,
-      "proteinas": 30,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Principal",
-      "tiempoMinutos": 50,
-      "pasos": [
-        "Pochear cebolla y zanahoria.",
-        "Añadir tomate, lentejas y agua.",
-        "Cocer treinta minutos a fuego bajo y sazonar al final."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 13,
-          "cantidad": 300,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 4,
-          "cantidad": 80,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 14,
-          "cantidad": 80,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 3,
-          "cantidad": 100,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 20,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 4,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Garbanzos con espinacas",
-      "kcal": 929,
-      "proteinas": 45,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Principal",
-      "tiempoMinutos": 35,
-      "pasos": [
-        "Rehogar ajo y cebolla en aceite.",
-        "Añadir los garbanzos y las espinacas.",
-        "Cocinar diez minutos removiendo y sazonar."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 12,
-          "cantidad": 400,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 27,
-          "cantidad": 250,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 4,
-          "cantidad": 60,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 5,
-          "cantidad": 10,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 20,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 3,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Pasta con tomate",
-      "kcal": 1566,
-      "proteinas": 47,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Principal",
-      "tiempoMinutos": 25,
-      "pasos": [
-        "Hacer un sofrito de cebolla con aceite.",
-        "Añadir el tomate y cocinar quince minutos.",
-        "Cocer la pasta y mezclarla con la salsa; terminar con queso rallado."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 20,
-          "cantidad": 300,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 3,
-          "cantidad": 400,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 4,
-          "cantidad": 60,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 20,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 9,
-          "cantidad": 50,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 4,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Bacalao al horno",
-      "kcal": 930,
-      "proteinas": 97,
-      "regionOrigen": "Cantábrico",
-      "tipoPlato": "Principal",
-      "tiempoMinutos": 30,
-      "pasos": [
-        "Colocar las rodajas de bacalao sobre una bandeja.",
-        "Añadir patata y cebolla en rodajas.",
-        "Rociar con aceite y horno veinticinco minutos a doscientos grados."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 17,
-          "cantidad": 500,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 16,
-          "cantidad": 300,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 4,
-          "cantidad": 60,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 30,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 4,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Pollo al curry",
-      "kcal": 1881,
-      "proteinas": 149,
-      "regionOrigen": "Asiático",
-      "tipoPlato": "Principal",
-      "tiempoMinutos": 35,
-      "pasos": [
-        "Dorar el pollo en dados y reservarlo.",
-        "Sofreír cebolla y ajo, añadir curry.",
-        "Incorporar leche y cocinar quince minutos con el pollo."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 2,
-          "cantidad": 400,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 1,
-          "cantidad": 250,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 8,
-          "cantidad": 200,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 4,
-          "cantidad": 80,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 5,
-          "cantidad": 10,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 20,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 3,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Paella de verduras",
-      "kcal": 1635,
-      "proteinas": 38,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Principal",
-      "tiempoMinutos": 45,
-      "pasos": [
-        "Sofreír pimiento y tomate en la paellera.",
-        "Añadir garbanzos, arroz y agua caliente.",
-        "Cocer veinticinco minutos a fuego fuerte sin remover."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 1,
-          "cantidad": 300,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 15,
-          "cantidad": 150,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 3,
-          "cantidad": 150,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 12,
-          "cantidad": 150,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 6,
-          "cantidad": 30,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 5,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Macarrones con queso",
-      "kcal": 2498,
-      "proteinas": 92,
-      "regionOrigen": "Europeo",
-      "tipoPlato": "Principal",
-      "tiempoMinutos": 30,
-      "pasos": [
-        "Cocer los macarrones al dente.",
-        "Derretir mantequilla, añadir harina y leche para hacer la bechamel.",
-        "Añadir el queso hasta que funda y mezclar con la pasta."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 20,
-          "cantidad": 300,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 9,
-          "cantidad": 200,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 8,
-          "cantidad": 400,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 21,
-          "cantidad": 50,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 30,
-          "cantidad": 4,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Flan de huevo",
-      "kcal": 917,
-      "proteinas": 38,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Postre",
-      "tiempoMinutos": 50,
-      "pasos": [
-        "Batir los huevos con el azúcar.",
-        "Añadir la leche caliente y mezclar.",
-        "Hornear en baño maría cuarenta minutos y enfriar."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 7,
-          "cantidad": 200,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 8,
-          "cantidad": 400,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 19,
-          "cantidad": 100,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Arroz con leche",
-      "kcal": 1447,
-      "proteinas": 33,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Postre",
-      "tiempoMinutos": 40,
-      "pasos": [
-        "Tostar el arroz con un poco de leche.",
-        "Añadir el resto de la leche y el azúcar.",
-        "Cocer treinta minutos a fuego bajo removiendo."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 1,
-          "cantidad": 150,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 8,
-          "cantidad": 750,
-          "unidad": "ml"
-        },
-        {
-          "alimentoId": 19,
-          "cantidad": 120,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Yogur con fresas",
-      "kcal": 328,
-      "proteinas": 27,
-      "regionOrigen": "Mediterráneo",
-      "tipoPlato": "Postre",
-      "tiempoMinutos": 5,
-      "pasos": [
-        "Lavar y cortar las fresas.",
-        "Mezclarlas con el yogur.",
-        "Endulzar con azúcar al gusto."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 24,
-          "cantidad": 250,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 23,
-          "cantidad": 200,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 19,
-          "cantidad": 30,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Plátano con chocolate",
-      "kcal": 615,
-      "proteinas": 6,
-      "regionOrigen": "Tropical",
-      "tipoPlato": "Postre",
-      "tiempoMinutos": 5,
-      "pasos": [
-        "Pelar el plátano y cortarlo en trozos.",
-        "Fundir el chocolate a baño maría.",
-        "Bañar el plátano con el chocolate derretido."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 22,
-          "cantidad": 200,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 25,
-          "cantidad": 80,
-          "unidad": "g"
-        }
-      ]
-    },
-    {
-      "nombre": "Bizcocho de plátano",
-      "kcal": 2496,
-      "proteinas": 46,
-      "regionOrigen": "Tropical",
-      "tipoPlato": "Postre",
-      "tiempoMinutos": 55,
-      "pasos": [
-        "Aplastar el plátano con un tenedor.",
-        "Mezclar con huevo, azúcar y mantequilla.",
-        "Incorporar la harina y hornear treinta minutos a ciento ochenta grados."
-      ],
-      "ingredientes": [
-        {
-          "alimentoId": 20,
-          "cantidad": 300,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 22,
-          "cantidad": 250,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 7,
-          "cantidad": 100,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 19,
-          "cantidad": 120,
-          "unidad": "g"
-        },
-        {
-          "alimentoId": 21,
-          "cantidad": 80,
-          "unidad": "g"
-        }
-      ]
-    }
-  ]
+﻿{
+    "alimentos":  [
+                      {
+                          "id":  1,
+                          "nombre":  "Arroz",
+                          "kcal":  350,
+                          "proteinas":  7,
+                          "regionOrigen":  "Asiático",
+                          "tipoPlato":  "Cereal",
+                          "cantidad":  1000,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  2,
+                          "nombre":  "Pechuga de pollo",
+                          "kcal":  165,
+                          "proteinas":  31,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Carne",
+                          "cantidad":  500,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  3,
+                          "nombre":  "Tomate",
+                          "kcal":  18,
+                          "proteinas":  1,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Verdura",
+                          "cantidad":  500,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  4,
+                          "nombre":  "Cebolla",
+                          "kcal":  40,
+                          "proteinas":  1,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Verdura",
+                          "cantidad":  500,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  5,
+                          "nombre":  "Ajo",
+                          "kcal":  149,
+                          "proteinas":  6,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Verdura",
+                          "cantidad":  100,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  6,
+                          "nombre":  "Aceite de oliva",
+                          "kcal":  884,
+                          "proteinas":  0,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Condimento",
+                          "cantidad":  750,
+                          "unidad":  "ml"
+                      },
+                      {
+                          "id":  7,
+                          "nombre":  "Huevo",
+                          "kcal":  143,
+                          "proteinas":  13,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Huevo",
+                          "cantidad":  10,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  8,
+                          "nombre":  "Leche",
+                          "kcal":  61,
+                          "proteinas":  3,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Lácteo",
+                          "cantidad":  1000,
+                          "unidad":  "ml"
+                      },
+                      {
+                          "id":  9,
+                          "nombre":  "Queso",
+                          "kcal":  402,
+                          "proteinas":  25,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Lácteo",
+                          "cantidad":  300,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  10,
+                          "nombre":  "Pan",
+                          "kcal":  265,
+                          "proteinas":  9,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Cereal",
+                          "cantidad":  500,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  11,
+                          "nombre":  "Atún",
+                          "kcal":  132,
+                          "proteinas":  28,
+                          "regionOrigen":  "Cantábrico",
+                          "tipoPlato":  "Pescado",
+                          "cantidad":  400,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  12,
+                          "nombre":  "Garbanzos cocidos",
+                          "kcal":  164,
+                          "proteinas":  9,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Legumbre",
+                          "cantidad":  500,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  13,
+                          "nombre":  "Lentejas cocidas",
+                          "kcal":  116,
+                          "proteinas":  9,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Legumbre",
+                          "cantidad":  500,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  14,
+                          "nombre":  "Zanahoria",
+                          "kcal":  41,
+                          "proteinas":  1,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Verdura",
+                          "cantidad":  500,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  15,
+                          "nombre":  "Pimiento",
+                          "kcal":  31,
+                          "proteinas":  1,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Verdura",
+                          "cantidad":  500,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  16,
+                          "nombre":  "Patata",
+                          "kcal":  77,
+                          "proteinas":  2,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Verdura",
+                          "cantidad":  1000,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  17,
+                          "nombre":  "Bacalao",
+                          "kcal":  82,
+                          "proteinas":  18,
+                          "regionOrigen":  "Cantábrico",
+                          "tipoPlato":  "Pescado",
+                          "cantidad":  600,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  18,
+                          "nombre":  "Nata",
+                          "kcal":  335,
+                          "proteinas":  2,
+                          "regionOrigen":  "Europeo",
+                          "tipoPlato":  "Lácteo",
+                          "cantidad":  200,
+                          "unidad":  "ml"
+                      },
+                      {
+                          "id":  19,
+                          "nombre":  "Azúcar",
+                          "kcal":  387,
+                          "proteinas":  0,
+                          "regionOrigen":  "Europeo",
+                          "tipoPlato":  "Condimento",
+                          "cantidad":  500,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  20,
+                          "nombre":  "Harina",
+                          "kcal":  364,
+                          "proteinas":  10,
+                          "regionOrigen":  "Europeo",
+                          "tipoPlato":  "Cereal",
+                          "cantidad":  1000,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  21,
+                          "nombre":  "Mantequilla",
+                          "kcal":  717,
+                          "proteinas":  1,
+                          "regionOrigen":  "Europeo",
+                          "tipoPlato":  "Lácteo",
+                          "cantidad":  250,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  22,
+                          "nombre":  "Plátano",
+                          "kcal":  89,
+                          "proteinas":  1,
+                          "regionOrigen":  "Tropical",
+                          "tipoPlato":  "Fruta",
+                          "cantidad":  500,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  23,
+                          "nombre":  "Fresa",
+                          "kcal":  32,
+                          "proteinas":  1,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Fruta",
+                          "cantidad":  400,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  24,
+                          "nombre":  "Yogur natural",
+                          "kcal":  59,
+                          "proteinas":  10,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Lácteo",
+                          "cantidad":  500,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  25,
+                          "nombre":  "Chocolate negro",
+                          "kcal":  546,
+                          "proteinas":  5,
+                          "regionOrigen":  "Europeo",
+                          "tipoPlato":  "Postre",
+                          "cantidad":  200,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  26,
+                          "nombre":  "Champiñón",
+                          "kcal":  22,
+                          "proteinas":  3,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Verdura",
+                          "cantidad":  400,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  27,
+                          "nombre":  "Espinacas",
+                          "kcal":  23,
+                          "proteinas":  3,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Verdura",
+                          "cantidad":  300,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  28,
+                          "nombre":  "Camarón",
+                          "kcal":  99,
+                          "proteinas":  24,
+                          "regionOrigen":  "Cantábrico",
+                          "tipoPlato":  "Pescado",
+                          "cantidad":  300,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  29,
+                          "nombre":  "Lechuga",
+                          "kcal":  15,
+                          "proteinas":  1,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Verdura",
+                          "cantidad":  200,
+                          "unidad":  "g"
+                      },
+                      {
+                          "id":  30,
+                          "nombre":  "Sal",
+                          "kcal":  0,
+                          "proteinas":  0,
+                          "regionOrigen":  "Mediterráneo",
+                          "tipoPlato":  "Condimento",
+                          "cantidad":  100,
+                          "unidad":  "g"
+                      }
+                  ],
+    "recetas":  [
+                    {
+                        "nombre":  "Ensalada mixta",
+                        "kcal":  211,
+                        "proteinas":  4,
+                        "regionOrigen":  "Mediterráneo",
+                        "tipoPlato":  "Entrante",
+                        "tiempoMinutos":  10,
+                        "pasos":  [
+                                      "Lavar la lechuga y el tomate bajo el grifo.",
+                                      "Cortar el tomate en rodajas y la cebolla en juliana.",
+                                      "Mezclar todo en un bol y aliñar con aceite de oliva y una pizca de sal."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  29,
+                                                 "cantidad":  150,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  3,
+                                                 "cantidad":  200,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  4,
+                                                 "cantidad":  50,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  15,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  3,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  2
+                    },
+                    {
+                        "nombre":  "Sopa de verduras",
+                        "kcal":  388,
+                        "proteinas":  6,
+                        "regionOrigen":  "Mediterráneo",
+                        "tipoPlato":  "Entrante",
+                        "tiempoMinutos":  35,
+                        "pasos":  [
+                                      "Pochear la cebolla y la zanahoria en una olla con aceite.",
+                                      "Añadir la patata en dados y cubrir con agua.",
+                                      "Cocer a fuego lento veinte minutos y triturar hasta obtener una crema lisa."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  4,
+                                                 "cantidad":  100,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  14,
+                                                 "cantidad":  150,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  16,
+                                                 "cantidad":  200,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  15,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  4,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  4
+                    },
+                    {
+                        "nombre":  "Ensalada de atún",
+                        "kcal":  312,
+                        "proteinas":  30,
+                        "regionOrigen":  "Cantábrico",
+                        "tipoPlato":  "Entrante",
+                        "tiempoMinutos":  10,
+                        "pasos":  [
+                                      "Escurrir el atún y cortar el tomate en dados.",
+                                      "Trocear la cebolla finamente.",
+                                      "Mezclar los tres ingredientes y terminar con aceite y sal."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  11,
+                                                 "cantidad":  100,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  3,
+                                                 "cantidad":  150,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  4,
+                                                 "cantidad":  50,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  15,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  3,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  2
+                    },
+                    {
+                        "nombre":  "Crema de zanahoria",
+                        "kcal":  607,
+                        "proteinas":  6,
+                        "regionOrigen":  "Mediterráneo",
+                        "tipoPlato":  "Entrante",
+                        "tiempoMinutos":  30,
+                        "pasos":  [
+                                      "Rehogar la cebolla en aceite sin que se dore.",
+                                      "Añadir la zanahoria en rodajas y cubrir con agua.",
+                                      "Cocer veinte minutos, añadir la nata y triturar."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  4,
+                                                 "cantidad":  50,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  14,
+                                                 "cantidad":  400,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  18,
+                                                 "cantidad":  100,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  10,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  3,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  4
+                    },
+                    {
+                        "nombre":  "Revuelto de champiñones",
+                        "kcal":  390,
+                        "proteinas":  25,
+                        "regionOrigen":  "Mediterráneo",
+                        "tipoPlato":  "Entrante",
+                        "tiempoMinutos":  15,
+                        "pasos":  [
+                                      "Laminar los champiñones y la cebolla.",
+                                      "Sofreír en aceite a fuego medio.",
+                                      "Añadir los huevos batidos y remover hasta que cuajen."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  26,
+                                                 "cantidad":  300,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  4,
+                                                 "cantidad":  50,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  7,
+                                                 "cantidad":  120,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  15,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  2,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  2
+                    },
+                    {
+                        "nombre":  "Camarones al ajillo",
+                        "kcal":  673,
+                        "proteinas":  73,
+                        "regionOrigen":  "Cantábrico",
+                        "tipoPlato":  "Entrante",
+                        "tiempoMinutos":  15,
+                        "pasos":  [
+                                      "Picar el ajo muy fino.",
+                                      "Calentar el aceite y dorar el ajo sin que se queme.",
+                                      "Añadir los camarones y cocinar tres minutos a fuego alto."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  28,
+                                                 "cantidad":  300,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  5,
+                                                 "cantidad":  15,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  40,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  3,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  2
+                    },
+                    {
+                        "nombre":  "Arroz con pollo",
+                        "kcal":  2064,
+                        "proteinas":  148,
+                        "regionOrigen":  "Mediterráneo",
+                        "tipoPlato":  "Principal",
+                        "tiempoMinutos":  45,
+                        "pasos":  [
+                                      "Dorar el pollo en aceite y reservarlo.",
+                                      "Sofreír cebolla, pimiento y tomate.",
+                                      "Devolver el pollo, añadir el arroz y el doble de agua; cocer veinticinco minutos."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  1,
+                                                 "cantidad":  300,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  2,
+                                                 "cantidad":  400,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  3,
+                                                 "cantidad":  100,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  15,
+                                                 "cantidad":  100,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  4,
+                                                 "cantidad":  100,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  30,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  5,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  4
+                    },
+                    {
+                        "nombre":  "Tortilla de patatas",
+                        "kcal":  1065,
+                        "proteinas":  37,
+                        "regionOrigen":  "Mediterráneo",
+                        "tipoPlato":  "Principal",
+                        "tiempoMinutos":  40,
+                        "pasos":  [
+                                      "Cortar las patatas en láminas finas y freír con la cebolla.",
+                                      "Escurrir y mezclar con los huevos batidos.",
+                                      "Cocinar por cada lado a fuego medio hasta que cuaje."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  16,
+                                                 "cantidad":  500,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  7,
+                                                 "cantidad":  200,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  4,
+                                                 "cantidad":  100,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  40,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  4,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  4
+                    },
+                    {
+                        "nombre":  "Lentejas estofadas",
+                        "kcal":  608,
+                        "proteinas":  30,
+                        "regionOrigen":  "Mediterráneo",
+                        "tipoPlato":  "Principal",
+                        "tiempoMinutos":  50,
+                        "pasos":  [
+                                      "Pochear cebolla y zanahoria.",
+                                      "Añadir tomate, lentejas y agua.",
+                                      "Cocer treinta minutos a fuego bajo y sazonar al final."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  13,
+                                                 "cantidad":  300,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  4,
+                                                 "cantidad":  80,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  14,
+                                                 "cantidad":  80,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  3,
+                                                 "cantidad":  100,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  20,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  4,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  4
+                    },
+                    {
+                        "nombre":  "Garbanzos con espinacas",
+                        "kcal":  929,
+                        "proteinas":  45,
+                        "regionOrigen":  "Mediterráneo",
+                        "tipoPlato":  "Principal",
+                        "tiempoMinutos":  35,
+                        "pasos":  [
+                                      "Rehogar ajo y cebolla en aceite.",
+                                      "Añadir los garbanzos y las espinacas.",
+                                      "Cocinar diez minutos removiendo y sazonar."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  12,
+                                                 "cantidad":  400,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  27,
+                                                 "cantidad":  250,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  4,
+                                                 "cantidad":  60,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  5,
+                                                 "cantidad":  10,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  20,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  3,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  4
+                    },
+                    {
+                        "nombre":  "Pasta con tomate",
+                        "kcal":  1566,
+                        "proteinas":  47,
+                        "regionOrigen":  "Mediterráneo",
+                        "tipoPlato":  "Principal",
+                        "tiempoMinutos":  25,
+                        "pasos":  [
+                                      "Hacer un sofrito de cebolla con aceite.",
+                                      "Añadir el tomate y cocinar quince minutos.",
+                                      "Cocer la pasta y mezclarla con la salsa; terminar con queso rallado."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  20,
+                                                 "cantidad":  300,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  3,
+                                                 "cantidad":  400,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  4,
+                                                 "cantidad":  60,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  20,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  9,
+                                                 "cantidad":  50,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  4,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  4
+                    },
+                    {
+                        "nombre":  "Bacalao al horno",
+                        "kcal":  930,
+                        "proteinas":  97,
+                        "regionOrigen":  "Cantábrico",
+                        "tipoPlato":  "Principal",
+                        "tiempoMinutos":  30,
+                        "pasos":  [
+                                      "Colocar las rodajas de bacalao sobre una bandeja.",
+                                      "Añadir patata y cebolla en rodajas.",
+                                      "Rociar con aceite y horno veinticinco minutos a doscientos grados."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  17,
+                                                 "cantidad":  500,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  16,
+                                                 "cantidad":  300,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  4,
+                                                 "cantidad":  60,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  30,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  4,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  4
+                    },
+                    {
+                        "nombre":  "Pollo al curry",
+                        "kcal":  1881,
+                        "proteinas":  149,
+                        "regionOrigen":  "Asiático",
+                        "tipoPlato":  "Principal",
+                        "tiempoMinutos":  35,
+                        "pasos":  [
+                                      "Dorar el pollo en dados y reservarlo.",
+                                      "Sofreír cebolla y ajo, añadir curry.",
+                                      "Incorporar leche y cocinar quince minutos con el pollo."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  2,
+                                                 "cantidad":  400,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  1,
+                                                 "cantidad":  250,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  8,
+                                                 "cantidad":  200,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  4,
+                                                 "cantidad":  80,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  5,
+                                                 "cantidad":  10,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  20,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  3,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  4
+                    },
+                    {
+                        "nombre":  "Paella de verduras",
+                        "kcal":  1635,
+                        "proteinas":  38,
+                        "regionOrigen":  "Mediterráneo",
+                        "tipoPlato":  "Principal",
+                        "tiempoMinutos":  45,
+                        "pasos":  [
+                                      "Sofreír pimiento y tomate en la paellera.",
+                                      "Añadir garbanzos, arroz y agua caliente.",
+                                      "Cocer veinticinco minutos a fuego fuerte sin remover."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  1,
+                                                 "cantidad":  300,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  15,
+                                                 "cantidad":  150,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  3,
+                                                 "cantidad":  150,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  12,
+                                                 "cantidad":  150,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  6,
+                                                 "cantidad":  30,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  5,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  4
+                    },
+                    {
+                        "nombre":  "Macarrones con queso",
+                        "kcal":  2498,
+                        "proteinas":  92,
+                        "regionOrigen":  "Europeo",
+                        "tipoPlato":  "Principal",
+                        "tiempoMinutos":  30,
+                        "pasos":  [
+                                      "Cocer los macarrones al dente.",
+                                      "Derretir mantequilla, añadir harina y leche para hacer la bechamel.",
+                                      "Añadir el queso hasta que funda y mezclar con la pasta."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  20,
+                                                 "cantidad":  300,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  9,
+                                                 "cantidad":  200,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  8,
+                                                 "cantidad":  400,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  21,
+                                                 "cantidad":  50,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  30,
+                                                 "cantidad":  4,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  4
+                    },
+                    {
+                        "nombre":  "Flan de huevo",
+                        "kcal":  917,
+                        "proteinas":  38,
+                        "regionOrigen":  "Mediterráneo",
+                        "tipoPlato":  "Postre",
+                        "tiempoMinutos":  50,
+                        "pasos":  [
+                                      "Batir los huevos con el azúcar.",
+                                      "Añadir la leche caliente y mezclar.",
+                                      "Hornear en baño maría cuarenta minutos y enfriar."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  7,
+                                                 "cantidad":  200,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  8,
+                                                 "cantidad":  400,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  19,
+                                                 "cantidad":  100,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  4
+                    },
+                    {
+                        "nombre":  "Arroz con leche",
+                        "kcal":  1447,
+                        "proteinas":  33,
+                        "regionOrigen":  "Mediterráneo",
+                        "tipoPlato":  "Postre",
+                        "tiempoMinutos":  40,
+                        "pasos":  [
+                                      "Tostar el arroz con un poco de leche.",
+                                      "Añadir el resto de la leche y el azúcar.",
+                                      "Cocer treinta minutos a fuego bajo removiendo."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  1,
+                                                 "cantidad":  150,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  8,
+                                                 "cantidad":  750,
+                                                 "unidad":  "ml"
+                                             },
+                                             {
+                                                 "alimentoId":  19,
+                                                 "cantidad":  120,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  4
+                    },
+                    {
+                        "nombre":  "Yogur con fresas",
+                        "kcal":  328,
+                        "proteinas":  27,
+                        "regionOrigen":  "Mediterráneo",
+                        "tipoPlato":  "Postre",
+                        "tiempoMinutos":  5,
+                        "pasos":  [
+                                      "Lavar y cortar las fresas.",
+                                      "Mezclarlas con el yogur.",
+                                      "Endulzar con azúcar al gusto."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  24,
+                                                 "cantidad":  250,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  23,
+                                                 "cantidad":  200,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  19,
+                                                 "cantidad":  30,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  2
+                    },
+                    {
+                        "nombre":  "Plátano con chocolate",
+                        "kcal":  615,
+                        "proteinas":  6,
+                        "regionOrigen":  "Tropical",
+                        "tipoPlato":  "Postre",
+                        "tiempoMinutos":  5,
+                        "pasos":  [
+                                      "Pelar el plátano y cortarlo en trozos.",
+                                      "Fundir el chocolate a baño maría.",
+                                      "Bañar el plátano con el chocolate derretido."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  22,
+                                                 "cantidad":  200,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  25,
+                                                 "cantidad":  80,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  2
+                    },
+                    {
+                        "nombre":  "Bizcocho de plátano",
+                        "kcal":  2496,
+                        "proteinas":  46,
+                        "regionOrigen":  "Tropical",
+                        "tipoPlato":  "Postre",
+                        "tiempoMinutos":  55,
+                        "pasos":  [
+                                      "Aplastar el plátano con un tenedor.",
+                                      "Mezclar con huevo, azúcar y mantequilla.",
+                                      "Incorporar la harina y hornear treinta minutos a ciento ochenta grados."
+                                  ],
+                        "ingredientes":  [
+                                             {
+                                                 "alimentoId":  20,
+                                                 "cantidad":  300,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  22,
+                                                 "cantidad":  250,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  7,
+                                                 "cantidad":  100,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  19,
+                                                 "cantidad":  120,
+                                                 "unidad":  "g"
+                                             },
+                                             {
+                                                 "alimentoId":  21,
+                                                 "cantidad":  80,
+                                                 "unidad":  "g"
+                                             }
+                                         ],
+                        "porciones":  8
+                    }
+                ]
 }

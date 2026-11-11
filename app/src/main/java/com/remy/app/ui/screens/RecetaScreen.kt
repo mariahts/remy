@@ -60,6 +60,7 @@ import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.LocalFireDepartment
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.MonitorHeart
+import androidx.compose.material.icons.outlined.People
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
 import androidx.compose.material.icons.outlined.Remove
@@ -330,6 +331,10 @@ private fun TarjetaRecetaGrid(
 ) {
     val receta = item.receta
 
+    val porciones = receta.porciones.coerceAtLeast(1)
+    val kcalPorRacion = kotlin.math.round(receta.kcal.toFloat() / porciones).toInt()
+    val proteinasPorRacion = kotlin.math.round(receta.proteinas.toFloat() / porciones).toInt()
+
     RemyCard(
         modifier = Modifier.fillMaxWidth(),
         onClick = onClick,
@@ -399,10 +404,10 @@ private fun TarjetaRecetaGrid(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                stringResource(R.string.recetas_kcal_proteina, receta.kcal, receta.proteinas),
+                stringResource(R.string.recetas_kcal_proteina, kcalPorRacion, proteinasPorRacion),
                 style = MaterialTheme.typography.bodySmall,
                 color = TextoSecundario,
-                maxLines = 1
+                maxLines = 2
             )
             receta.fechaCocinada?.let { fecha ->
                 Text(
@@ -423,11 +428,11 @@ private fun RecetasScreenPreview() {
         ContenidoRecetas(
             recetas = listOf(
                 RecetaConIngredientes(
-                    receta = Receta(id = 1, nombre = "Arroz con verduras", kcal = 420, proteinas = 14, regionOrigen = "MediterrÃ¡nea", tipoPlato = "Principal", tiempoMinutos = 25),
+                    receta = Receta(id = 1, nombre = "Arroz con verduras", kcal = 420, proteinas = 14, regionOrigen = "MediterrÃ¡nea", tipoPlato = "Principal", tiempoMinutos = 25, porciones = 4),
                     ingredientes = emptyList()
                 ),
                 RecetaConIngredientes(
-                    receta = Receta(id = 2, nombre = "Tortilla de patatas", kcal = 380, proteinas = 22, regionOrigen = "EspaÃ±a", tipoPlato = "Principal", tiempoMinutos = 40),
+                    receta = Receta(id = 2, nombre = "Tortilla de patatas", kcal = 380, proteinas = 22, regionOrigen = "EspaÃ±a", tipoPlato = "Principal", tiempoMinutos = 40, porciones = 4),
                     ingredientes = emptyList()
                 )
             ),
@@ -720,6 +725,7 @@ private fun ContenidoDetalle(
     onLimpiarAviso: () -> Unit
 ) {
     val receta = detalle.receta
+    val porciones = receta.porciones.coerceAtLeast(1)
     val total = detalle.ingredientes.size
     val disponibles = detalle.ingredientes.count { it.alimento != null }
     val faltan = (total - disponibles).coerceAtLeast(0)
@@ -762,14 +768,28 @@ private fun ContenidoDetalle(
                         modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
+                        DatoPildora(
+                            Icons.Outlined.People,
+                            if (porciones == 1) {
+                                stringResource(R.string.comun_una_racion)
+                            } else {
+                                stringResource(R.string.comun_raciones, porciones)
+                            }
+                        )
                         if (receta.tiempoMinutos > 0) {
                             DatoPildora(Icons.Outlined.Schedule, stringResource(R.string.comun_minutos, receta.tiempoMinutos))
                         }
                         if (receta.kcal > 0) {
-                            DatoPildora(Icons.Outlined.LocalFireDepartment, stringResource(R.string.comun_kcal, receta.kcal))
+                            DatoPildora(
+                                Icons.Outlined.LocalFireDepartment,
+                                stringResource(R.string.comun_kcal_racion, kotlin.math.round(receta.kcal.toFloat() / porciones).toInt())
+                            )
                         }
                         if (receta.proteinas > 0) {
-                            DatoPildora(Icons.Outlined.FitnessCenter, stringResource(R.string.detalle_proteina, receta.proteinas))
+                            DatoPildora(
+                                Icons.Outlined.FitnessCenter,
+                                stringResource(R.string.detalle_proteina, kotlin.math.round(receta.proteinas.toFloat() / porciones).toInt())
+                            )
                         }
                         if (receta.tipoPlato.isNotBlank()) {
                             DatoPildora(Icons.Outlined.Restaurant, receta.tipoPlato)
@@ -809,7 +829,7 @@ private fun ContenidoDetalle(
                         if (indice > 0) {
                             HorizontalDivider(color = BordeTarjeta, thickness = 1.dp)
                         }
-                        FilaIngredienteDetalle(par = par)
+                        FilaIngredienteDetalle(par = par, porciones = porciones)
                     }
                     if (total == 0) {
                         Text(
@@ -975,10 +995,11 @@ private fun DatoPildora(
 }
 
 @Composable
-private fun FilaIngredienteDetalle(par: IngredienteConAlimento) {
+private fun FilaIngredienteDetalle(par: IngredienteConAlimento, porciones: Int = 1) {
     val nombre = par.alimento?.nombre ?: stringResource(R.string.detalle_ingrediente)
     val tiene = par.alimento != null
-    val cantidad = "${par.ingrediente.cantidad.formatoCantidad()} ${par.ingrediente.unidad}"
+    val porRacion = (par.ingrediente.cantidad / porciones.coerceAtLeast(1))
+    val cantidad = stringResource(R.string.detalle_cantidad_racion, porRacion.formatoCantidad(), par.ingrediente.unidad)
 
     Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
@@ -1266,6 +1287,7 @@ private fun RecetaDetallePreview() {
         regionOrigen = "Castilla y LeÃ³n",
         tipoPlato = "Principal",
         tiempoMinutos = 35,
+        porciones = 4,
         pasos = listOf(
             "SofrÃ­e la cebolla y la zanahoria picadas.",
             "AÃ±ade las lentejas y el caldo, y cocina 25 minutos."

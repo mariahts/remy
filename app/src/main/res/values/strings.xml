@@ -24,7 +24,10 @@
     <!-- Comunes -->
     <string name="comun_minutos">%1$d min</string>
     <string name="comun_kcal">%1$d kcal</string>
+    <string name="comun_kcal_racion">%1$d kcal por ración</string>
     <string name="comun_por_racion">por ración</string>
+    <string name="comun_raciones">%1$d raciones</string>
+    <string name="comun_una_racion">1 ración</string>
     <string name="comun_volver">Volver</string>
     <string name="comun_entendido">Entendido</string>
     <string name="comun_cargando">Cargando…</string>
@@ -83,7 +86,7 @@
     <string name="recetas_sin_resultados_filtro">No hay recetas en este filtro</string>
     <string name="recetas_guardar">Guardar receta</string>
     <string name="recetas_quitar">Quitar de favoritas</string>
-    <string name="recetas_kcal_proteina">%1$d kcal · %2$d g de proteína</string>
+    <string name="recetas_kcal_proteina">%1$d kcal · %2$d g de proteína por ración</string>
     <string name="recetas_cocinada_el">Cocinada el %1$s</string>
     <string name="recetas_cargando">Cargando tus recetas…</string>
 
@@ -107,7 +110,8 @@
     <string name="detalle_sin_ingredientes">Esta receta no tiene ingredientes registrados.</string>
     <string name="detalle_pasos">Pasos</string>
     <string name="detalle_cocinada_el">Cocinada el %1$s</string>
-    <string name="detalle_proteina">%1$d g de proteína</string>
+    <string name="detalle_proteina">%1$d g de proteína por ración</string>
+    <string name="detalle_cantidad_racion">%1$s %2$s por ración</string>
     <string name="detalle_en_despensa">En despensa</string>
     <string name="detalle_falta">Falta</string>
     <string name="detalle_captura_titulo">Foto del plato</string>

@@ -310,11 +310,12 @@ private fun TarjetaFavorita(receta: Receta, onClick: () -> Unit) {
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
+            val porciones = receta.porciones.coerceAtLeast(1)
             Text(
                 text = stringResource(
                     R.string.recetas_kcal_proteina,
-                    receta.kcal,
-                    receta.proteinas
+                    kotlin.math.round(receta.kcal.toFloat() / porciones).toInt(),
+                    kotlin.math.round(receta.proteinas.toFloat() / porciones).toInt()
                 ),
                 style = MaterialTheme.typography.bodySmall,
                 color = TextoSecundario
@@ -452,6 +453,7 @@ private fun PerfilScreenPreview() {
                         regionOrigen = "España",
                         tipoPlato = "Principal",
                         tiempoMinutos = 25,
+                        porciones = 4,
                         pasos = listOf("Pela y corta las patatas.", "Cuaja la tortilla.")
                     ),
                     ingredientes = emptyList()
@@ -465,6 +467,7 @@ private fun PerfilScreenPreview() {
                         regionOrigen = "Mediterránea",
                         tipoPlato = "Entrante",
                         tiempoMinutos = 15,
+                        porciones = 2,
                         pasos = listOf("Mezcla los ingredientes.")
                     ),
                     ingredientes = emptyList()

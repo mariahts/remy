@@ -363,8 +363,9 @@ private fun TarjetaSugerencia(
                         )
                         Text("·", style = MaterialTheme.typography.bodySmall, color = TextoSecundario)
                     }
+                    val porciones = datos.porciones.coerceAtLeast(1)
                     Text(
-                        stringResource(R.string.comun_kcal, datos.kcal),
+                        stringResource(R.string.comun_kcal_racion, kotlin.math.round(datos.kcal.toFloat() / porciones).toInt()),
                         style = MaterialTheme.typography.bodySmall,
                         color = TextoSecundario
                     )
@@ -662,7 +663,7 @@ private fun StepperBoton(
 // Preview
 // ---------------------------------------------------------------------------
 
-private fun recetaDemo(id: Long, nombre: String, minutos: Int, kcal: Int) = RecetaConIngredientes(
+private fun recetaDemo(id: Long, nombre: String, minutos: Int, kcal: Int, porciones: Int = 4) = RecetaConIngredientes(
     receta = Receta(
         id = id,
         nombre = nombre,
@@ -670,7 +671,8 @@ private fun recetaDemo(id: Long, nombre: String, minutos: Int, kcal: Int) = Rece
         proteinas = 18,
         regionOrigen = "Mediterránea",
         tipoPlato = "Principal",
-        tiempoMinutos = minutos
+        tiempoMinutos = minutos,
+        porciones = porciones
     ),
     ingredientes = emptyList()
 )

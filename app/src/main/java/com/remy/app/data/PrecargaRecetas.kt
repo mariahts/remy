@@ -64,7 +64,8 @@ object PrecargaRecetas {
                         regionOrigen = r.getString("regionOrigen"),
                         tipoPlato = r.getString("tipoPlato"),
                         tiempoMinutos = r.getInt("tiempoMinutos"),
-                        pasos = (0 until pasosJson.length()).map { pasosJson.getString(it) }
+                        pasos = (0 until pasosJson.length()).map { pasosJson.getString(it) },
+                        porciones = r.optInt("porciones", 1).coerceAtLeast(1)
                     ),
                     ingredientes
                 )

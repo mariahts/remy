@@ -222,13 +222,14 @@ private fun HeroReceta(receta: RecetaConIngredientes, onCocinar: () -> Unit) {
                 fontWeight = FontWeight.ExtraBold
             )
             Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                val porciones = receta.receta.porciones.coerceAtLeast(1)
                 MetaTexto(
                     icono = Icons.Outlined.Schedule,
                     texto = stringResource(R.string.comun_minutos, receta.receta.tiempoMinutos)
                 )
                 MetaTexto(
                     icono = Icons.Outlined.Whatshot,
-                    texto = stringResource(R.string.comun_kcal, receta.receta.kcal)
+                    texto = stringResource(R.string.comun_kcal_racion, kotlin.math.round(receta.receta.kcal.toFloat() / porciones).toInt())
                 )
             }
             Spacer(Modifier.height(2.dp))
@@ -433,7 +434,8 @@ private fun PreviewInicio() {
             proteinas = 32,
             regionOrigen = "Mediterráneo",
             tipoPlato = "Principal",
-            tiempoMinutos = 35
+            tiempoMinutos = 35,
+            porciones = 4
         ),
         ingredientes = emptyList()
     )
