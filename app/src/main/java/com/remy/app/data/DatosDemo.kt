@@ -5,35 +5,56 @@ import kotlinx.coroutines.flow.first
 object DatosDemo {
     const val CORREO_DEMO = "demo@remy.app"
 
-    /** Nombres de alimentos del catálogo que se precargan en la despensa de la cuenta demo. */
-    private val ALIMENTOS_DEMO = listOf(
+    /**
+     * Versión del conjunto de datos de la despensa de demostración.
+     *
+     * Se incrementa cuando cambian las cantidades o las unidades para que las
+     * instalaciones antiguas vuelvan a sembrar la despensa con los datos nuevos.
+     */
+    const val VERSION_DESPENSA_DEMO = 2
+
+    /**
+     * Alimentos del catálogo que se precargan en la despensa de la cuenta demo.
+     *
+     * Las cantidades y unidades son las mismas que usan las recetas (gramos y
+     * mililitros), porque el algoritmo de sugerencias compara ambos. Con
+     * unidades como "ud" ninguna receta llegaba a considerarse completa.
+     */
+    internal val ALIMENTOS_DEMO = listOf(
         "Arroz" to (1000.0 to "g"),
         "Pechuga de pollo" to (500.0 to "g"),
         "Tomate" to (500.0 to "g"),
-        "Cebolla" to (3.0 to "ud"),
-        "Ajo" to (2.0 to "ud"),
+        "Cebolla" to (500.0 to "g"),
+        "Ajo" to (100.0 to "g"),
         "Aceite de oliva" to (500.0 to "ml"),
-        "Huevo" to (6.0 to "ud"),
-        "Leche" to (1.0 to "l"),
-        "Patata" to (4.0 to "ud"),
-        "Pasta" to (500.0 to "g"),
-        "Queso" to (200.0 to "g"),
+        "Huevo" to (300.0 to "g"),
+        "Leche" to (1000.0 to "ml"),
+        "Patata" to (1000.0 to "g"),
+        "Harina" to (1000.0 to "g"),
+        "Queso" to (300.0 to "g"),
         "Sal" to (500.0 to "g")
     )
 
     fun esCuentaDemo(correo: String?): Boolean =
         correo?.trim()?.equals(CORREO_DEMO, ignoreCase = true) == true
 
-    /** Precarga la despensa de la cuenta demo si está vacía. */
-    suspend fun sembrarDespensaSiHaceFalta(db: RemyDatabase) {
+    /**
+     * Precarga la despensa de la cuenta demo si todavía no se ha sembrado con
+     * los datos actuales.
+     */
+    suspend fun sembrarDespensaSiHaceFalta(
+        db: RemyDatabase,
+        preferencias: PreferenciasRepository
+    ) {
+        if (preferencias.versionDespensaDemo.first() >= VERSION_DESPENSA_DEMO) return
         val dao = db.alimentoDao()
-        if (dao.observarTodos().first().isNotEmpty()) return
         val catalogo = dao.observarCatalogo().first()
         ALIMENTOS_DEMO.forEach { (nombre, cantidadUnidad) ->
             val (cantidad, unidad) = cantidadUnidad
             val alimento = catalogo.firstOrNull { it.nombre.trim().equals(nombre, ignoreCase = true) } ?: return@forEach
             dao.actualizar(alimento.copy(cantidad = cantidad, unidad = unidad, enDespensa = true))
         }
+        preferencias.guardarVersionDespensaDemo(VERSION_DESPENSA_DEMO)
     }
 
     /** Restablece los datos locales del usuario para empezar desde cero. */

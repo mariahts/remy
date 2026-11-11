@@ -527,7 +527,7 @@ private fun FormularioAlimento(
 ) {
     var nombre by rememberSaveable { mutableStateOf(alimento?.nombre ?: "") }
     var cantidad by rememberSaveable { mutableStateOf(alimento?.cantidad?.formatoCantidad() ?: "") }
-    var unidad by rememberSaveable { mutableStateOf(alimento?.unidad ?: "ud") }
+    var unidad by rememberSaveable { mutableStateOf(alimento?.unidad ?: "g") }
     var errores by remember { mutableStateOf(ErroresAlimento()) }
     val unidades = listOf("g", "kg", "ml", "l", "ud", "cda")
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)

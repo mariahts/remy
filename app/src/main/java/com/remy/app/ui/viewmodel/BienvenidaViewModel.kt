@@ -25,21 +25,26 @@ class BienvenidaViewModel(
     private val preferenciasRepository: PreferenciasRepository
 ) : ViewModel() {
 
+    /**
+     * Ingredientes básicos que se sugieren en la bienvenida.
+     *
+     * Las unidades son las mismas que usan las recetas (gramos y mililitros)
+     * para que el algoritmo de sugerencias pueda compararlas.
+     */
     val ingredientesComunes: List<IngredienteComun> = listOf(
         IngredienteComun("Aceite de oliva", 500.0, "ml"),
         IngredienteComun("Arroz", 500.0, "g"),
-        IngredienteComun("Pasta", 500.0, "g"),
-        IngredienteComun("Huevo", 6.0, "ud"),
-        IngredienteComun("Leche", 1.0, "l"),
-        IngredienteComun("Cebolla", 2.0, "ud"),
-        IngredienteComun("Ajo", 1.0, "ud"),
-        IngredienteComun("Tomate", 4.0, "ud"),
-        IngredienteComun("Patata", 4.0, "ud"),
-        IngredienteComun("Pechuga de pollo", 500.0, "g"),
-        IngredienteComun("Atún", 2.0, "ud"),
         IngredienteComun("Harina", 500.0, "g"),
+        IngredienteComun("Huevo", 200.0, "g"),
+        IngredienteComun("Leche", 1000.0, "ml"),
+        IngredienteComun("Cebolla", 200.0, "g"),
+        IngredienteComun("Ajo", 50.0, "g"),
+        IngredienteComun("Tomate", 400.0, "g"),
+        IngredienteComun("Patata", 500.0, "g"),
+        IngredienteComun("Pechuga de pollo", 500.0, "g"),
+        IngredienteComun("Atún", 400.0, "g"),
         IngredienteComun("Azúcar", 500.0, "g"),
-        IngredienteComun("Queso", 200.0, "g")
+        IngredienteComun("Queso", 300.0, "g")
     )
 
     /** Inserta los ingredientes seleccionados en la despensa sin marcar la bienvenida. */

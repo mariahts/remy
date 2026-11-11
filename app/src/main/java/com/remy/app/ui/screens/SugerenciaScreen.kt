@@ -86,15 +86,15 @@ private val TIPOS_DE_PLATO = listOf("Entrante", "Principal", "Postre")
 
 /**
  * Sugerencias: recetas que puedes cocinar ya y recetas casi listas, con los
- * filtros guardados en DataStore. Los filtros viven en un ModalBottomSheet y
- * la pantalla se abre desde el atajo de Inicio (no es una pestaña).
+ * filtros guardados en DataStore. Los filtros viven en un ModalBottomSheet.
+ * Es uno de los destinos de la barra inferior, así que no lleva flecha de volver.
  */
 @Composable
 fun SugerenciasScreen(
     onRecetaClick: (Long) -> Unit = {},
     onIrADespensa: () -> Unit = {},
     onPerfilClick: () -> Unit = {},
-    onVolver: () -> Unit = {},
+    onVolver: (() -> Unit)? = null,
     preferencias: PreferenciasViewModel = viewModel(factory = PreferenciasViewModel.Factory),
     sugerencias: SugerenciasViewModel = viewModel(factory = SugerenciasViewModel.Factory)
 ) {
@@ -105,7 +105,8 @@ fun SugerenciasScreen(
     Column(modifier = Modifier.fillMaxSize().background(FondoCrema)) {
         RemyTopBar(
             titulo = stringResource(R.string.sugerencias_titulo),
-            onVolver = onVolver
+            onVolver = onVolver,
+            onAvatarClick = onPerfilClick
         )
         ContenidoConEstado(
             estado = estado,

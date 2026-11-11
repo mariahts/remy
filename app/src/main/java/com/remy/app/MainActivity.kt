@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                                 prefs.guardarUltimoUsuario(usuarioId)
                             }
                             if (DatosDemo.esCuentaDemo(correo)) {
-                                DatosDemo.sembrarDespensaSiHaceFalta(db)
+                                DatosDemo.sembrarDespensaSiHaceFalta(db, prefs)
                             }
                             val completada = prefs.bienvenidaCompletada.first()
                             val despensaVacia = db.alimentoDao().observarTodos().first().isEmpty()

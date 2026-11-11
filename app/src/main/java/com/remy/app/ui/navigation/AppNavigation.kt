@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Kitchen
 import androidx.compose.material.icons.outlined.MenuBook
@@ -38,11 +39,12 @@ fun AppNavigation(rutaInicial: String? = null) {
         DestinoBarra(Routes.INICIO, stringResource(R.string.nav_inicio), Icons.Outlined.Home),
         DestinoBarra(Routes.DESPENSA, stringResource(R.string.nav_despensa), Icons.Outlined.Kitchen),
         DestinoBarra(Routes.RECETAS, stringResource(R.string.nav_recetas), Icons.Outlined.MenuBook),
+        DestinoBarra(Routes.SUGERENCIAS, stringResource(R.string.nav_sugerencias), Icons.Outlined.AutoAwesome),
     )
     val backStackEntry by navController.currentBackStackEntryAsState()
     val rutaActual = backStackEntry?.destination?.route
 
-    // La barra inferior solo aparece en los tres destinos principales.
+    // La barra inferior solo aparece en los destinos principales.
     val mostrarBarra = destinos.any { it.ruta == rutaActual }
 
     val irA: (String) -> Unit = { ruta ->
@@ -91,12 +93,12 @@ fun AppNavigation(rutaInicial: String? = null) {
                     onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
                     onPerfilClick = { navController.navigate(Routes.PERFIL) },
                     onIrADespensa = { irA(Routes.DESPENSA) },
-                    onVerSugerencias = { navController.navigate(Routes.SUGERENCIAS) }
+                    onVerSugerencias = { irA(Routes.SUGERENCIAS) }
                 )
             }
             composable(Routes.DESPENSA) {
                 DespensaScreen(
-                    onVerSugerencias = { navController.navigate(Routes.SUGERENCIAS) },
+                    onVerSugerencias = { irA(Routes.SUGERENCIAS) },
                     onPerfilClick = { navController.navigate(Routes.PERFIL) }
                 )
             }
@@ -104,7 +106,7 @@ fun AppNavigation(rutaInicial: String? = null) {
                 RecetasScreen(
                     onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
                     onPerfilClick = { navController.navigate(Routes.PERFIL) },
-                    onVerSugerencias = { navController.navigate(Routes.SUGERENCIAS) }
+                    onVerSugerencias = { irA(Routes.SUGERENCIAS) }
                 )
             }
             composable(
@@ -127,8 +129,7 @@ fun AppNavigation(rutaInicial: String? = null) {
                 SugerenciasScreen(
                     onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
                     onIrADespensa = { irA(Routes.DESPENSA) },
-                    onPerfilClick = { navController.navigate(Routes.PERFIL) },
-                    onVolver = { navController.popBackStack() }
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
                 )
             }
         }

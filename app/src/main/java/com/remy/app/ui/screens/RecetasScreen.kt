@@ -322,7 +322,7 @@ private fun FotoTarjetaReceta(
         if (receta.tiempoMinutos > 0) {
             EtiquetaTiempoReceta(
                 minutos = receta.tiempoMinutos,
-                modifier = Modifier.align(Alignment.TopStart).padding(8.dp)
+                modifier = Modifier.align(Alignment.BottomStart).padding(8.dp)
             )
         }
         BotonFavoritaTarjeta(
