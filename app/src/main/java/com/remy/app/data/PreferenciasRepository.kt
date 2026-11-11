@@ -3,53 +3,173 @@ package com.remy.app.data
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 private val Context.dataStorePreferencias by preferencesDataStore(name = "preferencias")
 
 /**
- * Preferencias de filtrado de la app (#29): filtros activos de tipo de plato y
- * número máximo de ingredientes faltantes para las sugerencias.
+ * Preferencias de filtrado de las sugerencias (#29 y #37): tipo de plato,
+ * máximo de ingredientes faltantes, tiempo, calorías, proteínas y región.
  *
- * Primer arranque sin preferencias: se devuelven los valores por defecto sin error.
- * DataStore realiza la escritura en Dispatchers.IO, fuera del hilo de interfaz.
+ * Primer arranque sin preferencias: se devuelven los valores por defecto sin
+ * error. DataStore escribe en Dispatchers.IO, fuera del hilo de interfaz.
  */
 class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
 
-    val filtrosActivos: Flow<Set<String>> =
-        dataStore.data.map { it[CLAVE_FILTROS] ?: emptySet() }
+    val filtros: Flow<FiltrosSugerencias> = dataStore.data
+        .catch { emit(emptyPreferences()) }
+        .map { preferencias ->
+            FiltrosSugerencias(
+                tiposDePlato = preferencias[CLAVE_FILTROS] ?: emptySet(),
+                maximoFaltantes = (preferencias[CLAVE_MAXIMO_FALTANTES] ?: MAXIMO_POR_DEFECTO)
+                    .coerceIn(0, MAXIMO_MAXIMO),
+                tiempoMaximoMinutos = (preferencias[CLAVE_TIEMPO_MAXIMO] ?: 0).coerceAtLeast(0),
+                kcalMaximas = (preferencias[CLAVE_KCAL_MAXIMAS] ?: 0).coerceAtLeast(0),
+                proteinasMinimas = (preferencias[CLAVE_PROTEINAS_MINIMAS] ?: 0).coerceAtLeast(0),
+                region = preferencias[CLAVE_REGION] ?: "",
+                faltantesPermitidos = (preferencias[CLAVE_FALTANTES_PERMITIDOS] ?: emptySet())
+                    .mapNotNull { it.toLongOrNull() }
+                    .toSet(),
+                altaProteina = preferencias[CLAVE_ALTA_PROTEINA] ?: false,
+                bajaHidratos = preferencias[CLAVE_BAJA_HIDRATOS] ?: false,
+                bajaGrasa = preferencias[CLAVE_BAJA_GRASA] ?: false
+            )
+        }
 
-    val maximoFaltantes: Flow<Int> =
-        dataStore.data.map { it[CLAVE_MAXIMO_FALTANTES] ?: MAXIMO_POR_DEFECTO }
+    /** Identificadores de las recetas marcadas como favoritas. */
+    val favoritas: Flow<Set<Long>> = dataStore.data
+        .catch { emit(emptyPreferences()) }
+        .map { preferencias ->
+            (preferencias[CLAVE_FAVORITAS] ?: emptySet())
+                .mapNotNull { it.toLongOrNull() }
+                .toSet()
+        }
 
-    /** Ruta absoluta de la imagen elegida en el selector de fotos (#26); null si aún no hay. */
-    val imagenElegida: Flow<String?> =
-        dataStore.data.map { it[CLAVE_IMAGEN_ELEGIDA] }
+    /** Indica si la bienvenida de primer uso ya se completó u omitió. */
+    val bienvenidaCompletada: Flow<Boolean> = dataStore.data
+        .catch { emit(emptyPreferences()) }
+        .map { preferencias -> preferencias[CLAVE_BIENVENIDA_COMPLETADA] ?: false }
 
-    suspend fun guardarFiltros(filtros: Set<String>) {
-        dataStore.edit { it[CLAVE_FILTROS] = filtros }
+    /** Identificador del último usuario autenticado en este dispositivo. */
+    val ultimoUsuarioId: Flow<String?> = dataStore.data
+        .catch { emit(emptyPreferences()) }
+        .map { preferencias -> preferencias[CLAVE_ULTIMO_USUARIO] }
+
+    suspend fun marcarBienvenidaCompletada() {
+        dataStore.edit { it[CLAVE_BIENVENIDA_COMPLETADA] = true }
+    }
+
+    suspend fun guardarUltimoUsuario(id: String) {
+        dataStore.edit { it[CLAVE_ULTIMO_USUARIO] = id }
+    }
+
+    /** Restablece las preferencias del usuario (manteniendo el identificador guardado aparte). */
+    suspend fun limpiarPreferenciasUsuario() {
+        dataStore.edit { preferencias ->
+            preferencias.remove(CLAVE_FILTROS)
+            preferencias.remove(CLAVE_MAXIMO_FALTANTES)
+            preferencias.remove(CLAVE_TIEMPO_MAXIMO)
+            preferencias.remove(CLAVE_KCAL_MAXIMAS)
+            preferencias.remove(CLAVE_PROTEINAS_MINIMAS)
+            preferencias.remove(CLAVE_REGION)
+            preferencias.remove(CLAVE_FALTANTES_PERMITIDOS)
+            preferencias.remove(CLAVE_ALTA_PROTEINA)
+            preferencias.remove(CLAVE_BAJA_HIDRATOS)
+            preferencias.remove(CLAVE_BAJA_GRASA)
+            preferencias.remove(CLAVE_FAVORITAS)
+            preferencias.remove(CLAVE_BIENVENIDA_COMPLETADA)
+        }
+    }
+
+    suspend fun guardarTiposDePlato(tipos: Set<String>) {
+        dataStore.edit { it[CLAVE_FILTROS] = tipos }
     }
 
     suspend fun guardarMaximoFaltantes(valor: Int) {
-        dataStore.edit { it[CLAVE_MAXIMO_FALTANTES] = valor }
+        dataStore.edit { it[CLAVE_MAXIMO_FALTANTES] = valor.coerceIn(0, MAXIMO_MAXIMO) }
     }
 
-    /** Guarda la ruta de la imagen copiada al almacenamiento interno para que sobreviva al reinicio. */
-    suspend fun guardarImagenElegida(ruta: String) {
-        dataStore.edit { it[CLAVE_IMAGEN_ELEGIDA] = ruta }
+    suspend fun guardarTiempoMaximo(minutos: Int) {
+        dataStore.edit { it[CLAVE_TIEMPO_MAXIMO] = minutos.coerceAtLeast(0) }
+    }
+
+    suspend fun guardarKcalMaximas(kcal: Int) {
+        dataStore.edit { it[CLAVE_KCAL_MAXIMAS] = kcal.coerceAtLeast(0) }
+    }
+
+    suspend fun guardarProteinasMinimas(gramos: Int) {
+        dataStore.edit { it[CLAVE_PROTEINAS_MINIMAS] = gramos.coerceAtLeast(0) }
+    }
+
+    suspend fun guardarRegion(region: String) {
+        dataStore.edit { it[CLAVE_REGION] = region.trim() }
+    }
+
+    suspend fun guardarFaltantesPermitidos(ids: Set<Long>) {
+        dataStore.edit { it[CLAVE_FALTANTES_PERMITIDOS] = ids.map { id -> id.toString() }.toSet() }
+    }
+
+    suspend fun guardarAltaProteina(activo: Boolean) {
+        dataStore.edit { it[CLAVE_ALTA_PROTEINA] = activo }
+    }
+
+    suspend fun guardarBajaHidratos(activo: Boolean) {
+        dataStore.edit { it[CLAVE_BAJA_HIDRATOS] = activo }
+    }
+
+    suspend fun guardarBajaGrasa(activo: Boolean) {
+        dataStore.edit { it[CLAVE_BAJA_GRASA] = activo }
+    }
+
+    suspend fun limpiarFiltros() {
+        dataStore.edit { preferencias ->
+            preferencias.remove(CLAVE_FILTROS)
+            preferencias.remove(CLAVE_MAXIMO_FALTANTES)
+            preferencias.remove(CLAVE_TIEMPO_MAXIMO)
+            preferencias.remove(CLAVE_KCAL_MAXIMAS)
+            preferencias.remove(CLAVE_PROTEINAS_MINIMAS)
+            preferencias.remove(CLAVE_REGION)
+            preferencias.remove(CLAVE_FALTANTES_PERMITIDOS)
+            preferencias.remove(CLAVE_ALTA_PROTEINA)
+            preferencias.remove(CLAVE_BAJA_HIDRATOS)
+            preferencias.remove(CLAVE_BAJA_GRASA)
+        }
+    }
+
+    suspend fun alternarFavorita(id: Long) {
+        dataStore.edit { preferencias ->
+            val actual = preferencias[CLAVE_FAVORITAS] ?: emptySet()
+            val clave = id.toString()
+            preferencias[CLAVE_FAVORITAS] = if (clave in actual) actual - clave else actual + clave
+        }
     }
 
     companion object {
         val CLAVE_FILTROS = stringSetPreferencesKey("filtros_activos")
         val CLAVE_MAXIMO_FALTANTES = intPreferencesKey("maximo_faltantes")
-        val CLAVE_IMAGEN_ELEGIDA = stringPreferencesKey("imagen_elegida")
+        val CLAVE_TIEMPO_MAXIMO = intPreferencesKey("tiempo_maximo_minutos")
+        val CLAVE_KCAL_MAXIMAS = intPreferencesKey("kcal_maximas")
+        val CLAVE_PROTEINAS_MINIMAS = intPreferencesKey("proteinas_minimas")
+        val CLAVE_REGION = stringPreferencesKey("region")
+        val CLAVE_FALTANTES_PERMITIDOS = stringSetPreferencesKey("faltantes_permitidos")
+        val CLAVE_ALTA_PROTEINA = booleanPreferencesKey("alta_proteina")
+        val CLAVE_BAJA_HIDRATOS = booleanPreferencesKey("baja_hidratos")
+        val CLAVE_BAJA_GRASA = booleanPreferencesKey("baja_grasa")
+        val CLAVE_FAVORITAS = stringSetPreferencesKey("recetas_favoritas")
+        val CLAVE_BIENVENIDA_COMPLETADA = booleanPreferencesKey("bienvenida_completada")
+        val CLAVE_ULTIMO_USUARIO = stringPreferencesKey("ultimo_usuario_id")
+
         const val MAXIMO_POR_DEFECTO = 3
+        const val MAXIMO_MAXIMO = 20
 
         fun delContexto(contexto: Context): PreferenciasRepository =
             PreferenciasRepository(contexto.applicationContext.dataStorePreferencias)

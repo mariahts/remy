@@ -40,7 +40,7 @@ class PrecargaRecetasTest {
         val recetas = db.recetaDao().observarTodas().first()
         assertTrue(recetas.all { it.ingredientes.isNotEmpty() })
         val alimentos = db.alimentoDao().observarTodos().first().map { it.id }.toSet()
-        assertTrue(recetas.all { r -> r.ingredientes.all { it.alimentoId in alimentos } })
+        assertTrue(recetas.all { r -> r.ingredientes.all { it.ingrediente.alimentoId in alimentos } })
     }
 
     @Test

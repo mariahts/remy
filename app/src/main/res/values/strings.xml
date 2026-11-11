@@ -1,3 +1,225 @@
 <resources>
     <string name="app_name">REMY</string>
+
+    <!-- Navegación -->
+    <string name="nav_inicio">Inicio</string>
+    <string name="nav_despensa">Despensa</string>
+    <string name="nav_recetas">Recetas</string>
+
+    <!-- Login -->
+    <string name="login_frase">Cocina delicioso con lo que tienes en casa</string>
+    <string name="login_correo">Correo electrónico</string>
+    <string name="login_contrasena">Contraseña</string>
+    <string name="login_mostrar_contrasena">Mostrar contraseña</string>
+    <string name="login_ocultar_contrasena">Ocultar contraseña</string>
+    <string name="login_entrar">Entrar a mi cocina</string>
+    <string name="login_entrando">Entrando…</string>
+    <string name="login_o_continua">o continúa con</string>
+    <string name="login_google">Continuar con Google</string>
+    <string name="login_demo">Probar con la cuenta de demo</string>
+    <string name="login_sin_cuenta">¿No tienes cuenta?</string>
+    <string name="login_crear_cuenta">Crear cuenta</string>
+    <string name="login_demo_ayuda">Cuenta de demo: %1$s</string>
+    <string name="login_cuenta_creada">Cuenta creada. Revisa tu correo si es necesario confirmar la cuenta.</string>
+
+    <!-- Comunes -->
+    <string name="comun_minutos">%1$d min</string>
+    <string name="comun_kcal">%1$d kcal</string>
+    <string name="comun_kcal_racion">%1$d kcal por ración</string>
+    <string name="comun_por_racion">por ración</string>
+    <string name="comun_raciones">%1$d raciones</string>
+    <string name="comun_una_racion">1 ración</string>
+    <string name="comun_volver">Volver</string>
+    <string name="comun_entendido">Entendido</string>
+    <string name="comun_cargando">Cargando…</string>
+    <string name="comun_reintentar">Reintentar</string>
+
+    <!-- Inicio -->
+    <string name="inicio_titulo">Mi cocina</string>
+    <string name="inicio_buenos_dias">Buenos días</string>
+    <string name="inicio_buenas_tardes">Buenas tardes</string>
+    <string name="inicio_buenas_noches">Buenas noches</string>
+    <string name="inicio_saludo">Hola, %1$s</string>
+    <string name="inicio_receta_hoy">RECETA DE HOY</string>
+    <string name="inicio_receta_lista">Lista para cocinar</string>
+    <string name="inicio_cocinar_ahora">Cocinar ahora</string>
+    <string name="inicio_anadir_despensa">Añadir a mi despensa</string>
+    <string name="inicio_ver_sugerencias">Ver sugerencias</string>
+    <string name="inicio_listas_para_cocinar">%1$d listas para cocinar</string>
+    <string name="inicio_lista_para_cocinar">1 lista para cocinar</string>
+    <string name="inicio_semana">Tu semana</string>
+    <string name="inicio_recientes">Cocinadas recientes</string>
+    <string name="inicio_cargando">Cargando tu inicio…</string>
+    <string name="inicio_desayuno">DESAYUNO</string>
+    <string name="inicio_comida">COMIDA</string>
+    <string name="inicio_cena">CENA</string>
+    <string name="inicio_anadir_desayuno">Añadir desayuno</string>
+    <string name="inicio_anadir_comida">Añadir comida</string>
+    <string name="inicio_anadir_cena">Añadir cena</string>
+    <string name="inicio_faltan">Faltan %1$d</string>
+    <string name="inicio_lista">Lista</string>
+
+    <!-- Despensa -->
+    <string name="despensa_titulo">Mi despensa</string>
+    <string name="despensa_buscar">Buscar en mi despensa</string>
+    <string name="despensa_todos">Todos</string>
+    <string name="despensa_frescos">Frescos</string>
+    <string name="despensa_despensa">Despensa</string>
+    <string name="despensa_especias">Especias</string>
+    <string name="despensa_lacteos">Lácteos</string>
+    <string name="despensa_anadir">Añadir</string>
+    <string name="despensa_cantidad">%1$s %2$s</string>
+    <string name="despensa_contador">%1$d alimentos en tu despensa</string>
+    <string name="despensa_toca_editar">Editar</string>
+    <string name="despensa_eliminar">Eliminar</string>
+    <string name="despensa_cargando">Cargando tu despensa…</string>
+    <string name="despensa_vacia_titulo">Tu despensa está vacía</string>
+    <string name="despensa_vacia_texto">Añade lo que tienes en casa para descubrir qué puedes cocinar hoy.</string>
+    <string name="despensa_sin_resultados">Sin resultados</string>
+    <string name="despensa_sin_resultados_texto">Prueba con otro nombre o cambia el filtro de categoría.</string>
+    <string name="despensa_anadir_primero">Añadir mi primer alimento</string>
+    <string name="despensa_anadir_ingredientes">Añadir ingredientes</string>
+    <string name="despensa_basicos_golpe">Marcar los básicos de golpe</string>
+    <string name="despensa_form_anadir">Añadir alimento</string>
+    <string name="despensa_form_editar">Editar alimento</string>
+    <string name="despensa_form_ayuda">Indica el nombre, la cantidad y la unidad del ingrediente.</string>
+    <string name="despensa_campo_nombre">Nombre</string>
+    <string name="despensa_campo_cantidad">Cantidad</string>
+    <string name="despensa_campo_unidad">Unidad</string>
+    <string name="despensa_guardar">Guardar</string>
+
+    <!-- Recetas -->
+    <string name="recetas_titulo">Recetas</string>
+    <string name="recetas_buscar">Buscar recetas</string>
+    <string name="recetas_todas">Todas</string>
+    <string name="recetas_rapidas">Rápidas</string>
+    <string name="recetas_favoritas">Favoritas</string>
+    <string name="recetas_cocinadas">Cocinadas</string>
+    <string name="recetas_vacia">Aún no hay recetas</string>
+    <string name="recetas_vacia_texto">Cuando haya recetas disponibles aparecerán aquí.</string>
+    <string name="recetas_sin_resultados">No encontramos recetas con «%1$s»</string>
+    <string name="recetas_sin_resultados_filtro">No hay recetas en este filtro</string>
+    <string name="recetas_sin_resultados_filtro_texto">Prueba con otro filtro para ver más recetas.</string>
+    <string name="recetas_guardar">Guardar receta</string>
+    <string name="recetas_quitar">Quitar de favoritas</string>
+    <string name="recetas_kcal_proteina">%1$d kcal · %2$d g de proteína por ración</string>
+    <string name="recetas_cocinada_el">Cocinada el %1$s</string>
+    <string name="recetas_cargando">Cargando tus recetas…</string>
+
+    <!-- Bienvenida -->
+    <string name="bienvenida_titulo">¿Qué tienes en casa?</string>
+    <string name="bienvenida_texto">Marca los ingredientes que ya tienes y te sugerimos qué puedes cocinar.</string>
+    <string name="bienvenida_seleccionados">%1$d seleccionados</string>
+    <string name="bienvenida_seleccionado">1 seleccionado</string>
+    <string name="bienvenida_ninguno">Ninguno seleccionado</string>
+    <string name="bienvenida_ver_sugerencias">Ver qué puedo cocinar</string>
+    <string name="bienvenida_mas_tarde">Lo haré más tarde</string>
+    <string name="bienvenida_otro">Otro</string>
+
+    <!-- Plan -->
+    <string name="plan_anadir_a">Añadir a %1$s</string>
+    <string name="plan_desayuno">el desayuno</string>
+    <string name="plan_comida">la comida</string>
+    <string name="plan_cena">la cena</string>
+    <string name="plan_buscar_receta">Buscar receta…</string>
+    <string name="plan_primero_despensa">Primero, las que puedes cocinar con tu despensa.</string>
+    <string name="plan_anadir">Añadir</string>
+    <string name="plan_badge_lista">Lista</string>
+    <string name="plan_badge_falta">Falta 1</string>
+    <string name="plan_badge_faltan">Faltan %1$d</string>
+
+    <!-- Sugerencias -->
+    <string name="sugerencias_titulo">Sugerencias</string>
+    <string name="sugerencias_frase">Con tu despensa puedes cocinar %1$d recetas hoy</string>
+    <string name="sugerencias_frase_una">Con tu despensa puedes cocinar 1 receta hoy</string>
+    <string name="sugerencias_subtitulo">Aprovecha lo que ya tienes y evita desperdicios.</string>
+    <string name="sugerencias_todos">Todos</string>
+    <string name="sugerencias_filtros">Filtros</string>
+    <string name="sugerencias_listas">Puedes cocinarlas ya</string>
+    <string name="sugerencias_casi">Casi listas</string>
+    <string name="sugerencias_badge_lista">Lista</string>
+    <string name="sugerencias_badge_faltan">Faltan %1$d</string>
+    <string name="detalle_no_encontrada">No se encontró esta receta</string>
+    <string name="detalle_volver_listado">Volver al listado</string>
+    <string name="detalle_marcar_cocinada">Marcar como cocinada</string>
+    <string name="detalle_volver_cocinar">Volver a cocinar</string>
+    <string name="detalle_ingredientes">Ingredientes</string>
+    <string name="detalle_ingrediente">Ingrediente</string>
+    <string name="detalle_sin_ingredientes">Esta receta no tiene ingredientes registrados.</string>
+    <string name="detalle_pasos">Preparación</string>
+    <string name="detalle_cocinada_el">Cocinada el %1$s</string>
+    <string name="detalle_proteina">%1$d g de proteína</string>
+    <string name="detalle_proteina_racion">%1$d g de proteína por ración</string>
+    <string name="detalle_hidratos">%1$d g de hidratos</string>
+    <string name="detalle_grasas">%1$d g de grasas</string>
+    <string name="detalle_ingredientes_para">Ingredientes para %1$d raciones</string>
+    <string name="detalle_ingredientes_para_una">Ingredientes para 1 ración</string>
+    <string name="detalle_raciones_titulo">Raciones</string>
+    <string name="detalle_menos_raciones">Reducir raciones</string>
+    <string name="detalle_mas_raciones">Aumentar raciones</string>
+    <string name="detalle_en_despensa">En despensa</string>
+    <string name="detalle_falta">Falta</string>
+    <string name="detalle_captura_titulo">Foto del plato</string>
+    <string name="detalle_captura_texto">Haz o elige una foto del plato. Al confirmar se guarda la fecha de hoy junto a la receta y a la fotografía.</string>
+    <string name="detalle_elegir_otra">Elegir otra foto</string>
+    <string name="detalle_comprobando_permiso">Comprobando el permiso de cámara…</string>
+    <string name="detalle_sin_camara">Este dispositivo no tiene cámara. Elige una imagen de tu galería.</string>
+    <string name="detalle_sin_permiso">Sin permiso de cámara no se pueden hacer fotos. Puedes conceder el permiso en Ajustes o usar una imagen de tu galería.</string>
+    <string name="detalle_cancelar">Cancelar</string>
+    <string name="detalle_confirmar">Confirmar</string>
+    <string name="detalle_confirmar_sin_foto">Confirmar sin foto</string>
+    <string name="detalle_foto_plato">Foto del plato</string>
+    <string name="detalle_elige_foto">Elige una foto del plato para continuar.</string>
+    <string name="detalle_foto_error">No se pudo abrir la imagen elegida.</string>
+    <string name="detalle_aviso_descuento">No se han podido descontar de la despensa: %1$s.</string>
+    <string name="detalle_aviso_sin_foto_guardada">No se ha podido guardar la foto del plato, pero el registro se ha guardado sin ella.</string>
+    <string name="detalle_aviso_confirmado_sin_foto">Has confirmado sin foto: el registro queda sin fotografía del plato.</string>
+    <string name="detalle_error_guardar_coccion">No se ha podido guardar el registro de cocción. Inténtalo de nuevo.</string>
+    <string name="detalle_error_receta_no_existe">Esta receta ya no existe: no se ha podido marcar como cocinada.</string>
+    <string name="captura_hacer_foto">Hacer foto</string>
+    <string name="captura_elegir_galeria">Elegir imagen de la galería</string>
+    <string name="captura_elegir_galeria_corta">Elegir de la galería</string>
+    <string name="sugerencias_falta">Te falta %1$s</string>
+    <string name="sugerencias_insuficiente">%1$s · cantidad insuficiente</string>
+    <string name="sugerencias_vacio_titulo">Aún no hay sugerencias</string>
+    <string name="sugerencias_vacio_texto">Añade ingredientes a tu despensa o ajusta los filtros para descubrir qué cocinar hoy.</string>
+    <string name="sugerencias_revisar">Revisar filtros</string>
+    <string name="sugerencias_ir_despensa">Ir a mi despensa</string>
+    <string name="sugerencias_anadir_despensa">Añadir a mi despensa</string>
+    <string name="sugerencias_cargando">Calculando tus sugerencias…</string>
+    <string name="sugerencias_encajan">%1$d recetas encajan con estos filtros</string>
+    <string name="sugerencias_ajustar_titulo">Ajusta tus preferencias</string>
+    <string name="sugerencias_ajustar_texto">Los filtros se guardan y se recuperan al volver a abrir la app.</string>
+    <string name="sugerencias_tipo">Tipo de plato</string>
+    <string name="sugerencias_max_faltantes">Máx. faltantes</string>
+    <string name="sugerencias_de_20">de 20</string>
+    <string name="sugerencias_tiempo">Tiempo máximo</string>
+    <string name="sugerencias_kcal">Calorías máximas</string>
+    <string name="sugerencias_proteinas">Proteínas mínimas</string>
+    <string name="sugerencias_macros">Macros por ración</string>
+    <string name="sugerencias_alta_proteina">Alta en proteína</string>
+    <string name="sugerencias_baja_hidratos">Baja en hidratos</string>
+    <string name="sugerencias_baja_grasa">Baja en grasa</string>
+    <string name="sugerencias_region">Región</string>
+    <string name="sugerencias_sin_limite">Sin límite</string>
+    <string name="sugerencias_todas">Todas</string>
+    <string name="sugerencias_limpiar">Limpiar filtros</string>
+    <string name="sugerencias_ver">Ver sugerencias</string>
+
+    <string name="perfil_titulo">Mi perfil</string>
+    <string name="perfil_usuario">Tu cuenta</string>
+    <string name="perfil_sin_correo">Sin correo</string>
+    <string name="perfil_cuenta_demo">Cuenta de demostración</string>
+    <string name="perfil_guardadas">Guardadas</string>
+    <string name="perfil_favoritas">Favoritas</string>
+    <string name="perfil_en_despensa">En despensa</string>
+    <string name="perfil_favoritas_titulo">Tus favoritas</string>
+    <string name="perfil_favoritas_vacio_titulo">Aún no tienes favoritas</string>
+    <string name="perfil_favoritas_vacio_texto">Marca una receta con el marcador y aparecerá aquí.</string>
+    <string name="perfil_ajustes">Ajustes</string>
+    <string name="perfil_unidades">Unidades</string>
+    <string name="perfil_unidades_valor">Gramos y mililitros</string>
+    <string name="perfil_acerca">Acerca de REMY</string>
+    <string name="perfil_version">Versión 1.0</string>
+    <string name="perfil_cerrar_sesion">Cerrar sesión</string>
 </resources>

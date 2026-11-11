@@ -10,52 +10,70 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 private val LightColorScheme = lightColorScheme(
-    primary = Green600,
+    primary = Terracota,
     onPrimary = Color.White,
-    primaryContainer = Green100,
-    onPrimaryContainer = Green900,
-    secondary = Green700,
+    primaryContainer = Melocoton,
+    onPrimaryContainer = TextoPrincipal,
+    secondary = AzulTinta,
     onSecondary = Color.White,
-    secondaryContainer = Green100,
-    onSecondaryContainer = Green900,
-    tertiary = Orange600,
+    secondaryContainer = AvisoNeutroBg,
+    onSecondaryContainer = TextoPrincipal,
+    tertiary = AzulTinta,
     onTertiary = Color.White,
-    tertiaryContainer = Orange100,
-    onTertiaryContainer = Orange800,
-    background = Mint,
-    onBackground = Slate900,
-    surface = Color.White,
-    onSurface = Slate900,
-    surfaceVariant = Slate100,
-    onSurfaceVariant = Slate500,
-    outline = Slate300,
-    outlineVariant = Slate200,
+    tertiaryContainer = AvisoNeutroBg,
+    onTertiaryContainer = TextoPrincipal,
+    background = FondoCrema,
+    onBackground = TextoPrincipal,
+    surface = SuperficieBlanca,
+    onSurface = TextoPrincipal,
+    surfaceVariant = Color(0xFFF8F4EC),
+    onSurfaceVariant = TextoSecundario,
+    outline = BordeTarjeta,
+    outlineVariant = BordeTarjeta,
     error = Red600,
     onError = Color.White,
-    errorContainer = Red100,
-    onErrorContainer = Red900,
-    surfaceBright = Color.White,
-    surfaceDim = Color(0xFFCBE2D1),
-    surfaceContainerLowest = Color.White,
-    surfaceContainerLow = Color(0xFFF4FCF6),
-    surfaceContainer = Color(0xFFEAF9EE),
-    surfaceContainerHigh = Mint,
-    surfaceContainerHighest = Color.White // las Card se pintan con este color
+    errorContainer = AvisoCaducadoBg,
+    onErrorContainer = AvisoCaducadoFg,
+    surfaceBright = SuperficieBlanca,
+    surfaceDim = Color(0xFFF3EDE3),
+    surfaceContainerLowest = SuperficieBlanca,
+    surfaceContainerLow = Color(0xFFFFFDF9),
+    surfaceContainer = Color(0xFFFFFAF2),
+    surfaceContainerHigh = Color(0xFFFFF7ED),
+    surfaceContainerHighest = SuperficieBlanca
 )
 
-/**
- * Colores propios de REMY que Material 3 no define: avisos, información y
- * categorías de alimentos (cereales, verduras, proteínas, frescos, aceites).
- * Uso: MaterialTheme.remyColors.warning
- */
+/** Par bg/texto/borde para chips/badges (compatibilidad). */
+@Immutable
+data class ChipColors(
+    val bg: Color,
+    val fg: Color,
+    val border: Color
+)
+
 @Immutable
 data class RemyColors(
+    // Avisos e información
     val warning: Color,
     val warningContainer: Color,
     val onWarningContainer: Color,
     val success: Color,
     val info: Color,
     val infoContainer: Color,
+    // Acentos (compatibilidad)
+    val violet: Color,
+    val violetContainer: Color,
+    val blue: Color,
+    val blueContainer: Color,
+    val amber: Color,
+    val amberContainer: Color,
+    // Chips de categoría
+    val chipGranos: ChipColors,
+    val chipHuevo: ChipColors,
+    val chipVerdura: ChipColors,
+    val chipAceite: ChipColors,
+    val chipProteina: ChipColors,
+    // Categorías
     val categoryCereales: Color,
     val categoryVerduras: Color,
     val categoryProteinas: Color,
@@ -64,17 +82,28 @@ data class RemyColors(
 )
 
 private val DefaultRemyColors = RemyColors(
-    warning = Orange600,
-    warningContainer = Orange100,
-    onWarningContainer = Orange800,
-    success = Green600,
-    info = Indigo700,
-    infoContainer = Indigo100,
-    categoryCereales = Color(0xFFFEF08A),
-    categoryVerduras = Color(0xFFFFE4C8),
-    categoryProteinas = Orange100,
-    categoryFrescos = Green100,
-    categoryAceites = Color(0xFFECFCCB)
+    warning = AvisoProntoFg,
+    warningContainer = AvisoProntoBg,
+    onWarningContainer = AvisoProntoFg,
+    success = AzulTinta, // sin verde
+    info = AzulTinta,
+    infoContainer = AvisoNeutroBg,
+    violet = AzulTinta,
+    violetContainer = AvisoNeutroBg,
+    blue = AzulTinta,
+    blueContainer = AvisoNeutroBg,
+    amber = AvisoProntoFg,
+    amberContainer = AvisoProntoBg,
+    chipGranos = ChipColors(bg = AvisoProntoBg, fg = AvisoProntoFg, border = BordeTarjeta),
+    chipHuevo = ChipColors(bg = AvisoFaltaBg, fg = AvisoFaltaFg, border = BordeTarjeta),
+    chipVerdura = ChipColors(bg = AvisoNeutroBg, fg = AvisoNeutroFg, border = BordeTarjeta),
+    chipAceite = ChipColors(bg = AvisoNeutroBg, fg = AvisoNeutroFg, border = BordeTarjeta),
+    chipProteina = ChipColors(bg = AvisoFaltaBg, fg = AvisoFaltaFg, border = BordeTarjeta),
+    categoryCereales = AvisoProntoBg,
+    categoryVerduras = AvisoNeutroBg,
+    categoryProteinas = AvisoFaltaBg,
+    categoryFrescos = Melocoton,
+    categoryAceites = AvisoNeutroBg
 )
 
 private val LocalRemyColors = staticCompositionLocalOf { DefaultRemyColors }

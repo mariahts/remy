@@ -1,15 +1,18 @@
 package com.remy.app.ui.navigation
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Kitchen
+import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -17,63 +20,92 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.remy.app.ui.screens.CamaraScreen
+import com.remy.app.R
+import com.remy.app.ui.components.DestinoBarra
+import com.remy.app.ui.components.RemyBottomBar
 import com.remy.app.ui.screens.DespensaScreen
+import com.remy.app.ui.screens.InicioScreen
+import com.remy.app.ui.screens.PerfilScreen
 import com.remy.app.ui.screens.RecetaDetalleScreen
 import com.remy.app.ui.screens.RecetasScreen
 import com.remy.app.ui.screens.SugerenciasScreen
-
-private data class Destino(val ruta: String, val titulo: String)
+import com.remy.app.ui.theme.FondoCrema
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(rutaInicial: String? = null) {
     val navController = rememberNavController()
     val destinos = listOf(
-        Destino(Routes.DESPENSA, "Despensa"),
-        Destino(Routes.RECETAS, "Recetas"),
-        Destino(Routes.SUGERENCIAS, "Sugerencias"),
-        Destino(Routes.CAMARA, "Cámara"), // pestaña de prueba del prototipo de #25
+        DestinoBarra(Routes.INICIO, stringResource(R.string.nav_inicio), Icons.Outlined.Home),
+        DestinoBarra(Routes.DESPENSA, stringResource(R.string.nav_despensa), Icons.Outlined.Kitchen),
+        DestinoBarra(Routes.RECETAS, stringResource(R.string.nav_recetas), Icons.Outlined.MenuBook),
     )
     val backStackEntry by navController.currentBackStackEntryAsState()
     val rutaActual = backStackEntry?.destination?.route
 
+    // La barra inferior solo aparece en los tres destinos principales.
+    val mostrarBarra = destinos.any { it.ruta == rutaActual }
+
+    val irA: (String) -> Unit = { ruta ->
+        navController.navigate(ruta) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
+    LaunchedEffect(rutaInicial) {
+        if (rutaInicial != null) {
+            navController.navigate(rutaInicial) {
+                launchSingleTop = true
+            }
+        }
+    }
+
     Scaffold(
+        containerColor = FondoCrema,
         bottomBar = {
-            NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
-                destinos.forEach { destino ->
-                    NavigationBarItem(
-                        selected = rutaActual == destino.ruta,
-                        onClick = {
-                            navController.navigate(destino.ruta) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        icon = { Text(destino.titulo.first().toString()) },
-                        label = { Text(destino.titulo) },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.onPrimary,
-                            selectedTextColor = MaterialTheme.colorScheme.primary,
-                            indicatorColor = MaterialTheme.colorScheme.primary,
-                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    )
-                }
+            if (mostrarBarra) {
+                RemyBottomBar(
+                    destinos = destinos,
+                    rutaActual = rutaActual,
+                    onNavegar = irA,
+                    modifier = Modifier.background(FondoCrema)
+                )
             }
         }
     ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = Routes.DESPENSA,
-            modifier = Modifier.padding(padding)
+            startDestination = Routes.INICIO,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    top = padding.calculateTopPadding(),
+                    bottom = padding.calculateBottomPadding()
+                )
         ) {
-            composable(Routes.DESPENSA) { DespensaScreen() }
+            composable(Routes.INICIO) {
+                InicioScreen(
+                    onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) },
+                    onIrADespensa = { irA(Routes.DESPENSA) },
+                    onVerSugerencias = { navController.navigate(Routes.SUGERENCIAS) }
+                )
+            }
+            composable(Routes.DESPENSA) {
+                DespensaScreen(
+                    onVerSugerencias = { navController.navigate(Routes.SUGERENCIAS) },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
+                )
+            }
             composable(Routes.RECETAS) {
-                RecetasScreen(onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) })
+                RecetasScreen(
+                    onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) },
+                    onVerSugerencias = { navController.navigate(Routes.SUGERENCIAS) }
+                )
             }
             composable(
                 route = Routes.RECETA_DETALLE,
@@ -81,11 +113,24 @@ fun AppNavigation() {
             ) { entrada ->
                 RecetaDetalleScreen(
                     id = entrada.arguments?.getLong("id") ?: -1L,
+                    onVolver = { navController.popBackStack() },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
+                )
+            }
+            composable(Routes.PERFIL) {
+                PerfilScreen(
+                    onVolver = { navController.popBackStack() },
+                    onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) }
+                )
+            }
+            composable(Routes.SUGERENCIAS) {
+                SugerenciasScreen(
+                    onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
+                    onIrADespensa = { irA(Routes.DESPENSA) },
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) },
                     onVolver = { navController.popBackStack() }
                 )
             }
-            composable(Routes.SUGERENCIAS) { SugerenciasScreen() }
-            composable(Routes.CAMARA) { CamaraScreen() }
         }
     }
 }

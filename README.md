@@ -25,37 +25,43 @@ cocinan en casa con poco tiempo y presupuesto ajustado.
 - Al cocinar una receta descuenta los ingredientes y guarda una foto del plato.
 
 ## Funcionalidades de la primera versión
+- Pantalla de inicio con calendario y registro de las recetas cocinadas por día.
 - Despensa personal: alimentos, cantidades y unidades (Room).
 - Catálogo de al menos 20 recetas con tiempo e información nutricional.
 - Sugerencias según la despensa: completas y con pocos ingredientes faltantes.
-- Filtros por tiempo, calorías y macronutrientes, tipo de plato y región,
-  con preferencias guardadas (DataStore).
+- Filtros por tipo de plato, tiempo máximo, calorías máximas, proteínas mínimas,
+  región y máximo de ingredientes que faltan, con las preferencias guardadas en
+  DataStore y un botón para limpiar los filtros (#37).
+- Estados de carga y de error con opción de reintentar en las pantallas que
+  consultan Room (#46).
 - Marcar una receta como cocinada, con fecha y fotografía del plato
-  (función multimedia).
+  (función multimedia), y registro de lo cocinado en el calendario.
+- Al marcar una receta como cocinada se descuentan de la despensa los
+  ingredientes que había, sin bajar nunca de cero (#36).
 
 ## Si hay tiempo
 Registro e inicio de sesión, lista de la compra con cálculo de gasto, planes de
-comidas y calendario, valoraciones, recetas propias con foto, modo sin
-conexión, sugerencias por patrones de consumo y funciones sociales.
+comidas, valoraciones, recetas propias con foto, modo sin conexión, sugerencias
+por patrones de consumo y funciones sociales.
 
 ## Tecnologías
 - Kotlin y Jetpack Compose (Material 3)
 - Arquitectura MVVM (ViewModel y repositorios)
-- Navigation Compose (ya en uso: barra inferior con tres pantallas)
-- Room para los datos estructurados (ya en uso: la despensa, con el esquema
-  exportado a `app/schemas/` para poder migrar versiones)
-- CameraX para la función multimedia (prototipo en marcha: permiso, vista
-  previa y captura de fotografía)
-- DataStore para las preferencias y Coil para mostrar imágenes (previstos)
+- Navigation Compose (barra inferior con cuatro pantallas y detalle de receta)
+- Room para los datos estructurados (despensa, recetas e historial de
+  cocciones, con el esquema exportado a `app/schemas/` para poder migrar)
+- CameraX para la foto del plato (permiso, vista previa y captura) y selector
+  de fotos del sistema como alternativa
+- DataStore para las preferencias de filtros
 
 ## Estructura del proyecto
 El código está en `app/src/main/java/com/remy/app/`:
 
-- `data`: acceso a datos (entidad `Alimento`, DAO, `RemyDatabase`,
-  repositorios; más adelante DataStore).
+- `data`: acceso a datos (entidades, DAO, `RemyDatabase`, repositorios y las
+  preferencias de filtros con DataStore).
 - `domain/model`: clases de negocio, como Receta o Alimento.
 - `ui`: interfaz con Jetpack Compose.
-  - `screens`: pantallas (despensa, recetas, sugerencias y prototipo de cámara).
+  - `screens`: pantallas (inicio, despensa, recetas y sugerencias).
   - `components`: elementos reutilizables.
   - `navigation`: rutas y navegación entre pantallas.
   - `viewmodel`: ViewModels de cada pantalla.
@@ -72,21 +78,29 @@ un móvil con la depuración USB activada. La app usa minSdk 26.
 5. Pulsar **Run** sobre el módulo `app`.
 
 No se necesita ninguna clave ni servicio externo para ejecutar la aplicación.
-La app pide permiso de cámara al abrir la pantalla de cámara; se puede denegar
-y sigue funcionando con el selector de fotos del sistema.
+La app pide permiso de cámara al marcar una receta como cocinada y elegir la
+cámara; se puede denegar y seguir funcionando con el selector de fotos del
+sistema.
 
-### Cómo probar el recorrido principal (Entrega 3)
-1. Instalar la APK o pulsar Run: la app abre la pestaña Despensa y, en la
-   primera instalación, entran el catálogo de 20 recetas y 30 alimentos.
-2. Añadir un alimento con el botón flotante; probar a guardar con cantidad 0
-   para ver el mensaje de validación.
+### Cómo probar el recorrido principal
+1. Instalar la APK o pulsar Run: la app abre la pantalla de Inicio con el
+   calendario y, en la primera instalación, entran el catálogo de 20 recetas y
+   30 alimentos.
+2. Pestaña Despensa: añadir un alimento con el botón flotante; probar a guardar
+   con cantidad 0 para ver el mensaje de validación.
 3. Pestaña Recetas: tocar una tarjeta para abrir el detalle (ingredientes,
    pasos y nutrición) y volver con «Volver al listado».
 4. Pestaña Sugerencias: con la despensa completa aparecen «Se puede cocinar
    ya» y «Casi cocinable»; al borrar un alimento de la despensa (por ejemplo
    «Arroz») aparecen recetas en «Casi cocinable» con «Falta: …».
-5. Elegir el filtro «Postre» o cambiar el máximo de faltantes y, con la app
-   cerrada, abrirla de nuevo: la preferencia se conserva (DataStore).
+5. Pestaña Sugerencias: abrir los filtros, elegir un tipo de plato, un tiempo
+   máximo, unas calorías máximas, unas proteínas mínimas o una región, y
+   comprobar que la lista y el contador cambian. Cerrar y abrir la app: los
+   filtros se conservan (DataStore); «Limpiar filtros» vuelve al estado inicial.
+6. Abrir una receta, pulsar «Empezar a cocinar», bajar hasta «Marcar como
+   cocinada» y confirmar con foto o sin ella: la receta queda registrada en el
+   calendario de Inicio en el día correspondiente y la despensa descuenta los
+   ingredientes (sin bajar nunca de cero).
 
 ## Organización del equipo
 - Tablero Kanban (GitHub Project): https://github.com/users/mariahts/projects/1
@@ -102,20 +116,34 @@ y sigue funcionando con el selector de fotos del sistema.
 No se hacen commits directos a `main`: está protegida y exige una aprobación.
 El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
 
-## Estado actual (8 de noviembre de 2026)
-- Base de datos Room en la versión 5 con migraciones explícitas: despensa
-  (#22 y #28), recetas e ingredientes (#23), precarga del catálogo (#30) y
-  receta cocinada con fecha y foto (#35).
+## Estado actual (11 de noviembre de 2026)
+- Base de datos Room en la versión 8 con migraciones explícitas: despensa
+  (#22 y #28), recetas e ingredientes (#23), precarga del catálogo (#30),
+  receta cocinada con fecha y foto (#35), e hidratos y grasas de recetas (#82).
 - Tema de la app (#8): paleta, tipografía y formas aplicados en todas las
   pantallas, con su documento en `docs/Identidad visual de REMY.md`.
 - Preferencias con DataStore (#29), listado (#31) y detalle (#32) de recetas,
   y sugerencias con los dos grupos (#33 y #34).
-- Receta marcada como cocinada con foto (#35) e imagen del selector guardada
-  en el almacenamiento interno y mostrada con Coil (#26).
-- Pruebas: 20 pruebas unitarias en verde; el registro está en `docs/pruebas.md`.
-- Prototipo de cámara con CameraX (#25).
-- Pendientes: bocetos (#9 y #10), filtros por tiempo, calorías y región
-  (#37) y prueba en dispositivo físico (#48).
+- Receta marcada como cocinada con foto (#35), registro de recetas cocinadas
+  en el calendario de Inicio (#44) y descuento automático de la despensa al
+  cocinar (#36).
+- Navegación con cuatro pestañas: Inicio, Despensa, Recetas y Sugerencias (#45),
+  y barra inferior adaptada a tres destinos (#83).
+- Filtros completos de #37: tipo de plato, tiempo máximo, calorías máximas,
+  proteínas mínimas, región y máximo de faltantes, persistidos en DataStore y
+  con opción de limpiarlos.
+- Filtros de macros por ración (#82): `Alta en proteína` (≥ 25 g),
+  `Baja en hidratos` (≤ 30 g) y `Baja en grasa` (≤ 15 g), con persistencia
+  en DataStore.
+- Macros completas en el detalle (#82): proteínas, hidratos y grasas por
+  ración, escaladas con el selector de raciones.
+- Rediseño de la interfaz (#83): tema Nunito, componentes reutilizables,
+  pantallas rediseñadas, planificación semanal y estados vacíos mejorados.
+- Estados de carga y error con reintento en las pantallas que consultan Room
+  (#46).
+- Pruebas: 37 unitarias y 16 instrumentadas en verde; el registro está en
+  `docs/pruebas.md`.
+- Pendientes: documentos de la entrega (#41 y #42) y bocetos (#9 y #10).
 
 ## Documentación
 La memoria del proyecto (Word) se entrega en el Aula Virtual. En la carpeta

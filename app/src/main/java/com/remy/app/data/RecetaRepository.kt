@@ -5,6 +5,9 @@ import kotlinx.coroutines.flow.Flow
 class RecetaRepository(private val dao: RecetaDao) {
     val recetas: Flow<List<RecetaConIngredientes>> = dao.observarTodas()
 
+    /** Historial de recetas cocinadas, de la más reciente a la más antigua (#44). */
+    val cocinadas: Flow<List<RecetaConIngredientes>> = dao.observarCocinadas()
+
     suspend fun guardar(receta: Receta, ingredientes: List<Ingrediente>): Long =
         dao.insertarCompleta(receta, ingredientes)
 

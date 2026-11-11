@@ -23,10 +23,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.remy.app.R
 
 /**
  * Estado del permiso de cámara. Se modela aparte para no quedarnos en un
@@ -128,11 +130,11 @@ fun CamaraConPermiso(
             },
             modifier = Modifier.padding(16.dp)
         ) {
-            Text("Hacer foto")
+            Text(stringResource(R.string.captura_hacer_foto))
         }
         if (alElegirImagen != null) {
             Button(onClick = alElegirImagen, modifier = Modifier.padding(bottom = 16.dp)) {
-                Text("Elegir imagen de la galería")
+                Text(stringResource(R.string.captura_elegir_galeria))
             }
         }
     }
@@ -152,7 +154,7 @@ fun AlternativaGaleria(
     Column(modifier = modifier.padding(16.dp)) {
         Text(text = mensaje, style = MaterialTheme.typography.bodyMedium)
         Button(onClick = alElegirImagen, modifier = Modifier.padding(top = 16.dp)) {
-            Text("Elegir de la galería")
+            Text(stringResource(R.string.captura_elegir_galeria_corta))
         }
     }
 }

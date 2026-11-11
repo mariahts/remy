@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- Permiso de cámara en tiempo de ejecución: la app lo pide al entrar en la pantalla de cámara -->
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- La cámara no es imprescindible para la app: si el dispositivo no tiene, se usa el selector de fotos -->
@@ -27,6 +28,12 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="remy" android:host="login-callback" />
             </intent-filter>
         </activity>
     </application>

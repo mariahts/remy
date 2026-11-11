@@ -28,6 +28,11 @@ interface RecetaDao {
     @Query("SELECT * FROM recetas ORDER BY nombre")
     fun observarTodas(): Flow<List<RecetaConIngredientes>>
 
+    /** Recetas ya cocinadas, de la más reciente a la más antigua (#44). */
+    @Transaction
+    @Query("SELECT * FROM recetas WHERE fechaCocinada IS NOT NULL ORDER BY fechaCocinada DESC")
+    fun observarCocinadas(): Flow<List<RecetaConIngredientes>>
+
     @Query("SELECT COUNT(*) FROM recetas")
     suspend fun contar(): Int
 
@@ -42,6 +47,13 @@ interface RecetaDao {
 
     @Update
     suspend fun actualizar(receta: Receta)
+
+    @Query("SELECT * FROM recetas WHERE nombre = :nombre LIMIT 1")
+    suspend fun porNombre(nombre: String): Receta?
+
+    /** Limpia las marcas de cocinado para dejar el historial del usuario vacío. */
+    @Query("UPDATE recetas SET fechaCocinada = NULL, fotoCocinada = NULL")
+    suspend fun limpiarCocinadas()
 
     /** Borra la receta; sus ingredientes caen por la clave externa (CASCADE). */
     @Delete
