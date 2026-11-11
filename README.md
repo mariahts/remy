@@ -135,8 +135,8 @@ El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
 - Receta marcada como cocinada con foto (#35), registro de recetas cocinadas
   en el calendario de Inicio (#44) y descuento automático de la despensa al
   cocinar (#36).
-- Navegación con cuatro pestañas: Inicio, Despensa, Recetas y Sugerencias (#45),
-  y barra inferior adaptada a tres destinos (#83).
+- Navegación con cuatro destinos en la barra inferior: Inicio, Despensa,
+  Recetas y Sugerencias (#45 y #83).
 - Filtros completos de #37: tipo de plato, tiempo máximo, calorías máximas,
   proteínas mínimas, región y máximo de faltantes, persistidos en DataStore y
   con opción de limpiarlos.
@@ -149,13 +149,20 @@ El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
   una fuente fiable antes de publicar la app.
 - Rediseño de la interfaz (#83): tema Nunito, componentes reutilizables,
   pantallas rediseñadas, planificación semanal y estados vacíos mejorados.
+- Pulido de interfaz para la entrega 4: miniaturas de receta con bloques de
+  color pastel como en la maqueta, insignia de disponibilidad en «Tu receta
+  de hoy», despensa de demostración sembrada con las unidades de las recetas
+  y mes visible en la cabecera de la semana. La revisión de diseño,
+  accesibilidad y usabilidad está en `docs/revision-diseno-usabilidad.md`.
 - Estados de carga y error con reintento en las pantallas que consultan Room
   (#46).
-- Pruebas: 40 unitarias y 17 instrumentadas en verde; el registro está en
+- Versión de entrega: APK de `release` con ofuscación (R8) y firma propia,
+  de 3,3 MB.
+- Pruebas: 49 unitarias y 19 instrumentadas en verde; el registro está en
   `docs/pruebas.md`.
-- Pendientes: documentos de la entrega (#41 y #42), verificación manual en
-  emulador o dispositivo real, fotos reales de las recetas y publicación
-  (icono, capturas, política de privacidad y minify en release).
+- Pendientes: documentos de la entrega (#41 y #42), verificación en móviles
+  reales, fotos reales de las recetas, caducidad en la despensa, modo oscuro y
+  publicación (icono, capturas, política de privacidad).
 
 ## Documentación
 La memoria del proyecto (Word) se entrega en el Aula Virtual. En la carpeta
