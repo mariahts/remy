@@ -62,6 +62,8 @@ object PrecargaRecetas {
                         nombre = r.getString("nombre"),
                         kcal = r.getInt("kcal"),
                         proteinas = r.getInt("proteinas"),
+                        hidratos = r.optInt("hidratos", 0),
+                        grasas = r.optInt("grasas", 0),
                         regionOrigen = r.getString("regionOrigen"),
                         tipoPlato = r.getString("tipoPlato"),
                         tiempoMinutos = r.getInt("tiempoMinutos"),
