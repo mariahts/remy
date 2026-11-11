@@ -39,7 +39,10 @@ class PrecargaRecetasTest {
         // Cada ingrediente referencia a un alimento existente (lo garantiza la clave externa)
         val recetas = db.recetaDao().observarTodas().first()
         assertTrue(recetas.all { it.ingredientes.isNotEmpty() })
-        val alimentos = db.alimentoDao().observarTodos().first().map { it.id }.toSet()
+        // El catálogo completo: los alimentos precargados se insertan fuera de la despensa,
+        // así que hay que mirar observarCatalogo() y no observarTodos() (solo despensa).
+        val alimentos = db.alimentoDao().observarCatalogo().first().map { it.id }.toSet()
+        assertTrue(alimentos.isNotEmpty())
         assertTrue(recetas.all { r -> r.ingredientes.all { it.ingrediente.alimentoId in alimentos } })
     }
 

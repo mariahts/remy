@@ -24,7 +24,10 @@ class FiltrosSugerenciasUiTest {
         filtros: FiltrosSugerencias = FiltrosSugerencias(),
         onTipo: (String) -> Unit = {},
         onTiempo: (Int) -> Unit = {},
-        onLimpiar: () -> Unit = {}
+        onLimpiar: () -> Unit = {},
+        onAlternarAltaProteina: () -> Unit = {},
+        onAlternarBajaHidratos: () -> Unit = {},
+        onAlternarBajaGrasa: () -> Unit = {}
     ) {
         compose.setContent {
             REMYTheme {
@@ -39,7 +42,10 @@ class FiltrosSugerenciasUiTest {
                     onCambiarProteinas = {},
                     onCambiarRegion = {},
                     onLimpiarFiltros = onLimpiar,
-                    onMostrar = {}
+                    onMostrar = {},
+                    onAlternarAltaProteina = onAlternarAltaProteina,
+                    onAlternarBajaHidratos = onAlternarBajaHidratos,
+                    onAlternarBajaGrasa = onAlternarBajaGrasa
                 )
             }
         }
@@ -97,5 +103,25 @@ class FiltrosSugerenciasUiTest {
         mostrar()
 
         compose.onNodeWithText("Limpiar filtros").assertDoesNotExist()
+    }
+
+    @Test
+    fun muestraLosFiltrosDeMacrosPorRacion() {
+        mostrar()
+
+        compose.onNodeWithText("Macros por ración").assertExists()
+        compose.onNodeWithText("Alta en proteína").assertExists()
+        compose.onNodeWithText("Baja en hidratos").assertExists()
+        compose.onNodeWithText("Baja en grasa").assertExists()
+    }
+
+    @Test
+    fun alPulsarUnFiltroDeMacros_avisaAlViewModel() {
+        var alternadaAltaProteina = false
+        mostrar(onAlternarAltaProteina = { alternadaAltaProteina = true })
+
+        compose.onNodeWithText("Alta en proteína").performScrollTo().performClick()
+
+        assertEquals(true, alternadaAltaProteina)
     }
 }
