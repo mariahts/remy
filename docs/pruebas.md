@@ -1,12 +1,11 @@
 # Pruebas de REMY
 
 Qué se ha probado, en qué entorno, con qué resultado y qué queda pendiente.
-Documento actualizado el 11 de noviembre de 2026 tras el sprint 4 (rama `dev`,
-integrada en `main` mediante la PR #85). Solo se citan pruebas que existen en
-el repositorio.
+Documento actualizado el 12 de noviembre de 2026. Solo se citan pruebas que
+existen en el repositorio.
 
-**Recuento actual:** 49 pruebas unitarias en 9 suites (todas en verde) y 19
-pruebas instrumentadas en 6 suites.
+**Recuento actual:** 54 pruebas unitarias en 10 suites (todas en verde) y 22
+pruebas instrumentadas en 7 suites.
 
 ## Entorno
 
@@ -37,6 +36,7 @@ pruebas instrumentadas en 6 suites.
 | `FechaEspanolTest` | Formato de fecha en español para «Cocinada el …» y nombre del mes en minúsculas. |
 | `ColorRecetaTest` | Reparto estable del color pastel de cada receta: mismo nombre, mismo tono, rango válido y variedad de tonos. |
 | `DatosDemoTest` | Despensa de demostración: unidades en gramos o mililitros, cantidades mayores que cero y al menos una receta completa con lo sembrado. |
+| `MacrosRecetaTest` | Cálculo puro de macros de una receta a partir de sus ingredientes: suma proporcional, el aceite solo aporta grasas, receta vacía, ingredientes ausentes del catálogo y redondeo. |
 
 ### Instrumentadas (`app/src/androidTest`, emulador)
 
@@ -48,15 +48,20 @@ pruebas instrumentadas en 6 suites.
 | `Migration7To8Test` | Migración de Room de la versión 7 a la 8: se conservan los datos del usuario y las recetas quedan con hidratos y grasas. |
 | `EstadoCargaUiTest` | Estados de carga, error con reintento y contenido disponible. |
 | `FiltrosSugerenciasUiTest` | Pantalla/sheet de filtros: controles, cambios, limpiar filtros y visibilidad de acciones. |
+| `CatalogoRecetasTest` | Catálogo de recetas: los macros de cada receta coinciden con los calculados a partir de sus ingredientes, todos los alimentos declaran hidratos y grasas, y todas las recetas tienen al menos tres pasos y dos ingredientes válidos. |
 
 ## Pruebas manuales y verificación
 
 - Compilación y pruebas unitarias verificadas en sesión con
-  `assembleDebug` y `testDebugUnitTest`.
+  `assembleDebug` y `testDebugUnitTest` (54 en verde).
+- Pruebas instrumentadas ejecutadas en el emulador `Medium_Phone_API_37.0`
+  (Android 17) con `connectedDebugAndroidTest` (22 en verde), incluidas las de
+  `CatalogoRecetasTest`, que validan la coherencia del catálogo.
 - Comprobaciones manuales previas en emulador (recorrido, precarga, CRUD de
   despensa, recetas/sugerencias, filtros, cocinados, descuento y migraciones)
-  se documentaron en iteraciones anteriores; repetirlas en dispositivo o
-  emulador tras los cambios del sprint 4 es recomendable.
+  se documentaron en iteraciones anteriores. Tras los cambios del catálogo y
+  las fotos reales, conviene repetir el recorrido principal en dispositivo o
+  emulador.
 
 ## Defectos encontrados en pruebas manuales y corregidos
 
@@ -79,18 +84,13 @@ confirmación y enlace de reenvío), login normal, y hoja del plan con el títul
 ## Limitaciones y pendientes
 
 - La prueba manual de «cocinar con foto y reiniciar» queda recomendada en
-  dispositivo/emulador actual; el flujo tiene cobertura parcial por pruebas
+  dispositivo o emulador actual; el flujo tiene cobertura parcial por pruebas
   automatizadas existentes.
 - No se ha probado en dispositivo físico en esta sesión.
-- El sprint 4 incorpora refactors de limpieza (descuento extraído, avisos,
-  strings/tema, perfil y ampliación de tests de cruce), el rediseño de la
-  interfaz y las macros por ración; validar el flujo de cocción y descuento en
-  UI tras estos cambios.
-- Las 19 pruebas instrumentadas (incluida `Migration7To8Test`) se ejecutaron en
-  el emulador `Medium_Phone_API_37.0` (Android 17) y quedaron en verde; se
-  corrigió además un fallo real de la suite de filtros, que no compilaba desde
-  el sprint 4.
-- Los valores de hidratos y grasas del catálogo de recetas son estimados, no
-  oficiales: antes de publicar habría que revisarlos con una fuente fiable.
+- Los macros de las recetas se calculan a partir de los valores nutricionales
+  estándar por 100 g/ml de cada ingrediente del catálogo, por lo que son
+  coherentes entre sí. Antes de publicar conviene contrastarlos con una fuente
+  de referencia (por ejemplo, la Base de Datos Española de Composición de
+  Alimentos).
 - Falta la prueba con 2-3 personas ajenas al equipo y la validación en móviles
   reales (letra grande, rotación y gama baja).
