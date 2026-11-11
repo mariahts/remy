@@ -64,12 +64,27 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
         .catch { emit(emptyPreferences()) }
         .map { preferencias -> preferencias[CLAVE_ULTIMO_USUARIO] }
 
+    /**
+     * Versión de la despensa sembrada para la cuenta de demostración.
+     *
+     * Si el número guardado es menor que la versión actual, la despensa se vuelve
+     * a sembrar para aplicar los cambios de cantidades y unidades.
+     */
+    val versionDespensaDemo: Flow<Int> = dataStore.data
+        .catch { emit(emptyPreferences()) }
+        .map { preferencias -> preferencias[CLAVE_VERSION_DESPENSA_DEMO] ?: 0 }
+
     suspend fun marcarBienvenidaCompletada() {
         dataStore.edit { it[CLAVE_BIENVENIDA_COMPLETADA] = true }
     }
 
     suspend fun guardarUltimoUsuario(id: String) {
         dataStore.edit { it[CLAVE_ULTIMO_USUARIO] = id }
+    }
+
+    /** Guarda la versión de la despensa de demostración ya sembrada. */
+    suspend fun guardarVersionDespensaDemo(version: Int) {
+        dataStore.edit { it[CLAVE_VERSION_DESPENSA_DEMO] = version }
     }
 
     /** Restablece las preferencias del usuario (manteniendo el identificador guardado aparte). */
@@ -87,6 +102,7 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
             preferencias.remove(CLAVE_BAJA_GRASA)
             preferencias.remove(CLAVE_FAVORITAS)
             preferencias.remove(CLAVE_BIENVENIDA_COMPLETADA)
+            preferencias.remove(CLAVE_VERSION_DESPENSA_DEMO)
         }
     }
 
@@ -167,6 +183,7 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
         val CLAVE_FAVORITAS = stringSetPreferencesKey("recetas_favoritas")
         val CLAVE_BIENVENIDA_COMPLETADA = booleanPreferencesKey("bienvenida_completada")
         val CLAVE_ULTIMO_USUARIO = stringPreferencesKey("ultimo_usuario_id")
+        val CLAVE_VERSION_DESPENSA_DEMO = intPreferencesKey("version_despensa_demo")
 
         const val MAXIMO_POR_DEFECTO = 3
         const val MAXIMO_MAXIMO = 20
