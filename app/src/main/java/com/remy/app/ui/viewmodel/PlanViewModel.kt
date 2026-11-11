@@ -47,6 +47,8 @@ data class ComidaPlanificadaVista(
 data class PlanDia(
     val fecha: LocalDate = LocalDate.now(),
     val comidas: Map<TipoComida, ComidaPlanificadaVista> = emptyMap(),
+    /** Comidas planificadas para hoy, para la tarjeta destacada. */
+    val comidasHoy: Map<TipoComida, ComidaPlanificadaVista> = emptyMap(),
     val diasConPlan: Set<LocalDate> = emptySet(),
     /** Recetas disponibles para elegir en el sheet, con disponibilidad y ordenadas (listas primero). */
     val recetasParaElegir: List<Pair<com.remy.app.data.RecetaConIngredientes, DisponibilidadReceta>> = emptyList()
@@ -74,13 +76,27 @@ class PlanViewModel(
     val estado: StateFlow<EstadoCarga<PlanDia>> = fechaSeleccionada
         .flatMapLatest { fecha ->
             val clave = fecha.format(formatoFecha)
+            val claveHoy = LocalDate.now().format(formatoFecha)
             combine(
                 planRepositorio.observarDia(clave),
+                planRepositorio.observarDia(claveHoy),
                 planRepositorio.observarFechasConPlan(),
                 recetasRepositorio.recetas,
                 alimentosRepositorio.alimentos,
                 preferenciasRepositorio.filtros
-            ) { comidasDia, fechasConPlan, recetas, despensa, filtros ->
+            ) { valores ->
+                @Suppress("UNCHECKED_CAST")
+                val comidasDia = valores[0] as List<com.remy.app.data.ComidaPlanificadaConReceta>
+                @Suppress("UNCHECKED_CAST")
+                val comidasHoy = valores[1] as List<com.remy.app.data.ComidaPlanificadaConReceta>
+                @Suppress("UNCHECKED_CAST")
+                val fechasConPlan = valores[2] as List<String>
+                @Suppress("UNCHECKED_CAST")
+                val recetas = valores[3] as List<com.remy.app.data.RecetaConIngredientes>
+                @Suppress("UNCHECKED_CAST")
+                val despensa = valores[4] as List<com.remy.app.data.Alimento>
+                val filtros = valores[5] as com.remy.app.data.FiltrosSugerencias
+
                 val filtradas = filtrarRecetas(recetas, filtros)
                 val clasificacion = clasificarRecetas(
                     recetas = filtradas,
@@ -96,13 +112,14 @@ class PlanViewModel(
                     disponibilidadPorReceta[it.receta.receta.id] = DisponibilidadReceta.Faltan(it.faltantes.size)
                 }
 
-                val comidasVista = comidasDia.associate { comida ->
-                    val disp = disponibilidadPorReceta[comida.receta.receta.id]
-                        ?: DisponibilidadReceta.Faltan(comida.receta.ingredientes.size.coerceAtLeast(1))
-                    comida.plan.tipoComida to ComidaPlanificadaVista(comida, disp)
-                }
-                val dias = fechasConPlan.mapNotNull { runCatching { LocalDate.parse(it) }.getOrNull() }.toSet()
+                fun aVista(lista: List<com.remy.app.data.ComidaPlanificadaConReceta>) =
+                    lista.associate { comida ->
+                        val disp = disponibilidadPorReceta[comida.receta.receta.id]
+                            ?: DisponibilidadReceta.Faltan(comida.receta.ingredientes.size.coerceAtLeast(1))
+                        comida.plan.tipoComida to ComidaPlanificadaVista(comida, disp)
+                    }
 
+                val dias = fechasConPlan.mapNotNull { runCatching { LocalDate.parse(it) }.getOrNull() }.toSet()
                 val recetasElegir = filtradas.map { receta ->
                     receta to (disponibilidadPorReceta[receta.receta.id]
                         ?: DisponibilidadReceta.Faltan(receta.ingredientes.size.coerceAtLeast(1)))
@@ -111,7 +128,13 @@ class PlanViewModel(
                 }.thenBy { (it.second as? DisponibilidadReceta.Faltan)?.cantidad ?: 0 }
                  .thenBy { it.first.receta.nombre.lowercase() })
 
-                PlanDia(fecha = fecha, comidas = comidasVista, diasConPlan = dias, recetasParaElegir = recetasElegir)
+                PlanDia(
+                    fecha = fecha,
+                    comidas = aVista(comidasDia),
+                    comidasHoy = aVista(comidasHoy),
+                    diasConPlan = dias,
+                    recetasParaElegir = recetasElegir
+                )
             }
                 .map<PlanDia, EstadoCarga<PlanDia>> { EstadoCarga.Datos(it) }
                 .onStart { emit(EstadoCarga.Cargando) }
