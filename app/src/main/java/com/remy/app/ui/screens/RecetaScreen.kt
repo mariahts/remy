@@ -620,6 +620,7 @@ fun RecetaDetalleScreen(
     val estado by viewModel.estado.collectAsStateWithLifecycle()
     val estadoCoccion by viewModel.estadoCoccion.collectAsStateWithLifecycle()
     var capturando by remember { mutableStateOf(false) }
+    var racionesDeseadas by rememberSaveable(id) { mutableStateOf(1) }
 
     // Al confirmar, el registro ya estÃ¡ guardado: se vuelve al detalle para
     // ver la receta con su fecha y su foto.
@@ -668,7 +669,7 @@ fun RecetaDetalleScreen(
                 )
                 CapturaPlato(
                     estadoCoccion = estadoCoccion,
-                    alConfirmar = { foto, uri -> viewModel.marcarComoCocinada(id, foto, uri) },
+                    alConfirmar = { foto, uri -> viewModel.marcarComoCocinada(id, foto, uri, racionesDeseadas) },
                     alCancelar = {
                         capturando = false
                         viewModel.limpiarCoccion()
@@ -679,6 +680,8 @@ fun RecetaDetalleScreen(
         } else {
             DetalleReceta(
                 detalle = actual.detalle,
+                racionesDeseadas = racionesDeseadas,
+                onCambiarRaciones = { racionesDeseadas = it },
                 estadoCoccion = estadoCoccion,
                 onVolver = onVolver,
                 onEmpezarCoccion = { capturando = true },
@@ -692,6 +695,8 @@ fun RecetaDetalleScreen(
 @Composable
 private fun DetalleReceta(
     detalle: RecetaDetalle,
+    racionesDeseadas: Int,
+    onCambiarRaciones: (Int) -> Unit,
     estadoCoccion: RecetaDetalleViewModel.EstadoCoccion,
     onVolver: () -> Unit,
     onEmpezarCoccion: () -> Unit,
@@ -705,6 +710,8 @@ private fun DetalleReceta(
 
     ContenidoDetalle(
         detalle = detalle,
+        racionesDeseadas = racionesDeseadas,
+        onCambiarRaciones = onCambiarRaciones,
         esFavorita = esFavorita,
         onToggleFavorita = { scope.launch { preferencias.alternarFavorita(detalle.receta.id) } },
         estadoCoccion = estadoCoccion,
@@ -717,6 +724,8 @@ private fun DetalleReceta(
 @Composable
 private fun ContenidoDetalle(
     detalle: RecetaDetalle,
+    racionesDeseadas: Int,
+    onCambiarRaciones: (Int) -> Unit,
     esFavorita: Boolean,
     onToggleFavorita: () -> Unit,
     estadoCoccion: RecetaDetalleViewModel.EstadoCoccion,
@@ -726,7 +735,6 @@ private fun ContenidoDetalle(
 ) {
     val receta = detalle.receta
     val porcionesReceta = receta.porciones.coerceAtLeast(1)
-    var racionesDeseadas by rememberSaveable { mutableStateOf(1) }
     val total = detalle.ingredientes.size
     val disponibles = detalle.ingredientes.count { it.alimento != null }
     val faltan = (total - disponibles).coerceAtLeast(0)
@@ -795,8 +803,8 @@ private fun ContenidoDetalle(
                     }
                     SelectorRaciones(
                         raciones = racionesDeseadas,
-                        onMenos = { if (racionesDeseadas > 1) racionesDeseadas-- },
-                        onMas = { racionesDeseadas++ }
+                        onMenos = { if (racionesDeseadas > 1) onCambiarRaciones(racionesDeseadas - 1) },
+                        onMas = { onCambiarRaciones(racionesDeseadas + 1) }
                     )
                 }
             }
@@ -1385,6 +1393,8 @@ private fun RecetaDetallePreview() {
     REMYTheme {
         ContenidoDetalle(
             detalle = RecetaDetalle(receta, ingredientes),
+            racionesDeseadas = 2,
+            onCambiarRaciones = {},
             esFavorita = true,
             onToggleFavorita = {},
             estadoCoccion = RecetaDetalleViewModel.EstadoCoccion.Normal,

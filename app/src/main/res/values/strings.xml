@@ -131,7 +131,7 @@
     <string name="detalle_ingredientes">Ingredientes</string>
     <string name="detalle_ingrediente">Ingrediente</string>
     <string name="detalle_sin_ingredientes">Esta receta no tiene ingredientes registrados.</string>
-    <string name="detalle_pasos">Pasos</string>
+    <string name="detalle_pasos">Preparación</string>
     <string name="detalle_cocinada_el">Cocinada el %1$s</string>
     <string name="detalle_proteina">%1$d g de proteína</string>
     <string name="detalle_proteina_racion">%1$d g de proteína por ración</string>
