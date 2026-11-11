@@ -5,7 +5,7 @@ Documento actualizado el 11 de noviembre de 2026 tras el sprint 4 (rama `dev`,
 integrada en `main` mediante la PR #85). Solo se citan pruebas que existen en
 el repositorio.
 
-**Recuento actual:** 40 pruebas unitarias en 7 suites (todas en verde) y 17
+**Recuento actual:** 49 pruebas unitarias en 9 suites (todas en verde) y 19
 pruebas instrumentadas en 6 suites.
 
 ## Entorno
@@ -18,9 +18,9 @@ pruebas instrumentadas en 6 suites.
   - `gradlew connectedDebugAndroidTest` — pruebas instrumentadas en el emulador.
   - `gradlew assembleDebug` — APK de depuración.
 - En esta sesión se ejecutaron `testDebugUnitTest` y `assembleDebug` tras cada
-  tarea de limpieza implementada (resultado: BUILD SUCCESSFUL). Las pruebas
-  instrumentadas no se reejecutaron completas en esta sesión salvo donde se
-  indique.
+  tarea implementada, además de `assembleRelease` para la versión de entrega
+  (resultado: BUILD SUCCESSFUL). Las 19 pruebas instrumentadas se ejecutaron en
+  el emulador y quedaron en verde.
 
 ## Pruebas automatizadas (existentes)
 
@@ -34,7 +34,9 @@ pruebas instrumentadas en 6 suites.
 | `FiltroRecetasTest` | Filtros de sugerencias: sin filtros, tipo de plato, región, tiempo máximo, calorías, proteínas, combinaciones y límites a cero. |
 | `PreferenciasRepositoryTest` | Valores por defecto, guardado/lectura de filtros, límites, persistencia al reabrir y limpieza de filtros en DataStore. |
 | `AlmacenamientoFotosTest` | Nombres de archivo de la foto del plato y copia de la imagen al almacenamiento interno. |
-| `FechaEspanolTest` | Formato de fecha en español para «Cocinada el …». |
+| `FechaEspanolTest` | Formato de fecha en español para «Cocinada el …» y nombre del mes en minúsculas. |
+| `ColorRecetaTest` | Reparto estable del color pastel de cada receta: mismo nombre, mismo tono, rango válido y variedad de tonos. |
+| `DatosDemoTest` | Despensa de demostración: unidades en gramos o mililitros, cantidades mayores que cero y al menos una receta completa con lo sembrado. |
 
 ### Instrumentadas (`app/src/androidTest`, emulador)
 
@@ -66,9 +68,10 @@ pruebas instrumentadas en 6 suites.
   strings/tema, perfil y ampliación de tests de cruce), el rediseño de la
   interfaz y las macros por ración; validar el flujo de cocción y descuento en
   UI tras estos cambios.
-- Las 17 pruebas instrumentadas (incluida `Migration7To8Test`) están escritas
-  pero no se han reejecutado en emulador desde el sprint 4: falta lanzar
-  `./gradlew :app:connectedDebugAndroidTest` con un emulador abierto.
+- Las 19 pruebas instrumentadas (incluida `Migration7To8Test`) se ejecutaron en
+  el emulador `Medium_Phone_API_37.0` (Android 17) y quedaron en verde; se
+  corrigió además un fallo real de la suite de filtros, que no compilaba desde
+  el sprint 4.
 - Los valores de hidratos y grasas del catálogo de recetas son estimados, no
   oficiales: antes de publicar habría que revisarlos con una fuente fiable.
 - Falta la prueba con 2-3 personas ajenas al equipo y la validación en móviles
