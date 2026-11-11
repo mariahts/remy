@@ -116,10 +116,10 @@ sistema.
 No se hacen commits directos a `main`: está protegida y exige una aprobación.
 El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
 
-## Estado actual (10 de noviembre de 2026)
-- Base de datos Room en la versión 5 con migraciones explícitas: despensa
-  (#22 y #28), recetas e ingredientes (#23), precarga del catálogo (#30) y
-  receta cocinada con fecha y foto (#35).
+## Estado actual (11 de noviembre de 2026)
+- Base de datos Room en la versión 8 con migraciones explícitas: despensa
+  (#22 y #28), recetas e ingredientes (#23), precarga del catálogo (#30),
+  receta cocinada con fecha y foto (#35), e hidratos y grasas de recetas (#82).
 - Tema de la app (#8): paleta, tipografía y formas aplicados en todas las
   pantallas, con su documento en `docs/Identidad visual de REMY.md`.
 - Preferencias con DataStore (#29), listado (#31) y detalle (#32) de recetas,
@@ -127,16 +127,23 @@ El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
 - Receta marcada como cocinada con foto (#35), registro de recetas cocinadas
   en el calendario de Inicio (#44) y descuento automático de la despensa al
   cocinar (#36).
-- Navegación con cuatro pestañas: Inicio, Despensa, Recetas y Sugerencias (#45).
+- Navegación con cuatro pestañas: Inicio, Despensa, Recetas y Sugerencias (#45),
+  y barra inferior adaptada a tres destinos (#83).
 - Filtros completos de #37: tipo de plato, tiempo máximo, calorías máximas,
   proteínas mínimas, región y máximo de faltantes, persistidos en DataStore y
   con opción de limpiarlos.
+- Filtros de macros por ración (#82): `Alta en proteína` (≥ 25 g),
+  `Baja en hidratos` (≤ 30 g) y `Baja en grasa` (≤ 15 g), con persistencia
+  en DataStore.
+- Macros completas en el detalle (#82): proteínas, hidratos y grasas por
+  ración, escaladas con el selector de raciones.
+- Rediseño de la interfaz (#83): tema Nunito, componentes reutilizables,
+  pantallas rediseñadas, planificación semanal y estados vacíos mejorados.
 - Estados de carga y error con reintento en las pantallas que consultan Room
   (#46).
 - Pruebas: 37 unitarias y 16 instrumentadas en verde; el registro está en
   `docs/pruebas.md`.
-- Pendientes: documentos de la entrega (#38, #40, #41 y #42), bocetos
-  (#9 y #10) y prueba en dispositivo físico (#48).
+- Pendientes: documentos de la entrega (#41 y #42) y bocetos (#9 y #10).
 
 ## Documentación
 La memoria del proyecto (Word) se entrega en el Aula Virtual. En la carpeta
