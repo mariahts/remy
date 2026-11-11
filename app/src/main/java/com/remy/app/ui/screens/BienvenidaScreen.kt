@@ -230,10 +230,10 @@ private fun BienvenidaPreview() {
             ingredientes = listOf(
                 IngredienteComun("Aceite de oliva", 500.0, "ml"),
                 IngredienteComun("Arroz", 500.0, "g"),
-                IngredienteComun("Pasta", 500.0, "g"),
-                IngredienteComun("Huevo", 6.0, "ud"),
-                IngredienteComun("Leche", 1.0, "l"),
-                IngredienteComun("Cebolla", 2.0, "ud")
+                IngredienteComun("Harina", 500.0, "g"),
+                IngredienteComun("Huevo", 200.0, "g"),
+                IngredienteComun("Leche", 1000.0, "ml"),
+                IngredienteComun("Cebolla", 200.0, "g")
             ),
             seleccionados = setOf("Arroz", "Huevo"),
             onToggle = {},

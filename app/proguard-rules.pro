@@ -1,21 +1,52 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
+# Reglas de ProGuard/R8 para la build de release.
 #
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# R8 no puede adivinar las clases que se usan por reflexion, por serializacion
+# o por generacion de codigo. Aqui se declaran las de REMY y las de las librerias
+# que dependen de la reflexion (Room, Supabase, Ktor, kotlinx.serialization, Coil).
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# --- REMY -------------------------------------------------------------------
+# Los datos de Room se guardan y se leen por nombre de columna y por tipo.
+-keep class com.remy.app.data.** { *; }
+-keep class com.remy.app.domain.model.** { *; }
+# Los ViewModel se crean por reflexion desde los Composeables.
+-keep class com.remy.app.ui.viewmodel.** { *; }
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# --- Room -------------------------------------------------------------------
+-keep class * extends androidx.room.RoomDatabase { <init>(); }
+-dontwarn androidx.room.paging.**
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# --- kotlinx.serialization ---------------------------------------------------
+# Los serializadores se generan como metodos estaticos y se localizan por nombre.
+-keepattributes *Annotation*, InnerClasses
+-dontnote kotlinx.serialization.**
+-keepclassmembers class kotlinx.serialization.json.** {
+    *** Companion;
+}
+-keepclasseswithmembers class kotlinx.serialization.json.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+-keep,includedescriptorclasses class com.remy.app.**$$serializer { *; }
+-keepclassmembers class com.remy.app.** {
+    *** Companion;
+}
+-keepclasseswithmembers class com.remy.app.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+# --- Supabase / Ktor ---------------------------------------------------------
+# El cliente de Supabase y el de Ktor registran y localizan clases por reflexion.
+-keep class io.github.jan.tennert.supabase.** { *; }
+-keep class io.github.jan.supabase.** { *; }
+-dontwarn io.github.jan.tennert.supabase.**
+-dontwarn io.ktor.**
+-dontwarn org.slf4j.**
+-keepclassmembers class io.ktor.** { volatile <fields>; }
+
+# --- Coil --------------------------------------------------------------------
+# Coil guarda las imágenes en cache con nombres de archivo generados.
+-dontwarn coil.**
+
+# --- AndroidX / Compose ------------------------------------------------------
+# Los componentes de Compose con preview y los de Material 3 se localizan por nombre.
+-dontwarn androidx.compose.**
+-dontwarn androidx.camera.**

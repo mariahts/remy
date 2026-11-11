@@ -5,6 +5,7 @@
     <string name="nav_inicio">Inicio</string>
     <string name="nav_despensa">Despensa</string>
     <string name="nav_recetas">Recetas</string>
+    <string name="nav_sugerencias">Sugerencias</string>
 
     <!-- Login -->
     <string name="login_frase">Cocina delicioso con lo que tienes en casa</string>
@@ -16,10 +17,8 @@
     <string name="login_entrando">Entrando…</string>
     <string name="login_o_continua">o continúa con</string>
     <string name="login_google">Continuar con Google</string>
-    <string name="login_demo">Probar con la cuenta de demo</string>
     <string name="login_sin_cuenta">¿No tienes cuenta?</string>
     <string name="login_crear_cuenta">Crear cuenta</string>
-    <string name="login_demo_ayuda">Cuenta de demo: %1$s</string>
     <string name="login_cuenta_creada">Cuenta creada. Revisa tu correo si es necesario confirmar la cuenta.</string>
 
     <!-- Comunes -->
@@ -47,6 +46,8 @@
     <string name="inicio_ver_sugerencias">Ver sugerencias</string>
     <string name="inicio_listas_para_cocinar">%1$d listas para cocinar</string>
     <string name="inicio_lista_para_cocinar">1 lista para cocinar</string>
+    <string name="inicio_alimentos_despensa">%1$d alimentos</string>
+    <string name="inicio_alimento_despensa">1 alimento</string>
     <string name="inicio_semana">Tu semana</string>
     <string name="inicio_recientes">Cocinadas recientes</string>
     <string name="inicio_cargando">Cargando tu inicio…</string>

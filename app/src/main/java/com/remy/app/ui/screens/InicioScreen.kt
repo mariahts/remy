@@ -7,9 +7,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -57,6 +59,9 @@ import com.remy.app.ui.components.PrimaryButton
 import com.remy.app.ui.components.RecipePhoto
 import com.remy.app.ui.components.RemyCard
 import com.remy.app.ui.components.RemyTopBar
+import com.remy.app.ui.components.StatusBadge
+import com.remy.app.ui.components.VarianteBadge
+import com.remy.app.ui.components.mesEnEspanol
 import com.remy.app.ui.theme.AzulTinta
 import com.remy.app.ui.theme.BordeTarjeta
 import com.remy.app.ui.theme.FondoCrema
@@ -168,23 +173,33 @@ private fun ContenidoInicio(
             }
         }
 
-        recetaHoy?.let { (receta, _) ->
+        recetaHoy?.let { (receta, disponibilidad) ->
             item(key = "hero") {
                 HeroRecetaHoy(
                     receta = receta,
+                    disponibilidad = disponibilidad,
                     onCocinar = { onRecetaClick(receta.receta.id) }
                 )
             }
         }
 
         item(key = "atajos") {
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            // IntrinsicSize.Min + fillMaxHeight hacen que las dos tarjetas midan lo mismo
+            // aunque una tenga el texto en dos líneas.
+            Row(
+                modifier = Modifier.height(IntrinsicSize.Min),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 AtajoInicio(
                     texto = stringResource(R.string.inicio_anadir_despensa),
-                    subtitulo = null,
+                    subtitulo = if (planDia.alimentosEnDespensa == 1) {
+                        stringResource(R.string.inicio_alimento_despensa)
+                    } else {
+                        stringResource(R.string.inicio_alimentos_despensa, planDia.alimentosEnDespensa)
+                    },
                     icono = Icons.Outlined.Kitchen,
                     onClick = onIrADespensa,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).fillMaxHeight()
                 )
                 AtajoInicio(
                     texto = stringResource(R.string.inicio_ver_sugerencias),
@@ -192,7 +207,7 @@ private fun ContenidoInicio(
                     else stringResource(R.string.inicio_listas_para_cocinar, listas),
                     icono = Icons.Outlined.AutoAwesome,
                     onClick = onVerSugerencias,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).fillMaxHeight()
                 )
             }
         }
@@ -232,7 +247,11 @@ private fun recetaDeHoy(
 }
 
 @Composable
-private fun HeroRecetaHoy(receta: RecetaConIngredientes, onCocinar: () -> Unit) {
+private fun HeroRecetaHoy(
+    receta: RecetaConIngredientes,
+    disponibilidad: DisponibilidadReceta,
+    onCocinar: () -> Unit
+) {
     RemyCard(modifier = Modifier.fillMaxWidth(), padding = 0.dp) {
         Row(
             modifier = Modifier
@@ -251,19 +270,17 @@ private fun HeroRecetaHoy(receta: RecetaConIngredientes, onCocinar: () -> Unit) 
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(50))
-                        .background(AzulTinta)
-                        .padding(horizontal = 10.dp, vertical = 4.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.inicio_receta_lista),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                StatusBadge(
+                    text = when (disponibilidad) {
+                        is DisponibilidadReceta.Lista -> stringResource(R.string.inicio_receta_lista)
+                        is DisponibilidadReceta.Faltan ->
+                            stringResource(R.string.sugerencias_badge_faltan, disponibilidad.cantidad)
+                    },
+                    variante = when (disponibilidad) {
+                        is DisponibilidadReceta.Lista -> VarianteBadge.LISTA
+                        is DisponibilidadReceta.Faltan -> VarianteBadge.FALTAN
+                    }
+                )
                 Text(
                     text = receta.receta.nombre,
                     style = MaterialTheme.typography.titleLarge,
@@ -348,12 +365,23 @@ private fun SemanaPlan(
     val dias = (0..6).map { inicio.plusDays(it.toLong()) }
 
     RemyCard(modifier = Modifier.fillMaxWidth(), padding = 16.dp) {
-        Text(
-            text = stringResource(R.string.inicio_semana),
-            style = MaterialTheme.typography.titleMedium,
-            color = TextoPrincipal,
-            fontWeight = FontWeight.Bold
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.inicio_semana),
+                style = MaterialTheme.typography.titleMedium,
+                color = TextoPrincipal,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = mesEnEspanol(hoy.month),
+                style = MaterialTheme.typography.labelMedium,
+                color = TextoSecundario
+            )
+        }
         Spacer(Modifier.height(12.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             dias.forEach { dia ->
