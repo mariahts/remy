@@ -58,6 +58,24 @@ pruebas instrumentadas en 6 suites.
   se documentaron en iteraciones anteriores; repetirlas en dispositivo o
   emulador tras los cambios del sprint 4 es recomendable.
 
+## Defectos encontrados en pruebas manuales y corregidos
+
+Estas comprobaciones se hicieron a partir del feedback de uso en un móvil real,
+reproduciendo el flujo en el emulador `Medium_Phone_API_37.0` (Android 17).
+
+| Defecto | Causa raíz | Corrección |
+| --- | --- | --- |
+| El botón «Añadir» de la hoja del plan se veía cortado como «Añadi». | `OutlineButton` tenía `fillMaxWidth()` forzado y 24 dp de padding horizontal; con el ancho fijo de 92 dp solo quedaban 44 dp para el texto. | `OutlineButton` acepta ahora `contentPadding` y `fillWidth`; la hoja usa `widthIn(min = 88.dp)`, 16 dp de padding y sin relleno. |
+| El título decía «Añadir a el desayuno». | Las cadenas `plan_desayuno`, `plan_comida` y `plan_cena` ya traían el artículo («el desayuno»…) y la plantilla era «Añadir a %1$s». | Plantilla «Añadir %1$s» y cadenas «al desayuno», «a la comida», «a la cena». |
+| El enlace «Crear cuenta» no hacía nada con los campos vacíos. | El `Text` solo era pulsable con `formularioValido`, así que no llegaba ni a ejecutarse la validación. | Ahora es pulsable siempre y muestra el error de validación correspondiente. |
+| Al registrarse, la app parecía no hacer nada. | El proyecto de Supabase exige confirmar el correo (`mailer_autoconfirm = false`), así que `signUpWith` no devuelve sesión y la app se queda en el login. | Se explica el paso de confirmación, se ofrece reenviar el correo y, si la cuenta ya existía, se entra directamente. |
+| El reenvío del correo de confirmación a veces fallaba. | Límite de Supabase: `HTTP 429 over_email_send_rate_limit` («solo puedes pedirlo tras 35 segundos»). No es un fallo de la app. | Mensaje explicativo en lugar de un error genérico. |
+
+Verificación tras la corrección, en el emulador: registro con una cuenta ya
+existente (entra directamente en la app), registro con una cuenta nueva (aviso de
+confirmación y enlace de reenvío), login normal, y hoja del plan con el título
+«Añadir al desayuno» y el botón «Añadir» completo.
+
 ## Limitaciones y pendientes
 
 - La prueba manual de «cocinar con foto y reiniciar» queda recomendada en
