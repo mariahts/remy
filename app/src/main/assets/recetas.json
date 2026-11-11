@@ -1,4 +1,4 @@
-﻿{
+{
     "alimentos":  [
                       {
                           "id":  1,
@@ -341,7 +341,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  2
+                        "porciones":  2,
+                        "hidratos":  17,
+                        "grasas":  16
                     },
                     {
                         "nombre":  "Sopa de verduras",
@@ -382,7 +384,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  4
+                        "porciones":  4,
+                        "hidratos":  58,
+                        "grasas":  16
                     },
                     {
                         "nombre":  "Ensalada de atún",
@@ -423,7 +427,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  2
+                        "porciones":  2,
+                        "hidratos":  10,
+                        "grasas":  16
                     },
                     {
                         "nombre":  "Crema de zanahoria",
@@ -464,7 +470,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  4
+                        "porciones":  4,
+                        "hidratos":  48,
+                        "grasas":  46
                     },
                     {
                         "nombre":  "Revuelto de champiñones",
@@ -505,7 +513,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  2
+                        "porciones":  2,
+                        "hidratos":  15,
+                        "grasas":  29
                     },
                     {
                         "nombre":  "Camarones al ajillo",
@@ -541,7 +551,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  2
+                        "porciones":  2,
+                        "hidratos":  6,
+                        "grasas":  41
                     },
                     {
                         "nombre":  "Arroz con pollo",
@@ -592,7 +604,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  4
+                        "porciones":  4,
+                        "hidratos":  250,
+                        "grasas":  47
                     },
                     {
                         "nombre":  "Tortilla de patatas",
@@ -633,7 +647,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  4
+                        "porciones":  4,
+                        "hidratos":  96,
+                        "grasas":  63
                     },
                     {
                         "nombre":  "Lentejas estofadas",
@@ -679,7 +695,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  4
+                        "porciones":  4,
+                        "hidratos":  79,
+                        "grasas":  22
                     },
                     {
                         "nombre":  "Garbanzos con espinacas",
@@ -725,7 +743,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  4
+                        "porciones":  4,
+                        "hidratos":  126,
+                        "grasas":  32
                     },
                     {
                         "nombre":  "Pasta con tomate",
@@ -771,7 +791,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  4
+                        "porciones":  4,
+                        "hidratos":  250,
+                        "grasas":  40
                     },
                     {
                         "nombre":  "Bacalao al horno",
@@ -812,7 +834,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  4
+                        "porciones":  4,
+                        "hidratos":  57,
+                        "grasas":  34
                     },
                     {
                         "nombre":  "Pollo al curry",
@@ -863,7 +887,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  4
+                        "porciones":  4,
+                        "hidratos":  213,
+                        "grasas":  43
                     },
                     {
                         "nombre":  "Paella de verduras",
@@ -909,7 +935,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  4
+                        "porciones":  4,
+                        "hidratos":  286,
+                        "grasas":  36
                     },
                     {
                         "nombre":  "Macarrones con queso",
@@ -950,7 +978,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  4
+                        "porciones":  4,
+                        "hidratos":  250,
+                        "grasas":  123
                     },
                     {
                         "nombre":  "Flan de huevo",
@@ -981,7 +1011,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  4
+                        "porciones":  4,
+                        "hidratos":  121,
+                        "grasas":  35
                     },
                     {
                         "nombre":  "Arroz con leche",
@@ -1012,7 +1044,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  4
+                        "porciones":  4,
+                        "hidratos":  272,
+                        "grasas":  26
                     },
                     {
                         "nombre":  "Yogur con fresas",
@@ -1043,7 +1077,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  2
+                        "porciones":  2,
+                        "hidratos":  54,
+                        "grasas":  2
                     },
                     {
                         "nombre":  "Plátano con chocolate",
@@ -1069,7 +1105,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  2
+                        "porciones":  2,
+                        "hidratos":  83,
+                        "grasas":  25
                     },
                     {
                         "nombre":  "Bizcocho de plátano",
@@ -1110,7 +1148,9 @@
                                                  "unidad":  "g"
                                              }
                                          ],
-                        "porciones":  8
+                        "porciones":  8,
+                        "hidratos":  406,
+                        "grasas":  80
                     }
                 ]
 }
