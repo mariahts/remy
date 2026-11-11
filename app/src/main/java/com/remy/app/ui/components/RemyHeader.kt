@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.remy.app.R
-import com.remy.app.ui.theme.Green600
+import com.remy.app.ui.theme.Terracota
 
 /**
  * Cabecera de pantalla con el logotipo de REMY (mockup Stitch):
@@ -47,7 +47,7 @@ fun RemyHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(R.drawable.remy_logo),
+            painter = painterResource(R.drawable.remy_logo_gris),
             contentDescription = "Logotipo de REMY",
             modifier = Modifier.size(logoSize).clip(CircleShape)
         )
@@ -55,7 +55,7 @@ fun RemyHeader(
             Text(
                 text = "REMY",
                 style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary,
+                color = Terracota,
                 letterSpacing = 2.sp
             )
             Text(titulo, style = MaterialTheme.typography.headlineMedium)
@@ -65,7 +65,7 @@ fun RemyHeader(
     }
 }
 
-/** Círculo de perfil verde con icono de persona (mockup: Circle 32/36 #16A34A). */
+/** Círculo de perfil melocotón con icono de persona. */
 @Composable
 fun PersonCircle(
     size: Dp = 32.dp,
@@ -76,14 +76,14 @@ fun PersonCircle(
         modifier = modifier
             .size(size)
             .clip(CircleShape)
-            .background(Green600)
+            .background(com.remy.app.ui.theme.Melocoton)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         contentAlignment = Alignment.Center
     ) {
         Icon(
             Icons.Outlined.Person,
             contentDescription = "Perfil",
-            tint = androidx.compose.ui.graphics.Color.White,
+            tint = com.remy.app.ui.theme.TextoPrincipal,
             modifier = Modifier.size(size * 0.55f)
         )
     }
