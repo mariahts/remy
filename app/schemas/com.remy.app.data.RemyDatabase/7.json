@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "df0d1d7eacc4266d0508e944a748f034",
+    "identityHash": "abe7da9941b8726db172c9e7262dfc99",
     "entities": [
       {
         "tableName": "alimentos",
@@ -73,7 +73,7 @@
       },
       {
         "tableName": "recetas",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nombre` TEXT NOT NULL, `kcal` INTEGER NOT NULL, `proteinas` INTEGER NOT NULL, `regionOrigen` TEXT NOT NULL, `tipoPlato` TEXT NOT NULL, `tiempoMinutos` INTEGER NOT NULL DEFAULT 0, `pasos` TEXT NOT NULL DEFAULT '', `porciones` INTEGER NOT NULL DEFAULT 1, `fechaCocinada` INTEGER, `fotoCocinada` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `nombre` TEXT NOT NULL, `kcal` INTEGER NOT NULL, `proteinas` INTEGER NOT NULL, `regionOrigen` TEXT NOT NULL, `tipoPlato` TEXT NOT NULL, `tiempoMinutos` INTEGER NOT NULL DEFAULT 0, `pasos` TEXT NOT NULL DEFAULT '', `porciones` INTEGER NOT NULL DEFAULT 4, `fechaCocinada` INTEGER, `fotoCocinada` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -130,7 +130,7 @@
             "columnName": "porciones",
             "affinity": "INTEGER",
             "notNull": true,
-            "defaultValue": "1"
+            "defaultValue": "4"
           },
           {
             "fieldPath": "fechaCocinada",
@@ -318,7 +318,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'df0d1d7eacc4266d0508e944a748f034')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'abe7da9941b8726db172c9e7262dfc99')"
     ]
   }
 }
