@@ -118,12 +118,15 @@
     <string name="bienvenida_otro">Otro</string>
 
     <!-- Plan -->
-    <string name="plan_anadir_a">Añadir a %1$s</string>
-    <string name="plan_desayuno">el desayuno</string>
-    <string name="plan_comida">la comida</string>
-    <string name="plan_cena">la cena</string>
+    <string name="plan_anadir_a">Añadir %1$s</string>
+    <string name="plan_desayuno">al desayuno</string>
+    <string name="plan_comida">a la comida</string>
+    <string name="plan_cena">a la cena</string>
     <string name="plan_buscar_receta">Buscar receta…</string>
     <string name="plan_primero_despensa">Primero, las que puedes cocinar con tu despensa.</string>
+    <string name="plan_chip_desayuno">Desayuno</string>
+    <string name="plan_chip_comida">Comida</string>
+    <string name="plan_chip_cena">Cena</string>
     <string name="plan_anadir">Añadir</string>
     <string name="plan_badge_lista">Lista</string>
     <string name="plan_badge_falta">Falta 1</string>

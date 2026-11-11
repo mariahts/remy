@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -256,7 +257,9 @@ fun OutlineButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    icon: ImageVector? = null
+    icon: ImageVector? = null,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 24.dp),
+    fillWidth: Boolean = true
 ) {
     OutlinedButton(
         onClick = onClick,
@@ -267,9 +270,9 @@ fun OutlineButton(
             containerColor = SuperficieBlanca,
             contentColor = AzulTinta
         ),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp),
+        contentPadding = contentPadding,
         modifier = modifier
-            .fillMaxWidth()
+            .then(if (fillWidth) Modifier.fillMaxWidth() else Modifier)
             .height(52.dp)
     ) {
         if (icon != null) {
