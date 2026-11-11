@@ -9,6 +9,7 @@ import androidx.compose.material.icons.outlined.Kitchen
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -31,7 +32,7 @@ import com.remy.app.ui.screens.SugerenciasScreen
 import com.remy.app.ui.theme.FondoCrema
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(rutaInicial: String? = null) {
     val navController = rememberNavController()
     val destinos = listOf(
         DestinoBarra(Routes.INICIO, stringResource(R.string.nav_inicio), Icons.Outlined.Home),
@@ -51,6 +52,14 @@ fun AppNavigation() {
             }
             launchSingleTop = true
             restoreState = true
+        }
+    }
+
+    LaunchedEffect(rutaInicial) {
+        if (rutaInicial != null) {
+            navController.navigate(rutaInicial) {
+                launchSingleTop = true
+            }
         }
     }
 

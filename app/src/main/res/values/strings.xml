@@ -77,6 +77,8 @@
     <string name="despensa_sin_resultados">Sin resultados</string>
     <string name="despensa_sin_resultados_texto">Prueba con otro nombre o cambia el filtro de categoría.</string>
     <string name="despensa_anadir_primero">Añadir mi primer alimento</string>
+    <string name="despensa_anadir_ingredientes">Añadir ingredientes</string>
+    <string name="despensa_basicos_golpe">Marcar los básicos de golpe</string>
     <string name="despensa_form_anadir">Añadir alimento</string>
     <string name="despensa_form_editar">Editar alimento</string>
     <string name="despensa_form_ayuda">Indica el nombre, la cantidad y la unidad del ingrediente.</string>
@@ -93,13 +95,25 @@
     <string name="recetas_favoritas">Favoritas</string>
     <string name="recetas_cocinadas">Cocinadas</string>
     <string name="recetas_vacia">Aún no hay recetas</string>
+    <string name="recetas_vacia_texto">Cuando haya recetas disponibles aparecerán aquí.</string>
     <string name="recetas_sin_resultados">No encontramos recetas con «%1$s»</string>
     <string name="recetas_sin_resultados_filtro">No hay recetas en este filtro</string>
+    <string name="recetas_sin_resultados_filtro_texto">Prueba con otro filtro para ver más recetas.</string>
     <string name="recetas_guardar">Guardar receta</string>
     <string name="recetas_quitar">Quitar de favoritas</string>
     <string name="recetas_kcal_proteina">%1$d kcal · %2$d g de proteína por ración</string>
     <string name="recetas_cocinada_el">Cocinada el %1$s</string>
     <string name="recetas_cargando">Cargando tus recetas…</string>
+
+    <!-- Bienvenida -->
+    <string name="bienvenida_titulo">¿Qué tienes en casa?</string>
+    <string name="bienvenida_texto">Marca los ingredientes que ya tienes y te sugerimos qué puedes cocinar.</string>
+    <string name="bienvenida_seleccionados">%1$d seleccionados</string>
+    <string name="bienvenida_seleccionado">1 seleccionado</string>
+    <string name="bienvenida_ninguno">Ninguno seleccionado</string>
+    <string name="bienvenida_ver_sugerencias">Ver qué puedo cocinar</string>
+    <string name="bienvenida_mas_tarde">Lo haré más tarde</string>
+    <string name="bienvenida_otro">Otro</string>
 
     <!-- Plan -->
     <string name="plan_anadir_a">Añadir a %1$s</string>

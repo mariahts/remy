@@ -3,6 +3,7 @@ package com.remy.app.data
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -49,6 +50,15 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
                 .mapNotNull { it.toLongOrNull() }
                 .toSet()
         }
+
+    /** Indica si la bienvenida de primer uso ya se completó u omitió. */
+    val bienvenidaCompletada: Flow<Boolean> = dataStore.data
+        .catch { emit(emptyPreferences()) }
+        .map { preferencias -> preferencias[CLAVE_BIENVENIDA_COMPLETADA] ?: false }
+
+    suspend fun marcarBienvenidaCompletada() {
+        dataStore.edit { it[CLAVE_BIENVENIDA_COMPLETADA] = true }
+    }
 
     suspend fun guardarTiposDePlato(tipos: Set<String>) {
         dataStore.edit { it[CLAVE_FILTROS] = tipos }
@@ -107,6 +117,7 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
         val CLAVE_REGION = stringPreferencesKey("region")
         val CLAVE_FALTANTES_PERMITIDOS = stringSetPreferencesKey("faltantes_permitidos")
         val CLAVE_FAVORITAS = stringSetPreferencesKey("recetas_favoritas")
+        val CLAVE_BIENVENIDA_COMPLETADA = booleanPreferencesKey("bienvenida_completada")
 
         const val MAXIMO_POR_DEFECTO = 3
         const val MAXIMO_MAXIMO = 20
