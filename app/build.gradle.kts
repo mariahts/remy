@@ -31,13 +31,38 @@ android {
         buildConfigField("String", "SUPABASE_ANON_KEY", "\"${localProperties.getProperty("SUPABASE_ANON_KEY", "")}\"")
     }
 
+    // Firma de la build de release. Las claves se leen de local.properties (no se versiona),
+    // así el repositorio no guarda ninguna credencial. Si no estan, la build sale sin firmar.
+    val rutaAlmacen = localProperties.getProperty("RELEASE_STORE_FILE")
+    val contrasenaAlmacen = localProperties.getProperty("RELEASE_STORE_PASSWORD")
+    val aliasClave = localProperties.getProperty("RELEASE_KEY_ALIAS")
+    val contrasenaClave = localProperties.getProperty("RELEASE_KEY_PASSWORD")
+    val hayFirma = !rutaAlmacen.isNullOrBlank() && !contrasenaAlmacen.isNullOrBlank() &&
+        !aliasClave.isNullOrBlank() && !contrasenaClave.isNullOrBlank()
+
+    if (hayFirma) {
+        signingConfigs {
+            create("release") {
+                storeFile = file(rutaAlmacen!!)
+                storePassword = contrasenaAlmacen
+                keyAlias = aliasClave
+                keyPassword = contrasenaClave
+            }
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // La APK de entrega se ofusca y recorta: baja de ~20 MB a ~3 MB.
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            if (hayFirma) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     compileOptions {
