@@ -1,8 +1,6 @@
 package com.remy.app.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -11,43 +9,33 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.ExpandLess
-import androidx.compose.material.icons.outlined.ExpandMore
-import androidx.compose.material.icons.outlined.FitnessCenter
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Lightbulb
-import androidx.compose.material.icons.outlined.LocalFireDepartment
-import androidx.compose.material.icons.outlined.Public
+import androidx.compose.material.icons.outlined.Kitchen
 import androidx.compose.material.icons.outlined.Remove
-import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material.icons.outlined.Restaurant
-import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material.icons.outlined.Warning
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,36 +44,37 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.remy.app.R
 import com.remy.app.data.FiltrosSugerencias
+import com.remy.app.data.Receta
 import com.remy.app.data.RecetaConIngredientes
-import com.remy.app.ui.EstadoCarga
-import com.remy.app.ui.components.FotoReceta
-import com.remy.app.ui.components.MetaPill
-import com.remy.app.ui.components.PantallaCargando
-import com.remy.app.ui.components.PantallaError
-import com.remy.app.ui.components.PersonCircle
-import com.remy.app.ui.components.RemyCta
-import com.remy.app.ui.components.RemyHeaderSombra
-import com.remy.app.ui.components.SectionCard
-import com.remy.app.ui.components.categoriaDe
-import com.remy.app.ui.components.emojiDe
+import com.remy.app.ui.components.ContenidoConEstado
+import com.remy.app.ui.components.IngredientIcon
+import com.remy.app.ui.components.OutlineButton
+import com.remy.app.ui.components.PrimaryButton
+import com.remy.app.ui.components.RecipePhoto
+import com.remy.app.ui.components.RemyCard
+import com.remy.app.ui.components.RemyChip
+import com.remy.app.ui.components.RemyTopBar
+import com.remy.app.ui.components.StatusBadge
+import com.remy.app.ui.components.VarianteBadge
+import com.remy.app.ui.theme.AzulTinta
+import com.remy.app.ui.theme.BordeTarjeta
+import com.remy.app.ui.theme.FondoCrema
 import com.remy.app.ui.theme.PillShape
-import com.remy.app.ui.theme.RemyShapes
-import com.remy.app.ui.theme.Slate300
+import com.remy.app.ui.theme.REMYTheme
+import com.remy.app.ui.theme.Terracota
+import com.remy.app.ui.theme.TextoPrincipal
+import com.remy.app.ui.theme.TextoSecundario
 import com.remy.app.ui.viewmodel.CasiCocinableVista
 import com.remy.app.ui.viewmodel.FaltanteVista
 import com.remy.app.ui.viewmodel.GruposSugerencias
@@ -95,99 +84,341 @@ import com.remy.app.ui.viewmodel.SugerenciasViewModel
 private val TIPOS_DE_PLATO = listOf("Entrante", "Principal", "Postre")
 
 /**
- * Pantalla de sugerencias (#34): estado de configuración con filtros
- * persistentes de #29 (tipo de plato, máximo de faltantes) y, al pulsar
- * "Mostrar sugerencias", los resultados del algoritmo de #33 agrupados
- * en "se puede cocinar ya" y "casi cocinable" con sus faltantes.
- *
- * §2.6 (filtros) y §2.8 (resultados) del SPEC son dos vistas de la misma
- * pestaña; el botón "Mostrar sugerencias" / "Volver a filtros" alterna.
+ * Sugerencias: recetas que puedes cocinar ya y recetas casi listas, con los
+ * filtros guardados en DataStore. Los filtros viven en un ModalBottomSheet y
+ * la pantalla se abre desde el atajo de Inicio (no es una pestaña).
  */
 @Composable
 fun SugerenciasScreen(
     onRecetaClick: (Long) -> Unit = {},
     onIrADespensa: () -> Unit = {},
     onPerfilClick: () -> Unit = {},
+    onVolver: () -> Unit = {},
     preferencias: PreferenciasViewModel = viewModel(factory = PreferenciasViewModel.Factory),
     sugerencias: SugerenciasViewModel = viewModel(factory = SugerenciasViewModel.Factory)
 ) {
     val filtros by preferencias.filtros.collectAsStateWithLifecycle()
     val estado by sugerencias.estado.collectAsStateWithLifecycle()
     val regiones by sugerencias.regiones.collectAsStateWithLifecycle()
-    var viendoResultados by rememberSaveable { mutableStateOf(false) }
 
-    when (val actual = estado) {
-        is EstadoCarga.Cargando,
-        is EstadoCarga.Error -> PantallaEstadoSugerencias(actual, sugerencias::reintentar, onPerfilClick)
+    Column(modifier = Modifier.fillMaxSize().background(FondoCrema)) {
+        RemyTopBar(
+            titulo = stringResource(R.string.sugerencias_titulo),
+            onVolver = onVolver
+        )
+        ContenidoConEstado(
+            estado = estado,
+            onReintentar = sugerencias::reintentar,
+            mensajeCargando = stringResource(R.string.sugerencias_cargando)
+        ) { grupos ->
+            ContenidoSugerencias(
+                filtros = filtros,
+                grupos = grupos,
+                regiones = regiones,
+                onAlternarTipo = preferencias::alternarTipoDePlato,
+                onCambiarMaximo = preferencias::cambiarMaximoFaltantes,
+                onAlternarFaltante = preferencias::alternarFaltantePermitido,
+                onCambiarTiempo = preferencias::cambiarTiempoMaximo,
+                onCambiarCalorias = preferencias::cambiarKcalMaximas,
+                onCambiarProteinas = preferencias::cambiarProteinasMinimas,
+                onCambiarRegion = preferencias::cambiarRegion,
+                onLimpiarFiltros = preferencias::limpiarFiltros,
+                onRecetaClick = onRecetaClick,
+                onIrADespensa = onIrADespensa
+            )
+        }
+    }
+}
 
-        is EstadoCarga.Datos -> {
-            if (viendoResultados) {
-                PantallaResultados(
-                    filtros = filtros,
-                    grupos = actual.datos,
-                    onVolverFiltros = { viendoResultados = false },
-                    onRecetaClick = onRecetaClick,
-                    onIrADespensa = onIrADespensa,
-                    onPerfilClick = onPerfilClick
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ContenidoSugerencias(
+    filtros: FiltrosSugerencias,
+    grupos: GruposSugerencias,
+    regiones: List<String>,
+    onAlternarTipo: (String) -> Unit,
+    onCambiarMaximo: (Int) -> Unit,
+    onAlternarFaltante: (Long) -> Unit,
+    onCambiarTiempo: (Int) -> Unit,
+    onCambiarCalorias: (Int) -> Unit,
+    onCambiarProteinas: (Int) -> Unit,
+    onCambiarRegion: (String) -> Unit,
+    onLimpiarFiltros: () -> Unit,
+    onRecetaClick: (Long) -> Unit,
+    onIrADespensa: () -> Unit
+) {
+    var mostrarFiltros by rememberSaveable { mutableStateOf(false) }
+    val total = grupos.completas.size
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 32.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
+        item(key = "frase") {
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(
+                    text = if (total == 1) {
+                        stringResource(R.string.sugerencias_frase_una)
+                    } else {
+                        stringResource(R.string.sugerencias_frase, total)
+                    },
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = TextoPrincipal
                 )
-            } else {
-                PantallaFiltros(
-                    filtros = filtros,
-                    grupos = actual.datos,
-                    regiones = regiones,
-                    onAlternarTipo = preferencias::alternarTipoDePlato,
-                    onCambiarMaximo = preferencias::cambiarMaximoFaltantes,
-                    onAlternarFaltante = preferencias::alternarFaltantePermitido,
-                    onCambiarTiempo = preferencias::cambiarTiempoMaximo,
-                    onCambiarCalorias = preferencias::cambiarKcalMaximas,
-                    onCambiarProteinas = preferencias::cambiarProteinasMinimas,
-                    onCambiarRegion = preferencias::cambiarRegion,
-                    onLimpiarFiltros = preferencias::limpiarFiltros,
-                    onMostrar = { viendoResultados = true },
-                    onPerfilClick = onPerfilClick
+                Text(
+                    stringResource(R.string.sugerencias_subtitulo),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = TextoSecundario
                 )
             }
+        }
+
+        item(key = "chips") {
+            Row(
+                modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                RemyChip(
+                    text = stringResource(R.string.sugerencias_todos),
+                    selected = filtros.tiposDePlato.isEmpty(),
+                    onClick = { filtros.tiposDePlato.forEach(onAlternarTipo) }
+                )
+                TIPOS_DE_PLATO.forEach { tipo ->
+                    RemyChip(
+                        text = tipo,
+                        selected = tipo in filtros.tiposDePlato,
+                        onClick = { onAlternarTipo(tipo) }
+                    )
+                }
+                RemyChip(
+                    text = stringResource(R.string.sugerencias_filtros),
+                    selected = filtros.hayFiltros,
+                    icon = Icons.Outlined.Tune,
+                    onClick = { mostrarFiltros = true }
+                )
+            }
+        }
+
+        if (!grupos.hayAlgunaSugerencia) {
+            item(key = "vacio") {
+                RemyCard(modifier = Modifier.fillMaxWidth()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            stringResource(R.string.sugerencias_vacio_titulo),
+                            style = MaterialTheme.typography.titleLarge,
+                            color = TextoPrincipal
+                        )
+                        Text(
+                            stringResource(R.string.sugerencias_vacio_texto),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = TextoSecundario
+                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            RemyChip(
+                                text = stringResource(R.string.sugerencias_revisar),
+                                selected = false,
+                                onClick = { mostrarFiltros = true }
+                            )
+                            RemyChip(
+                                text = stringResource(R.string.sugerencias_ir_despensa),
+                                selected = false,
+                                onClick = onIrADespensa
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        if (grupos.completas.isNotEmpty()) {
+            item(key = "cabecera-listas") {
+                CabeceraSeccion(
+                    titulo = stringResource(R.string.sugerencias_listas),
+                    total = grupos.completas.size,
+                    variante = VarianteBadge.LISTA
+                )
+            }
+            items(grupos.completas, key = { "lista-${it.receta.id}" }) { receta ->
+                TarjetaSugerencia(
+                    receta = receta,
+                    esCompleta = true,
+                    faltantes = emptyList(),
+                    onRecetaClick = onRecetaClick
+                )
+            }
+        }
+
+        if (grupos.casiCocinables.isNotEmpty()) {
+            item(key = "cabecera-casi") {
+                CabeceraSeccion(
+                    titulo = stringResource(R.string.sugerencias_casi),
+                    total = grupos.casiCocinables.size,
+                    variante = VarianteBadge.FALTAN
+                )
+            }
+            items(grupos.casiCocinables, key = { "casi-${it.receta.receta.id}" }) { casi ->
+                TarjetaSugerencia(
+                    receta = casi.receta,
+                    esCompleta = false,
+                    faltantes = casi.faltantes,
+                    onRecetaClick = onRecetaClick
+                )
+            }
+            item(key = "ir-despensa") {
+                OutlineButton(
+                    text = stringResource(R.string.sugerencias_anadir_despensa),
+                    onClick = onIrADespensa,
+                    icon = Icons.Outlined.Kitchen
+                )
+            }
+        }
+    }
+
+    if (mostrarFiltros) {
+        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        ModalBottomSheet(
+            onDismissRequest = { mostrarFiltros = false },
+            sheetState = sheetState,
+            containerColor = FondoCrema
+        ) {
+            PantallaFiltros(
+                filtros = filtros,
+                grupos = grupos,
+                regiones = regiones,
+                onAlternarTipo = onAlternarTipo,
+                onCambiarMaximo = onCambiarMaximo,
+                onCambiarTiempo = onCambiarTiempo,
+                onCambiarCalorias = onCambiarCalorias,
+                onCambiarProteinas = onCambiarProteinas,
+                onCambiarRegion = onCambiarRegion,
+                onLimpiarFiltros = onLimpiarFiltros,
+                onMostrar = { mostrarFiltros = false },
+                onAlternarFaltante = onAlternarFaltante,
+                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.92f)
+            )
         }
     }
 }
 
 @Composable
-private fun PantallaEstadoSugerencias(
-    estado: EstadoCarga<*>,
-    onReintentar: () -> Unit,
-    onPerfilClick: () -> Unit = {}
+private fun CabeceraSeccion(titulo: String, total: Int, variante: VarianteBadge) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            titulo,
+            style = MaterialTheme.typography.titleLarge,
+            color = TextoPrincipal,
+            modifier = Modifier.weight(1f)
+        )
+        StatusBadge(
+            text = if (variante == VarianteBadge.LISTA) {
+                stringResource(R.string.sugerencias_badge_lista)
+            } else {
+                stringResource(R.string.sugerencias_badge_faltan, total)
+            },
+            variante = variante
+        )
+    }
+}
+
+@Composable
+private fun TarjetaSugerencia(
+    receta: RecetaConIngredientes,
+    esCompleta: Boolean,
+    faltantes: List<FaltanteVista>,
+    onRecetaClick: (Long) -> Unit
 ) {
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            RemyHeaderSombra(
-                titulo = "Sugerencias",
-                bg = MaterialTheme.colorScheme.background,
-                logoSize = 32.dp,
-                trailing = { PersonCircle(size = 32.dp, onClick = onPerfilClick) }
+    val datos = receta.receta
+    RemyCard(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = { onRecetaClick(datos.id) }
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            RecipePhoto(
+                model = datos.fotoCocinada,
+                nombre = datos.nombre,
+                modifier = Modifier.size(88.dp).clip(RoundedCornerShape(16.dp))
             )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    datos.nombre,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = TextoPrincipal,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (datos.tiempoMinutos > 0) {
+                        Text(
+                            stringResource(R.string.comun_minutos, datos.tiempoMinutos),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = TextoSecundario
+                        )
+                        Text("·", style = MaterialTheme.typography.bodySmall, color = TextoSecundario)
+                    }
+                    Text(
+                        stringResource(R.string.comun_kcal, datos.kcal),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextoSecundario
+                    )
+                }
+                StatusBadge(
+                    text = if (esCompleta) {
+                        stringResource(R.string.sugerencias_badge_lista)
+                    } else {
+                        stringResource(R.string.sugerencias_badge_faltan, faltantes.size)
+                    },
+                    variante = if (esCompleta) VarianteBadge.LISTA else VarianteBadge.FALTAN
+                )
+            }
         }
-    ) { inner ->
-        when (estado) {
-            is EstadoCarga.Cargando -> PantallaCargando(
-                mensaje = "Calculando tus sugerencias…",
-                modifier = Modifier.padding(inner)
-            )
 
-            is EstadoCarga.Error -> PantallaError(
-                mensaje = estado.mensaje,
-                onReintentar = onReintentar,
-                modifier = Modifier.padding(inner)
-            )
-
-            is EstadoCarga.Datos -> Unit
+        if (!esCompleta && faltantes.isNotEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                faltantes.forEach { faltante ->
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IngredientIcon(nombre = faltante.nombre, size = 30.dp)
+                        Text(
+                            text = if (faltante.insuficiente) {
+                                stringResource(R.string.sugerencias_insuficiente, faltante.nombre)
+                            } else {
+                                stringResource(R.string.sugerencias_falta, faltante.nombre)
+                            },
+                            style = MaterialTheme.typography.bodySmall,
+                            color = TextoSecundario,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+            }
         }
     }
 }
 
 // ---------------------------------------------------------------------------
-// §2.6 — Configuración de filtros
+// Filtros (ModalBottomSheet)
 // ---------------------------------------------------------------------------
+
 @Composable
 internal fun PantallaFiltros(
     filtros: FiltrosSugerencias,
@@ -202,1395 +433,306 @@ internal fun PantallaFiltros(
     onLimpiarFiltros: () -> Unit,
     onMostrar: () -> Unit,
     onPerfilClick: () -> Unit = {},
-    onAlternarFaltante: (Long) -> Unit = {}
+    onAlternarFaltante: (Long) -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
     val total = grupos.completas.size + grupos.casiCocinables.size
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            RemyHeaderSombra(
-                titulo = "Sugerencias",
-                bg = MaterialTheme.colorScheme.background,
-                logoSize = 32.dp,
-                trailing = { PersonCircle(size = 32.dp, onClick = onPerfilClick) }
+    Column(
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                stringResource(R.string.sugerencias_ajustar_titulo),
+                style = MaterialTheme.typography.headlineSmall,
+                color = TextoPrincipal
+            )
+            Text(
+                stringResource(R.string.sugerencias_ajustar_texto),
+                style = MaterialTheme.typography.bodyMedium,
+                color = TextoSecundario
             )
         }
-    ) { inner ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(inner)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            HeroPreferencias()
 
-            if (filtros.hayFiltros) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .clip(PillShape)
-                            .clickable(onClick = onLimpiarFiltros)
-                            .padding(horizontal = 12.dp, vertical = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        androidx.compose.material3.Icon(
-                            Icons.Outlined.RestartAlt,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Text(
-                            "Limpiar filtros",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
+        SeccionFiltro(titulo = stringResource(R.string.sugerencias_tipo)) {
+            Row(
+                modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                TIPOS_DE_PLATO.forEach { tipo ->
+                    RemyChip(
+                        text = tipo,
+                        selected = tipo in filtros.tiposDePlato,
+                        onClick = { onAlternarTipo(tipo) }
+                    )
                 }
             }
+        }
 
-            FiltroTipoDePlato(filtrosActivos = filtros.tiposDePlato, alternar = onAlternarTipo)
+        SeccionFiltro(titulo = stringResource(R.string.sugerencias_max_faltantes)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                StepperBoton(
+                    icono = Icons.Outlined.Remove,
+                    enabled = filtros.maximoFaltantes > 0,
+                    onClick = { onCambiarMaximo((filtros.maximoFaltantes - 1).coerceAtLeast(0)) }
+                )
+                Text(
+                    "${filtros.maximoFaltantes}",
+                    modifier = Modifier.width(40.dp),
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = TextoPrincipal,
+                    textAlign = TextAlign.Center
+                )
+                StepperBoton(
+                    icono = Icons.Outlined.Add,
+                    enabled = filtros.maximoFaltantes < 20,
+                    onClick = { onCambiarMaximo((filtros.maximoFaltantes + 1).coerceAtMost(20)) }
+                )
+                Text(
+                    stringResource(R.string.sugerencias_de_20),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = TextoSecundario
+                )
+            }
+        }
 
-            FiltroMaxFaltantes(
-                maximoFaltantes = filtros.maximoFaltantes,
-                faltantesDisponibles = grupos.faltantesDisponibles,
-                faltantesPermitidos = filtros.faltantesPermitidos,
-                cambiarMaximo = onCambiarMaximo,
-                alternarFaltante = onAlternarFaltante
-            )
-
-            FiltroOpciones(
-                icono = Icons.Outlined.Schedule,
-                fondoIcono = Color(0xFFF3E8FF),
-                colorIcono = Color(0xFF8B5CF6),
-                etiqueta = "Tiempo de preparación",
-                titulo = "Tiempo máximo",
-                seleccionado = filtros.tiempoMaximoMinutos,
+        SeccionFiltro(titulo = stringResource(R.string.sugerencias_tiempo)) {
+            FilaOpciones(
                 opciones = listOf(
-                    "Sin límite" to 0,
+                    stringResource(R.string.sugerencias_sin_limite) to 0,
                     "15 min" to 15,
                     "30 min" to 30,
                     "45 min" to 45,
                     "60 min" to 60
                 ),
-                resumen = if (filtros.tiempoMaximoMinutos > 0) "Hasta ${filtros.tiempoMaximoMinutos} min" else "Sin límite",
+                seleccionado = filtros.tiempoMaximoMinutos,
                 onSeleccionar = onCambiarTiempo
             )
+        }
 
-            FiltroOpciones(
-                icono = Icons.Outlined.LocalFireDepartment,
-                fondoIcono = Color(0xFFFFF7ED),
-                colorIcono = Color(0xFFEA580C),
-                etiqueta = "Aporte energético",
-                titulo = "Calorías máximas",
-                seleccionado = filtros.kcalMaximas,
+        SeccionFiltro(titulo = stringResource(R.string.sugerencias_kcal)) {
+            FilaOpciones(
                 opciones = listOf(
-                    "Sin límite" to 0,
+                    stringResource(R.string.sugerencias_sin_limite) to 0,
                     "300 kcal" to 300,
                     "500 kcal" to 500,
                     "700 kcal" to 700
                 ),
-                resumen = if (filtros.kcalMaximas > 0) "Hasta ${filtros.kcalMaximas} kcal" else "Sin límite",
+                seleccionado = filtros.kcalMaximas,
                 onSeleccionar = onCambiarCalorias
             )
+        }
 
-            FiltroOpciones(
-                icono = Icons.Outlined.FitnessCenter,
-                fondoIcono = Color(0xFFDCFCE7),
-                colorIcono = Color(0xFF16A34A),
-                etiqueta = "Macronutrientes",
-                titulo = "Proteínas mínimas",
-                seleccionado = filtros.proteinasMinimas,
+        SeccionFiltro(titulo = stringResource(R.string.sugerencias_proteinas)) {
+            FilaOpciones(
                 opciones = listOf(
-                    "Sin límite" to 0,
+                    stringResource(R.string.sugerencias_sin_limite) to 0,
                     "10 g" to 10,
                     "20 g" to 20,
                     "30 g" to 30
                 ),
-                resumen = if (filtros.proteinasMinimas > 0) "Desde ${filtros.proteinasMinimas} g" else "Sin límite",
+                seleccionado = filtros.proteinasMinimas,
                 onSeleccionar = onCambiarProteinas
             )
-
-            FiltroOpciones(
-                icono = Icons.Outlined.Public,
-                fondoIcono = Color(0xFFF0F9FF),
-                colorIcono = Color(0xFF0284C7),
-                etiqueta = "Procedencia",
-                titulo = "Región",
-                seleccionado = filtros.region,
-                opciones = listOf("Todas" to "") + regiones.map { it to it },
-                resumen = filtros.region.ifBlank { "Todas" },
-                onSeleccionar = onCambiarRegion
-            )
-
-            // ChefMotivation (§2.6): cuenta real de recetas encajando
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RemyShapes.extraLarge)
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
-                    .padding(14.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary),
-                    contentAlignment = Alignment.Center
-                ) {
-                    androidx.compose.material3.Icon(
-                        Icons.Filled.AutoAwesome,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text(
-                        "$total recetas encajan con estos filtros",
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        "Aprovecharás tus ingredientes frescos hoy.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-
-            // CTA §2.6: h56 r16 con flecha
-            RemyCta(
-                text = "Mostrar sugerencias",
-                onClick = onMostrar,
-                modifier = Modifier.fillMaxWidth(),
-                height = 56.dp,
-                iconAfter = Icons.Filled.ArrowForward,
-                fontSize = 14.sp
-            )
         }
-    }
-}
 
-/** HeroCard §2.6: píldora "INSPIRACIÓN A MEDIDA" + titular + bajada. */
-@Composable
-private fun HeroPreferencias() {
-    SectionCard(
-        shape = RemyShapes.large,
-        bg = MaterialTheme.colorScheme.surfaceVariant,
-        border = null,
-        glow = true,
-        padding = PaddingValues(16.dp)
-    ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            // círculo decorativo esquina inferior derecha (mockup: blur 24px)
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .size(96.dp)
-                    .padding(0.dp)
-                    .offset(x = 34.dp, y = 34.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.10f))
-            )
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+        SeccionFiltro(titulo = stringResource(R.string.sugerencias_region)) {
+            Row(
+                modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Row(
-                    modifier = Modifier
-                        .clip(PillShape)
-                        .background(Color.White)
-                        .padding(horizontal = 10.dp, vertical = 4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    androidx.compose.material3.Icon(
-                        Icons.Outlined.Tune,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(14.dp)
-                    )
-                    Text(
-                        "INSPIRACIÓN A MEDIDA",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary,
-                        letterSpacing = 0.8.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    "Filtra tus recetas ideales",
-                    style = MaterialTheme.typography.titleLarge
+                RemyChip(
+                    text = stringResource(R.string.sugerencias_todas),
+                    selected = filtros.region.isBlank(),
+                    onClick = { onCambiarRegion("") }
                 )
-                Text(
-                    "Configura tus preferencias antes de descubrir qué cocinar hoy con tu despensa.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    lineHeight = 18.sp
-                )
-            }
-        }
-    }
-}
-
-/** Card "Tipo de plato" (§2.6 fila 2) con chips funcionales de #29. */
-@Composable
-private fun FiltroTipoDePlato(
-    filtrosActivos: Set<String>,
-    alternar: (String) -> Unit
-) {
-    var expandido by rememberSaveable { mutableStateOf(true) }
-
-    SectionCard(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RemyShapes.extraLarge,
-        bg = Color.White,
-        border = null,
-        padding = PaddingValues(16.dp)
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CuadroIcono(44.dp, Color(0xFFFFF7ED), Icons.Outlined.Restaurant, Color(0xFFEA580C))
-                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(
-                            "Categoría culinaria",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text("Tipo de plato", style = MaterialTheme.typography.titleMedium)
-                    }
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (filtrosActivos.isNotEmpty()) {
-                        Row(
-                            modifier = Modifier
-                                .clip(PillShape)
-                                .background(MaterialTheme.colorScheme.background)
-                                .padding(horizontal = 10.dp, vertical = 6.dp),
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            androidx.compose.material3.Icon(
-                                Icons.Outlined.Restaurant,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(14.dp)
-                            )
-                            Text(
-                                text = if (filtrosActivos.size == 1) filtrosActivos.first()
-                                else "${filtrosActivos.size} activos",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.primary,
-                                fontWeight = FontWeight.Bold,
-                                maxLines = 1
-                            )
-                        }
-                    }
-                    BotonMini(
-                        icon = if (expandido) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
-                        onClick = { expandido = !expandido }
+                regiones.forEach { region ->
+                    RemyChip(
+                        text = region,
+                        selected = filtros.region == region,
+                        onClick = { onCambiarRegion(region) }
                     )
-                }
-            }
-
-            if (expandido) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RemyShapes.medium)
-                        .background(MaterialTheme.colorScheme.background)
-                        .padding(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(
-                        "Los filtros quedan guardados: se recuperan al volver a abrir la app.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Row(
-                        modifier = Modifier.horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        TIPOS_DE_PLATO.forEach { tipo ->
-                            FiltroChip(
-                                label = tipo,
-                                active = tipo in filtrosActivos,
-                                onClick = { alternar(tipo) }
-                            )
-                        }
-                    }
                 }
             }
         }
-    }
-}
 
-/** Ingredientes que pueden faltar o no tener cantidad suficiente. */
-@Composable
-private fun FiltroMaxFaltantes(
-    maximoFaltantes: Int,
-    faltantesDisponibles: List<FaltanteVista>,
-    faltantesPermitidos: Set<Long>,
-    cambiarMaximo: (Int) -> Unit,
-    alternarFaltante: (Long) -> Unit
-) {
-    var expandido by rememberSaveable { mutableStateOf(true) }
-
-    SectionCard(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RemyShapes.extraLarge,
-        bg = Color.White,
-        border = null,
-        padding = PaddingValues(16.dp)
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CuadroIcono(44.dp, Color(0xFFF0F9FF), Icons.Outlined.Tune, Color(0xFF0284C7))
-                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(
-                            "Ingredientes prescindibles",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text("Máx. faltantes", style = MaterialTheme.typography.titleMedium)
-                    }
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .clip(PillShape)
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(horizontal = 10.dp, vertical = 6.dp)
-                    ) {
-                        Text(
-                            "Máx $maximoFaltantes",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    BotonMini(
-                        icon = if (expandido) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
-                        onClick = { expandido = !expandido }
-                    )
-                }
-            }
-
-            if (expandido) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RemyShapes.medium)
-                        .background(MaterialTheme.colorScheme.background)
-                        .padding(10.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        BotonMini(
-                            icon = Icons.Outlined.Remove,
-                            enabled = maximoFaltantes > 0,
-                            onClick = { cambiarMaximo((maximoFaltantes - 1).coerceAtLeast(0)) }
-                        )
-                        Text(
-                            "$maximoFaltantes",
-                            modifier = Modifier.width(48.dp),
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
-                        BotonMini(
-                            icon = Icons.Outlined.Add,
-                            enabled = maximoFaltantes < 20,
-                            onClick = { cambiarMaximo((maximoFaltantes + 1).coerceAtMost(20)) }
-                        )
-                        Text(
-                            "de 20",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-
-                    Text(
-                        "Elige qué ingredientes pueden faltar o no tener la cantidad exacta. Si no eliges ninguno, se permiten todos hasta el máximo indicado.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-                    if (faltantesDisponibles.isEmpty()) {
-                        Text(
-                            "Ahora mismo no hay ingredientes que falten o estén incompletos para las recetas disponibles.",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    } else {
-                        var busqueda by rememberSaveable { mutableStateOf("") }
-                        val filtrados = if (busqueda.isBlank()) faltantesDisponibles
-                        else faltantesDisponibles.filter { it.nombre.contains(busqueda, ignoreCase = true) }
-
-                        androidx.compose.material3.OutlinedTextField(
-                            value = busqueda,
-                            onValueChange = { busqueda = it },
-                            modifier = Modifier.fillMaxWidth(),
-                            singleLine = true,
-                            label = { Text("Escribe para buscar un ingrediente") },
-                            placeholder = { Text("Ej.: tomate, huevo...") }
-                        )
-
-                        if (filtrados.isEmpty()) {
-                            Text(
-                                "No hay ingredientes que coincidan con \"$busqueda\".",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        } else {
-                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                filtrados.forEach { faltante ->
-                                    val activo = faltante.alimentoId in faltantesPermitidos
-                                    val texto = if (faltante.insuficiente) {
-                                        "${faltante.nombre} · cantidad insuficiente"
-                                    } else {
-                                        "${faltante.nombre} · te falta"
-                                    }
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .clip(RemyShapes.small)
-                                            .background(if (activo) MaterialTheme.colorScheme.primaryContainer else Color.White)
-                                            .border(
-                                                1.dp,
-                                                if (activo) MaterialTheme.colorScheme.primary else Color(0xFFE2E8F0),
-                                                RemyShapes.small
-                                            )
-                                            .clickable { alternarFaltante(faltante.alimentoId) }
-                                            .padding(horizontal = 12.dp, vertical = 10.dp),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text(
-                                            texto,
-                                            style = MaterialTheme.typography.bodyMedium,
-                                            color = if (activo) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
-                                            modifier = Modifier.weight(1f)
-                                        )
-                                        Box(
-                                            modifier = Modifier
-                                                .size(22.dp)
-                                                .clip(CircleShape)
-                                                .background(if (activo) MaterialTheme.colorScheme.primary else Color.Transparent)
-                                                .border(
-                                                    1.5.dp,
-                                                    if (activo) MaterialTheme.colorScheme.primary else Slate300,
-                                                    CircleShape
-                                                ),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            if (activo) {
-                                                Icon(
-                                                    Icons.Outlined.Check,
-                                                    contentDescription = null,
-                                                    tint = Color.White,
-                                                    modifier = Modifier.size(14.dp)
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-/** Card genérica de un filtro de opción única (#37), plegada por defecto. */
-@Composable
-private fun <T> FiltroOpciones(
-    icono: ImageVector,
-    fondoIcono: Color,
-    colorIcono: Color,
-    etiqueta: String,
-    titulo: String,
-    seleccionado: T,
-    opciones: List<Pair<String, T>>,
-    resumen: String,
-    onSeleccionar: (T) -> Unit
-) {
-    var expandido by rememberSaveable { mutableStateOf(false) }
-
-    SectionCard(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RemyShapes.extraLarge,
-        bg = Color.White,
-        border = null,
-        padding = PaddingValues(16.dp)
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { expandido = !expandido },
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    CuadroIcono(44.dp, fondoIcono, icono, colorIcono)
-                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(
-                            etiqueta,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(titulo, style = MaterialTheme.typography.titleMedium)
-                    }
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .clip(PillShape)
-                            .background(MaterialTheme.colorScheme.background)
-                            .padding(horizontal = 10.dp, vertical = 6.dp)
-                    ) {
-                        Text(
-                            resumen,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Bold,
-                            maxLines = 1
-                        )
-                    }
-                    BotonMini(
-                        icon = if (expandido) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
-                        onClick = { expandido = !expandido }
-                    )
-                }
-            }
-
-            if (expandido) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RemyShapes.medium)
-                        .background(MaterialTheme.colorScheme.background)
-                        .horizontalScroll(rememberScrollState())
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    opciones.forEach { (label, valor) ->
-                        FiltroChip(
-                            label = label,
-                            active = valor == seleccionado,
-                            onClick = { onSeleccionar(valor) }
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-// ---------------------------------------------------------------------------
-// §2.8 — Resultados
-// ---------------------------------------------------------------------------
-@Composable
-private fun PantallaResultados(
-    filtros: FiltrosSugerencias,
-    grupos: GruposSugerencias,
-    onVolverFiltros: () -> Unit,
-    onRecetaClick: (Long) -> Unit,
-    onIrADespensa: () -> Unit,
-    onPerfilClick: () -> Unit = {}
-) {
-    // "Completo" = lista completa (100% match + casi listas);
-    // "Incompleto" = solo las recetas a las que les falta algo.
-    var verCompleto by rememberSaveable { mutableStateOf(true) }
-
-    val completasVisibles = if (verCompleto) grupos.completas else emptyList()
-    val casiVisibles = grupos.casiCocinables
-    val mostradas = completasVisibles.size + casiVisibles.size
-    val etiquetas = buildList {
-        filtros.tiposDePlato.sorted().forEach { add(it to Icons.Outlined.Restaurant) }
-        if (filtros.tiempoMaximoMinutos > 0) {
-            add("Hasta ${filtros.tiempoMaximoMinutos} min" to Icons.Outlined.Schedule)
-        }
-        if (filtros.kcalMaximas > 0) {
-            add("Hasta ${filtros.kcalMaximas} kcal" to Icons.Outlined.LocalFireDepartment)
-        }
-        if (filtros.proteinasMinimas > 0) {
-            add("Desde ${filtros.proteinasMinimas} g de proteína" to Icons.Outlined.FitnessCenter)
-        }
-        if (filtros.region.isNotBlank()) add(filtros.region to Icons.Outlined.Public)
-    }
-
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.primaryContainer,
-        topBar = {
-            TopBarResultados(onVolverFiltros = onVolverFiltros, onPerfilClick = onPerfilClick)
-        }
-    ) { inner ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(inner)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Spacer(Modifier.height(4.dp))
-
-            // Filtros activos (§2.8) + botón "Ajustar"
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .horizontalScroll(rememberScrollState()),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (etiquetas.isEmpty()) {
-                        MetaPill(
-                            text = "Sin filtros",
-                            bg = Color(0xFFF1F5F9),
-                            fg = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    } else {
-                        etiquetas.forEach { (texto, icono) ->
-                            MetaPill(
-                                text = texto,
-                                icon = icono,
-                                tint = MaterialTheme.colorScheme.primary,
-                                bg = Color(0xFFF1F5F9),
-                                fg = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
-                    }
-                    MetaPill(
-                        text = "Máx ${filtros.maximoFaltantes} faltantes",
-                        icon = Icons.Filled.Bolt,
-                        tint = MaterialTheme.colorScheme.primary,
-                        bg = MaterialTheme.colorScheme.primaryContainer,
-                        fg = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .clip(PillShape)
-                        .clickable(onClick = onVolverFiltros)
-                        .padding(horizontal = 8.dp, vertical = 6.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    androidx.compose.material3.Icon(
-                        Icons.Outlined.Tune,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Text(
-                        "Ajustar",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.primary,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
-            }
-
-            // Segmentado Completo / Incompleto
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Segmento(
-                    label = "Completo",
-                    active = verCompleto,
-                    modifier = Modifier.weight(1f),
-                    onClick = { verCompleto = true }
-                )
-                Segmento(
-                    label = "Incompleto",
-                    active = !verCompleto,
-                    modifier = Modifier.weight(1f),
-                    onClick = { verCompleto = false }
-                )
-            }
-
-            if (!grupos.hayAlgunaSugerencia) {
-                EstadoVacioResultados(onVolverFiltros = onVolverFiltros, onIrADespensa = onIrADespensa)
-                return@Column
-            }
-
-            // Contador
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primaryContainer),
-                    contentAlignment = Alignment.Center
-                ) {
-                    androidx.compose.material3.Icon(
-                        Icons.Filled.AutoAwesome,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(14.dp)
-                    )
-                }
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    "$mostradas recetas sugeridas",
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
-
-            // Sección "100% MATCH" (título implícito en el mockup)
-            if (completasVisibles.isNotEmpty()) {
-                Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                    completasVisibles.forEach { receta ->
-                        TarjetaSugerida(
-                            receta = receta,
-                            esCompleta = true,
-                            faltantes = emptyList(),
-                            onRecetaClick = onRecetaClick
-                        )
-                    }
-                }
-            }
-
-            // Sección "Casi listas"
-            if (casiVisibles.isNotEmpty()) {
-                EncabezadoCasi(total = casiVisibles.size)
-
-                Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                    casiVisibles.forEach { casi ->
-                        TarjetaSugerida(
-                            receta = casi.receta,
-                            esCompleta = false,
-                            faltantes = casi.faltantes,
-                            onRecetaClick = onRecetaClick
-                        )
-                    }
-                }
-
-                if (!verCompleto && completasVisibles.isEmpty()) {
-                    Text(
-                        "Si quitas ingredientes faltantes de tu despensa, aparecerán aquí recetas 100% listas.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                ChefTipResultados()
-            }
-
-            if (!verCompleto && casiVisibles.isEmpty()) {
-                Text(
-                    "Todas las sugerencias actuales están completas: puedes cocinarlas ya.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            // CTA final (§2.8): añadir alimentos → pestaña Despensa
-            if (casiVisibles.isNotEmpty()) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .clip(PillShape)
-                            .background(MaterialTheme.colorScheme.primary)
-                            .clickable(onClick = onIrADespensa)
-                            .padding(horizontal = 24.dp, vertical = 10.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        androidx.compose.material3.Icon(
-                            Icons.Filled.AddCircle,
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Text(
-                            "Añadir alimentos a tu despensa (+${casiVisibles.size} recetas)",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = Color.White,
-                            fontWeight = FontWeight.SemiBold,
-                            maxLines = 1
-                        )
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(8.dp))
-        }
-    }
-}
-
-/** TopBar de resultados (§2.8): volver a filtros + logo/REMY + persona. */
-@Composable
-private fun TopBarResultados(onVolverFiltros: () -> Unit, onPerfilClick: () -> Unit = {}) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(horizontal = 16.dp, vertical = 10.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
         Row(
             modifier = Modifier
-                .height(40.dp)
-                .clip(PillShape)
-                .background(Color(0xFFF1F5F9))
-                .clickable(onClick = onVolverFiltros)
-                .padding(horizontal = 10.dp),
-            horizontalArrangement = Arrangement.spacedBy(2.dp),
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(AzulTinta.copy(alpha = 0.05f))
+                .padding(14.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            androidx.compose.material3.Icon(
-                Icons.Filled.KeyboardArrowLeft,
+            Icon(
+                Icons.Outlined.Restaurant,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = Terracota,
                 modifier = Modifier.size(20.dp)
             )
             Text(
-                "Volver a filtros",
+                stringResource(R.string.sugerencias_encajan, total),
                 style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
-                maxLines = 1
+                color = TextoPrincipal
             )
         }
-        Image(
-            painter = painterResource(R.drawable.remy_logo),
-            contentDescription = "Logotipo de REMY",
-            modifier = Modifier
-                .size(32.dp)
-                .clip(CircleShape)
-        )
-        Column {
-            Text(
-                "REMY",
-                style = MaterialTheme.typography.labelSmall,
-                color = Color(0xFF22C55E),
-                letterSpacing = 1.6.sp
-            )
-            Text("Sugerencias", style = MaterialTheme.typography.titleLarge)
-        }
-        Spacer(Modifier.weight(1f))
-        PersonCircle(size = 32.dp, onClick = onPerfilClick)
-    }
-}
 
-/** Encabezado "Casi listas (Ingredientes prescindibles)" (§2.8). */
-@Composable
-private fun EncabezadoCasi(total: Int) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                modifier = Modifier.weight(1f),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFFF1F5F9)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    androidx.compose.material3.Icon(
-                        Icons.Outlined.Info,
-                        contentDescription = null,
-                        tint = Color(0xFFD97706),
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-                Text(
-                    "Casi listas (Ingredientes prescindibles)",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            MetaPill(
-                text = "Falta opcional ($total)",
-                bg = Color(0xFFF1F5F9),
-                fg = Color(0xFFD97706),
-                modifier = Modifier.padding(start = 8.dp)
-            )
-        }
-        Text(
-            "Recetas cuyo sabor principal y estructura están cubiertos por tu despensa; solo faltan toppings, hierbas frescas o aderezos secundarios que puedes omitir o sustituir fácilmente.",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            lineHeight = 17.sp
-        )
-    }
-}
-
-/** Tarjeta de receta sugerida (§2.8): foto con gradiente, macros, chips, CTA. */
-@Composable
-private fun TarjetaSugerida(
-    receta: RecetaConIngredientes,
-    esCompleta: Boolean,
-    faltantes: List<FaltanteVista>,
-    onRecetaClick: (Long) -> Unit
-) {
-    val datos = receta.receta
-    var marcada by rememberSaveable(datos.id) { mutableStateOf(false) }
-    val ingredientes = receta.ingredientes
-
-    SectionCard(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RemyShapes.medium,
-        bg = Color.White,
-        border = null,
-        padding = PaddingValues.Zero
-    ) {
-        // Foto + gradiente overlay + badges (§2.8)
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(176.dp)
-                .clip(RemyShapes.medium)
-        ) {
-            FotoReceta(nombre = datos.nombre, modifier = Modifier.fillMaxSize())
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(
-                                Color.Transparent,
-                                Color.Black.copy(alpha = 0.20f),
-                                Color.Black.copy(alpha = 0.70f)
-                            )
-                        )
-                    )
-            )
+        if (filtros.hayFiltros) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.TopCenter)
-                    .padding(8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                    .clip(PillShape)
+                    .clickable(onClick = onLimpiarFiltros)
+                    .padding(vertical = 10.dp),
+                horizontalArrangement = Arrangement.Center
             ) {
-                if (datos.tiempoMinutos > 0) {
-                    MetaPill(
-                        text = "${datos.tiempoMinutos} min",
-                        icon = Icons.Outlined.Schedule,
-                        tint = MaterialTheme.colorScheme.primary,
-                        bg = Color.White.copy(alpha = 0.9f),
-                        fg = MaterialTheme.colorScheme.onSurface
-                    )
-                } else {
-                    Spacer(Modifier.size(1.dp))
-                }
-                Box(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clip(CircleShape)
-                        .background(
-                            if (marcada) MaterialTheme.colorScheme.primary
-                            else Color.White.copy(alpha = 0.9f)
-                        )
-                        .clickable { marcada = !marcada },
-                    contentAlignment = Alignment.Center
-                ) {
-                    androidx.compose.material3.Icon(
-                        Icons.Filled.Bookmark,
-                        contentDescription = "Guardar receta",
-                        tint = if (marcada) Color.White else MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(18.dp)
-                    )
-                }
-            }
-        }
-
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(datos.nombre, style = MaterialTheme.typography.titleLarge, lineHeight = 20.sp)
-
-            // Macros
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                MetaPill(
-                    text = "${datos.kcal} kcal",
-                    icon = Icons.Outlined.LocalFireDepartment,
-                    tint = Color(0xFFD97706),
-                    bg = Color(0xFFF1F5F9),
-                    fg = MaterialTheme.colorScheme.onSurface
-                )
-                MetaPill(
-                    text = "${datos.proteinas}g Proteína",
-                    icon = Icons.Outlined.FitnessCenter,
-                    tint = MaterialTheme.colorScheme.primary,
-                    bg = Color(0xFFF1F5F9),
-                    fg = MaterialTheme.colorScheme.onSurface
-                )
-                if (!esCompleta && datos.tiempoMinutos > 0) {
-                    MetaPill(
-                        text = "Listo en ${datos.tiempoMinutos} min",
-                        icon = Icons.Filled.Bolt,
-                        tint = MaterialTheme.colorScheme.primary,
-                        bg = MaterialTheme.colorScheme.primaryContainer,
-                        fg = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                }
-            }
-
-            if (ingredientes.isNotEmpty()) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    ingredientes.take(4).forEach { ing ->
-                        ChipResultado(nombre = ing.alimento?.nombre ?: "Ingrediente")
-                    }
-                }
-            }
-
-            if (!esCompleta && faltantes.isNotEmpty()) {
-                AvisoFaltantes(faltantes)
-            }
-
-            RemyCta(
-                text = "Ver receta",
-                onClick = { onRecetaClick(datos.id) },
-                modifier = Modifier.fillMaxWidth(),
-                height = 44.dp,
-                iconAfter = Icons.Filled.ArrowForward,
-                fontSize = 13.sp
-            )
-        }
-    }
-}
-
-/** Chip blanco con punto de color (§2.8 IngredientChips). */
-@Composable
-private fun ChipResultado(nombre: String) {
-    val cat = categoriaDe(nombre)
-    Row(
-        modifier = Modifier
-            .clip(PillShape)
-            .background(Color.White)
-            .border(1.dp, Color(0x4D64748B), PillShape)
-            .padding(horizontal = 8.dp, vertical = 4.dp),
-        horizontalArrangement = Arrangement.spacedBy(5.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(8.dp)
-                .clip(CircleShape)
-                .background(cat.colors.fg)
-        )
-        Text(
-            nombre,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.SemiBold,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
-}
-
-/** WarningBox (§2.8): faltantes prescindibles de la receta casi cocinable. */
-@Composable
-private fun AvisoFaltantes(faltantes: List<FaltanteVista>) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RemyShapes.small)
-            .background(Color(0xFFF1F5F9))
-            .border(1.dp, Color(0x8064748B), RemyShapes.small)
-            .padding(8.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f)
-            ) {
-                androidx.compose.material3.Icon(
-                    Icons.Outlined.Warning,
-                    contentDescription = null,
-                    tint = Color(0xFFD97706),
-                    modifier = Modifier.size(14.dp)
-                )
                 Text(
-                    "Te falta o no tienes suficiente: ${faltantes.size}",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFFD97706),
-                    maxLines = 2
-                )
-            }
-            Text(
-                "PENDIENTE",
-                style = MaterialTheme.typography.labelSmall,
-                color = Color(0xFFD97706),
-                fontWeight = FontWeight.Bold
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RemyShapes.small)
-                .background(Color.White)
-                .padding(horizontal = 8.dp, vertical = 6.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            faltantes.forEach { f ->
-                val motivo = if (f.insuficiente) "cantidad insuficiente" else "te falta"
-                Text(
-                    text = "${emojiDe(f.nombre)} ${f.nombre} · $motivo",
+                    stringResource(R.string.sugerencias_limpiar),
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = Terracota
                 )
             }
         }
-        Text(
-            "Puedes elegir en los filtros qué ingredientes permitir cuando falten o no tengas la cantidad exacta.",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+
+        PrimaryButton(
+            text = stringResource(R.string.sugerencias_ver),
+            onClick = onMostrar
         )
+        Spacer(Modifier.height(8.dp))
     }
 }
 
-/** ChefTip de resultados (§2.8). */
 @Composable
-private fun ChefTipResultados() {
+private fun SeccionFiltro(titulo: String, contenido: @Composable () -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text(
+            titulo,
+            style = MaterialTheme.typography.titleMedium,
+            color = TextoPrincipal
+        )
+        contenido()
+    }
+}
+
+@Composable
+private fun FilaOpciones(
+    opciones: List<Pair<String, Int>>,
+    seleccionado: Int,
+    onSeleccionar: (Int) -> Unit
+) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RemyShapes.medium)
-            .background(Color(0xFFF1F5F9))
-            .padding(16.dp),
+        modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            contentAlignment = Alignment.Center
-        ) {
-            androidx.compose.material3.Icon(
-                Icons.Outlined.Lightbulb,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(22.dp)
-            )
-        }
-        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    "CONSEJO DEL CHEF REMY",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color(0xFF22C55E),
-                    letterSpacing = 0.8.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                androidx.compose.material3.Icon(
-                    Icons.Filled.AutoAwesome,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(14.dp)
-                )
-            }
-            Text(
-                "Los ingredientes prescindibles como hierbas frescas o especias aromáticas pueden sustituirse por una pizca de orégano seco, pimienta negra o un golpe de calor al final para intensificar los sabores de tu despensa sin gastar de más.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                lineHeight = 17.sp
+        opciones.forEach { (etiqueta, valor) ->
+            RemyChip(
+                text = etiqueta,
+                selected = valor == seleccionado,
+                onClick = { onSeleccionar(valor) }
             )
         }
     }
 }
 
-/** Estado vacío de resultados. */
 @Composable
-private fun EstadoVacioResultados(onVolverFiltros: () -> Unit, onIrADespensa: () -> Unit) {
-    Column(
+private fun StepperBoton(
+    icono: androidx.compose.ui.graphics.vector.ImageVector,
+    enabled: Boolean,
+    onClick: () -> Unit
+) {
+    IconButton(
+        onClick = onClick,
+        enabled = enabled,
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .size(44.dp)
+            .clip(CircleShape)
+            .background(if (enabled) androidx.compose.ui.graphics.Color.White else BordeTarjeta)
     ) {
-        Text(
-            "Aún no hay sugerencias: revisa los filtros o los ingredientes de tu despensa.",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            RemyCta(text = "Revisar filtros", onClick = onVolverFiltros, height = 44.dp, fontSize = 13.sp)
-            RemyCta(text = "Ir a la despensa", onClick = onIrADespensa, height = 44.dp, fontSize = 13.sp)
-        }
-    }
-}
-
-// ---------------------------------------------------------------------------
-// Utilidades compartidas
-// ---------------------------------------------------------------------------
-
-/** Cuadro de icono 44×44 r12 de las FilterCards (§2.6). */
-@Composable
-private fun CuadroIcono(size: Dp, bg: Color, icono: ImageVector, tint: Color) {
-    Box(
-        modifier = Modifier
-            .size(size)
-            .clip(RoundedCornerShape(12.dp))
-            .background(bg),
-        contentAlignment = Alignment.Center
-    ) {
-        androidx.compose.material3.Icon(
+        Icon(
             icono,
             contentDescription = null,
-            tint = tint,
-            modifier = Modifier.size(22.dp)
+            tint = if (enabled) AzulTinta else TextoSecundario,
+            modifier = Modifier.size(20.dp)
         )
     }
 }
 
-/** Botón circular 32×32 (expand/collapse y steppers). */
+// ---------------------------------------------------------------------------
+// Preview
+// ---------------------------------------------------------------------------
+
+private fun recetaDemo(id: Long, nombre: String, minutos: Int, kcal: Int) = RecetaConIngredientes(
+    receta = Receta(
+        id = id,
+        nombre = nombre,
+        kcal = kcal,
+        proteinas = 18,
+        regionOrigen = "Mediterránea",
+        tipoPlato = "Principal",
+        tiempoMinutos = minutos
+    ),
+    ingredientes = emptyList()
+)
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFBF5, heightDp = 900)
 @Composable
-private fun BotonMini(
-    icon: ImageVector,
-    onClick: () -> Unit,
-    enabled: Boolean = true
-) {
-    Box(
-        modifier = Modifier
-            .size(32.dp)
-            .clip(PillShape)
-            .background(Color(0xFFF1F5F9))
-            .clickable(enabled = enabled, onClick = onClick),
-        contentAlignment = Alignment.Center
-    ) {
-        androidx.compose.material3.Icon(
-            icon,
-            contentDescription = null,
-            tint = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-            modifier = Modifier.size(18.dp)
+private fun SugerenciasScreenPreview() {
+    REMYTheme {
+        ContenidoSugerencias(
+            filtros = FiltrosSugerencias(),
+            grupos = GruposSugerencias(
+                completas = listOf(
+                    recetaDemo(1, "Arroz con verduras", 25, 420),
+                    recetaDemo(2, "Tortilla de patatas", 40, 380)
+                ),
+                casiCocinables = listOf(
+                    CasiCocinableVista(
+                        receta = recetaDemo(3, "Pasta con tomate", 20, 450),
+                        faltantes = listOf(
+                            FaltanteVista(alimentoId = 1, nombre = "Tomate"),
+                            FaltanteVista(alimentoId = 2, nombre = "Albahaca", insuficiente = true)
+                        )
+                    )
+                )
+            ),
+            regiones = listOf("Mediterránea", "Europea"),
+            onAlternarTipo = {},
+            onCambiarMaximo = {},
+            onAlternarFaltante = {},
+            onCambiarTiempo = {},
+            onCambiarCalorias = {},
+            onCambiarProteinas = {},
+            onCambiarRegion = {},
+            onLimpiarFiltros = {},
+            onRecetaClick = {},
+            onIrADespensa = {}
         )
     }
 }
 
-/** Chip de filtro activo/inactivo (misma pinta que FilterPill, 32dp). */
+@Preview(showBackground = true, backgroundColor = 0xFFFFFBF5, heightDp = 900)
 @Composable
-private fun FiltroChip(label: String, active: Boolean, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .height(32.dp)
-            .clip(PillShape)
-            .background(if (active) MaterialTheme.colorScheme.primary else Color.White)
-            .border(
-                1.dp,
-                if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer,
-                PillShape
-            )
-            .clickable(onClick = onClick)
-            .padding(horizontal = 14.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            label,
-            color = if (active) Color.White else MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = if (active) FontWeight.Bold else FontWeight.SemiBold,
-            maxLines = 1
-        )
-    }
-}
-
-/** Segmento Completo / Incompleto (§2.8 ToggleSegment). */
-@Composable
-private fun Segmento(label: String, active: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Row(
-        modifier = modifier
-            .height(40.dp)
-            .clip(PillShape)
-            .background(if (active) MaterialTheme.colorScheme.primary else Color.White)
-            .then(
-                if (active) Modifier
-                else Modifier.border(1.dp, Color(0x8064748B), PillShape)
-            )
-            .clickable(onClick = onClick),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            label,
-            color = if (active) Color.White else MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.SemiBold
+private fun PantallaFiltrosPreview() {
+    REMYTheme {
+        PantallaFiltros(
+            filtros = FiltrosSugerencias(tiposDePlato = setOf("Principal")),
+            grupos = GruposSugerencias(completas = listOf(recetaDemo(1, "Arroz con verduras", 25, 420))),
+            regiones = listOf("Mediterránea", "Europea"),
+            onAlternarTipo = {},
+            onCambiarMaximo = {},
+            onCambiarTiempo = {},
+            onCambiarCalorias = {},
+            onCambiarProteinas = {},
+            onCambiarRegion = {},
+            onLimpiarFiltros = {},
+            onMostrar = {}
         )
     }
 }
