@@ -4,16 +4,29 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
+/** Conversores para tipos usados en la planificación semanal. */
+object ConvertidoresPlan {
+    @TypeConverter
+    fun deTipoComida(valor: TipoComida): String = valor.name
+
+    @TypeConverter
+    fun aTipoComida(valor: String): TipoComida = TipoComida.valueOf(valor)
+}
+
 @Database(
-    entities = [Alimento::class, Receta::class, Ingrediente::class],
-    version = 6
+    entities = [Alimento::class, Receta::class, Ingrediente::class, PlannedMeal::class],
+    version = 7
 )
+@TypeConverters(ConvertidoresPlan::class)
 abstract class RemyDatabase : RoomDatabase() {
     abstract fun alimentoDao(): AlimentoDao
     abstract fun recetaDao(): RecetaDao
+    abstract fun planDao(): PlanDao
 
     companion object {
         @Volatile
@@ -78,6 +91,24 @@ abstract class RemyDatabase : RoomDatabase() {
             }
         }
 
+        /** Crea la tabla de comidas planificadas por día y momento. */
+        val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS `comidas_planificadas` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `fecha` TEXT NOT NULL,
+                        `tipoComida` TEXT NOT NULL,
+                        `recetaId` INTEGER NOT NULL,
+                        FOREIGN KEY(`recetaId`) REFERENCES `recetas`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
+                    )"""
+                )
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_comidas_planificadas_fecha` ON `comidas_planificadas` (`fecha`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_comidas_planificadas_recetaId` ON `comidas_planificadas` (`recetaId`)")
+                db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_comidas_planificadas_fecha_tipoComida` ON `comidas_planificadas` (`fecha`, `tipoComida`)")
+            }
+        }
+
         fun obtener(contexto: Context): RemyDatabase =
             instancia ?: synchronized(this) {
                 instancia ?: Room.databaseBuilder(
@@ -85,7 +116,7 @@ abstract class RemyDatabase : RoomDatabase() {
                     RemyDatabase::class.java,
                     "remy.db"
                 ).addMigrations(
-                    MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6
+                    MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7
                 ).build().also { instancia = it }
             }
     }
