@@ -55,6 +55,7 @@ class CatalogoRecetasTest {
             val ingredientes = (0 until ingredientesJson.length()).map { j ->
                 val ing = ingredientesJson.getJSONObject(j)
                 Ingrediente(
+                    recetaId = 0,
                     alimentoId = ing.getLong("alimentoId"),
                     cantidad = ing.getDouble("cantidad"),
                     unidad = ing.getString("unidad")
