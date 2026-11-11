@@ -47,7 +47,8 @@ por patrones de consumo y funciones sociales.
 ## Tecnologías
 - Kotlin y Jetpack Compose (Material 3)
 - Arquitectura MVVM (ViewModel y repositorios)
-- Navigation Compose (barra inferior con cuatro pantallas y detalle de receta)
+- Navigation Compose (barra inferior con tres destinos: Inicio, Despensa y
+  Recetas; Sugerencias, Perfil y el detalle de receta se abren desde ellas)
 - Room para los datos estructurados (despensa, recetas e historial de
   cocciones, con el esquema exportado a `app/schemas/` para poder migrar)
 - CameraX para la foto del plato (permiso, vista previa y captura) y selector
@@ -61,7 +62,8 @@ El código está en `app/src/main/java/com/remy/app/`:
   preferencias de filtros con DataStore).
 - `domain/model`: clases de negocio, como Receta o Alimento.
 - `ui`: interfaz con Jetpack Compose.
-  - `screens`: pantallas (inicio, despensa, recetas y sugerencias).
+  - `screens`: pantallas (inicio, despensa, recetas, sugerencias, perfil y
+    detalle de receta).
   - `components`: elementos reutilizables.
   - `navigation`: rutas y navegación entre pantallas.
   - `viewmodel`: ViewModels de cada pantalla.
@@ -90,17 +92,23 @@ sistema.
    con cantidad 0 para ver el mensaje de validación.
 3. Pestaña Recetas: tocar una tarjeta para abrir el detalle (ingredientes,
    pasos y nutrición) y volver con «Volver al listado».
-4. Pestaña Sugerencias: con la despensa completa aparecen «Se puede cocinar
-   ya» y «Casi cocinable»; al borrar un alimento de la despensa (por ejemplo
-   «Arroz») aparecen recetas en «Casi cocinable» con «Falta: …».
-5. Pestaña Sugerencias: abrir los filtros, elegir un tipo de plato, un tiempo
-   máximo, unas calorías máximas, unas proteínas mínimas o una región, y
-   comprobar que la lista y el contador cambian. Cerrar y abrir la app: los
-   filtros se conservan (DataStore); «Limpiar filtros» vuelve al estado inicial.
+4. Desde Inicio, Despensa o Recetas, pulsar «Ver sugerencias»: con la despensa
+   completa aparecen «Se puede cocinar ya» y «Casi cocinable»; al borrar un
+   alimento de la despensa (por ejemplo «Arroz») aparecen recetas en «Casi
+   cocinable» con «Falta: …».
+5. En Sugerencias, abrir los filtros, elegir un tipo de plato, un tiempo
+   máximo, unas calorías máximas, unas proteínas mínimas, una región o un
+   filtro de macros por ración (`Alta en proteína`, `Baja en hidratos`,
+   `Baja en grasa`), y comprobar que la lista y el contador cambian. Cerrar y
+   abrir la app: los filtros se conservan (DataStore); «Limpiar filtros» vuelve
+   al estado inicial.
 6. Abrir una receta, pulsar «Empezar a cocinar», bajar hasta «Marcar como
    cocinada» y confirmar con foto o sin ella: la receta queda registrada en el
    calendario de Inicio en el día correspondiente y la despensa descuenta los
-   ingredientes (sin bajar nunca de cero).
+   ingredientes (sin bajar nunca de cero). Si algún ingrediente no se puede
+   descontar, la app avisa con su nombre y la cocción se guarda igualmente.
+7. Abrir el icono de perfil: se puede comprobar la información de la cuenta y
+   el acceso a las recetas que ya se han cocinado.
 
 ## Organización del equipo
 - Tablero Kanban (GitHub Project): https://github.com/users/mariahts/projects/1
@@ -121,7 +129,7 @@ El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
   (#22 y #28), recetas e ingredientes (#23), precarga del catálogo (#30),
   receta cocinada con fecha y foto (#35), e hidratos y grasas de recetas (#82).
 - Tema de la app (#8): paleta, tipografía y formas aplicados en todas las
-  pantallas, con su documento en `docs/Identidad visual de REMY.md`.
+  pantallas, con su documento en `docs/disenio/Identidad visual de REMY.md`.
 - Preferencias con DataStore (#29), listado (#31) y detalle (#32) de recetas,
   y sugerencias con los dos grupos (#33 y #34).
 - Receta marcada como cocinada con foto (#35), registro de recetas cocinadas
@@ -136,14 +144,18 @@ El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
   `Baja en hidratos` (≤ 30 g) y `Baja en grasa` (≤ 15 g), con persistencia
   en DataStore.
 - Macros completas en el detalle (#82): proteínas, hidratos y grasas por
-  ración, escaladas con el selector de raciones.
+  ración, escaladas con el selector de raciones. Los valores de hidratos y
+  grasas del catálogo son **estimados**, no oficiales: conviene revisarlos con
+  una fuente fiable antes de publicar la app.
 - Rediseño de la interfaz (#83): tema Nunito, componentes reutilizables,
   pantallas rediseñadas, planificación semanal y estados vacíos mejorados.
 - Estados de carga y error con reintento en las pantallas que consultan Room
   (#46).
-- Pruebas: 37 unitarias y 16 instrumentadas en verde; el registro está en
+- Pruebas: 40 unitarias y 17 instrumentadas en verde; el registro está en
   `docs/pruebas.md`.
-- Pendientes: documentos de la entrega (#41 y #42) y bocetos (#9 y #10).
+- Pendientes: documentos de la entrega (#41 y #42), verificación manual en
+  emulador o dispositivo real, fotos reales de las recetas y publicación
+  (icono, capturas, política de privacidad y minify en release).
 
 ## Documentación
 La memoria del proyecto (Word) se entrega en el Aula Virtual. En la carpeta

@@ -1,6 +1,9 @@
 # Estado del MVP de REMY
 
-Actualizado a 2026-11-11 para la rama `feature/limpieza-mvp` (trabajo de limpieza, tests, refactor y macros sobre la base auditada de `feature/rediseno-ui`, HEAD `119a202`).
+Actualizado a 2026-11-11 tras el sprint 4: el trabajo de limpieza, tests,
+refactor y macros (rama `feature/limpieza-mvp`, PR #82) y el rediseño de la
+interfaz (rama `feature/rediseno-ui`, PR #83) están integrados en `dev` y en
+`main` (PR #85).
 
 ## 1. Resumen
 
@@ -31,7 +34,7 @@ Suites unitarias presentes (`app/src/test`): `ValidacionAlimentoTest`, `Algoritm
 | 1.6 Documentación | Resuelto | `docs/pruebas.md` actualizado para citar solo tests existentes. |
 | 2 Refactor `RecetaScreen.kt` | Resuelto | Dividido en `RecetasScreen.kt`, `RecetaDetalleScreen.kt`, `CapturaPlato.kt`; eliminado legacy sin referencias (`PillContador`, `PieRecetas`, `ChipIngrediente`, `TarjetaReceta`, `RemyHeader.kt`); sustituidos `!!` en foto/detalle/captura. |
 | 3.1 Modelo y BD | Resuelto | `Receta` con `hidratos`/`grasas` (g totales, default 0), Room v8, `MIGRATION_7_8`, esquema `app/schemas/com.remy.app.data.RemyDatabase/8.json`, test `Migration7To8Test`. |
-| 3.2 Catálogo | Resuelto | `assets/recetas.json` con hidratos/grasas estimados (20 recetas); precarga actualiza catálogo existente por nombre conservando fecha/foto de cocción; nota `docs/macros-recetas.md` (valores estimados, no oficiales). |
+| 3.2 Catálogo | Resuelto | `assets/recetas.json` con hidratos/grasas estimados (20 recetas); precarga actualiza catálogo existente por nombre conservando fecha/foto de cocción. Valores estimados, no oficiales (ver sección 6). |
 | 3.3 Filtros | Resuelto | Filtros por ración `Alta en proteína` (≥25 g), `Baja en hidratos` (≤30 g), `Baja en grasa` (≤15 g) en `FiltrosSugerencias`/`FiltroRecetas`, chips en sheet, persistidos en DataStore y recuperables, `Limpiar` los reinicia; tests en `FiltroRecetasTest` y `PreferenciasRepositoryTest`. |
 | 3.4 Interfaz detalle | Resuelto | Detalle muestra Proteína, Hidratos y Grasas por ración escalados con selector de raciones, junto a kcal (`strings.xml`). |
 
@@ -40,7 +43,7 @@ Suites unitarias presentes (`app/src/test`): `ValidacionAlimentoTest`, `Algoritm
 | Punto | Estado | Nota |
 |---|---|---|
 | A1 Despensa CRUD y persistencia | [x] | Sin cambios funcionales de alcance en esta rama. |
-| A2 Catálogo ≥20 recetas con tiempo, kcal, macros, tipo, región, ingredientes y pasos | [x] | Macros completas (proteína, hidratos, grasas) añadidas con valores estimados (ver `docs/macros-recetas.md`). |
+| A2 Catálogo ≥20 recetas con tiempo, kcal, macros, tipo, región, ingredientes y pasos | [x] | Macros completas (proteína, hidratos, grasas) añadidas con valores estimados (ver sección 6). |
 | A3 Cruce “ya” vs “casi cocinables”, máximo configurable, cantidades/unidades | [~] | Lógica existente; tests ampliados (insuficiente, g/kg, ml/l). Cobertura de integración/UI no revalidada manualmente en esta sesión. |
 | A4 Básicos no cuentan como faltantes | [x] | Cubierto por lógica y test de cruce añadido. |
 | A5 Filtros (tiempo, calorías, macros, tipo, región) persistidos en DataStore | [x] | Incluye proteínas mínimas, kcal máximas y filtros por ración de macros (alta proteína, baja hidratos, baja grasa), persistidos y recuperables. |
@@ -59,6 +62,7 @@ Suites unitarias presentes (`app/src/test`): `ValidacionAlimentoTest`, `Algoritm
 
 ## 6. Notas
 
-- `docs/pruebas.md` describe las suites existentes; en esta sesión se verificaron `testDebugUnitTest` y `assembleDebug`.
-- Macros de hidratos/grasas del catálogo: **valores estimados, revisar con fuente fiable antes de publicar** (no datos oficiales), ver `docs/macros-recetas.md`.
-- No se añadieron dependencias nuevas ni se modificó `gradle/wrapper/gradle-wrapper.properties`. No se realizó `git push`.
+- `docs/pruebas.md` describe las suites existentes; en esta sesión se verificaron `testDebugUnitTest` y `assembleDebug` (40 pruebas unitarias en verde).
+- Macros de hidratos/grasas del catálogo: **valores estimados, revisar con fuente fiable antes de publicar** (no datos oficiales).
+- No se añadieron dependencias nuevas ni se modificó `gradle/wrapper/gradle-wrapper.properties`.
+- La navegación tiene tres destinos en la barra inferior (Inicio, Despensa y Recetas); Sugerencias, Perfil y el detalle de receta se abren desde ellas.
