@@ -34,5 +34,8 @@ google-services.json
 # Android Profiling
 *.hprof
 
+# OpenCode local data
+.opencode/
+
 capturas-pantallas/
 *.zip
