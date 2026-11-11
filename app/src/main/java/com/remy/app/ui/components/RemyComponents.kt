@@ -229,8 +229,8 @@ fun PrimaryButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = Terracota,
             contentColor = Color.White,
-            disabledContainerColor = Terracota.copy(alpha = 0.45f),
-            disabledContentColor = Color.White.copy(alpha = 0.8f)
+            disabledContainerColor = Terracota.copy(alpha = 0.7f),
+            disabledContentColor = Color.White.copy(alpha = 0.9f)
         ),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp),
         modifier = modifier
