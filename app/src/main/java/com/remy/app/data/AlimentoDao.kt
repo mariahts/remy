@@ -36,4 +36,8 @@ interface AlimentoDao {
      */
     @Query("UPDATE alimentos SET enDespensa = 0 WHERE id = :id")
     suspend fun ocultar(id: Long)
+
+    /** Vacía la despensa del usuario sin borrar el catálogo de alimentos. */
+    @Query("UPDATE alimentos SET enDespensa = 0")
+    suspend fun vaciarDespensa()
 }

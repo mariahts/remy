@@ -8,16 +8,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.remy.app.R
+import com.remy.app.data.AlimentoDao
 import com.remy.app.data.AlmacenamientoFotos
 import com.remy.app.data.RecetaDetalle
 import com.remy.app.data.RecetaRepository
 import com.remy.app.data.RemyDatabase
+import com.remy.app.logica.calcularDescuentoDespensa
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class RecetaDetalleViewModel(
     private val repositorio: RecetaRepository,
+    private val alimentoDao: AlimentoDao,
     private val contexto: Application,
 ) : ViewModel() {
 
@@ -57,12 +61,12 @@ class RecetaDetalleViewModel(
     }
 
     /**
-     * Marca la receta como cocinada (#35): guarda la foto en el almacenamiento
-     * interno, la fecha de hoy y recarga el detalle para que aparezca cocinada.
+     * Marca la receta como cocinada: guarda la foto/fecha y descuenta de la
+     * despensa los ingredientes escalados a [racionesDeseadas].
      * Si la foto no se puede guardar, el registro sigue adelante sin ella y se
      * deja constancia en `aviso`; solo un fallo de la base de datos pasa a Error.
      */
-    fun marcarComoCocinada(id: Long, foto: Bitmap?, uriFoto: Uri?) {
+    fun marcarComoCocinada(id: Long, foto: Bitmap?, uriFoto: Uri?, racionesDeseadas: Int = 1) {
         if (_estadoCoccion.value is EstadoCoccion.Guardando) return
         _estadoCoccion.value = EstadoCoccion.Guardando
 
@@ -85,34 +89,63 @@ class RecetaDetalleViewModel(
             } catch (e: Exception) {
                 rutaFoto = null
                 aviso = if (hayFoto) {
-                    "No se ha podido guardar la foto del plato, pero el registro se ha guardado sin ella."
+                    contexto.getString(R.string.detalle_aviso_sin_foto_guardada)
                 } else {
                     null
                 }
             }
 
             if (!hayFoto) {
-                aviso = "Has confirmado sin foto: el registro queda sin fotografía del plato."
+                aviso = contexto.getString(R.string.detalle_aviso_confirmado_sin_foto)
             }
 
             val guardado = try {
                 repositorio.marcarComoCocinada(id, fecha, rutaFoto)
             } catch (e: Exception) {
                 _estadoCoccion.value = EstadoCoccion.Error(
-                    "No se ha podido guardar el registro de cocción. Inténtalo de nuevo."
+                    contexto.getString(R.string.detalle_error_guardar_coccion)
                 )
                 return@launch
             }
 
             if (guardado) {
+                val noDescontados = try {
+                    descontarIngredientes(id, racionesDeseadas)
+                } catch (_: Exception) {
+                    emptyList()
+                }
+                if (noDescontados.isNotEmpty()) {
+                    val avisoDescuento = contexto.getString(
+                        R.string.detalle_aviso_descuento,
+                        noDescontados.joinToString(", ")
+                    )
+                    aviso = listOfNotNull(aviso, avisoDescuento).joinToString(" ")
+                }
                 cargar(id)
                 _estadoCoccion.value = EstadoCoccion.Guardado(fecha, rutaFoto, aviso)
             } else {
                 _estadoCoccion.value = EstadoCoccion.Error(
-                    "Esta receta ya no existe: no se ha podido marcar como cocinada."
+                    contexto.getString(R.string.detalle_error_receta_no_existe)
                 )
             }
         }
+    }
+
+    /** Descuenta de la despensa las cantidades necesarias para [racionesDeseadas]. */
+    private suspend fun descontarIngredientes(recetaId: Long, racionesDeseadas: Int): List<String> {
+        val detalle = repositorio.detalle(recetaId) ?: return emptyList()
+        val ids = detalle.ingredientes.map { it.ingrediente.alimentoId }.distinct()
+        val despensa = ids.mapNotNull { id -> alimentoDao.porId(id)?.let { id to it } }.toMap()
+        val resultado = calcularDescuentoDespensa(
+            ingredientes = detalle.ingredientes,
+            porcionesReceta = detalle.receta.porciones,
+            racionesDeseadas = racionesDeseadas,
+            despensa = despensa
+        )
+        for (alimento in resultado.actualizaciones) {
+            alimentoDao.actualizar(alimento)
+        }
+        return resultado.noDescontados
     }
 
     /** Descarta el aviso mostrado tras guardar. */
@@ -125,8 +158,10 @@ class RecetaDetalleViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val app = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]!! as Application
+                val db = RemyDatabase.obtener(app)
                 RecetaDetalleViewModel(
-                    RecetaRepository(RemyDatabase.obtener(app).recetaDao()),
+                    RecetaRepository(db.recetaDao()),
+                    db.alimentoDao(),
                     app,
                 )
             }

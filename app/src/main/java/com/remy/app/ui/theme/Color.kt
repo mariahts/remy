@@ -4,121 +4,132 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 // ---------------------------------------------------------------------------
-// Paleta de REMY — tokens según SPEC-FRONT §1.1 (mockups HTML de Stitch)
+// Nueva paleta REMY (rediseño)
 // ---------------------------------------------------------------------------
 
-// Verdes de marca (CTA)
-val Green900 = Color(0xFF14532D)   // CTA deep: texto sobre superficies mint
-val Green800 = Color(0xFF166534)   // texto de chips "Proteína" / pills activas
-val Green700 = Color(0xFF15803D)   // CTA dark: pressed
-val Green600 = Color(0xFF16A34A)   // CTA primario: botones, chips activos, FAB, badges
-val Green500 = Color(0xFF22C55E)   // CTA light: acentos, "En despensa"
-val Green400 = Color(0xFF4ADE80)   // iconos sobre pills oscuras
-val Green300 = Color(0xFF86EFAC)
-val Green200 = Color(0xFFBBF7D0)   // borde mint
-val Green100 = Color(0xFFDCFCE7)   // mint container: chips/badges/icon-circles
-val Green050 = Color(0xFFF0FDF4)   // fondo de pantalla base (mint bg app)
+val FondoCrema = Color(0xFFFFFBF5)
+val SuperficieBlanca = Color(0xFFFFFFFF)
+val BordeTarjeta = Color(0xFFF1E9DC)
 
-val Mint = Color(0xFFE2F8E7)       // fondo alterno (Despensa, detalle plegadas_2)
-val MintBorder = Color(0xFFC8F0D7)  // borde inferior del topbar de Despensa
-val MintDeep = Color(0xFFDCF5E3)    // fondo de hojas inferiores y diálogos
+val TextoPrincipal = Color(0xFF14213D)
+val TextoSecundario = Color(0xFF475569)
 
-// Neutros (texto y bordes)
-val Slate900 = Color(0xFF0F172A)   // texto primario
-val Slate700 = Color(0xFF334155)   // texto de botón "Cancelar"
-val Slate600 = Color(0xFF475569)   // texto secundario
-val Slate500 = Color(0xFF64748B)   // texto terciario / placeholders
+val Terracota = Color(0xFFC2410C)      // acción principal
+val AzulTinta = Color(0xFF14213D)       // estructura/selección
+val Melocoton = Color(0xFFFFEDD5)       // avatar y círculo del logo
+
+// Avisos
+val AvisoFaltaBg = Color(0xFFFFEDD5)
+val AvisoFaltaFg = Color(0xFF9A3412)
+val AvisoProntoBg = Color(0xFFFEF3C7)
+val AvisoProntoFg = Color(0xFF92400E)
+val AvisoCaducadoBg = Color(0xFFFEE2E2)
+val AvisoCaducadoFg = Color(0xFF991B1B)
+val AvisoNeutroBg = Color(0xFFE8EEF3)
+val AvisoNeutroFg = Color(0xFF334155)
+val NaranjaAviso = Color(0xFFEA580C)
+
+// Degradado suave de fondo (crema)
+val RemyBackgroundBrush: Brush = Brush.verticalGradient(
+    colors = listOf(FondoCrema, Color(0xFFFFF7ED))
+)
+
+// CTA brush (terracota)
+val CtaBrush: Brush = Brush.horizontalGradient(
+    colors = listOf(Terracota, Color(0xFF9A3412))
+)
+
+// ---------------------------------------------------------------------------
+// Aliases de compatibilidad para no romper código existente durante la migración.
+// Se irán eliminando conforme se actualicen componentes y pantallas.
+// ---------------------------------------------------------------------------
+val White = Color(0xFFFFFFFF)
+
+val Green900 = TextoPrincipal
+val Green800 = TextoPrincipal
+val Green700 = Terracota
+val Green600 = Terracota
+val Green500 = Terracota
+val Green400 = Melocoton
+val Green300 = BordeTarjeta
+val Green200 = BordeTarjeta
+val Green100 = Melocoton
+val Green050 = FondoCrema
+
+val Mint = FondoCrema
+val MintBorder = BordeTarjeta
+val MintDeep = Color(0xFFFFF7ED)
+
+val Slate900 = TextoPrincipal
+val Slate700 = TextoSecundario
+val Slate600 = TextoSecundario
+val Slate500 = Color(0xFF64748B)
 val Slate400 = Color(0xFF94A3B8)
 val Slate300 = Color(0xFFCBD5E1)
-val Slate200 = Color(0xFFE2E8F0)   // borde neutro
-val Slate100 = Color(0xFFF1F5F9)   // fondos inactivos, chips, teclas
-val Slate50 = Color(0xFFF8FAFC)    // superficie alt inactiva
+val Slate200 = BordeTarjeta
+val Slate100 = Color(0xFFF8FAF6)
+val Slate50 = FondoCrema
 
-// Rojo (eliminar / error)
 val Red600 = Color(0xFFDC2626)
-val Red700 = Color(0xFFBE123C)
-val Red900 = Color(0xFF991B1B)
-val Red400 = Color(0xFFF43F5E)
-val Red100 = Color(0xFFFEE2E2)
-val Red50 = Color(0xFFFEE2E2)
-val RedRosa50 = Color(0xFFFFF1F2)
-val RedRose100 = Color(0xFFFECACA)
-val RedRose200 = Color(0xFFFECDD3)
-val RedRose500 = Color(0xFFE11D48)
-val RedRose50 = Color(0xFFFFE4E6)
+val Red700 = AvisoCaducadoFg
+val Red900 = AvisoCaducadoFg
+val Red400 = Color(0xFFF87171)
+val Red100 = AvisoCaducadoBg
+val Red50 = AvisoCaducadoBg
+val RedRosa50 = AvisoCaducadoBg
+val RedRose100 = AvisoCaducadoBg
+val RedRose200 = Color(0xFFFECACA)
+val RedRose500 = Red600
+val RedRose50 = AvisoCaducadoBg
 
-// Naranja (proteína / avisos)
-val Orange600 = Color(0xFFEA580C)
-val Orange800 = Color(0xFF9A3412)
-val Orange700 = Color(0xFFC2410C)
-val Orange100 = Color(0xFFFFEDD5)
+val Orange600 = Terracota
+val Orange800 = AvisoFaltaFg
+val Orange700 = Terracota
+val Orange100 = AvisoFaltaBg
 val Orange50 = Color(0xFFFFF7ED)
 val Orange300 = Color(0xFFFED7AA)
 
-// Ámbar (alertas / vencimiento / chef tips)
-val Amber600 = Color(0xFFD97706)
-val Amber700 = Color(0xFFB45309)
-val Amber100 = Color(0xFFFEF3C7)
+val Amber600 = AvisoProntoFg
+val Amber700 = AvisoProntoFg
+val Amber100 = AvisoProntoBg
 val Amber200 = Color(0xFFFDE68A)
-val Amber300 = Color(0xFFFDE047)
-val Amber50 = Color(0xFFFEF9C3)
+val Amber300 = Color(0xFFFCD34D)
+val Amber50 = AvisoProntoBg
 
-// Amarillo (granos / cereales)
-val Yellow400 = Color(0xFFFEF08A)  // chip grano bg
-val Yellow600 = Color(0xFFCA8A04)  // chip grano texto
+val Yellow400 = Color(0xFFFDE68A)
+val Yellow600 = AvisoProntoFg
 
-// Violeta (filtro duración)
-val Violet600 = Color(0xFF8B5CF6)
-val Violet700 = Color(0xFF9333EA)
-val Violet100 = Color(0xFFF3E8FF)
-val Violet50 = Color(0xFFF5F3FF)
+val Violet600 = AzulTinta
+val Violet700 = AzulTinta
+val Violet100 = Color(0xFFE8EEF3)
+val Violet50 = Color(0xFFF8FAFC)
 
-// Azul (filtro región de origen)
-val Blue600 = Color(0xFF0284C7)
-val Blue700 = Color(0xFF2563EB)
-val Blue100 = Color(0xFFDBEAFE)
-val Blue50 = Color(0xFFF0F9FF)
-val Blue200 = Color(0xFFDAE2FD)
+val Blue600 = AzulTinta
+val Blue700 = AzulTinta
+val Blue100 = AvisoNeutroBg
+val Blue50 = Color(0xFFF8FAFC)
+val Blue200 = AvisoNeutroBg
 
-// Índigo (chips informativos)
-val Indigo700 = Color(0xFF3730A3)
-val Indigo50 = Color(0xFFE2E7FF)
-val Indigo100 = Color(0xFFE0E7FF)
+val Indigo700 = AzulTinta
+val Indigo50 = AvisoNeutroBg
+val Indigo100 = AvisoNeutroBg
 
-// Verde especial del mockup (banner "todos los ingredientes", radios)
-val Emerald300 = Color(0xFF34D399)
-val Emerald200 = Color(0xFFA7F3D0)
-val Emerald100 = Color(0xFFD1FAE5)
-val Emerald50 = Color(0xFF95F8A7)
+val Emerald300 = BordeTarjeta
+val Emerald200 = BordeTarjeta
+val Emerald100 = Melocoton
+val Emerald50 = Melocoton
 
-// Chips de categoría (bg / texto / borde) — §1.1
-// Granos    #FEF08A / #CA8A04 / #FDE047
-// Huevo     #FEF3C7 / #D97706 / #FDE68A
-// Verdura   #FFE4E6 / #E11D48 / #FECDD3
-// Aceite    #ECFCCB / #4D7C0F / #D9F99D
-// Proteína  #FFEDD5 / #EA580C / #FED7AA
-val ChipAceiteBg = Color(0xFFECFCCB)
-val ChipAceiteFg = Color(0xFF4D7C0F)
-val ChipAceiteBorder = Color(0xFFD9F99D)
+val ChipAceiteBg = AvisoNeutroBg
+val ChipAceiteFg = AvisoNeutroFg
+val ChipAceiteBorder = BordeTarjeta
 
-// Detalle de receta (variantes del mockup)
-val DetailGreen500 = Color(0xFF00873A)   // pill "4 pasos"
-val DetailGreen900 = Color(0xFF005323)   // texto consejo
-val DetailGreen950 = Color(0xFF00210A)   // texto sobre #92F5A4
-val DetailMint = Color(0xFF92F5A4)       // secondary-container del mockup
-val DetailOrange700 = Color(0xFFCC4900)  // tertiary-container
-val DetailOrange900 = Color(0xFF370E00)
-val DetailDarkPill = Color(0xFF283044)   // pills oscuras del hero
-val Terracota100 = Color(0xFFFFDBCE)
-val Terracota50 = Color(0xFFFFDAD6)
-val Terracota700 = Color(0xFFA33900)
-
-// Fondo con degradado: blanco arriba, menta abajo (cabecera de Despensa)
-val RemyBackgroundBrush: Brush = Brush.verticalGradient(
-    colors = listOf(Color.White, Mint)
-)
-
-// Degradado del hero de Sugerencias (§2.6 usa blur-circle; este es el de auth CTA)
-val CtaBrush: Brush = Brush.horizontalGradient(
-    colors = listOf(Green500, Green600)
-)
+val DetailGreen500 = Terracota
+val DetailGreen900 = TextoPrincipal
+val DetailGreen950 = TextoPrincipal
+val DetailMint = Melocoton
+val DetailOrange700 = Terracota
+val DetailOrange900 = TextoPrincipal
+val DetailDarkPill = AzulTinta
+val Terracota100 = Melocoton
+val Terracota50 = Melocoton
+val Terracota700 = Terracota

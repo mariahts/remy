@@ -81,6 +81,8 @@ dependencies {
     implementation(libs.supabase.compose.auth.ui)
     implementation(libs.ktor.client.android)
     implementation("androidx.compose.material:material-icons-extended")
+    implementation(libs.coil.compose)
+    implementation(libs.androidx.compose.ui.text.google.fonts)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)

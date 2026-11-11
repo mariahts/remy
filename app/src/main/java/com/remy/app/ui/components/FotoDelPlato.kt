@@ -39,9 +39,10 @@ fun FotoDelPlato(
         }
     }
 
+    val bmp = bitmap
     when {
-        bitmap != null -> Image(
-            bitmap = bitmap!!.asImageBitmap(),
+        bmp != null -> Image(
+            bitmap = bmp.asImageBitmap(),
             contentDescription = "Foto del plato cocinado",
             modifier = modifier,
             contentScale = contentScale

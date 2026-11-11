@@ -1,5 +1,6 @@
 package com.remy.app.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -8,106 +9,125 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.Restaurant
+import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.Kitchen
+import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.outlined.Whatshot
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.launch
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import java.time.LocalTime
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.remy.app.R
+import com.remy.app.data.Receta
 import com.remy.app.data.RecetaConIngredientes
-import io.github.jan.supabase.auth.auth
+import com.remy.app.data.SupabaseClientProvider
+import com.remy.app.data.TipoComida
 import com.remy.app.ui.components.ContenidoConEstado
-import com.remy.app.ui.components.FotoDelPlato
-import com.remy.app.ui.components.FotoReceta
-import com.remy.app.ui.components.PersonCircle
-import com.remy.app.ui.components.RemyCta
-import com.remy.app.ui.components.RemyHeaderSombra
-import com.remy.app.ui.components.SectionCard
-import com.remy.app.ui.components.fechaEnEspanol
-import com.remy.app.ui.theme.Green100
-import com.remy.app.ui.theme.Green200
-import com.remy.app.ui.theme.Green600
-import com.remy.app.ui.theme.Green700
-import com.remy.app.ui.theme.Green900
-import com.remy.app.ui.theme.PillShape
-import com.remy.app.ui.theme.RemyShapes
-import com.remy.app.ui.theme.Slate100
-import com.remy.app.ui.theme.Slate400
-import com.remy.app.ui.theme.Slate500
-import com.remy.app.ui.theme.Slate600
-import com.remy.app.ui.theme.Slate900
-import com.remy.app.ui.viewmodel.CocinadasViewModel
-import com.remy.app.ui.viewmodel.InicioDatos
-import java.time.Instant
+import com.remy.app.ui.components.PrimaryButton
+import com.remy.app.ui.components.RecipePhoto
+import com.remy.app.ui.components.RemyCard
+import com.remy.app.ui.components.RemyTopBar
+import com.remy.app.ui.theme.AzulTinta
+import com.remy.app.ui.theme.BordeTarjeta
+import com.remy.app.ui.theme.FondoCrema
+import com.remy.app.ui.theme.Melocoton
+import com.remy.app.ui.theme.NaranjaAviso
+import com.remy.app.ui.theme.REMYTheme
+import com.remy.app.ui.theme.SuperficieBlanca
+import com.remy.app.ui.theme.Terracota
+import com.remy.app.ui.theme.TextoPrincipal
+import com.remy.app.ui.theme.TextoSecundario
+import com.remy.app.ui.viewmodel.DisponibilidadReceta
+import com.remy.app.ui.viewmodel.PlanDia
+import com.remy.app.ui.viewmodel.PlanViewModel
+import io.github.jan.supabase.auth.auth
+import java.io.File
+import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.YearMonth
-import java.time.ZoneId
+import java.time.LocalTime
 import java.time.format.TextStyle
+import java.time.temporal.TemporalAdjusters
 import java.util.Locale
 
-/**
- * Pantalla de inicio con calendario, registro de recetas cocinadas y
- * una receta sugerida aleatoria para hoy.
- */
 @Composable
 fun InicioScreen(
     onRecetaClick: (Long) -> Unit,
     onPerfilClick: () -> Unit = {},
-    viewModel: CocinadasViewModel = viewModel(factory = CocinadasViewModel.Factory),
+    onIrADespensa: () -> Unit = {},
+    onVerSugerencias: () -> Unit = {},
+    planViewModel: PlanViewModel = viewModel(factory = PlanViewModel.Factory)
 ) {
-    val estado by viewModel.estado.collectAsStateWithLifecycle()
+    val estado by planViewModel.estado.collectAsStateWithLifecycle()
+    val nombre = nombreDeUsuario()
+    var tipoSheet by remember { mutableStateOf<TipoComida?>(null) }
 
-    Column(modifier = Modifier.fillMaxSize().background(Green100)) {
-        RemyHeaderSombra(
-            titulo = "Inicio",
-            bg = Green100,
-            logoSize = 40.dp,
-            trailing = { PersonCircle(36.dp, onClick = onPerfilClick) }
+    // Asegurar que el día seleccionado arranque en hoy al entrar.
+    LaunchedEffect(Unit) { planViewModel.seleccionarDia(LocalDate.now()) }
+
+    Column(modifier = Modifier.fillMaxSize().background(FondoCrema)) {
+        RemyTopBar(
+            titulo = stringResource(R.string.inicio_titulo),
+            onAvatarClick = onPerfilClick
         )
-
         Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
             ContenidoConEstado(
                 estado = estado,
-                onReintentar = viewModel::reintentar,
-                mensajeCargando = "Cargando tu inicio…"
-            ) { datos ->
+                onReintentar = { /* El flujo se reintenta al cambiar de día; forzamos hoy */ planViewModel.seleccionarDia(LocalDate.now()) },
+                mensajeCargando = stringResource(R.string.inicio_cargando)
+            ) { planDia ->
+                val hoy = LocalDate.now()
                 ContenidoInicio(
-                    cocinadas = datos.cocinadas,
-                    sugerencia = datos.sugerencia,
-                    onRecetaClick = onRecetaClick
+                    nombre = nombre,
+                    planDia = planDia,
+                    hoy = hoy,
+                    onRecetaClick = onRecetaClick,
+                    onIrADespensa = onIrADespensa,
+                    onVerSugerencias = onVerSugerencias,
+                    onDiaClick = { planViewModel.seleccionarDia(it) },
+                    onAbrirSheet = { tipoSheet = it }
                 )
+
+                tipoSheet?.let { tipo ->
+                    AnadirPlanSheet(
+                        tipoInicial = tipo,
+                        recetas = planDia.recetasParaElegir,
+                        onDismiss = { tipoSheet = null },
+                        onAnadir = { tipoElegido, recetaId ->
+                            planViewModel.planificar(tipoElegido, recetaId)
+                            tipoSheet = null
+                        }
+                    )
+                }
             }
         }
     }
@@ -115,351 +135,475 @@ fun InicioScreen(
 
 @Composable
 private fun ContenidoInicio(
-    cocinadas: List<RecetaConIngredientes>,
-    sugerencia: RecetaConIngredientes?,
+    nombre: String,
+    planDia: PlanDia,
+    hoy: LocalDate,
     onRecetaClick: (Long) -> Unit,
+    onIrADespensa: () -> Unit,
+    onVerSugerencias: () -> Unit,
+    onDiaClick: (LocalDate) -> Unit,
+    onAbrirSheet: (TipoComida) -> Unit
 ) {
-    val zona = ZoneId.systemDefault()
-    val porDia = remember(cocinadas) {
-        cocinadas
-            .mapNotNull { item -> item.receta.fechaCocinada?.let { item to fechaLocal(it, zona) } }
-            .groupBy({ it.second }, { it.first })
-    }
-
-    val hoy = LocalDate.now(zona)
-    var mesVisible by rememberSaveable { mutableStateOf(YearMonth.from(hoy)) }
-    var diaSeleccionado by rememberSaveable { mutableStateOf(hoy.toString()) }
-    val seleccionado = runCatching { LocalDate.parse(diaSeleccionado) }.getOrDefault(hoy)
-
-    val recetasDelDia = porDia[seleccionado].orEmpty()
-    val usuario = com.remy.app.data.SupabaseClientProvider.client.auth.currentUserOrNull()
-    val nombre = usuario?.userMetadata?.get("full_name")?.toString()?.trim('"')
-        ?: usuario?.userMetadata?.get("name")?.toString()?.trim('"')
-        ?: usuario?.email?.substringBefore('@')
-        ?: "María"
+    val recetaHoy = recetaDeHoy(planDia, hoy)
+    val listas = planDia.listasParaCocinar
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 96.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 28.dp),
+        verticalArrangement = Arrangement.spacedBy(18.dp)
     ) {
         item(key = "saludo") {
-            SectionCard(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RemyShapes.extraLarge,
-                padding = PaddingValues(16.dp)
-            ) {
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(
-                        text = "${saludoSegunHora()}, $nombre",
-                        style = MaterialTheme.typography.headlineSmall,
-                        color = Slate900,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = "Revisa tu calendario, lo que has cocinado y una receta recomendada para hoy.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Slate600
-                    )
-                }
-            }
-        }
-
-        item(key = "sugerencia") {
-            SugerenciaDelDia(sugerencia = sugerencia, onRecetaClick = onRecetaClick)
-        }
-
-        item(key = "calendario") {
-            CalendarioMensual(
-                mes = mesVisible,
-                hoy = hoy,
-                seleccionado = seleccionado,
-                onMesAnterior = { mesVisible = mesVisible.minusMonths(1) },
-                onMesSiguiente = { mesVisible = mesVisible.plusMonths(1) },
-                onSeleccionarDia = { diaSeleccionado = it.toString() }
-            )
-        }
-
-        items(recetasDelDia, key = { "reg-${it.receta.id}" }) { item ->
-            RegistroCocinado(item = item, onClick = { onRecetaClick(item.receta.id) })
-        }
-    }
-}
-
-@Composable
-private fun CalendarioMensual(
-    mes: YearMonth,
-    hoy: LocalDate,
-    seleccionado: LocalDate,
-    onMesAnterior: () -> Unit,
-    onMesSiguiente: () -> Unit,
-    onSeleccionarDia: (LocalDate) -> Unit,
-) {
-    val locale = Locale.forLanguageTag("es")
-    val nombreMes = mes.month.getDisplayName(TextStyle.FULL, locale).replaceFirstChar {
-        if (it.isLowerCase()) it.titlecase(locale) else it.toString()
-    }
-
-    SectionCard(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RemyShapes.extraLarge,
-        padding = PaddingValues(16.dp)
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                IconButton(onClick = onMesAnterior) {
-                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "Mes anterior", tint = Green700)
-                }
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
-                    "$nombreMes ${mes.year}",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Slate900,
-                    fontWeight = FontWeight.SemiBold
+                    text = saludoSegunHora(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = TextoSecundario
                 )
-                IconButton(onClick = onMesSiguiente) {
-                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = "Mes siguiente", tint = Green700)
-                }
+                Text(
+                    text = stringResource(R.string.inicio_saludo, nombre),
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = TextoPrincipal,
+                    fontWeight = FontWeight.ExtraBold
+                )
             }
+        }
 
-            Row(modifier = Modifier.fillMaxWidth()) {
-                listOf("L", "M", "X", "J", "V", "S", "D").forEach { dia ->
-                    Text(
-                        text = dia,
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = Slate500,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                }
+        recetaHoy?.let { (receta, _) ->
+            item(key = "hero") {
+                HeroRecetaHoy(
+                    receta = receta,
+                    onCocinar = { onRecetaClick(receta.receta.id) }
+                )
             }
+        }
 
-            val primerDiaMes = mes.atDay(1)
-            val desplazamiento = primerDiaMes.dayOfWeek.value - 1 // lunes = 0
-            val diasMes = mes.lengthOfMonth()
-            val totalCeldas = ((desplazamiento + diasMes + 6) / 7) * 7
-
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                for (fila in 0 until totalCeldas step 7) {
-                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        for (columna in 0 until 7) {
-                            val indice = fila + columna
-                            val numeroDia = indice - desplazamiento + 1
-                            if (numeroDia in 1..diasMes) {
-                                val fecha = mes.atDay(numeroDia)
-                                DiaCalendario(
-                                    fecha = fecha,
-                                    esHoy = fecha == hoy,
-                                    seleccionado = fecha == seleccionado,
-                                    onClick = { onSeleccionarDia(fecha) },
-                                    modifier = Modifier.weight(1f)
-                                )
-                            } else {
-                                Box(modifier = Modifier.weight(1f).aspectRatio(1f))
-                            }
-                        }
-                    }
-                }
+        item(key = "atajos") {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                AtajoInicio(
+                    texto = stringResource(R.string.inicio_anadir_despensa),
+                    subtitulo = null,
+                    icono = Icons.Outlined.Kitchen,
+                    onClick = onIrADespensa,
+                    modifier = Modifier.weight(1f)
+                )
+                AtajoInicio(
+                    texto = stringResource(R.string.inicio_ver_sugerencias),
+                    subtitulo = if (listas == 1) stringResource(R.string.inicio_lista_para_cocinar)
+                    else stringResource(R.string.inicio_listas_para_cocinar, listas),
+                    icono = Icons.Outlined.AutoAwesome,
+                    onClick = onVerSugerencias,
+                    modifier = Modifier.weight(1f)
+                )
             }
+        }
+
+        item(key = "semana") {
+            SemanaPlan(
+                hoy = hoy,
+                seleccionado = planDia.fecha,
+                diasConPlan = planDia.diasConPlan,
+                onDiaClick = onDiaClick
+            )
+        }
+
+        item(key = "plan-dia") {
+            PlanDelDia(
+                planDia = planDia,
+                onRecetaClick = onRecetaClick,
+                onAnadir = onAbrirSheet
+            )
         }
     }
 }
 
-@Composable
-private fun DiaCalendario(
-    fecha: LocalDate,
-    esHoy: Boolean,
-    seleccionado: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val fondo = when {
-        seleccionado -> Green600
-        esHoy -> Green200
-        else -> androidx.compose.ui.graphics.Color.Transparent
+private fun recetaDeHoy(
+    planDia: PlanDia,
+    @Suppress("UNUSED_PARAMETER") hoy: LocalDate
+): Pair<RecetaConIngredientes, DisponibilidadReceta>? {
+    // Prioridad: comida planificada para hoy (comida > desayuno > cena), si no, sugerencia.
+    val orden = listOf(TipoComida.COMIDA, TipoComida.DESAYUNO, TipoComida.CENA)
+    val planificada = orden.firstNotNullOfOrNull { tipo ->
+        planDia.comidasHoy[tipo]?.let { it.plan.receta to it.disponibilidad }
     }
-    val colorTexto = when {
-        seleccionado -> androidx.compose.ui.graphics.Color.White
-        esHoy -> Green900
-        else -> Slate900
-    }
-
-    Column(
-        modifier = modifier
-            .aspectRatio(1f)
-            .clip(CircleShape)
-            .background(fondo)
-            .then(
-                if (esHoy && !seleccionado) Modifier.border(1.dp, Green600, CircleShape) else Modifier
-            )
-            .clickable(onClick = onClick)
-            .padding(2.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = fecha.dayOfMonth.toString(),
-            style = MaterialTheme.typography.bodySmall,
-            color = colorTexto,
-            fontWeight = if (seleccionado || esHoy) FontWeight.Bold else FontWeight.Medium
-        )
-        Box(
-            modifier = Modifier
-                .padding(top = 2.dp)
-                .size(5.dp)
-                .clip(CircleShape)
-                .background(
-                    when {
-                        seleccionado && esHoy -> androidx.compose.ui.graphics.Color.White
-                        seleccionado -> Green600
-                        else -> androidx.compose.ui.graphics.Color.Transparent
-                    }
-                )
-        )
-    }
+    if (planificada != null) return planificada
+    // Sugerencia: primera lista para cocinar, o la primera disponible.
+    val candidata = planDia.recetasParaElegir.firstOrNull() ?: return null
+    return candidata.first to candidata.second
 }
 
 @Composable
-private fun SugerenciaDelDia(
-    sugerencia: RecetaConIngredientes?,
-    onRecetaClick: (Long) -> Unit,
-) {
-    SectionCard(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RemyShapes.extraLarge,
-        border = null,
-        glow = false,
-        padding = PaddingValues(0.dp)
-    ) {
-        Column {
-            Box(modifier = Modifier.fillMaxWidth().height(170.dp)) {
-                if (sugerencia != null) {
-                    FotoReceta(sugerencia.receta.nombre, Modifier.fillMaxSize())
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Green200),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(Icons.Outlined.Restaurant, contentDescription = null, tint = Green600)
-                    }
-                }
+private fun HeroRecetaHoy(receta: RecetaConIngredientes, onCocinar: () -> Unit) {
+    RemyCard(modifier = Modifier.fillMaxWidth(), padding = 0.dp) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(14.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            RecipePhoto(
+                model = receta.receta.fotoCocinada?.let { File(it) },
+                nombre = receta.receta.nombre,
+                modifier = Modifier.size(96.dp),
+                shape = RoundedCornerShape(18.dp)
+            )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
                 Box(
                     modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .padding(12.dp)
-                        .clip(PillShape)
-                        .background(Green600)
-                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                        .clip(RoundedCornerShape(50))
+                        .background(AzulTinta)
+                        .padding(horizontal = 10.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        "Receta recomendada para hoy",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = androidx.compose.ui.graphics.Color.White,
-                        fontWeight = FontWeight.SemiBold
+                        text = stringResource(R.string.inicio_receta_lista),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Text(
+                    text = receta.receta.nombre,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = TextoPrincipal,
+                    fontWeight = FontWeight.ExtraBold,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Meta(icono = Icons.Outlined.Schedule, texto = stringResource(R.string.comun_minutos, receta.receta.tiempoMinutos))
+                    val porciones = receta.receta.porciones.coerceAtLeast(1)
+                    Meta(
+                        icono = Icons.Outlined.Whatshot,
+                        texto = stringResource(R.string.comun_kcal_racion, kotlin.math.round(receta.receta.kcal.toFloat() / porciones).toInt())
                     )
                 }
             }
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                if (sugerencia != null) {
+        }
+        Box(modifier = Modifier.padding(horizontal = 14.dp, vertical = 0.dp).padding(bottom = 14.dp)) {
+            PrimaryButton(
+                text = stringResource(R.string.inicio_cocinar_ahora),
+                onClick = onCocinar,
+                icon = Icons.AutoMirrored.Filled.ArrowForward
+            )
+        }
+    }
+}
+
+@Composable
+private fun Meta(icono: androidx.compose.ui.graphics.vector.ImageVector, texto: String) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Icon(icono, contentDescription = null, tint = TextoSecundario, modifier = Modifier.size(15.dp))
+        Text(texto, style = MaterialTheme.typography.bodySmall, color = TextoSecundario)
+    }
+}
+
+@Composable
+private fun AtajoInicio(
+    texto: String,
+    subtitulo: String?,
+    icono: androidx.compose.ui.graphics.vector.ImageVector,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    RemyCard(modifier = modifier, onClick = onClick, padding = 16.dp) {
+        Box(
+            modifier = Modifier
+                .size(44.dp)
+                .clip(CircleShape)
+                .background(Melocoton),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(icono, contentDescription = null, tint = AzulTinta, modifier = Modifier.size(22.dp))
+        }
+        Spacer(Modifier.height(12.dp))
+        Text(
+            text = texto,
+            style = MaterialTheme.typography.titleSmall,
+            color = TextoPrincipal,
+            fontWeight = FontWeight.Bold,
+            maxLines = 2
+        )
+        if (subtitulo != null) {
+            Spacer(Modifier.height(2.dp))
+            Text(
+                text = subtitulo,
+                style = MaterialTheme.typography.bodySmall,
+                color = TextoSecundario
+            )
+        }
+    }
+}
+
+@Composable
+private fun SemanaPlan(
+    hoy: LocalDate,
+    seleccionado: LocalDate,
+    diasConPlan: Set<LocalDate>,
+    onDiaClick: (LocalDate) -> Unit
+) {
+    val inicio = hoy.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+    val dias = (0..6).map { inicio.plusDays(it.toLong()) }
+
+    RemyCard(modifier = Modifier.fillMaxWidth(), padding = 16.dp) {
+        Text(
+            text = stringResource(R.string.inicio_semana),
+            style = MaterialTheme.typography.titleMedium,
+            color = TextoPrincipal,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(Modifier.height(12.dp))
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            dias.forEach { dia ->
+                val esHoy = dia == hoy
+                val esSeleccionado = dia == seleccionado
+                val tienePlan = dia in diasConPlan
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(14.dp))
+                        .clickable { onDiaClick(dia) }
+                        .padding(horizontal = 2.dp, vertical = 2.dp)
+                ) {
                     Text(
-                        sugerencia.receta.nombre,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Slate900,
-                        fontWeight = FontWeight.SemiBold
+                        text = inicialDia(dia.dayOfWeek),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = if (esHoy) AzulTinta else TextoSecundario,
+                        fontWeight = if (esHoy) FontWeight.ExtraBold else FontWeight.SemiBold
                     )
-                    Text(
-                        "Una sugerencia aleatoria para inspirarte hoy en la cocina.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Slate600
-                    )
-                    RemyCta(
-                        text = "Ver receta",
-                        onClick = { onRecetaClick(sugerencia.receta.id) },
-                        modifier = Modifier.fillMaxWidth(),
-                        height = 44.dp,
-                        iconAfter = Icons.AutoMirrored.Filled.ArrowForward,
-                        fontSize = 14.sp
-                    )
-                } else {
-                    Text(
-                        "Aún no hay recetas disponibles para recomendar.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Slate600
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .background(if (esHoy) AzulTinta else if (esSeleccionado) Melocoton else SuperficieBlanca)
+                            .border(
+                                width = if (!esHoy && !esSeleccionado) 1.dp else 0.dp,
+                                color = BordeTarjeta,
+                                shape = CircleShape
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = dia.dayOfMonth.toString(),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = if (esHoy) Color.White else TextoPrincipal,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .size(6.dp)
+                            .clip(CircleShape)
+                            .background(if (tienePlan) Terracota else Color.Transparent)
                     )
                 }
+            }
+        }
+    }
+}
+
+private fun inicialDia(dia: DayOfWeek): String = when (dia) {
+    DayOfWeek.MONDAY -> "L"
+    DayOfWeek.TUESDAY -> "M"
+    DayOfWeek.WEDNESDAY -> "X"
+    DayOfWeek.THURSDAY -> "J"
+    DayOfWeek.FRIDAY -> "V"
+    DayOfWeek.SATURDAY -> "S"
+    DayOfWeek.SUNDAY -> "D"
+}
+
+@Composable
+private fun PlanDelDia(
+    planDia: PlanDia,
+    onRecetaClick: (Long) -> Unit,
+    onAnadir: (TipoComida) -> Unit
+) {
+    val filas = listOf(
+        Triple(TipoComida.DESAYUNO, R.string.inicio_desayuno, R.string.inicio_anadir_desayuno),
+        Triple(TipoComida.COMIDA, R.string.inicio_comida, R.string.inicio_anadir_comida),
+        Triple(TipoComida.CENA, R.string.inicio_cena, R.string.inicio_anadir_cena)
+    )
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        filas.forEach { (tipo, labelRes, anadirRes) ->
+            val comida = planDia.comidaDe(tipo)
+            if (comida != null) {
+                FilaComidaPlanificada(
+                    etiqueta = stringResource(labelRes),
+                    receta = comida.plan.receta,
+                    disponibilidad = comida.disponibilidad,
+                    onClick = { onRecetaClick(comida.plan.receta.receta.id) }
+                )
+            } else {
+                FilaComidaVacia(
+                    etiqueta = stringResource(labelRes),
+                    textoAnadir = stringResource(anadirRes),
+                    onClick = { onAnadir(tipo) }
+                )
             }
         }
     }
 }
 
 @Composable
-private fun RegistroCocinado(item: RecetaConIngredientes, onClick: () -> Unit) {
-    val receta = item.receta
-    SectionCard(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RemyShapes.extraLarge,
-        border = null,
-        glow = false,
-        padding = PaddingValues(0.dp)
-    ) {
-        Box(modifier = Modifier.fillMaxWidth().height(160.dp)) {
-            if (receta.fotoCocinada != null) {
-                FotoDelPlato(
-                    ruta = receta.fotoCocinada,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            } else {
-                FotoReceta(receta.nombre, Modifier.fillMaxSize())
-            }
-        }
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+private fun FilaComidaPlanificada(
+    etiqueta: String,
+    receta: RecetaConIngredientes,
+    disponibilidad: DisponibilidadReceta,
+    onClick: () -> Unit
+) {
+    val datos = receta.receta
+    RemyCard(modifier = Modifier.fillMaxWidth(), onClick = onClick, padding = 14.dp) {
+        Text(etiqueta, style = MaterialTheme.typography.labelSmall, color = TextoSecundario, fontWeight = FontWeight.Bold)
+        Spacer(Modifier.height(6.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(receta.nombre, style = MaterialTheme.typography.titleMedium, color = Slate900)
-            receta.fechaCocinada?.let { fecha ->
-                Row(
-                    modifier = Modifier
-                        .clip(PillShape)
-                        .background(Slate100)
-                        .padding(horizontal = 12.dp, vertical = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+            RecipePhoto(
+                model = datos.fotoCocinada?.let { File(it) },
+                nombre = datos.nombre,
+                modifier = Modifier.size(52.dp),
+                shape = RoundedCornerShape(14.dp)
+            )
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    text = datos.nombre,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = TextoPrincipal,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                    if (datos.tiempoMinutos > 0) {
+                        Text(
+                            stringResource(R.string.comun_minutos, datos.tiempoMinutos),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = TextoSecundario
+                        )
+                        Text("·", style = MaterialTheme.typography.bodySmall, color = TextoSecundario)
+                    }
+                    val porciones = datos.porciones.coerceAtLeast(1)
                     Text(
-                        "Cocinada el ${fechaEnEspanol(fecha)}",
+                        stringResource(R.string.comun_kcal_racion, kotlin.math.round(datos.kcal.toFloat() / porciones).toInt()),
                         style = MaterialTheme.typography.bodySmall,
-                        color = Green600,
-                        fontWeight = FontWeight.SemiBold
+                        color = TextoSecundario
                     )
                 }
             }
-            RemyCta(
-                text = "Ver receta",
-                onClick = onClick,
-                modifier = Modifier.fillMaxWidth(),
-                height = 44.dp,
-                iconAfter = Icons.AutoMirrored.Filled.ArrowForward,
-                fontSize = 14.sp
+            AvisoDisponibilidad(disponibilidad)
+        }
+    }
+}
+
+@Composable
+private fun AvisoDisponibilidad(disponibilidad: DisponibilidadReceta) {
+    when (disponibilidad) {
+        is DisponibilidadReceta.Lista -> Text(
+            text = stringResource(R.string.inicio_lista),
+            style = MaterialTheme.typography.labelMedium,
+            color = AzulTinta,
+            fontWeight = FontWeight.Bold
+        )
+        is DisponibilidadReceta.Faltan -> Text(
+            text = stringResource(R.string.inicio_faltan, disponibilidad.cantidad),
+            style = MaterialTheme.typography.labelMedium,
+            color = NaranjaAviso,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+private fun FilaComidaVacia(etiqueta: String, textoAnadir: String, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .border(
+                BorderStroke(1.dp, BordeTarjeta),
+                RoundedCornerShape(20.dp)
+            )
+            .background(SuperficieBlanca.copy(alpha = 0.6f))
+            .clickable(onClick = onClick)
+            .padding(14.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(etiqueta, style = MaterialTheme.typography.labelSmall, color = TextoSecundario, fontWeight = FontWeight.Bold)
+            Text(
+                text = textoAnadir,
+                style = MaterialTheme.typography.titleSmall,
+                color = Terracota,
+                fontWeight = FontWeight.Bold
             )
         }
     }
 }
 
-private fun fechaLocal(millis: Long, zona: ZoneId): LocalDate =
-    Instant.ofEpochMilli(millis).atZone(zona).toLocalDate()
+@Composable
+private fun nombreDeUsuario(): String {
+    val usuario = SupabaseClientProvider.client.auth.currentUserOrNull()
+    val nombre = usuario?.userMetadata?.get("full_name")?.toString()?.trim('"')
+        ?: usuario?.userMetadata?.get("name")?.toString()?.trim('"')
+        ?: usuario?.email?.substringBefore('@')
+    return nombre?.takeIf { it.isNotBlank() } ?: "cocinero"
+}
 
+@Composable
 private fun saludoSegunHora(): String = when (LocalTime.now().hour) {
-    in 6..11 -> "Buenos días"
-    in 12..19 -> "Buenas tardes"
-    else -> "Buenas noches"
+    in 5..11 -> stringResource(R.string.inicio_buenos_dias)
+    in 12..19 -> stringResource(R.string.inicio_buenas_tardes)
+    else -> stringResource(R.string.inicio_buenas_noches)
+}
+
+@Preview(name = "Inicio", showBackground = true, backgroundColor = 0xFFFFFBF5, heightDp = 1000)
+@Composable
+private fun PreviewInicio() {
+    val receta = RecetaConIngredientes(
+        receta = Receta(
+            id = 1,
+            nombre = "Arroz con pollo",
+            kcal = 520,
+            proteinas = 32,
+            regionOrigen = "Mediterráneo",
+            tipoPlato = "Principal",
+            tiempoMinutos = 35,
+            porciones = 4
+        ),
+        ingredientes = emptyList()
+    )
+    val hoy = LocalDate.now()
+    val plan = PlanDia(
+        fecha = hoy,
+        comidas = mapOf(
+            TipoComida.COMIDA to com.remy.app.ui.viewmodel.ComidaPlanificadaVista(
+                plan = com.remy.app.data.ComidaPlanificadaConReceta(
+                    plan = com.remy.app.data.PlannedMeal(id = 1, fecha = hoy.toString(), tipoComida = TipoComida.COMIDA, recetaId = 1),
+                    receta = receta
+                ),
+                disponibilidad = DisponibilidadReceta.Lista
+            )
+        ),
+        diasConPlan = setOf(hoy, hoy.plusDays(2)),
+        recetasParaElegir = listOf(receta to DisponibilidadReceta.Lista)
+    )
+    REMYTheme {
+        Column(modifier = Modifier.fillMaxSize().background(FondoCrema)) {
+            RemyTopBar(titulo = "Mi cocina")
+            ContenidoInicio(
+                nombre = "María",
+                planDia = plan,
+                hoy = hoy,
+                onRecetaClick = {},
+                onIrADespensa = {},
+                onVerSugerencias = {},
+                onDiaClick = {},
+                onAbrirSheet = {}
+            )
+        }
+    }
 }

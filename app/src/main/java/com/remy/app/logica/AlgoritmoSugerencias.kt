@@ -2,11 +2,21 @@ package com.remy.app.logica
 
 import com.remy.app.data.Alimento
 import com.remy.app.data.RecetaConIngredientes
+import java.text.Normalizer
 import java.util.Locale
 import kotlin.math.abs
 
 /** Motivo por el que un ingrediente cuenta como faltante. */
 enum class MotivoFaltante { AUSENTE, CANTIDAD_INSUFICIENTE }
+
+private val BASICOS = setOf("sal", "agua", "pimienta")
+
+private fun esBasico(nombre: String?): Boolean {
+    if (nombre == null) return false
+    val normalizado = Normalizer.normalize(nombre.trim().lowercase(Locale.getDefault()), Normalizer.Form.NFD)
+        .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
+    return normalizado in BASICOS
+}
 
 /** Ingrediente que falta para poder cocinar una receta. */
 data class Faltante(val alimentoId: Long, val motivo: MotivoFaltante = MotivoFaltante.AUSENTE)
@@ -46,6 +56,7 @@ fun clasificarRecetas(
         for (ing in item.ingredientes) {
             val id = ing.ingrediente.alimentoId
             if (id in faltantes) continue
+            if (esBasico(ing.alimento?.nombre)) continue
             val disponible = enDespensa[id]
             val motivo = when {
                 disponible == null -> MotivoFaltante.AUSENTE

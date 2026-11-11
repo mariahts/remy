@@ -53,6 +53,9 @@ class PreferenciasRepositoryTest {
         repositorio.guardarKcalMaximas(500)
         repositorio.guardarProteinasMinimas(20)
         repositorio.guardarRegion("Mediterráneo")
+        repositorio.guardarAltaProteina(true)
+        repositorio.guardarBajaHidratos(true)
+        repositorio.guardarBajaGrasa(true)
 
         val filtros = repositorio.filtros.first()
         assertEquals(setOf("Entrante", "Postre"), filtros.tiposDePlato)
@@ -61,6 +64,9 @@ class PreferenciasRepositoryTest {
         assertEquals(500, filtros.kcalMaximas)
         assertEquals(20, filtros.proteinasMinimas)
         assertEquals("Mediterráneo", filtros.region)
+        assertEquals(true, filtros.altaProteina)
+        assertEquals(true, filtros.bajaHidratos)
+        assertEquals(true, filtros.bajaGrasa)
         assertEquals(true, filtros.hayFiltros)
     }
 
@@ -81,6 +87,9 @@ class PreferenciasRepositoryTest {
         repositorio.guardarKcalMaximas(700)
         repositorio.guardarProteinasMinimas(30)
         repositorio.guardarRegion("Cantábrico")
+        repositorio.guardarAltaProteina(true)
+        repositorio.guardarBajaHidratos(true)
+        repositorio.guardarBajaGrasa(false)
 
         // Se cierra la instancia actual y se abre otra sobre el mismo fichero,
         // igual que al reabrir la app
@@ -97,6 +106,9 @@ class PreferenciasRepositoryTest {
         assertEquals(700, filtros.kcalMaximas)
         assertEquals(30, filtros.proteinasMinimas)
         assertEquals("Cantábrico", filtros.region)
+        assertEquals(true, filtros.altaProteina)
+        assertEquals(true, filtros.bajaHidratos)
+        assertEquals(false, filtros.bajaGrasa)
     }
 
     @Test
@@ -107,6 +119,9 @@ class PreferenciasRepositoryTest {
         repositorio.guardarKcalMaximas(300)
         repositorio.guardarProteinasMinimas(10)
         repositorio.guardarRegion("Europeo")
+        repositorio.guardarAltaProteina(true)
+        repositorio.guardarBajaHidratos(true)
+        repositorio.guardarBajaGrasa(true)
 
         repositorio.limpiarFiltros()
 
