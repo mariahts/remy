@@ -52,6 +52,9 @@ data class PlanDia(
     val recetasParaElegir: List<Pair<com.remy.app.data.RecetaConIngredientes, DisponibilidadReceta>> = emptyList()
 ) {
     fun comidaDe(tipo: TipoComida): ComidaPlanificadaVista? = comidas[tipo]
+
+    val listasParaCocinar: Int
+        get() = recetasParaElegir.count { it.second is DisponibilidadReceta.Lista }
 }
 
 /** Gestiona la planificación semanal y calcula la disponibilidad con la despensa. */

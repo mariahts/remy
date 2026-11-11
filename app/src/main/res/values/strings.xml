@@ -40,12 +40,23 @@
     <string name="inicio_buenas_noches">Buenas noches</string>
     <string name="inicio_saludo">Hola, %1$s</string>
     <string name="inicio_receta_hoy">RECETA DE HOY</string>
+    <string name="inicio_receta_lista">Lista para cocinar</string>
     <string name="inicio_cocinar_ahora">Cocinar ahora</string>
     <string name="inicio_anadir_despensa">Añadir a mi despensa</string>
     <string name="inicio_ver_sugerencias">Ver sugerencias</string>
+    <string name="inicio_listas_para_cocinar">%1$d listas para cocinar</string>
+    <string name="inicio_lista_para_cocinar">1 lista para cocinar</string>
     <string name="inicio_semana">Tu semana</string>
     <string name="inicio_recientes">Cocinadas recientes</string>
     <string name="inicio_cargando">Cargando tu inicio…</string>
+    <string name="inicio_desayuno">DESAYUNO</string>
+    <string name="inicio_comida">COMIDA</string>
+    <string name="inicio_cena">CENA</string>
+    <string name="inicio_anadir_desayuno">Añadir desayuno</string>
+    <string name="inicio_anadir_comida">Añadir comida</string>
+    <string name="inicio_anadir_cena">Añadir cena</string>
+    <string name="inicio_faltan">Faltan %1$d</string>
+    <string name="inicio_lista">Lista</string>
 
     <!-- Despensa -->
     <string name="despensa_titulo">Mi despensa</string>
@@ -89,6 +100,18 @@
     <string name="recetas_kcal_proteina">%1$d kcal · %2$d g de proteína por ración</string>
     <string name="recetas_cocinada_el">Cocinada el %1$s</string>
     <string name="recetas_cargando">Cargando tus recetas…</string>
+
+    <!-- Plan -->
+    <string name="plan_anadir_a">Añadir a %1$s</string>
+    <string name="plan_desayuno">el desayuno</string>
+    <string name="plan_comida">la comida</string>
+    <string name="plan_cena">la cena</string>
+    <string name="plan_buscar_receta">Buscar receta…</string>
+    <string name="plan_primero_despensa">Primero, las que puedes cocinar con tu despensa.</string>
+    <string name="plan_anadir">Añadir</string>
+    <string name="plan_badge_lista">Lista</string>
+    <string name="plan_badge_falta">Falta 1</string>
+    <string name="plan_badge_faltan">Faltan %1$d</string>
 
     <!-- Sugerencias -->
     <string name="sugerencias_titulo">Sugerencias</string>
