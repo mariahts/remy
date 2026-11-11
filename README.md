@@ -92,7 +92,7 @@ sistema.
    con cantidad 0 para ver el mensaje de validación.
 3. Pestaña Recetas: tocar una tarjeta para abrir el detalle (ingredientes,
    pasos y nutrición) y volver con «Volver al listado».
-4. Desde Inicio, Despensa o Recetas, pulsar «Ver sugerencias»: con la despensa
+4. En la barra inferior, abrir «Sugerencias»: con la despensa
    completa aparecen «Se puede cocinar ya» y «Casi cocinable»; al borrar un
    alimento de la despensa (por ejemplo «Arroz») aparecen recetas en «Casi
    cocinable» con «Falta: …».
@@ -151,9 +151,11 @@ El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
   pantallas rediseñadas, planificación semanal y estados vacíos mejorados.
 - Pulido de interfaz para la entrega 4: miniaturas de receta con bloques de
   color pastel como en la maqueta, insignia de disponibilidad en «Tu receta
-  de hoy», despensa de demostración sembrada con las unidades de las recetas
-  y mes visible en la cabecera de la semana. La revisión de diseño,
-  accesibilidad y usabilidad está en `docs/revision-diseno-usabilidad.md`.
+  de hoy», despensa de demostración sembrada con las unidades de las recetas,
+  mes visible en la cabecera de la semana y los dos accesos directos del
+  inicio («Añadir a mi despensa» y «Ver sugerencias») con la misma altura.
+  La revisión de diseño, accesibilidad y usabilidad está en
+  `docs/revision-diseno-usabilidad.md`.
 - Estados de carga y error con reintento en las pantallas que consultan Room
   (#46).
 - Versión de entrega: APK de `release` con ofuscación (R8) y firma propia,
