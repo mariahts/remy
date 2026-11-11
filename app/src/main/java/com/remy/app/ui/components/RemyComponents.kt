@@ -32,7 +32,6 @@ import androidx.compose.material.icons.outlined.Grain
 import androidx.compose.material.icons.outlined.Icecream
 import androidx.compose.material.icons.outlined.OilBarrel
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material.icons.outlined.SetMeal
 import androidx.compose.material.icons.outlined.Spa
 import androidx.compose.material3.Icon
@@ -47,7 +46,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.ColorPainter
@@ -63,6 +61,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import androidx.compose.ui.platform.LocalContext
 import com.remy.app.R
+import com.remy.app.logica.indiceTonoPastel
 import com.remy.app.ui.theme.AvisoCaducadoBg
 import com.remy.app.ui.theme.AvisoCaducadoFg
 import com.remy.app.ui.theme.AvisoFaltaBg
@@ -80,6 +79,7 @@ import com.remy.app.ui.theme.SuperficieBlanca
 import com.remy.app.ui.theme.Terracota
 import com.remy.app.ui.theme.TextoPrincipal
 import com.remy.app.ui.theme.TextoSecundario
+import com.remy.app.ui.theme.TONOS_PASTEL
 
 // ---------------------------------------------------------------------------
 // Logo circular de REMY.
@@ -410,7 +410,8 @@ fun StatusBadge(
 }
 
 // ---------------------------------------------------------------------------
-// Foto de receta con marcador de posición cálido.
+// Foto de receta. Cuando la receta no tiene foto, se muestra un bloque de
+// color pastel, tal y como aparece en el diseño de la app.
 // ---------------------------------------------------------------------------
 @Composable
 fun RecipePhoto(
@@ -420,18 +421,13 @@ fun RecipePhoto(
     shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(20.dp),
     contentScale: ContentScale = ContentScale.Crop
 ) {
+    val tono = TONOS_PASTEL[indiceTonoPastel(nombre)]
     Box(
         modifier = modifier
             .clip(shape)
-            .background(Brush.linearGradient(listOf(Melocoton, FondoCrema))),
+            .background(tono),
         contentAlignment = Alignment.Center
     ) {
-        Icon(
-            Icons.Outlined.Restaurant,
-            contentDescription = null,
-            tint = AzulTinta.copy(alpha = 0.22f),
-            modifier = Modifier.size(34.dp)
-        )
         if (model != null) {
             val contexto = LocalContext.current
             AsyncImage(
@@ -441,7 +437,7 @@ fun RecipePhoto(
                     .build(),
                 contentDescription = nombre,
                 contentScale = contentScale,
-                placeholder = ColorPainter(Melocoton),
+                placeholder = ColorPainter(tono),
                 error = ColorPainter(Color.Transparent),
                 modifier = Modifier.fillMaxSize()
             )

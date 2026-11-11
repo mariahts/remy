@@ -18,6 +18,24 @@ val Terracota = Color(0xFFC2410C)      // acción principal
 val AzulTinta = Color(0xFF14213D)       // estructura/selección
 val Melocoton = Color(0xFFFFEDD5)       // avatar y círculo del logo
 
+// Tonos pasteles de las miniaturas de receta (sustituyen a las fotos reales
+// mientras no haya imágenes propias con licencia).
+val TonoPastelMelocoton = Color(0xFFE9A27A)
+val TonoPastelMostaza = Color(0xFFF4C98B)
+val TonoPastelAzul = Color(0xFF9DC3D6)
+val TonoPastelLavanda = Color(0xFFC7D2E8)
+val TonoPastelRosa = Color(0xFFFBCFE8)
+val TonoPastelAzulClaro = Color(0xFFDCE7F5)
+
+val TONOS_PASTEL = listOf(
+    TonoPastelMelocoton,
+    TonoPastelMostaza,
+    TonoPastelAzul,
+    TonoPastelLavanda,
+    TonoPastelRosa,
+    TonoPastelAzulClaro
+)
+
 // Avisos
 val AvisoFaltaBg = Color(0xFFFFEDD5)
 val AvisoFaltaFg = Color(0xFF9A3412)
