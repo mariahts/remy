@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.remy.app.R
 import com.remy.app.data.AlimentoDao
 import com.remy.app.data.AlmacenamientoFotos
 import com.remy.app.data.RecetaDetalle
@@ -108,10 +109,17 @@ class RecetaDetalleViewModel(
             }
 
             if (guardado) {
-                try {
+                val noDescontados = try {
                     descontarIngredientes(id, racionesDeseadas)
                 } catch (_: Exception) {
-                    // El registro de cocción ya se guardó; no bloqueamos por el descuento.
+                    emptyList()
+                }
+                if (noDescontados.isNotEmpty()) {
+                    val avisoDescuento = contexto.getString(
+                        R.string.detalle_aviso_descuento,
+                        noDescontados.joinToString(", ")
+                    )
+                    aviso = listOfNotNull(aviso, avisoDescuento).joinToString(" ")
                 }
                 cargar(id)
                 _estadoCoccion.value = EstadoCoccion.Guardado(fecha, rutaFoto, aviso)
