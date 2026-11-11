@@ -12,15 +12,6 @@ val localProperties = Properties().apply {
     if (file.exists()) file.inputStream().use { load(it) }
 }
 
-// Valores por defecto para que el proyecto funcione al clonarlo sin configurar nada.
-// La clave publishable de Supabase está pensada para distribuirse en el cliente y
-// queda protegida por las políticas RLS del proyecto. local.properties puede
-// sobrescribirlos para apuntar a otro entorno.
-val supabaseUrl = localProperties.getProperty("SUPABASE_URL")
-    ?: "https://hfkefquivvaneyqrvlnb.supabase.co"
-val supabaseAnonKey = localProperties.getProperty("SUPABASE_ANON_KEY")
-    ?: "sb_publishable_GiIYeTm-znux6XONvcDfvA_bSw9gq9K"
-
 android {
     namespace = "com.remy.app"
     compileSdk {
@@ -36,8 +27,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "SUPABASE_URL", "\"$supabaseUrl\"")
-        buildConfigField("String", "SUPABASE_ANON_KEY", "\"$supabaseAnonKey\"")
+        buildConfigField("String", "SUPABASE_URL", "\"${localProperties.getProperty("SUPABASE_URL", "")}\"")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "\"${localProperties.getProperty("SUPABASE_ANON_KEY", "")}\"")
     }
 
     buildTypes {
