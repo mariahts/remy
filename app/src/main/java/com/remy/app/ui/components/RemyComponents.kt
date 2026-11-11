@@ -515,7 +515,7 @@ fun IngredientIcon(
 }
 
 // ---------------------------------------------------------------------------
-// Barra inferior de navegación (3 destinos).
+// Barra inferior de navegación. Icono encima de la etiqueta, como en el diseño.
 // ---------------------------------------------------------------------------
 data class DestinoBarra(
     val ruta: String,
@@ -542,34 +542,39 @@ fun RemyBottomBar(
             .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
             .background(SuperficieBlanca)
             .navigationBarsPadding()
-            .padding(horizontal = 14.dp, vertical = 10.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+            .padding(horizontal = 6.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         destinos.forEach { destino ->
             val activa = rutaActual == destino.ruta
-            Row(
+            Column(
                 modifier = Modifier
                     .weight(1f)
-                    .height(48.dp)
                     .clip(PillShape)
-                    .background(if (activa) AzulTinta else Color.Transparent)
                     .clickable { onNavegar(destino.ruta) }
-                    .padding(horizontal = 8.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(vertical = 2.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                Icon(
-                    destino.icono,
-                    contentDescription = destino.etiqueta,
-                    tint = if (activa) Color.White else TextoSecundario,
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(Modifier.width(6.dp))
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(if (activa) AzulTinta else Color.Transparent),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        destino.icono,
+                        contentDescription = destino.etiqueta,
+                        tint = if (activa) Color.White else TextoSecundario,
+                        modifier = Modifier.size(22.dp)
+                    )
+                }
                 Text(
                     text = destino.etiqueta,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = if (activa) Color.White else TextoSecundario,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (activa) TextoPrincipal else TextoSecundario,
                     fontWeight = if (activa) FontWeight.Bold else FontWeight.SemiBold,
                     maxLines = 1
                 )

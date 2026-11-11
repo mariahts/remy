@@ -5,6 +5,7 @@
     <string name="nav_inicio">Inicio</string>
     <string name="nav_despensa">Despensa</string>
     <string name="nav_recetas">Recetas</string>
+    <string name="nav_sugerencias">Sugerencias</string>
 
     <!-- Login -->
     <string name="login_frase">Cocina delicioso con lo que tienes en casa</string>
