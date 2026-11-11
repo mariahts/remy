@@ -139,4 +139,23 @@
     <string name="sugerencias_todas">Todas</string>
     <string name="sugerencias_limpiar">Limpiar filtros</string>
     <string name="sugerencias_ver">Ver sugerencias</string>
+
+    <string name="perfil_titulo">Mi perfil</string>
+    <string name="perfil_usuario">Tu cuenta</string>
+    <string name="perfil_sin_correo">Sin correo</string>
+    <string name="perfil_cuenta_demo">Cuenta de demostración</string>
+    <string name="perfil_guardadas">Guardadas</string>
+    <string name="perfil_favoritas">Favoritas</string>
+    <string name="perfil_en_despensa">En despensa</string>
+    <string name="perfil_favoritas_titulo">Tus favoritas</string>
+    <string name="perfil_favoritas_vacio_titulo">Aún no tienes favoritas</string>
+    <string name="perfil_favoritas_vacio_texto">Marca una receta con el marcador y aparecerá aquí.</string>
+    <string name="perfil_ajustes">Ajustes</string>
+    <string name="perfil_notificaciones">Recordatorios de cocina</string>
+    <string name="perfil_notificaciones_texto">Avisos para no dejar caducar tu despensa</string>
+    <string name="perfil_unidades">Unidades</string>
+    <string name="perfil_unidades_valor">Gramos y mililitros</string>
+    <string name="perfil_acerca">Acerca de REMY</string>
+    <string name="perfil_version">Versión 1.0</string>
+    <string name="perfil_cerrar_sesion">Cerrar sesión</string>
 </resources>
