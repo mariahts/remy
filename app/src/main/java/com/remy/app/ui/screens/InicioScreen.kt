@@ -57,6 +57,8 @@ import com.remy.app.ui.components.PrimaryButton
 import com.remy.app.ui.components.RecipePhoto
 import com.remy.app.ui.components.RemyCard
 import com.remy.app.ui.components.RemyTopBar
+import com.remy.app.ui.components.StatusBadge
+import com.remy.app.ui.components.VarianteBadge
 import com.remy.app.ui.theme.AzulTinta
 import com.remy.app.ui.theme.BordeTarjeta
 import com.remy.app.ui.theme.FondoCrema
@@ -168,10 +170,11 @@ private fun ContenidoInicio(
             }
         }
 
-        recetaHoy?.let { (receta, _) ->
+        recetaHoy?.let { (receta, disponibilidad) ->
             item(key = "hero") {
                 HeroRecetaHoy(
                     receta = receta,
+                    disponibilidad = disponibilidad,
                     onCocinar = { onRecetaClick(receta.receta.id) }
                 )
             }
@@ -232,7 +235,11 @@ private fun recetaDeHoy(
 }
 
 @Composable
-private fun HeroRecetaHoy(receta: RecetaConIngredientes, onCocinar: () -> Unit) {
+private fun HeroRecetaHoy(
+    receta: RecetaConIngredientes,
+    disponibilidad: DisponibilidadReceta,
+    onCocinar: () -> Unit
+) {
     RemyCard(modifier = Modifier.fillMaxWidth(), padding = 0.dp) {
         Row(
             modifier = Modifier
@@ -251,19 +258,17 @@ private fun HeroRecetaHoy(receta: RecetaConIngredientes, onCocinar: () -> Unit) 
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(50))
-                        .background(AzulTinta)
-                        .padding(horizontal = 10.dp, vertical = 4.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.inicio_receta_lista),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                StatusBadge(
+                    text = when (disponibilidad) {
+                        is DisponibilidadReceta.Lista -> stringResource(R.string.inicio_receta_lista)
+                        is DisponibilidadReceta.Faltan ->
+                            stringResource(R.string.sugerencias_badge_faltan, disponibilidad.cantidad)
+                    },
+                    variante = when (disponibilidad) {
+                        is DisponibilidadReceta.Lista -> VarianteBadge.LISTA
+                        is DisponibilidadReceta.Faltan -> VarianteBadge.FALTAN
+                    }
+                )
                 Text(
                     text = receta.receta.nombre,
                     style = MaterialTheme.typography.titleLarge,
