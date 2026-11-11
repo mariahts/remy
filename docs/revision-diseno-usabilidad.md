@@ -34,7 +34,8 @@ Capturas de la aplicación y de la maqueta en `capturas-pantallas/` (app) y `doc
 | Despensa | Agrupación en «Revísalos primero» (caducidad) y «El resto». | Lista única, sin caducidad. | **Pendiente**: el modelo `Alimento` no tiene fecha de caducidad (requeriría una migración de base de datos) |
 | Login | Logo REMY, campos con icono, botón terracota «Entrar a mi cocina», «Continuar con Google», enlaces «Crear cuenta» y «Probar con la cuenta de demo». | Estructura equivalente. | El enlace a la cuenta de demo se ha retirado (issue #36 y PR #86) |
 | Perfil | Inicial, correo, tres métricas, favoritas, ajustes y «Cerrar sesión». | Idéntica. | Correcto |
-| Inicio, semana | Etiqueta «noviembre» junto a «Tu semana». | Sin la etiqueta del mes. | **Pendiente** (mejora menor) |
+| Inicio, semana | Etiqueta «noviembre» junto a «Tu semana». | Sin la etiqueta del mes. | **Corregido** |
+| Inicio, accesos directos | Las dos tarjetas de «Añadir a mi despensa» y «Ver sugerencias» miden lo mismo. | La tarjeta de «Ver sugerencias» era más alta porque solo una llevaba subtítulo, y quedaban los bordes desalineados. | **Corregido** |
 
 ---
 
@@ -50,6 +51,7 @@ Capturas de la aplicación y de la maqueta en `capturas-pantallas/` (app) y `doc
 | `a4db655` | El botón principal deshabilitado mantiene el tono terracota en lugar de desvanecerse. |
 | `320326d` | La cabecera «Tu semana» muestra el mes, como en la maqueta. |
 | `be9282f` | Cada macronutriente tiene su propio icono en el detalle de la receta. |
+| `ba62063` | Los dos accesos directos del inicio («Añadir a mi despensa» y «Ver sugerencias») tienen la misma altura, y el de la despensa indica cuántos alimentos hay guardados. |
 
 El cambio de unidades corrige un defecto real: antes la despensa de demostración se sembraba con
 `Cebolla 3 ud`, `Huevo 6 ud`, `Patata 4 ud` y `Pasta`, que no existe en el catálogo. Como el algoritmo de
@@ -128,7 +130,6 @@ al diseño, pero es una mejora pendiente.
 |---|---|
 | Fotos reales de las recetas | Requiere 20 imágenes propias o con licencia libre; es trabajo humano. |
 | Caducidad de los alimentos en la despensa | El modelo `Alimento` no tiene ese campo; añadirlo obliga a una migración de base de datos (Room v9) y a la revisión de la categoría de la arroba. |
-| Etiqueta del mes en «Tu semana» | Mejora menor, pendiente de espacio en la entrega. |
 | Escalado de fuente al 150 % y al 200 % | Falta revisar las alturas fijas de algunos componentes. |
 | Modo oscuro | No está en la maqueta; se deja para una versión posterior. |
 | Pruebas en móviles reales y con personas ajenas | Necesitan dispositivos y usuarios fuera del equipo. |
