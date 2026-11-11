@@ -89,21 +89,21 @@ class RecetaDetalleViewModel(
             } catch (e: Exception) {
                 rutaFoto = null
                 aviso = if (hayFoto) {
-                    "No se ha podido guardar la foto del plato, pero el registro se ha guardado sin ella."
+                    contexto.getString(R.string.detalle_aviso_sin_foto_guardada)
                 } else {
                     null
                 }
             }
 
             if (!hayFoto) {
-                aviso = "Has confirmado sin foto: el registro queda sin fotografía del plato."
+                aviso = contexto.getString(R.string.detalle_aviso_confirmado_sin_foto)
             }
 
             val guardado = try {
                 repositorio.marcarComoCocinada(id, fecha, rutaFoto)
             } catch (e: Exception) {
                 _estadoCoccion.value = EstadoCoccion.Error(
-                    "No se ha podido guardar el registro de cocción. Inténtalo de nuevo."
+                    contexto.getString(R.string.detalle_error_guardar_coccion)
                 )
                 return@launch
             }
@@ -125,7 +125,7 @@ class RecetaDetalleViewModel(
                 _estadoCoccion.value = EstadoCoccion.Guardado(fecha, rutaFoto, aviso)
             } else {
                 _estadoCoccion.value = EstadoCoccion.Error(
-                    "Esta receta ya no existe: no se ha podido marcar como cocinada."
+                    contexto.getString(R.string.detalle_error_receta_no_existe)
                 )
             }
         }

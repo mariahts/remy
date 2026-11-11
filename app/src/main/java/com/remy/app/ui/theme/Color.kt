@@ -27,6 +27,7 @@ val AvisoCaducadoBg = Color(0xFFFEE2E2)
 val AvisoCaducadoFg = Color(0xFF991B1B)
 val AvisoNeutroBg = Color(0xFFE8EEF3)
 val AvisoNeutroFg = Color(0xFF334155)
+val NaranjaAviso = Color(0xFFEA580C)
 
 // Degradado suave de fondo (crema)
 val RemyBackgroundBrush: Brush = Brush.verticalGradient(

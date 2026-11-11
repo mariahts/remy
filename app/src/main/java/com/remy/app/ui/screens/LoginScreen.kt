@@ -43,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -86,6 +87,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     var esError by remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
     val auth = remember { SupabaseClientProvider.client.auth }
+    val contexto = LocalContext.current
 
     fun ejecutarAccion(esRegistro: Boolean = false, demo: Boolean = false, google: Boolean = false) {
         scope.launch {
@@ -108,7 +110,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                             email = correo.trim()
                             password = contrasena
                         }
-                        mensaje = "Cuenta creada. Revisa tu correo si es necesario confirmar la cuenta."
+                        mensaje = contexto.getString(R.string.login_cuenta_creada)
                         esError = false
                     }
                     else -> auth.signInWith(Email) {
@@ -175,7 +177,7 @@ private fun ContenidoLogin(
         RemyLogo(size = 112.dp, conBorde = true)
         Spacer(Modifier.height(18.dp))
         Text(
-            text = "REMY",
+            text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.displaySmall,
             color = Terracota,
             fontWeight = FontWeight.ExtraBold,

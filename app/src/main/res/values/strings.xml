@@ -20,6 +20,7 @@
     <string name="login_sin_cuenta">¿No tienes cuenta?</string>
     <string name="login_crear_cuenta">Crear cuenta</string>
     <string name="login_demo_ayuda">Cuenta de demo: %1$s</string>
+    <string name="login_cuenta_creada">Cuenta creada. Revisa tu correo si es necesario confirmar la cuenta.</string>
 
     <!-- Comunes -->
     <string name="comun_minutos">%1$d min</string>
@@ -169,6 +170,13 @@
     <string name="detalle_elige_foto">Elige una foto del plato para continuar.</string>
     <string name="detalle_foto_error">No se pudo abrir la imagen elegida.</string>
     <string name="detalle_aviso_descuento">No se han podido descontar de la despensa: %1$s.</string>
+    <string name="detalle_aviso_sin_foto_guardada">No se ha podido guardar la foto del plato, pero el registro se ha guardado sin ella.</string>
+    <string name="detalle_aviso_confirmado_sin_foto">Has confirmado sin foto: el registro queda sin fotografía del plato.</string>
+    <string name="detalle_error_guardar_coccion">No se ha podido guardar el registro de cocción. Inténtalo de nuevo.</string>
+    <string name="detalle_error_receta_no_existe">Esta receta ya no existe: no se ha podido marcar como cocinada.</string>
+    <string name="captura_hacer_foto">Hacer foto</string>
+    <string name="captura_elegir_galeria">Elegir imagen de la galería</string>
+    <string name="captura_elegir_galeria_corta">Elegir de la galería</string>
     <string name="sugerencias_falta">Te falta %1$s</string>
     <string name="sugerencias_insuficiente">%1$s · cantidad insuficiente</string>
     <string name="sugerencias_vacio_titulo">Aún no hay sugerencias</string>

@@ -61,6 +61,7 @@ import com.remy.app.ui.theme.AzulTinta
 import com.remy.app.ui.theme.BordeTarjeta
 import com.remy.app.ui.theme.FondoCrema
 import com.remy.app.ui.theme.Melocoton
+import com.remy.app.ui.theme.NaranjaAviso
 import com.remy.app.ui.theme.REMYTheme
 import com.remy.app.ui.theme.SuperficieBlanca
 import com.remy.app.ui.theme.Terracota
@@ -511,7 +512,7 @@ private fun AvisoDisponibilidad(disponibilidad: DisponibilidadReceta) {
         is DisponibilidadReceta.Faltan -> Text(
             text = stringResource(R.string.inicio_faltan, disponibilidad.cantidad),
             style = MaterialTheme.typography.labelMedium,
-            color = Color(0xFFEA580C), // naranja aviso, legible sobre blanco
+            color = NaranjaAviso,
             fontWeight = FontWeight.Bold
         )
     }
