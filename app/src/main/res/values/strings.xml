@@ -37,4 +37,31 @@
     <string name="inicio_semana">Tu semana</string>
     <string name="inicio_recientes">Cocinadas recientes</string>
     <string name="inicio_cargando">Cargando tu inicio…</string>
+
+    <!-- Despensa -->
+    <string name="despensa_titulo">Mi despensa</string>
+    <string name="despensa_buscar">Buscar en mi despensa</string>
+    <string name="despensa_todos">Todos</string>
+    <string name="despensa_frescos">Frescos</string>
+    <string name="despensa_despensa">Despensa</string>
+    <string name="despensa_especias">Especias</string>
+    <string name="despensa_lacteos">Lácteos</string>
+    <string name="despensa_anadir">Añadir</string>
+    <string name="despensa_cantidad">%1$s %2$s</string>
+    <string name="despensa_contador">%1$d alimentos en tu despensa</string>
+    <string name="despensa_toca_editar">Editar</string>
+    <string name="despensa_eliminar">Eliminar</string>
+    <string name="despensa_cargando">Cargando tu despensa…</string>
+    <string name="despensa_vacia_titulo">Tu despensa está vacía</string>
+    <string name="despensa_vacia_texto">Añade lo que tienes en casa para descubrir qué puedes cocinar hoy.</string>
+    <string name="despensa_sin_resultados">Sin resultados</string>
+    <string name="despensa_sin_resultados_texto">Prueba con otro nombre o cambia el filtro de categoría.</string>
+    <string name="despensa_anadir_primero">Añadir mi primer alimento</string>
+    <string name="despensa_form_anadir">Añadir alimento</string>
+    <string name="despensa_form_editar">Editar alimento</string>
+    <string name="despensa_form_ayuda">Indica el nombre, la cantidad y la unidad del ingrediente.</string>
+    <string name="despensa_campo_nombre">Nombre</string>
+    <string name="despensa_campo_cantidad">Cantidad</string>
+    <string name="despensa_campo_unidad">Unidad</string>
+    <string name="despensa_guardar">Guardar</string>
 </resources>
