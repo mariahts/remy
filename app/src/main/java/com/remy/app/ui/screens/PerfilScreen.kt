@@ -26,19 +26,14 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -361,9 +356,6 @@ private fun TarjetaFavoritasVacio() {
 
 @Composable
 private fun TarjetaAjustes() {
-    // TODO: persistir en DataStore cuando existan preferencias de cuenta.
-    var recordatorios by rememberSaveable { mutableStateOf(true) }
-
     RemyCard(modifier = Modifier.fillMaxWidth(), padding = 20.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Text(
@@ -371,36 +363,6 @@ private fun TarjetaAjustes() {
                 style = MaterialTheme.typography.titleLarge,
                 color = TextoPrincipal
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = stringResource(R.string.perfil_notificaciones),
-                        style = MaterialTheme.typography.titleSmall,
-                        color = TextoPrincipal
-                    )
-                    Text(
-                        text = stringResource(R.string.perfil_notificaciones_texto),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = TextoSecundario
-                    )
-                }
-                Switch(
-                    checked = recordatorios,
-                    onCheckedChange = { recordatorios = it },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.White,
-                        checkedTrackColor = Terracota,
-                        uncheckedThumbColor = Color.White,
-                        uncheckedTrackColor = BordeTarjeta,
-                        uncheckedBorderColor = BordeTarjeta
-                    )
-                )
-            }
-            HorizontalDivider(color = BordeTarjeta)
             FilaAjuste(
                 titulo = stringResource(R.string.perfil_unidades),
                 valor = stringResource(R.string.perfil_unidades_valor)
