@@ -15,4 +15,26 @@
     <string name="login_sin_cuenta">¿No tienes cuenta?</string>
     <string name="login_crear_cuenta">Crear cuenta</string>
     <string name="login_demo_ayuda">Cuenta de demo: %1$s</string>
+
+    <!-- Comunes -->
+    <string name="comun_minutos">%1$d min</string>
+    <string name="comun_kcal">%1$d kcal</string>
+    <string name="comun_por_racion">por ración</string>
+    <string name="comun_volver">Volver</string>
+    <string name="comun_cargando">Cargando…</string>
+    <string name="comun_reintentar">Reintentar</string>
+
+    <!-- Inicio -->
+    <string name="inicio_titulo">Mi cocina</string>
+    <string name="inicio_buenos_dias">Buenos días</string>
+    <string name="inicio_buenas_tardes">Buenas tardes</string>
+    <string name="inicio_buenas_noches">Buenas noches</string>
+    <string name="inicio_saludo">Hola, %1$s</string>
+    <string name="inicio_receta_hoy">RECETA DE HOY</string>
+    <string name="inicio_cocinar_ahora">Cocinar ahora</string>
+    <string name="inicio_anadir_despensa">Añadir a mi despensa</string>
+    <string name="inicio_ver_sugerencias">Ver sugerencias</string>
+    <string name="inicio_semana">Tu semana</string>
+    <string name="inicio_recientes">Cocinadas recientes</string>
+    <string name="inicio_cargando">Cargando tu inicio…</string>
 </resources>
