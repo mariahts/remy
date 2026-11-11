@@ -67,6 +67,7 @@ import com.remy.app.ui.theme.SuperficieBlanca
 import com.remy.app.ui.theme.Terracota
 import com.remy.app.ui.theme.TextoPrincipal
 import com.remy.app.ui.theme.TextoSecundario
+import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.Email
@@ -80,6 +81,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     var cargando by remember { mutableStateOf(false) }
     var mensaje by remember { mutableStateOf<String?>(null) }
     var esError by remember { mutableStateOf(true) }
+    var correoPendiente by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
     val auth = remember { SupabaseClientProvider.client.auth }
     val contexto = LocalContext.current
@@ -93,12 +95,52 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 when {
                     google -> auth.signInWith(Google)
                     esRegistro -> {
-                        auth.signUpWith(Email) {
-                            email = correo.trim()
+                        val correoLimpio = correo.trim()
+                        if (!correoLimpio.contains("@") || !correoLimpio.contains(".")) {
+                            mensaje = contexto.getString(R.string.login_correo_invalido)
+                            esError = true
+                            return@launch
+                        }
+                        if (contrasena.length < 6) {
+                            mensaje = contexto.getString(R.string.login_contrasena_corta)
+                            esError = true
+                            return@launch
+                        }
+                        // Devuelve null cuando el alta inicia sesión y el usuario
+                        // cuando el proyecto exige confirmar el correo: en ese caso
+                        // no hay sesión y hay que avisar de la confirmación.
+                        val usuario = auth.signUpWith(Email) {
+                            email = correoLimpio
                             password = contrasena
                         }
-                        mensaje = contexto.getString(R.string.login_cuenta_creada)
-                        esError = false
+                        if (usuario == null) {
+                            // El alta ha iniciado sesion: la app entra directamente.
+                            mensaje = contexto.getString(R.string.login_cuenta_creada)
+                            esError = false
+                        } else {
+                            // El proyecto exige confirmar el correo, asi que no hay sesion.
+                            // Probamos a entrar: si la cuenta ya existia y estaba
+                            // confirmada, entramos directamente; si es nueva, el acceso
+                            // fallara y habra que confirmar el correo.
+                            val entro = try {
+                                auth.signInWith(Email) {
+                                    email = correoLimpio
+                                    password = contrasena
+                                }
+                                true
+                            } catch (entradaFallida: Exception) {
+                                false
+                            }
+                            if (entro) {
+                                correoPendiente = null
+                                mensaje = contexto.getString(R.string.login_bienvenida_de_nuevo)
+                                esError = false
+                            } else {
+                                correoPendiente = correoLimpio
+                                mensaje = contexto.getString(R.string.login_confirmar_correo, correoLimpio)
+                                esError = false
+                            }
+                        }
                     }
                     else -> auth.signInWith(Email) {
                         email = correo.trim()
@@ -106,11 +148,38 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     }
                 }
             } catch (e: Exception) {
-                mensaje = e.message ?: "No se ha podido completar el acceso."
+                val texto = e.message ?: ""
+                mensaje = when {
+                    texto.contains("already registered", ignoreCase = true) ->
+                        contexto.getString(R.string.login_cuenta_existente)
+                    texto.contains("Password should be", ignoreCase = true) ->
+                        contexto.getString(R.string.login_contrasena_corta)
+                    texto.contains("Email address", ignoreCase = true) ||
+                        texto.contains("invalid email", ignoreCase = true) ->
+                        contexto.getString(R.string.login_correo_invalido)
+                    else -> contexto.getString(R.string.login_error_generico)
+                }
                 esError = true
                 if (google) cargando = false
             } finally {
                 if (!google) cargando = false
+            }
+        }
+    }
+
+    fun reenviarConfirmacion() {
+        val destino = correoPendiente ?: return
+        scope.launch {
+            cargando = true
+            try {
+                auth.resendEmail(OtpType.Email.SIGNUP, destino)
+                mensaje = contexto.getString(R.string.login_correo_reenviado, destino)
+                esError = false
+            } catch (e: Exception) {
+                mensaje = contexto.getString(R.string.login_error_reenvio)
+                esError = true
+            } finally {
+                cargando = false
             }
         }
     }
@@ -125,6 +194,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         cargando = cargando,
         mensaje = mensaje,
         esError = esError,
+        correoPendiente = correoPendiente,
+        onReenviarConfirmacion = { reenviarConfirmacion() },
         onEntrar = { ejecutarAccion() },
         onGoogle = { ejecutarAccion(google = true) },
         onCrearCuenta = { ejecutarAccion(esRegistro = true) },
@@ -143,6 +214,8 @@ private fun ContenidoLogin(
     cargando: Boolean,
     mensaje: String?,
     esError: Boolean,
+    correoPendiente: String?,
+    onReenviarConfirmacion: () -> Unit,
     onEntrar: () -> Unit,
     onGoogle: () -> Unit,
     onCrearCuenta: () -> Unit,
@@ -325,7 +398,20 @@ private fun ContenidoLogin(
                 color = Terracota,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .clickable(enabled = !cargando && formularioValido, onClick = onCrearCuenta)
+                    .clickable(enabled = !cargando, onClick = onCrearCuenta)
+                    .padding(horizontal = 4.dp, vertical = 6.dp)
+            )
+        }
+
+        if (correoPendiente != null) {
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = stringResource(R.string.login_reenviar),
+                style = MaterialTheme.typography.labelLarge,
+                color = Terracota,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .clickable(enabled = !cargando, onClick = onReenviarConfirmacion)
                     .padding(horizontal = 4.dp, vertical = 6.dp)
             )
         }
@@ -348,6 +434,8 @@ private fun PreviewLogin() {
             cargando = false,
             mensaje = null,
             esError = true,
+            correoPendiente = null,
+            onReenviarConfirmacion = {},
             onEntrar = {},
             onGoogle = {},
             onCrearCuenta = {}
