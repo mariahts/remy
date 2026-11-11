@@ -1,8 +1,10 @@
 package com.remy.app.ui.components
 
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.time.Month
 
 class FechaEspanolTest {
 
@@ -29,5 +31,16 @@ class FechaEspanolTest {
     @Test
     fun fechaLarga_noSaleDelAnioEsperado() {
         assertTrue("Debe terminar en 2026: ${fechaEnEspanol(instante)}", fechaEnEspanol(instante).endsWith("de 2026"))
+    }
+
+    @Test
+    fun nombreDelMes_saleEnEspanol() {
+        assertEquals("noviembre", mesEnEspanol(Month.NOVEMBER))
+        assertEquals("enero", mesEnEspanol(Month.JANUARY))
+    }
+
+    @Test
+    fun nombreDelMes_noEmpiezaPorMayuscula() {
+        assertEquals("julio", mesEnEspanol(Month.JULY))
     }
 }

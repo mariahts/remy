@@ -59,6 +59,7 @@ import com.remy.app.ui.components.RemyCard
 import com.remy.app.ui.components.RemyTopBar
 import com.remy.app.ui.components.StatusBadge
 import com.remy.app.ui.components.VarianteBadge
+import com.remy.app.ui.components.mesEnEspanol
 import com.remy.app.ui.theme.AzulTinta
 import com.remy.app.ui.theme.BordeTarjeta
 import com.remy.app.ui.theme.FondoCrema
@@ -353,12 +354,23 @@ private fun SemanaPlan(
     val dias = (0..6).map { inicio.plusDays(it.toLong()) }
 
     RemyCard(modifier = Modifier.fillMaxWidth(), padding = 16.dp) {
-        Text(
-            text = stringResource(R.string.inicio_semana),
-            style = MaterialTheme.typography.titleMedium,
-            color = TextoPrincipal,
-            fontWeight = FontWeight.Bold
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.inicio_semana),
+                style = MaterialTheme.typography.titleMedium,
+                color = TextoPrincipal,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = mesEnEspanol(hoy.month),
+                style = MaterialTheme.typography.labelMedium,
+                color = TextoSecundario
+            )
+        }
         Spacer(Modifier.height(12.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             dias.forEach { dia ->
