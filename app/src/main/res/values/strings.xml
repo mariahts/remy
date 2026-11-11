@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">REMY</string>
 
+    <!-- Navegación -->
+    <string name="nav_inicio">Inicio</string>
+    <string name="nav_despensa">Despensa</string>
+    <string name="nav_recetas">Recetas</string>
+
     <!-- Login -->
     <string name="login_frase">Cocina delicioso con lo que tienes en casa</string>
     <string name="login_correo">Correo electrónico</string>
