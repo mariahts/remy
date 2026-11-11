@@ -725,7 +725,8 @@ private fun ContenidoDetalle(
     onLimpiarAviso: () -> Unit
 ) {
     val receta = detalle.receta
-    val porciones = receta.porciones.coerceAtLeast(1)
+    val porcionesReceta = receta.porciones.coerceAtLeast(1)
+    var racionesDeseadas by rememberSaveable { mutableStateOf(1) }
     val total = detalle.ingredientes.size
     val disponibles = detalle.ingredientes.count { it.alimento != null }
     val faltan = (total - disponibles).coerceAtLeast(0)
@@ -764,31 +765,25 @@ private fun ContenidoDetalle(
                         style = MaterialTheme.typography.headlineMedium,
                         color = TextoPrincipal
                     )
+                    val kcalPara = kotlin.math.round(receta.kcal.toFloat() * racionesDeseadas / porcionesReceta).toInt()
+                    val proteinasPara = kotlin.math.round(receta.proteinas.toFloat() * racionesDeseadas / porcionesReceta).toInt()
                     Row(
                         modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        DatoPildora(
-                            Icons.Outlined.People,
-                            if (porciones == 1) {
-                                stringResource(R.string.comun_una_racion)
-                            } else {
-                                stringResource(R.string.comun_raciones, porciones)
-                            }
-                        )
                         if (receta.tiempoMinutos > 0) {
                             DatoPildora(Icons.Outlined.Schedule, stringResource(R.string.comun_minutos, receta.tiempoMinutos))
                         }
                         if (receta.kcal > 0) {
                             DatoPildora(
                                 Icons.Outlined.LocalFireDepartment,
-                                stringResource(R.string.comun_kcal_racion, kotlin.math.round(receta.kcal.toFloat() / porciones).toInt())
+                                stringResource(R.string.comun_kcal, kcalPara)
                             )
                         }
                         if (receta.proteinas > 0) {
                             DatoPildora(
                                 Icons.Outlined.FitnessCenter,
-                                stringResource(R.string.detalle_proteina, kotlin.math.round(receta.proteinas.toFloat() / porciones).toInt())
+                                stringResource(R.string.detalle_proteina, proteinasPara)
                             )
                         }
                         if (receta.tipoPlato.isNotBlank()) {
@@ -798,6 +793,11 @@ private fun ContenidoDetalle(
                             DatoPildora(Icons.Outlined.Public, receta.regionOrigen)
                         }
                     }
+                    SelectorRaciones(
+                        raciones = racionesDeseadas,
+                        onMenos = { if (racionesDeseadas > 1) racionesDeseadas-- },
+                        onMas = { racionesDeseadas++ }
+                    )
                 }
             }
             item {
@@ -808,7 +808,11 @@ private fun ContenidoDetalle(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(R.string.detalle_ingredientes),
+                            text = if (racionesDeseadas == 1) {
+                                stringResource(R.string.detalle_ingredientes_para_una)
+                            } else {
+                                stringResource(R.string.detalle_ingredientes_para, racionesDeseadas)
+                            },
                             style = MaterialTheme.typography.titleLarge,
                             color = TextoPrincipal
                         )
@@ -829,7 +833,11 @@ private fun ContenidoDetalle(
                         if (indice > 0) {
                             HorizontalDivider(color = BordeTarjeta, thickness = 1.dp)
                         }
-                        FilaIngredienteDetalle(par = par, porciones = porciones)
+                        FilaIngredienteDetalle(
+                            par = par,
+                            porcionesReceta = porcionesReceta,
+                            racionesDeseadas = racionesDeseadas
+                        )
                     }
                     if (total == 0) {
                         Text(
@@ -995,11 +1003,15 @@ private fun DatoPildora(
 }
 
 @Composable
-private fun FilaIngredienteDetalle(par: IngredienteConAlimento, porciones: Int = 1) {
+private fun FilaIngredienteDetalle(
+    par: IngredienteConAlimento,
+    porcionesReceta: Int = 1,
+    racionesDeseadas: Int = 1
+) {
     val nombre = par.alimento?.nombre ?: stringResource(R.string.detalle_ingrediente)
     val tiene = par.alimento != null
-    val porRacion = (par.ingrediente.cantidad / porciones.coerceAtLeast(1))
-    val cantidad = stringResource(R.string.detalle_cantidad_racion, porRacion.formatoCantidad(), par.ingrediente.unidad)
+    val cantidadEscalada = par.ingrediente.cantidad * racionesDeseadas / porcionesReceta.coerceAtLeast(1)
+    val cantidad = "${cantidadEscalada.formatoCantidad()} ${par.ingrediente.unidad}"
 
     Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
@@ -1036,6 +1048,67 @@ private fun FilaIngredienteDetalle(par: IngredienteConAlimento, porciones: Int =
                 text = stringResource(R.string.detalle_falta),
                 variante = VarianteBadge.FALTAN
             )
+        }
+    }
+}
+
+@Composable
+private fun SelectorRaciones(
+    raciones: Int,
+    onMenos: () -> Unit,
+    onMas: () -> Unit
+) {
+    RemyCard(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = stringResource(R.string.detalle_raciones_titulo),
+                style = MaterialTheme.typography.titleMedium,
+                color = TextoPrincipal
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(44.dp)
+                        .clip(CircleShape)
+                        .background(if (raciones > 1) Terracota else BordeTarjeta)
+                        .clickable(enabled = raciones > 1, onClick = onMenos),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Remove,
+                        contentDescription = stringResource(R.string.detalle_menos_raciones),
+                        tint = if (raciones > 1) Color.White else TextoSecundario
+                    )
+                }
+                Text(
+                    text = raciones.toString(),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = TextoPrincipal,
+                    modifier = Modifier.width(28.dp),
+                    textAlign = TextAlign.Center
+                )
+                Box(
+                    modifier = Modifier
+                        .size(44.dp)
+                        .clip(CircleShape)
+                        .background(Terracota)
+                        .clickable(onClick = onMas),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Add,
+                        contentDescription = stringResource(R.string.detalle_mas_raciones),
+                        tint = Color.White
+                    )
+                }
+            }
         }
     }
 }

@@ -110,8 +110,13 @@
     <string name="detalle_sin_ingredientes">Esta receta no tiene ingredientes registrados.</string>
     <string name="detalle_pasos">Pasos</string>
     <string name="detalle_cocinada_el">Cocinada el %1$s</string>
-    <string name="detalle_proteina">%1$d g de proteína por ración</string>
-    <string name="detalle_cantidad_racion">%1$s %2$s por ración</string>
+    <string name="detalle_proteina">%1$d g de proteína</string>
+    <string name="detalle_proteina_racion">%1$d g de proteína por ración</string>
+    <string name="detalle_ingredientes_para">Ingredientes para %1$d raciones</string>
+    <string name="detalle_ingredientes_para_una">Ingredientes para 1 ración</string>
+    <string name="detalle_raciones_titulo">Raciones</string>
+    <string name="detalle_menos_raciones">Reducir raciones</string>
+    <string name="detalle_mas_raciones">Aumentar raciones</string>
     <string name="detalle_en_despensa">En despensa</string>
     <string name="detalle_falta">Falta</string>
     <string name="detalle_captura_titulo">Foto del plato</string>
