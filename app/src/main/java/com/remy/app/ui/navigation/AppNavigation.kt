@@ -103,7 +103,8 @@ fun AppNavigation(rutaInicial: String? = null) {
             composable(Routes.RECETAS) {
                 RecetasScreen(
                     onRecetaClick = { id -> navController.navigate(Routes.detalleReceta(id)) },
-                    onPerfilClick = { navController.navigate(Routes.PERFIL) }
+                    onPerfilClick = { navController.navigate(Routes.PERFIL) },
+                    onVerSugerencias = { navController.navigate(Routes.SUGERENCIAS) }
                 )
             }
             composable(

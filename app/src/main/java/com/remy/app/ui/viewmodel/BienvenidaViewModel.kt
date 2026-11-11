@@ -42,6 +42,37 @@ class BienvenidaViewModel(
         IngredienteComun("Queso", 200.0, "g")
     )
 
+    /** Inserta los ingredientes seleccionados en la despensa sin marcar la bienvenida. */
+    fun insertarSeleccion(seleccionados: Set<String>, alTerminar: () -> Unit = {}) {
+        viewModelScope.launch {
+            val catalogo = alimentoRepository.catalogo.first()
+            seleccionados.forEach { nombre ->
+                val comun = ingredientesComunes.firstOrNull { it.nombre == nombre } ?: return@forEach
+                val existente = catalogo.firstOrNull { it.nombre.trim().equals(comun.nombre, ignoreCase = true) }
+                    ?: catalogo.firstOrNull { coincideNombre(it.nombre, comun.nombre) }
+                if (existente != null) {
+                    alimentoRepository.actualizar(
+                        existente.copy(
+                            cantidad = comun.cantidad,
+                            unidad = comun.unidad,
+                            enDespensa = true
+                        )
+                    )
+                } else {
+                    alimentoRepository.guardar(
+                        Alimento(
+                            nombre = comun.nombre,
+                            cantidad = comun.cantidad,
+                            unidad = comun.unidad,
+                            enDespensa = true
+                        )
+                    )
+                }
+            }
+            alTerminar()
+        }
+    }
+
     /** Inserta los ingredientes seleccionados en la despensa y marca la bienvenida como completada. */
     fun completarConSeleccion(seleccionados: Set<String>, alTerminar: () -> Unit) {
         viewModelScope.launch {

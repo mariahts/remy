@@ -84,8 +84,13 @@ import com.remy.app.ui.theme.SuperficieBlanca
 import com.remy.app.ui.theme.Terracota
 import com.remy.app.ui.theme.TextoPrincipal
 import com.remy.app.ui.theme.TextoSecundario
+import com.remy.app.ui.viewmodel.BienvenidaViewModel
 import com.remy.app.ui.viewmodel.DespensaViewModel
 import com.remy.app.ui.viewmodel.ErroresAlimento
+import com.remy.app.ui.components.RemyLogo
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.material.icons.outlined.Check
 
 private enum class FiltroDespensa(val etiqueta: Int) {
     TODOS(R.string.despensa_todos),
@@ -114,11 +119,13 @@ private fun FiltroDespensa.contiene(nombre: String): Boolean {
 @Composable
 fun DespensaScreen(
     viewModel: DespensaViewModel = viewModel(factory = DespensaViewModel.Factory),
+    bienvenidaViewModel: BienvenidaViewModel = viewModel(factory = BienvenidaViewModel.Factory),
     onVerSugerencias: () -> Unit = {},
     onPerfilClick: () -> Unit = {}
 ) {
     val estado by viewModel.estado.collectAsStateWithLifecycle()
     var mostrarFormulario by rememberSaveable { mutableStateOf(false) }
+    var mostrarBasicos by rememberSaveable { mutableStateOf(false) }
     var editando by remember { mutableStateOf<Alimento?>(null) }
     var query by rememberSaveable { mutableStateOf("") }
     var filtro by rememberSaveable { mutableStateOf(FiltroDespensa.TODOS) }
@@ -203,6 +210,7 @@ fun DespensaScreen(
                         DespensaVacia(
                             hayFiltros = query.isNotBlank() || filtro != FiltroDespensa.TODOS,
                             onAnadir = { abrirFormulario(null) },
+                            onMarcarBasicos = { mostrarBasicos = true },
                             onVerSugerencias = onVerSugerencias
                         )
                     } else {
@@ -242,6 +250,16 @@ fun DespensaScreen(
                 viewModel.guardar(editando, nombre, cantidad, unidad)
             },
             onCerrar = { mostrarFormulario = false }
+        )
+    }
+
+    if (mostrarBasicos) {
+        HojaBasicos(
+            ingredientes = bienvenidaViewModel.ingredientesComunes,
+            onConfirmar = { seleccionados ->
+                bienvenidaViewModel.insertarSeleccion(seleccionados - "__otro__") { mostrarBasicos = false }
+            },
+            onCerrar = { mostrarBasicos = false }
         )
     }
 }
@@ -335,6 +353,7 @@ private fun FilaAlimento(
 private fun DespensaVacia(
     hayFiltros: Boolean,
     onAnadir: () -> Unit,
+    onMarcarBasicos: () -> Unit,
     onVerSugerencias: () -> Unit
 ) {
     Column(
@@ -344,19 +363,23 @@ private fun DespensaVacia(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Box(
-            modifier = Modifier
-                .size(84.dp)
-                .clip(CircleShape)
-                .background(Melocoton),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                Icons.Outlined.Kitchen,
-                contentDescription = null,
-                tint = AzulTinta,
-                modifier = Modifier.size(38.dp)
-            )
+        if (!hayFiltros) {
+            RemyLogo(size = 96.dp, conBorde = true)
+        } else {
+            Box(
+                modifier = Modifier
+                    .size(84.dp)
+                    .clip(CircleShape)
+                    .background(Melocoton),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    Icons.Outlined.Kitchen,
+                    contentDescription = null,
+                    tint = AzulTinta,
+                    modifier = Modifier.size(38.dp)
+                )
+            }
         }
         Spacer(Modifier.height(18.dp))
         Text(
@@ -380,18 +403,117 @@ private fun DespensaVacia(
         Spacer(Modifier.height(20.dp))
         if (!hayFiltros) {
             PrimaryButton(
-                text = stringResource(R.string.despensa_anadir_primero),
+                text = stringResource(R.string.despensa_anadir_ingredientes),
                 onClick = onAnadir,
                 icon = Icons.Outlined.Add
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(10.dp))
+            TextButton(onClick = onMarcarBasicos) {
+                Text(
+                    text = stringResource(R.string.despensa_basicos_golpe),
+                    color = Terracota,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        } else {
+            TextButton(onClick = onVerSugerencias) {
+                Text(
+                    text = stringResource(R.string.inicio_ver_sugerencias),
+                    color = Terracota,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
-        TextButton(onClick = onVerSugerencias) {
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@Composable
+private fun HojaBasicos(
+    ingredientes: List<com.remy.app.ui.viewmodel.IngredienteComun>,
+    onConfirmar: (Set<String>) -> Unit,
+    onCerrar: () -> Unit
+) {
+    var seleccionados by rememberSaveable { mutableStateOf(setOf<String>()) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    ModalBottomSheet(
+        onDismissRequest = onCerrar,
+        sheetState = sheetState,
+        containerColor = FondoCrema
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
             Text(
-                text = stringResource(R.string.inicio_ver_sugerencias),
-                color = Terracota,
+                text = stringResource(R.string.bienvenida_titulo),
+                style = MaterialTheme.typography.headlineSmall,
+                color = TextoPrincipal,
+                fontWeight = FontWeight.ExtraBold
+            )
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                ingredientes.forEach { ing ->
+                    ChipBasico(
+                        texto = ing.nombre,
+                        seleccionado = ing.nombre in seleccionados,
+                        onClick = {
+                            seleccionados = if (ing.nombre in seleccionados) seleccionados - ing.nombre else seleccionados + ing.nombre
+                        }
+                    )
+                }
+                ChipBasico(
+                    texto = stringResource(R.string.bienvenida_otro),
+                    seleccionado = "__otro__" in seleccionados,
+                    onClick = {
+                        seleccionados = if ("__otro__" in seleccionados) seleccionados - "__otro__" else seleccionados + "__otro__"
+                    }
+                )
+            }
+            val total = seleccionados.size
+            Text(
+                text = when (total) {
+                    0 -> stringResource(R.string.bienvenida_ninguno)
+                    1 -> stringResource(R.string.bienvenida_seleccionado)
+                    else -> stringResource(R.string.bienvenida_seleccionados, total)
+                },
+                style = MaterialTheme.typography.titleSmall,
+                color = if (total > 0) AzulTinta else TextoSecundario,
                 fontWeight = FontWeight.Bold
             )
+            PrimaryButton(
+                text = stringResource(R.string.despensa_anadir_ingredientes),
+                onClick = { onConfirmar(seleccionados) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun ChipBasico(texto: String, seleccionado: Boolean, onClick: () -> Unit) {
+    val fondo = if (seleccionado) AzulTinta else SuperficieBlanca
+    val contenido = if (seleccionado) androidx.compose.ui.graphics.Color.White else TextoPrincipal
+    val borde = if (seleccionado) AzulTinta else BordeTarjeta
+    Box(
+        modifier = Modifier
+            .clip(PillShape)
+            .background(fondo)
+            .border(1.dp, borde, PillShape)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 10.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            if (seleccionado) {
+                Icon(Icons.Outlined.Check, contentDescription = null, tint = contenido, modifier = Modifier.size(16.dp))
+            }
+            Text(texto, style = MaterialTheme.typography.labelLarge, color = contenido, fontWeight = FontWeight.Bold)
         }
     }
 }

@@ -64,6 +64,7 @@ import com.remy.app.ui.components.PrimaryButton
 import com.remy.app.ui.components.RecipePhoto
 import com.remy.app.ui.components.RemyCard
 import com.remy.app.ui.components.RemyChip
+import com.remy.app.ui.components.RemyLogo
 import com.remy.app.ui.components.RemyTopBar
 import com.remy.app.ui.components.StatusBadge
 import com.remy.app.ui.components.VarianteBadge
@@ -202,34 +203,36 @@ private fun ContenidoSugerencias(
 
         if (!grupos.hayAlgunaSugerencia) {
             item(key = "vacio") {
-                RemyCard(modifier = Modifier.fillMaxWidth()) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(
-                            stringResource(R.string.sugerencias_vacio_titulo),
-                            style = MaterialTheme.typography.titleLarge,
-                            color = TextoPrincipal
-                        )
-                        Text(
-                            stringResource(R.string.sugerencias_vacio_texto),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = TextoSecundario
-                        )
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            RemyChip(
-                                text = stringResource(R.string.sugerencias_revisar),
-                                selected = false,
-                                onClick = { mostrarFiltros = true }
-                            )
-                            RemyChip(
-                                text = stringResource(R.string.sugerencias_ir_despensa),
-                                selected = false,
-                                onClick = onIrADespensa
-                            )
-                        }
-                    }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    RemyLogo(size = 96.dp, conBorde = true)
+                    Text(
+                        stringResource(R.string.sugerencias_vacio_titulo),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = TextoPrincipal,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        stringResource(R.string.sugerencias_vacio_texto),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = TextoSecundario,
+                        textAlign = TextAlign.Center
+                    )
+                    PrimaryButton(
+                        text = stringResource(R.string.sugerencias_revisar),
+                        onClick = { mostrarFiltros = true }
+                    )
+                    OutlineButton(
+                        text = stringResource(R.string.sugerencias_ir_despensa),
+                        onClick = onIrADespensa,
+                        icon = Icons.Outlined.Kitchen
+                    )
                 }
             }
         }

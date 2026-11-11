@@ -192,6 +192,7 @@ import kotlinx.coroutines.withContext
 fun RecetasScreen(
     onRecetaClick: (Long) -> Unit,
     onPerfilClick: () -> Unit = {},
+    onVerSugerencias: () -> Unit = {},
     viewModel: RecetasViewModel = viewModel(factory = RecetasViewModel.Factory),
 ) {
     val estado by viewModel.estado.collectAsStateWithLifecycle()
@@ -214,7 +215,8 @@ fun RecetasScreen(
                 recetas = recetas,
                 favoritas = favoritas,
                 onToggleFavorita = { id -> scope.launch { preferencias.alternarFavorita(id) } },
-                onRecetaClick = onRecetaClick
+                onRecetaClick = onRecetaClick,
+                onVerSugerencias = onVerSugerencias
             )
         }
     }
@@ -234,7 +236,8 @@ private fun ContenidoRecetas(
     recetas: List<RecetaConIngredientes>,
     favoritas: Set<Long>,
     onToggleFavorita: (Long) -> Unit,
-    onRecetaClick: (Long) -> Unit
+    onRecetaClick: (Long) -> Unit,
+    onVerSugerencias: () -> Unit = {}
 ) {
     var query by rememberSaveable { mutableStateOf("") }
     var filtro by rememberSaveable { mutableStateOf(FiltroRecetas.TODAS) }
@@ -278,28 +281,48 @@ private fun ContenidoRecetas(
         }
 
         if (filtradas.isEmpty()) {
+            val sinDatos = recetas.isEmpty()
             Column(
                 modifier = Modifier.fillMaxSize().padding(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Icon(
-                    Icons.Outlined.MenuBook,
-                    contentDescription = null,
-                    tint = TextoSecundario,
-                    modifier = Modifier.size(40.dp)
-                )
+                com.remy.app.ui.components.RemyLogo(size = 96.dp, conBorde = true)
+                Spacer(Modifier.height(16.dp))
                 Text(
                     text = when {
-                        recetas.isEmpty() -> stringResource(R.string.recetas_vacia)
+                        sinDatos -> stringResource(R.string.recetas_vacia)
                         query.isNotBlank() -> stringResource(R.string.recetas_sin_resultados, query.trim())
                         else -> stringResource(R.string.recetas_sin_resultados_filtro)
                     },
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = TextoSecundario,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = TextoPrincipal,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(top = 8.dp)
+                    fontWeight = FontWeight.Bold
                 )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = when {
+                        sinDatos -> stringResource(R.string.recetas_vacia_texto)
+                        query.isNotBlank() -> stringResource(R.string.recetas_sin_resultados_filtro_texto)
+                        else -> stringResource(R.string.recetas_sin_resultados_filtro_texto)
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = TextoSecundario,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(Modifier.height(16.dp))
+                if (sinDatos) {
+                    PrimaryButton(
+                        text = stringResource(R.string.inicio_ver_sugerencias),
+                        onClick = onVerSugerencias
+                    )
+                } else {
+                    OutlineButton(
+                        text = stringResource(R.string.sugerencias_revisar),
+                        onClick = { query = ""; filtro = FiltroRecetas.TODAS }
+                    )
+                }
             }
         } else {
             LazyVerticalGrid(
