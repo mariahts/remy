@@ -19,7 +19,16 @@
     <string name="login_google">Continuar con Google</string>
     <string name="login_sin_cuenta">¿No tienes cuenta?</string>
     <string name="login_crear_cuenta">Crear cuenta</string>
-    <string name="login_cuenta_creada">Cuenta creada. Revisa tu correo si es necesario confirmar la cuenta.</string>
+    <string name="login_cuenta_creada">¡Cuenta creada! Ya estás dentro de REMY.</string>
+    <string name="login_confirmar_correo">Cuenta creada. Te hemos enviado un correo a %1$s para confirmarla. Confírmalo y después entra con tu contraseña.</string>
+    <string name="login_correo_reenviado">Hemos vuelto a enviar el correo de confirmación a %1$s.</string>
+    <string name="login_error_reenvio">No se ha podido reenviar el correo ahora mismo. Espera unos segundos e inténtalo de nuevo.</string>
+    <string name="login_correo_invalido">El correo no parece válido. Revísalo.</string>
+    <string name="login_contrasena_corta">La contraseña debe tener al menos 6 caracteres.</string>
+    <string name="login_cuenta_existente">Ya existe una cuenta con ese correo. Entra con tu contraseña.</string>
+    <string name="login_bienvenida_de_nuevo">¡Ya tenías una cuenta con ese correo! Ya estás dentro de REMY.</string>
+    <string name="login_error_generico">No se ha podido completar el acceso. Inténtalo de nuevo.</string>
+    <string name="login_reenviar">¿No te llega el correo? Vuelve a enviarlo</string>
 
     <!-- Comunes -->
     <string name="comun_minutos">%1$d min</string>
