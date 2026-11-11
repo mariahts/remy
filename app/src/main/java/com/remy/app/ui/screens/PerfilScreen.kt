@@ -59,6 +59,7 @@ import com.remy.app.ui.theme.AzulTinta
 import com.remy.app.ui.theme.BordeTarjeta
 import com.remy.app.ui.theme.FondoCrema
 import com.remy.app.ui.theme.Melocoton
+import com.remy.app.ui.theme.PillShape
 import com.remy.app.ui.theme.REMYTheme
 import com.remy.app.ui.theme.Red600
 import com.remy.app.ui.theme.Terracota
@@ -180,7 +181,7 @@ private fun ContenidoPerfil(
                 item(key = "cerrar-sesion") {
                     OutlinedButton(
                         onClick = onCerrarSesion,
-                        shape = MaterialTheme.shapes.large,
+                        shape = PillShape,
                         border = BorderStroke(1.dp, Red600),
                         modifier = Modifier
                             .fillMaxWidth()

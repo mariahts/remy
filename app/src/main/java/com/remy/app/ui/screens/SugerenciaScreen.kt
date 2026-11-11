@@ -238,8 +238,7 @@ private fun ContenidoSugerencias(
             item(key = "cabecera-listas") {
                 CabeceraSeccion(
                     titulo = stringResource(R.string.sugerencias_listas),
-                    total = grupos.completas.size,
-                    variante = VarianteBadge.LISTA
+                    total = grupos.completas.size
                 )
             }
             items(grupos.completas, key = { "lista-${it.receta.id}" }) { receta ->
@@ -256,8 +255,7 @@ private fun ContenidoSugerencias(
             item(key = "cabecera-casi") {
                 CabeceraSeccion(
                     titulo = stringResource(R.string.sugerencias_casi),
-                    total = grupos.casiCocinables.size,
-                    variante = VarianteBadge.FALTAN
+                    total = grupos.casiCocinables.size
                 )
             }
             items(grupos.casiCocinables, key = { "casi-${it.receta.receta.id}" }) { casi ->
@@ -305,7 +303,7 @@ private fun ContenidoSugerencias(
 }
 
 @Composable
-private fun CabeceraSeccion(titulo: String, total: Int, variante: VarianteBadge) {
+private fun CabeceraSeccion(titulo: String, total: Int) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -318,12 +316,8 @@ private fun CabeceraSeccion(titulo: String, total: Int, variante: VarianteBadge)
             modifier = Modifier.weight(1f)
         )
         StatusBadge(
-            text = if (variante == VarianteBadge.LISTA) {
-                stringResource(R.string.sugerencias_badge_lista)
-            } else {
-                stringResource(R.string.sugerencias_badge_faltan, total)
-            },
-            variante = variante
+            text = total.toString(),
+            variante = VarianteBadge.NEUTRO
         )
     }
 }

@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Kitchen
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -319,11 +320,11 @@ private fun FilaAlimento(
                         maxLines = 1
                     )
                 }
-                Text(
-                    text = stringResource(R.string.despensa_toca_editar),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = TextoSecundario.copy(alpha = 0.7f),
-                    fontWeight = FontWeight.SemiBold
+                Icon(
+                    imageVector = Icons.Outlined.ChevronRight,
+                    contentDescription = stringResource(R.string.despensa_toca_editar),
+                    tint = TextoSecundario.copy(alpha = 0.7f),
+                    modifier = Modifier.size(20.dp)
                 )
             }
         }

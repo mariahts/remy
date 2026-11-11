@@ -324,7 +324,7 @@ private fun DiaSemana(dia: LocalDate, esHoy: Boolean, cocinado: Boolean) {
         Text(
             text = inicialDia(dia.dayOfWeek.value),
             style = MaterialTheme.typography.labelSmall,
-            color = if (esHoy) Terracota else TextoSecundario,
+            color = if (esHoy) AzulTinta else TextoSecundario,
             fontWeight = if (esHoy) FontWeight.ExtraBold else FontWeight.SemiBold
         )
         Box(
