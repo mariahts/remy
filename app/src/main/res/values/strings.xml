@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">REMY</string>
+
+    <!-- Login -->
+    <string name="login_frase">Cocina delicioso con lo que tienes en casa</string>
+    <string name="login_correo">Correo electrónico</string>
+    <string name="login_contrasena">Contraseña</string>
+    <string name="login_mostrar_contrasena">Mostrar contraseña</string>
+    <string name="login_ocultar_contrasena">Ocultar contraseña</string>
+    <string name="login_entrar">Entrar a mi cocina</string>
+    <string name="login_entrando">Entrando…</string>
+    <string name="login_o_continua">o continúa con</string>
+    <string name="login_google">Continuar con Google</string>
+    <string name="login_demo">Probar con la cuenta de demo</string>
+    <string name="login_sin_cuenta">¿No tienes cuenta?</string>
+    <string name="login_crear_cuenta">Crear cuenta</string>
+    <string name="login_demo_ayuda">Cuenta de demo: %1$s</string>
 </resources>
