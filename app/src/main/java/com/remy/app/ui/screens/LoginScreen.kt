@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -21,7 +20,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.outlined.DinnerDining
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Visibility
@@ -74,9 +72,6 @@ import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
 
-private const val DEMO_CORREO = "demo@remy.app"
-private const val DEMO_CONTRASENA = "Demo1234!"
-
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
     var correo by remember { mutableStateOf("") }
@@ -89,7 +84,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     val auth = remember { SupabaseClientProvider.client.auth }
     val contexto = LocalContext.current
 
-    fun ejecutarAccion(esRegistro: Boolean = false, demo: Boolean = false, google: Boolean = false) {
+    fun ejecutarAccion(esRegistro: Boolean = false, google: Boolean = false) {
         scope.launch {
             cargando = true
             mensaje = null
@@ -97,14 +92,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             try {
                 when {
                     google -> auth.signInWith(Google)
-                    demo -> {
-                        correo = DEMO_CORREO
-                        contrasena = DEMO_CONTRASENA
-                        auth.signInWith(Email) {
-                            email = DEMO_CORREO
-                            password = DEMO_CONTRASENA
-                        }
-                    }
                     esRegistro -> {
                         auth.signUpWith(Email) {
                             email = correo.trim()
@@ -140,7 +127,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         esError = esError,
         onEntrar = { ejecutarAccion() },
         onGoogle = { ejecutarAccion(google = true) },
-        onDemo = { ejecutarAccion(demo = true) },
         onCrearCuenta = { ejecutarAccion(esRegistro = true) },
         modifier = modifier
     )
@@ -159,7 +145,6 @@ private fun ContenidoLogin(
     esError: Boolean,
     onEntrar: () -> Unit,
     onGoogle: () -> Unit,
-    onDemo: () -> Unit,
     onCrearCuenta: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -324,31 +309,6 @@ private fun ContenidoLogin(
         Spacer(Modifier.height(8.dp))
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp)
-                .clickable(enabled = !cargando, onClick = onDemo),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                Icons.Outlined.DinnerDining,
-                contentDescription = null,
-                tint = Terracota,
-                modifier = Modifier.size(18.dp)
-            )
-            Spacer(Modifier.width(8.dp))
-            Text(
-                text = stringResource(R.string.login_demo),
-                style = MaterialTheme.typography.labelLarge,
-                color = Terracota,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        Spacer(Modifier.height(8.dp))
-
-        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
@@ -370,15 +330,6 @@ private fun ContenidoLogin(
             )
         }
 
-        Spacer(Modifier.height(8.dp))
-
-        Text(
-            text = stringResource(R.string.login_demo_ayuda, DEMO_CORREO),
-            style = MaterialTheme.typography.bodySmall,
-            color = TextoSecundario.copy(alpha = 0.85f),
-            textAlign = TextAlign.Center
-        )
-
         Spacer(Modifier.height(12.dp))
     }
 }
@@ -399,7 +350,6 @@ private fun PreviewLogin() {
             esError = true,
             onEntrar = {},
             onGoogle = {},
-            onDemo = {},
             onCrearCuenta = {}
         )
     }
