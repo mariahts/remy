@@ -28,6 +28,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -43,6 +46,7 @@ import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.BarChart
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.ExpandMore
@@ -50,6 +54,7 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.FitnessCenter
 import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.LocalFireDepartment
+import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.MonitorHeart
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
 import androidx.compose.material.icons.outlined.Remove
@@ -88,12 +93,16 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.remy.app.R
 import com.remy.app.data.Receta
 import com.remy.app.data.PreferenciasRepository
 import com.remy.app.data.RecetaConIngredientes
@@ -113,8 +122,13 @@ import com.remy.app.ui.components.SearchPill
 import com.remy.app.ui.components.SectionCard
 import com.remy.app.ui.components.categoriaDe
 import com.remy.app.ui.components.emojiDe
-import com.remy.app.ui.components.fechaEnEspanol
 import com.remy.app.ui.components.FotoDelPlato
+import com.remy.app.ui.components.RecipePhoto
+import com.remy.app.ui.components.RemyCard
+import com.remy.app.ui.components.RemyChip
+import com.remy.app.ui.components.RemySearchField
+import com.remy.app.ui.components.RemyTopBar
+import com.remy.app.ui.components.fechaEnEspanol
 import com.remy.app.ui.components.formatoCantidad
 import com.remy.app.ui.theme.Amber100
 import com.remy.app.ui.theme.Amber600
@@ -125,6 +139,7 @@ import com.remy.app.ui.theme.DetailMint
 import com.remy.app.ui.theme.DetailOrange700
 import com.remy.app.ui.theme.DetailOrange900
 import com.remy.app.ui.theme.Emerald50
+import com.remy.app.ui.theme.FondoCrema
 import com.remy.app.ui.theme.Green050
 import com.remy.app.ui.theme.Green100
 import com.remy.app.ui.theme.Green200
@@ -143,6 +158,10 @@ import com.remy.app.ui.theme.Slate500
 import com.remy.app.ui.theme.Slate600
 import com.remy.app.ui.theme.Slate700
 import com.remy.app.ui.theme.Slate900
+import com.remy.app.ui.theme.REMYTheme
+import com.remy.app.ui.theme.Terracota
+import com.remy.app.ui.theme.TextoPrincipal
+import com.remy.app.ui.theme.TextoSecundario
 import com.remy.app.ui.theme.Terracota100
 import com.remy.app.ui.viewmodel.RecetaDetalleViewModel
 import com.remy.app.ui.viewmodel.RecetasViewModel
@@ -162,77 +181,242 @@ fun RecetasScreen(
     val favoritas by preferencias.favoritas.collectAsStateWithLifecycle(initialValue = emptySet())
     val scope = rememberCoroutineScope()
 
-    Column(modifier = Modifier.fillMaxSize().background(Green100)) {
-        RemyHeaderSombra(
-            titulo = "Recetas Guardadas",
-            bg = Green100,
-            logoSize = 40.dp,
-            trailing = { PersonCircle(36.dp, onClick = onPerfilClick) }
+    Column(modifier = Modifier.fillMaxSize().background(FondoCrema)) {
+        RemyTopBar(
+            titulo = stringResource(R.string.recetas_titulo),
+            onAvatarClick = onPerfilClick
         )
+        ContenidoConEstado(
+            estado = estado,
+            onReintentar = viewModel::reintentar,
+            mensajeCargando = stringResource(R.string.recetas_cargando)
+        ) { recetas ->
+            ContenidoRecetas(
+                recetas = recetas,
+                favoritas = favoritas,
+                onToggleFavorita = { id -> scope.launch { preferencias.alternarFavorita(id) } },
+                onRecetaClick = onRecetaClick
+            )
+        }
+    }
+}
 
-        Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
-            ContenidoConEstado(
-                estado = estado,
-                onReintentar = viewModel::reintentar,
-                mensajeCargando = "Cargando tus recetas…"
-            ) { recetas ->
-                var query by rememberSaveable { mutableStateOf("") }
-                val filtradas = remember(recetas, query) {
-                    if (query.isBlank()) recetas
-                    else recetas.filter { it.receta.nombre.contains(query.trim(), ignoreCase = true) }
-                }
+private enum class FiltroRecetas { TODAS, RAPIDAS, FAVORITAS, COCINADAS }
 
-                if (recetas.isEmpty()) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Aún no hay recetas", style = MaterialTheme.typography.titleLarge, color = Slate600)
-                    }
-                } else {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 96.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        item(key = "contador") { PillContador(filtradas.size) }
-                        item(key = "buscador") {
-                            SearchPill(
-                                value = query,
-                                onValueChange = { query = it },
-                                placeholder = "Buscar en tus recetas...",
-                                leadingIcon = Icons.Filled.Search,
-                                iconTint = Green600,
-                                trailingIcon = if (query.isNotEmpty()) Icons.Outlined.Close else Icons.Outlined.Tune,
-                                onTrailingClick = if (query.isNotEmpty()) ({ query = "" }) else null
-                            )
-                        }
-                        if (filtradas.isEmpty()) {
-                            item(key = "sin-resultados") {
-                                Text(
-                                    "No encontramos recetas con «$query»",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = Slate600,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier.fillMaxWidth().padding(top = 24.dp)
-                                )
-                            }
-                        } else {
-                            item(key = "tarjetas") {
-                                Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                                    filtradas.forEach { item ->
-                                        TarjetaReceta(
-                                            item = item,
-                                            esFavorita = item.receta.id in favoritas,
-                                            onToggleFavorita = { scope.launch { preferencias.alternarFavorita(item.receta.id) } },
-                                            onClick = { onRecetaClick(item.receta.id) }
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                        item(key = "pie") { PieRecetas() }
-                    }
+private fun etiquetaFiltro(filtro: FiltroRecetas): Int = when (filtro) {
+    FiltroRecetas.TODAS -> R.string.recetas_todas
+    FiltroRecetas.RAPIDAS -> R.string.recetas_rapidas
+    FiltroRecetas.FAVORITAS -> R.string.recetas_favoritas
+    FiltroRecetas.COCINADAS -> R.string.recetas_cocinadas
+}
+
+@Composable
+private fun ContenidoRecetas(
+    recetas: List<RecetaConIngredientes>,
+    favoritas: Set<Long>,
+    onToggleFavorita: (Long) -> Unit,
+    onRecetaClick: (Long) -> Unit
+) {
+    var query by rememberSaveable { mutableStateOf("") }
+    var filtro by rememberSaveable { mutableStateOf(FiltroRecetas.TODAS) }
+
+    val filtradas = remember(recetas, query, filtro, favoritas) {
+        recetas.filter { item ->
+            val coincideNombre = query.isBlank() ||
+                item.receta.nombre.contains(query.trim(), ignoreCase = true)
+            val coincideFiltro = when (filtro) {
+                FiltroRecetas.TODAS -> true
+                FiltroRecetas.RAPIDAS -> item.receta.tiempoMinutos in 1..30
+                FiltroRecetas.FAVORITAS -> item.receta.id in favoritas
+                FiltroRecetas.COCINADAS -> item.receta.fechaCocinada != null
+            }
+            coincideNombre && coincideFiltro
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            RemySearchField(
+                value = query,
+                onValueChange = { query = it },
+                placeholder = stringResource(R.string.recetas_buscar)
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                FiltroRecetas.entries.forEach { opcion ->
+                    RemyChip(
+                        text = stringResource(etiquetaFiltro(opcion)),
+                        selected = filtro == opcion,
+                        onClick = { filtro = opcion }
+                    )
                 }
             }
         }
+
+        if (filtradas.isEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxSize().padding(32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Icon(
+                    Icons.Outlined.MenuBook,
+                    contentDescription = null,
+                    tint = TextoSecundario,
+                    modifier = Modifier.size(40.dp)
+                )
+                Text(
+                    text = when {
+                        recetas.isEmpty() -> stringResource(R.string.recetas_vacia)
+                        query.isNotBlank() -> stringResource(R.string.recetas_sin_resultados, query.trim())
+                        else -> stringResource(R.string.recetas_sin_resultados_filtro)
+                    },
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = TextoSecundario,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 96.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(filtradas, key = { it.receta.id }) { item ->
+                    TarjetaRecetaGrid(
+                        item = item,
+                        esFavorita = item.receta.id in favoritas,
+                        onToggleFavorita = { onToggleFavorita(item.receta.id) },
+                        onClick = { onRecetaClick(item.receta.id) }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TarjetaRecetaGrid(
+    item: RecetaConIngredientes,
+    esFavorita: Boolean,
+    onToggleFavorita: () -> Unit,
+    onClick: () -> Unit
+) {
+    val receta = item.receta
+
+    RemyCard(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = onClick,
+        padding = 0.dp
+    ) {
+        Box(modifier = Modifier.fillMaxWidth().aspectRatio(4f / 3f)) {
+            RecipePhoto(
+                model = receta.fotoCocinada,
+                nombre = receta.nombre,
+                modifier = Modifier.fillMaxSize()
+            )
+            if (receta.tiempoMinutos > 0) {
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(8.dp)
+                        .clip(PillShape)
+                        .background(Color.White.copy(alpha = 0.92f))
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Icon(
+                        Icons.Outlined.Schedule,
+                        contentDescription = null,
+                        tint = TextoPrincipal,
+                        modifier = Modifier.size(13.dp)
+                    )
+                    Text(
+                        stringResource(R.string.comun_minutos, receta.tiempoMinutos),
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = TextoPrincipal
+                    )
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp)
+                    .size(36.dp)
+                    .clip(CircleShape)
+                    .background(Color.White.copy(alpha = 0.92f))
+                    .clickable(onClick = onToggleFavorita),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    if (esFavorita) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                    contentDescription = stringResource(
+                        if (esFavorita) R.string.recetas_quitar else R.string.recetas_guardar
+                    ),
+                    tint = if (esFavorita) Terracota else TextoSecundario,
+                    modifier = Modifier.size(19.dp)
+                )
+            }
+        }
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                receta.nombre,
+                style = MaterialTheme.typography.titleSmall,
+                color = TextoPrincipal,
+                maxLines = 2,
+                minLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                stringResource(R.string.recetas_kcal_proteina, receta.kcal, receta.proteinas),
+                style = MaterialTheme.typography.bodySmall,
+                color = TextoSecundario,
+                maxLines = 1
+            )
+            receta.fechaCocinada?.let { fecha ->
+                Text(
+                    stringResource(R.string.recetas_cocinada_el, fechaEnEspanol(fecha)),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Terracota,
+                    maxLines = 1
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFBF5)
+@Composable
+private fun RecetasScreenPreview() {
+    REMYTheme {
+        ContenidoRecetas(
+            recetas = listOf(
+                RecetaConIngredientes(
+                    receta = Receta(id = 1, nombre = "Arroz con verduras", kcal = 420, proteinas = 14, regionOrigen = "Mediterránea", tipoPlato = "Principal", tiempoMinutos = 25),
+                    ingredientes = emptyList()
+                ),
+                RecetaConIngredientes(
+                    receta = Receta(id = 2, nombre = "Tortilla de patatas", kcal = 380, proteinas = 22, regionOrigen = "España", tipoPlato = "Principal", tiempoMinutos = 40),
+                    ingredientes = emptyList()
+                )
+            ),
+            favoritas = setOf(1),
+            onToggleFavorita = {},
+            onRecetaClick = {}
+        )
     }
 }
 

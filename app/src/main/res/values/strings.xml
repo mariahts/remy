@@ -64,4 +64,20 @@
     <string name="despensa_campo_cantidad">Cantidad</string>
     <string name="despensa_campo_unidad">Unidad</string>
     <string name="despensa_guardar">Guardar</string>
+
+    <!-- Recetas -->
+    <string name="recetas_titulo">Recetas</string>
+    <string name="recetas_buscar">Buscar recetas</string>
+    <string name="recetas_todas">Todas</string>
+    <string name="recetas_rapidas">Rápidas</string>
+    <string name="recetas_favoritas">Favoritas</string>
+    <string name="recetas_cocinadas">Cocinadas</string>
+    <string name="recetas_vacia">Aún no hay recetas</string>
+    <string name="recetas_sin_resultados">No encontramos recetas con «%1$s»</string>
+    <string name="recetas_sin_resultados_filtro">No hay recetas en este filtro</string>
+    <string name="recetas_guardar">Guardar receta</string>
+    <string name="recetas_quitar">Quitar de favoritas</string>
+    <string name="recetas_kcal_proteina">%1$d kcal · %2$d g de proteína</string>
+    <string name="recetas_cocinada_el">Cocinada el %1$s</string>
+    <string name="recetas_cargando">Cargando tus recetas…</string>
 </resources>
