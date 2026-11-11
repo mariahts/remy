@@ -150,6 +150,8 @@
     <string name="detalle_cocinada_el">Cocinada el %1$s</string>
     <string name="detalle_proteina">%1$d g de proteína</string>
     <string name="detalle_proteina_racion">%1$d g de proteína por ración</string>
+    <string name="detalle_hidratos">%1$d g de hidratos</string>
+    <string name="detalle_grasas">%1$d g de grasas</string>
     <string name="detalle_ingredientes_para">Ingredientes para %1$d raciones</string>
     <string name="detalle_ingredientes_para_una">Ingredientes para 1 ración</string>
     <string name="detalle_raciones_titulo">Raciones</string>

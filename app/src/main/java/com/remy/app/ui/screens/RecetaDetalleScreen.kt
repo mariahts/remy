@@ -288,6 +288,8 @@ private fun InfoRecetaDetalle(
 private fun DatosRecetaDetalle(receta: Receta, porciones: Int, racionesDeseadas: Int) {
     val kcalPara = (receta.kcal.toFloat() * racionesDeseadas / porciones).roundToInt()
     val proteinasPara = (receta.proteinas.toFloat() * racionesDeseadas / porciones).roundToInt()
+    val hidratosPara = (receta.hidratos.toFloat() * racionesDeseadas / porciones).roundToInt()
+    val grasasPara = (receta.grasas.toFloat() * racionesDeseadas / porciones).roundToInt()
     Row(
         modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -295,6 +297,8 @@ private fun DatosRecetaDetalle(receta: Receta, porciones: Int, racionesDeseadas:
         if (receta.tiempoMinutos > 0) DatoPildora(Icons.Outlined.Schedule, stringResource(R.string.comun_minutos, receta.tiempoMinutos))
         if (receta.kcal > 0) DatoPildora(Icons.Outlined.LocalFireDepartment, stringResource(R.string.comun_kcal, kcalPara))
         if (receta.proteinas > 0) DatoPildora(Icons.Outlined.FitnessCenter, stringResource(R.string.detalle_proteina, proteinasPara))
+        if (receta.hidratos > 0) DatoPildora(Icons.Outlined.FitnessCenter, stringResource(R.string.detalle_hidratos, hidratosPara))
+        if (receta.grasas > 0) DatoPildora(Icons.Outlined.FitnessCenter, stringResource(R.string.detalle_grasas, grasasPara))
         if (receta.tipoPlato.isNotBlank()) DatoPildora(Icons.Outlined.Restaurant, receta.tipoPlato)
         if (receta.regionOrigen.isNotBlank()) DatoPildora(Icons.Outlined.Public, receta.regionOrigen)
     }
