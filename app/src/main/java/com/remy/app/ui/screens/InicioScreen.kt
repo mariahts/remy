@@ -7,9 +7,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -182,13 +184,22 @@ private fun ContenidoInicio(
         }
 
         item(key = "atajos") {
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            // IntrinsicSize.Min + fillMaxHeight hacen que las dos tarjetas midan lo mismo
+            // aunque una tenga el texto en dos líneas.
+            Row(
+                modifier = Modifier.height(IntrinsicSize.Min),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 AtajoInicio(
                     texto = stringResource(R.string.inicio_anadir_despensa),
-                    subtitulo = null,
+                    subtitulo = if (planDia.alimentosEnDespensa == 1) {
+                        stringResource(R.string.inicio_alimento_despensa)
+                    } else {
+                        stringResource(R.string.inicio_alimentos_despensa, planDia.alimentosEnDespensa)
+                    },
                     icono = Icons.Outlined.Kitchen,
                     onClick = onIrADespensa,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).fillMaxHeight()
                 )
                 AtajoInicio(
                     texto = stringResource(R.string.inicio_ver_sugerencias),
@@ -196,7 +207,7 @@ private fun ContenidoInicio(
                     else stringResource(R.string.inicio_listas_para_cocinar, listas),
                     icono = Icons.Outlined.AutoAwesome,
                     onClick = onVerSugerencias,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).fillMaxHeight()
                 )
             }
         }

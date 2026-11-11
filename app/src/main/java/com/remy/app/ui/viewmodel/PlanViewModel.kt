@@ -51,7 +51,9 @@ data class PlanDia(
     val comidasHoy: Map<TipoComida, ComidaPlanificadaVista> = emptyMap(),
     val diasConPlan: Set<LocalDate> = emptySet(),
     /** Recetas disponibles para elegir en el sheet, con disponibilidad y ordenadas (listas primero). */
-    val recetasParaElegir: List<Pair<com.remy.app.data.RecetaConIngredientes, DisponibilidadReceta>> = emptyList()
+    val recetasParaElegir: List<Pair<com.remy.app.data.RecetaConIngredientes, DisponibilidadReceta>> = emptyList(),
+    /** Número de alimentos que hay ahora mismo en la despensa. */
+    val alimentosEnDespensa: Int = 0
 ) {
     fun comidaDe(tipo: TipoComida): ComidaPlanificadaVista? = comidas[tipo]
 
@@ -133,7 +135,8 @@ class PlanViewModel(
                     comidas = aVista(comidasDia),
                     comidasHoy = aVista(comidasHoy),
                     diasConPlan = dias,
-                    recetasParaElegir = recetasElegir
+                    recetasParaElegir = recetasElegir,
+                    alimentosEnDespensa = despensa.size
                 )
             }
                 .map<PlanDia, EstadoCarga<PlanDia>> { EstadoCarga.Datos(it) }

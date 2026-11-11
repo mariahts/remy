@@ -46,6 +46,8 @@
     <string name="inicio_ver_sugerencias">Ver sugerencias</string>
     <string name="inicio_listas_para_cocinar">%1$d listas para cocinar</string>
     <string name="inicio_lista_para_cocinar">1 lista para cocinar</string>
+    <string name="inicio_alimentos_despensa">%1$d alimentos</string>
+    <string name="inicio_alimento_despensa">1 alimento</string>
     <string name="inicio_semana">Tu semana</string>
     <string name="inicio_recientes">Cocinadas recientes</string>
     <string name="inicio_cargando">Cargando tu inicio…</string>
