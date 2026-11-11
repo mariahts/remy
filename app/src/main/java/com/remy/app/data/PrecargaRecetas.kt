@@ -37,7 +37,8 @@ object PrecargaRecetas {
                         regionOrigen = a.getString("regionOrigen"),
                         tipoPlato = a.getString("tipoPlato"),
                         cantidad = a.getDouble("cantidad"),
-                        unidad = a.getString("unidad")
+                        unidad = a.getString("unidad"),
+                        enDespensa = false
                     )
                 )
             }

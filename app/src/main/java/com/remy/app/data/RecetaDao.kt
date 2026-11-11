@@ -48,6 +48,10 @@ interface RecetaDao {
     @Update
     suspend fun actualizar(receta: Receta)
 
+    /** Limpia las marcas de cocinado para dejar el historial del usuario vacío. */
+    @Query("UPDATE recetas SET fechaCocinada = NULL, fotoCocinada = NULL")
+    suspend fun limpiarCocinadas()
+
     /** Borra la receta; sus ingredientes caen por la clave externa (CASCADE). */
     @Delete
     suspend fun borrar(receta: Receta)

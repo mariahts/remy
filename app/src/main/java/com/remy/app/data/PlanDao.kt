@@ -26,4 +26,8 @@ interface PlanDao {
     /** Fechas que tienen al menos una comida planificada (para marcar la semana). */
     @Query("SELECT DISTINCT fecha FROM comidas_planificadas")
     fun observarFechasConPlan(): Flow<List<String>>
+
+    /** Elimina toda la planificación del usuario. */
+    @Query("DELETE FROM comidas_planificadas")
+    suspend fun borrarTodo()
 }

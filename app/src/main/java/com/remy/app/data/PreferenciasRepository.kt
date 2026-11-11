@@ -56,8 +56,32 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
         .catch { emit(emptyPreferences()) }
         .map { preferencias -> preferencias[CLAVE_BIENVENIDA_COMPLETADA] ?: false }
 
+    /** Identificador del último usuario autenticado en este dispositivo. */
+    val ultimoUsuarioId: Flow<String?> = dataStore.data
+        .catch { emit(emptyPreferences()) }
+        .map { preferencias -> preferencias[CLAVE_ULTIMO_USUARIO] }
+
     suspend fun marcarBienvenidaCompletada() {
         dataStore.edit { it[CLAVE_BIENVENIDA_COMPLETADA] = true }
+    }
+
+    suspend fun guardarUltimoUsuario(id: String) {
+        dataStore.edit { it[CLAVE_ULTIMO_USUARIO] = id }
+    }
+
+    /** Restablece las preferencias del usuario (manteniendo el identificador guardado aparte). */
+    suspend fun limpiarPreferenciasUsuario() {
+        dataStore.edit { preferencias ->
+            preferencias.remove(CLAVE_FILTROS)
+            preferencias.remove(CLAVE_MAXIMO_FALTANTES)
+            preferencias.remove(CLAVE_TIEMPO_MAXIMO)
+            preferencias.remove(CLAVE_KCAL_MAXIMAS)
+            preferencias.remove(CLAVE_PROTEINAS_MINIMAS)
+            preferencias.remove(CLAVE_REGION)
+            preferencias.remove(CLAVE_FALTANTES_PERMITIDOS)
+            preferencias.remove(CLAVE_FAVORITAS)
+            preferencias.remove(CLAVE_BIENVENIDA_COMPLETADA)
+        }
     }
 
     suspend fun guardarTiposDePlato(tipos: Set<String>) {
@@ -118,6 +142,7 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
         val CLAVE_FALTANTES_PERMITIDOS = stringSetPreferencesKey("faltantes_permitidos")
         val CLAVE_FAVORITAS = stringSetPreferencesKey("recetas_favoritas")
         val CLAVE_BIENVENIDA_COMPLETADA = booleanPreferencesKey("bienvenida_completada")
+        val CLAVE_ULTIMO_USUARIO = stringPreferencesKey("ultimo_usuario_id")
 
         const val MAXIMO_POR_DEFECTO = 3
         const val MAXIMO_MAXIMO = 20

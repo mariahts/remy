@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import com.remy.app.data.DatosDemo
 import com.remy.app.data.PreferenciasRepository
 import com.remy.app.data.PrecargaRecetas
 import com.remy.app.data.RemyDatabase
@@ -60,7 +61,20 @@ class MainActivity : ComponentActivity() {
                         val prefs = remember { PreferenciasRepository.delContexto(applicationContext) }
                         var destino by remember { mutableStateOf<DestinoInicial?>(null) }
 
-                        LaunchedEffect(Unit) {
+                        LaunchedEffect(sessionStatus) {
+                            val usuario = SupabaseClientProvider.client.auth.currentUserOrNull()
+                            val usuarioId = usuario?.id ?: usuario?.email ?: "anonimo"
+                            val correo = usuario?.email
+                            val ultimo = prefs.ultimoUsuarioId.first()
+                            if (ultimo != null && ultimo != usuarioId) {
+                                DatosDemo.resetearDatosUsuario(db, prefs)
+                            }
+                            if (ultimo != usuarioId) {
+                                prefs.guardarUltimoUsuario(usuarioId)
+                            }
+                            if (DatosDemo.esCuentaDemo(correo)) {
+                                DatosDemo.sembrarDespensaSiHaceFalta(db)
+                            }
                             val completada = prefs.bienvenidaCompletada.first()
                             val despensaVacia = db.alimentoDao().observarTodos().first().isEmpty()
                             destino = if (!completada && despensaVacia) DestinoInicial.Bienvenida else DestinoInicial.App
