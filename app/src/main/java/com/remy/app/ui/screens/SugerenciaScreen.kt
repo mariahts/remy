@@ -122,6 +122,9 @@ fun SugerenciasScreen(
                 onCambiarTiempo = preferencias::cambiarTiempoMaximo,
                 onCambiarCalorias = preferencias::cambiarKcalMaximas,
                 onCambiarProteinas = preferencias::cambiarProteinasMinimas,
+                onAlternarAltaProteina = preferencias::alternarAltaProteina,
+                onAlternarBajaHidratos = preferencias::alternarBajaHidratos,
+                onAlternarBajaGrasa = preferencias::alternarBajaGrasa,
                 onCambiarRegion = preferencias::cambiarRegion,
                 onLimpiarFiltros = preferencias::limpiarFiltros,
                 onRecetaClick = onRecetaClick,
@@ -143,6 +146,9 @@ private fun ContenidoSugerencias(
     onCambiarTiempo: (Int) -> Unit,
     onCambiarCalorias: (Int) -> Unit,
     onCambiarProteinas: (Int) -> Unit,
+    onAlternarAltaProteina: () -> Unit,
+    onAlternarBajaHidratos: () -> Unit,
+    onAlternarBajaGrasa: () -> Unit,
     onCambiarRegion: (String) -> Unit,
     onLimpiarFiltros: () -> Unit,
     onRecetaClick: (Long) -> Unit,
@@ -295,6 +301,9 @@ private fun ContenidoSugerencias(
                 onCambiarTiempo = onCambiarTiempo,
                 onCambiarCalorias = onCambiarCalorias,
                 onCambiarProteinas = onCambiarProteinas,
+                onAlternarAltaProteina = onAlternarAltaProteina,
+                onAlternarBajaHidratos = onAlternarBajaHidratos,
+                onAlternarBajaGrasa = onAlternarBajaGrasa,
                 onCambiarRegion = onCambiarRegion,
                 onLimpiarFiltros = onLimpiarFiltros,
                 onMostrar = { mostrarFiltros = false },
@@ -427,6 +436,9 @@ internal fun PantallaFiltros(
     onCambiarTiempo: (Int) -> Unit,
     onCambiarCalorias: (Int) -> Unit,
     onCambiarProteinas: (Int) -> Unit,
+    onAlternarAltaProteina: () -> Unit,
+    onAlternarBajaHidratos: () -> Unit,
+    onAlternarBajaGrasa: () -> Unit,
     onCambiarRegion: (String) -> Unit,
     onLimpiarFiltros: () -> Unit,
     onMostrar: () -> Unit,
@@ -538,6 +550,29 @@ internal fun PantallaFiltros(
                 seleccionado = filtros.proteinasMinimas,
                 onSeleccionar = onCambiarProteinas
             )
+        }
+
+        SeccionFiltro(titulo = stringResource(R.string.sugerencias_macros)) {
+            Row(
+                modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                RemyChip(
+                    text = stringResource(R.string.sugerencias_alta_proteina),
+                    selected = filtros.altaProteina,
+                    onClick = onAlternarAltaProteina
+                )
+                RemyChip(
+                    text = stringResource(R.string.sugerencias_baja_hidratos),
+                    selected = filtros.bajaHidratos,
+                    onClick = onAlternarBajaHidratos
+                )
+                RemyChip(
+                    text = stringResource(R.string.sugerencias_baja_grasa),
+                    selected = filtros.bajaGrasa,
+                    onClick = onAlternarBajaGrasa
+                )
+            }
         }
 
         SeccionFiltro(titulo = stringResource(R.string.sugerencias_region)) {
@@ -708,6 +743,9 @@ private fun SugerenciasScreenPreview() {
             onCambiarTiempo = {},
             onCambiarCalorias = {},
             onCambiarProteinas = {},
+            onAlternarAltaProteina = {},
+            onAlternarBajaHidratos = {},
+            onAlternarBajaGrasa = {},
             onCambiarRegion = {},
             onLimpiarFiltros = {},
             onRecetaClick = {},
@@ -729,6 +767,9 @@ private fun PantallaFiltrosPreview() {
             onCambiarTiempo = {},
             onCambiarCalorias = {},
             onCambiarProteinas = {},
+            onAlternarAltaProteina = {},
+            onAlternarBajaHidratos = {},
+            onAlternarBajaGrasa = {},
             onCambiarRegion = {},
             onLimpiarFiltros = {},
             onMostrar = {}

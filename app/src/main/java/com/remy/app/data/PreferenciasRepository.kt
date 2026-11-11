@@ -38,7 +38,10 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
                 region = preferencias[CLAVE_REGION] ?: "",
                 faltantesPermitidos = (preferencias[CLAVE_FALTANTES_PERMITIDOS] ?: emptySet())
                     .mapNotNull { it.toLongOrNull() }
-                    .toSet()
+                    .toSet(),
+                altaProteina = preferencias[CLAVE_ALTA_PROTEINA] ?: false,
+                bajaHidratos = preferencias[CLAVE_BAJA_HIDRATOS] ?: false,
+                bajaGrasa = preferencias[CLAVE_BAJA_GRASA] ?: false
             )
         }
 
@@ -79,6 +82,9 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
             preferencias.remove(CLAVE_PROTEINAS_MINIMAS)
             preferencias.remove(CLAVE_REGION)
             preferencias.remove(CLAVE_FALTANTES_PERMITIDOS)
+            preferencias.remove(CLAVE_ALTA_PROTEINA)
+            preferencias.remove(CLAVE_BAJA_HIDRATOS)
+            preferencias.remove(CLAVE_BAJA_GRASA)
             preferencias.remove(CLAVE_FAVORITAS)
             preferencias.remove(CLAVE_BIENVENIDA_COMPLETADA)
         }
@@ -112,6 +118,18 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { it[CLAVE_FALTANTES_PERMITIDOS] = ids.map { id -> id.toString() }.toSet() }
     }
 
+    suspend fun guardarAltaProteina(activo: Boolean) {
+        dataStore.edit { it[CLAVE_ALTA_PROTEINA] = activo }
+    }
+
+    suspend fun guardarBajaHidratos(activo: Boolean) {
+        dataStore.edit { it[CLAVE_BAJA_HIDRATOS] = activo }
+    }
+
+    suspend fun guardarBajaGrasa(activo: Boolean) {
+        dataStore.edit { it[CLAVE_BAJA_GRASA] = activo }
+    }
+
     suspend fun limpiarFiltros() {
         dataStore.edit { preferencias ->
             preferencias.remove(CLAVE_FILTROS)
@@ -121,6 +139,9 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
             preferencias.remove(CLAVE_PROTEINAS_MINIMAS)
             preferencias.remove(CLAVE_REGION)
             preferencias.remove(CLAVE_FALTANTES_PERMITIDOS)
+            preferencias.remove(CLAVE_ALTA_PROTEINA)
+            preferencias.remove(CLAVE_BAJA_HIDRATOS)
+            preferencias.remove(CLAVE_BAJA_GRASA)
         }
     }
 
@@ -140,6 +161,9 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
         val CLAVE_PROTEINAS_MINIMAS = intPreferencesKey("proteinas_minimas")
         val CLAVE_REGION = stringPreferencesKey("region")
         val CLAVE_FALTANTES_PERMITIDOS = stringSetPreferencesKey("faltantes_permitidos")
+        val CLAVE_ALTA_PROTEINA = booleanPreferencesKey("alta_proteina")
+        val CLAVE_BAJA_HIDRATOS = booleanPreferencesKey("baja_hidratos")
+        val CLAVE_BAJA_GRASA = booleanPreferencesKey("baja_grasa")
         val CLAVE_FAVORITAS = stringSetPreferencesKey("recetas_favoritas")
         val CLAVE_BIENVENIDA_COMPLETADA = booleanPreferencesKey("bienvenida_completada")
         val CLAVE_ULTIMO_USUARIO = stringPreferencesKey("ultimo_usuario_id")

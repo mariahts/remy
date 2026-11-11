@@ -14,7 +14,10 @@ class FiltroRecetasTest {
         region: String = "Mediterráneo",
         tiempo: Int = 30,
         kcal: Int = 400,
-        proteinas: Int = 20
+        proteinas: Int = 20,
+        hidratos: Int = 0,
+        grasas: Int = 0,
+        porciones: Int = 4
     ) = RecetaConIngredientes(
         receta = Receta(
             id = id,
@@ -23,7 +26,10 @@ class FiltroRecetasTest {
             regionOrigen = region,
             tiempoMinutos = tiempo,
             kcal = kcal,
-            proteinas = proteinas
+            proteinas = proteinas,
+            hidratos = hidratos,
+            grasas = grasas,
+            porciones = porciones
         ),
         ingredientes = emptyList()
     )
@@ -111,6 +117,45 @@ class FiltroRecetasTest {
         val recetas = listOf(receta(1, tiempo = 0, kcal = 0, proteinas = 0))
 
         val resultado = filtrarRecetas(recetas, FiltrosSugerencias())
+
+        assertEquals(listOf(1L), resultado.map { it.receta.id })
+    }
+
+    @Test
+    fun filtraAltaEnProteinaPorRacion() {
+        // 100g / 4 raciones = 25g por ración (pasa), 80g / 4 = 20g (no pasa)
+        val recetas = listOf(
+            receta(1, proteinas = 100, porciones = 4),
+            receta(2, proteinas = 80, porciones = 4)
+        )
+
+        val resultado = filtrarRecetas(recetas, FiltrosSugerencias(altaProteina = true))
+
+        assertEquals(listOf(1L), resultado.map { it.receta.id })
+    }
+
+    @Test
+    fun filtraBajaEnHidratosPorRacion() {
+        // 120g / 4 = 30g por ración (pasa), 124g / 4 = 31g (no pasa)
+        val recetas = listOf(
+            receta(1, hidratos = 120, porciones = 4),
+            receta(2, hidratos = 124, porciones = 4)
+        )
+
+        val resultado = filtrarRecetas(recetas, FiltrosSugerencias(bajaHidratos = true))
+
+        assertEquals(listOf(1L), resultado.map { it.receta.id })
+    }
+
+    @Test
+    fun filtraBajaEnGrasaPorRacion() {
+        // 60g / 4 = 15g por ración (pasa), 64g / 4 = 16g (no pasa)
+        val recetas = listOf(
+            receta(1, grasas = 60, porciones = 4),
+            receta(2, grasas = 64, porciones = 4)
+        )
+
+        val resultado = filtrarRecetas(recetas, FiltrosSugerencias(bajaGrasa = true))
 
         assertEquals(listOf(1L), resultado.map { it.receta.id })
     }

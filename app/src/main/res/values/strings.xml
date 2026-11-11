@@ -194,6 +194,10 @@
     <string name="sugerencias_tiempo">Tiempo máximo</string>
     <string name="sugerencias_kcal">Calorías máximas</string>
     <string name="sugerencias_proteinas">Proteínas mínimas</string>
+    <string name="sugerencias_macros">Macros por ración</string>
+    <string name="sugerencias_alta_proteina">Alta en proteína</string>
+    <string name="sugerencias_baja_hidratos">Baja en hidratos</string>
+    <string name="sugerencias_baja_grasa">Baja en grasa</string>
     <string name="sugerencias_region">Región</string>
     <string name="sugerencias_sin_limite">Sin límite</string>
     <string name="sugerencias_todas">Todas</string>

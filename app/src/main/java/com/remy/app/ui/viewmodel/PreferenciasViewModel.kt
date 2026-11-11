@@ -59,6 +59,27 @@ class PreferenciasViewModel(private val repositorio: PreferenciasRepository) : V
         viewModelScope.launch { repositorio.guardarRegion(region) }
     }
 
+    fun alternarAltaProteina() {
+        viewModelScope.launch {
+            val actual = repositorio.filtros.first().altaProteina
+            repositorio.guardarAltaProteina(!actual)
+        }
+    }
+
+    fun alternarBajaHidratos() {
+        viewModelScope.launch {
+            val actual = repositorio.filtros.first().bajaHidratos
+            repositorio.guardarBajaHidratos(!actual)
+        }
+    }
+
+    fun alternarBajaGrasa() {
+        viewModelScope.launch {
+            val actual = repositorio.filtros.first().bajaGrasa
+            repositorio.guardarBajaGrasa(!actual)
+        }
+    }
+
     fun limpiarFiltros() {
         viewModelScope.launch { repositorio.limpiarFiltros() }
     }

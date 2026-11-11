@@ -14,7 +14,10 @@ data class FiltrosSugerencias(
     val proteinasMinimas: Int = SIN_LIMITE,
     val region: String = "",
     /** Identificadores de ingredientes que se permiten como faltantes. */
-    val faltantesPermitidos: Set<Long> = emptySet()
+    val faltantesPermitidos: Set<Long> = emptySet(),
+    val altaProteina: Boolean = false,
+    val bajaHidratos: Boolean = false,
+    val bajaGrasa: Boolean = false
 ) {
     val hayFiltros: Boolean
         get() = tiposDePlato.isNotEmpty() ||
@@ -23,9 +26,15 @@ data class FiltrosSugerencias(
             kcalMaximas > SIN_LIMITE ||
             proteinasMinimas > SIN_LIMITE ||
             region.isNotBlank() ||
-            faltantesPermitidos.isNotEmpty()
+            faltantesPermitidos.isNotEmpty() ||
+            altaProteina ||
+            bajaHidratos ||
+            bajaGrasa
 
     companion object {
         const val SIN_LIMITE = 0
+        const val UMBRAL_ALTA_PROTEINA = 25
+        const val UMBRAL_BAJA_HIDRATOS = 30
+        const val UMBRAL_BAJA_GRASA = 15
     }
 }
