@@ -19,10 +19,6 @@ pendiente. Los enlaces son al repositorio
 | 7 | Evidencias individuales de contribución | [`evidencias-individuales.md`](evidencias-individuales.md) | Completado |
 | 8 | Resumen de qué se terminará o corregirá antes de la entrega definitiva | Final de este documento y sección «Pendiente» del README | Completado |
 
-Además, como apoyo para la defensa oral (#42), está [`defensa-entrega-4.md`](defensa-entrega-4.md)
-con el guion de los 10 minutos, el mapa del código que hay que saber explicar y las
-preguntas que el profesor es más probable que haga.
-
 ## 2. Versión candidata
 
 `REMY_MARIA_ENTREGA4.apk` (6,7 MB) es la build de `release` con ofuscación R8,

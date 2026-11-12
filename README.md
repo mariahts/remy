@@ -228,7 +228,6 @@ pendiente, está en [`docs/entrega-4.md`](docs/entrega-4.md).
 | Documento | Contenido |
 |---|---|
 | [`docs/entrega-4.md`](docs/entrega-4.md) | Los ocho entregables de la Entrega 4 y su estado |
-| [`docs/defensa-entrega-4.md`](docs/defensa-entrega-4.md) | Guion de la defensa oral, código que hay que saber explicar y preguntas probables |
 | [`docs/pruebas.md`](docs/pruebas.md) | Qué se ha probado, con qué resultado y qué queda pendiente |
 | [`docs/revision-diseno-usabilidad.md`](docs/revision-diseno-usabilidad.md) | Revisión de diseño, usabilidad y accesibilidad |
 | [`docs/evidencias-individuales.md`](docs/evidencias-individuales.md) | Evidencias de contribución de cada integrante |
