@@ -93,6 +93,7 @@ fun InicioScreen(
     planViewModel: PlanViewModel = viewModel(factory = PlanViewModel.Factory)
 ) {
     val estado by planViewModel.estado.collectAsStateWithLifecycle()
+    val fechaSeleccionada by planViewModel.fechaActual.collectAsStateWithLifecycle()
     val nombre = nombreDeUsuario()
     var tipoSheet by remember { mutableStateOf<TipoComida?>(null) }
 
@@ -114,6 +115,7 @@ fun InicioScreen(
                 ContenidoInicio(
                     nombre = nombre,
                     planDia = planDia,
+                    fechaSeleccionada = fechaSeleccionada,
                     hoy = hoy,
                     onRecetaClick = onRecetaClick,
                     onIrADespensa = onIrADespensa,
@@ -142,6 +144,7 @@ fun InicioScreen(
 private fun ContenidoInicio(
     nombre: String,
     planDia: PlanDia,
+    fechaSeleccionada: LocalDate,
     hoy: LocalDate,
     onRecetaClick: (Long) -> Unit,
     onIrADespensa: () -> Unit,
@@ -215,7 +218,7 @@ private fun ContenidoInicio(
         item(key = "semana") {
             SemanaPlan(
                 hoy = hoy,
-                seleccionado = planDia.fecha,
+                seleccionado = fechaSeleccionada,
                 diasConPlan = planDia.diasConPlan,
                 onDiaClick = onDiaClick
             )
@@ -625,6 +628,7 @@ private fun PreviewInicio() {
             ContenidoInicio(
                 nombre = "María",
                 planDia = plan,
+                fechaSeleccionada = hoy,
                 hoy = hoy,
                 onRecetaClick = {},
                 onIrADespensa = {},
