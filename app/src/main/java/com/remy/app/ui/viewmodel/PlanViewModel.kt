@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -140,7 +139,9 @@ class PlanViewModel(
                 )
             }
                 .map<PlanDia, EstadoCarga<PlanDia>> { EstadoCarga.Datos(it) }
-                .onStart { emit(EstadoCarga.Cargando) }
+                // Sin emitir "Cargando" al cambiar de dia: se mantiene el dia anterior
+                // en pantalla hasta que llegan los datos nuevos, para que la pantalla no
+                // parpadee ni pierda la posicion del scroll.
                 .catch { emit(EstadoCarga.Error("No se ha podido cargar el plan.")) }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), EstadoCarga.Cargando)
