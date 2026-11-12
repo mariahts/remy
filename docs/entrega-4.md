@@ -15,7 +15,7 @@ pendiente. Los enlaces son al repositorio
 | 3 | Lista breve de pruebas y resultados, con los errores detectados y cómo se resolvieron | [`pruebas.md`](pruebas.md) | Completado |
 | 4 | Revisión del diseño, la usabilidad y la accesibilidad | [`revision-diseno-usabilidad.md`](revision-diseno-usabilidad.md) | Completado |
 | 5 | Memoria en Word y `README.md` actualizados | [README](../README.md) y la memoria en Word, entregada en el Aula Virtual | Memoria pendiente (#41) |
-| 6 | Tablero Kanban revisado | Project 1: Sprint 4 y 5 activos, sprints 1-3 completados, #41 y #42 en Blocked | En revisión final |
+| 6 | Tablero Kanban revisado | Project 1: Sprint 4 en curso, Sprint 5 planificado, sprints 1-3 completados, #41 y #42 en Blocked | En revisión final |
 | 7 | Evidencias individuales de contribución | [`evidencias-individuales.md`](evidencias-individuales.md) | Completado |
 | 8 | Resumen de qué se terminará o corregirá antes de la entrega definitiva | Final de este documento y sección «Pendiente» del README | Completado |
 
@@ -38,18 +38,18 @@ recorte de recursos y firma propia. Incluye todo lo integrado en `dev`:
 ## 6. Tablero Kanban
 
 - 40 issues, 56 Pull Requests, 213 commits.
-- Sprint 1, 2 y 3 completados; Sprint 4 (desde el 10/11/2026) y Sprint 5
-  (desde el 17/11/2026) activos.
-- Las 15 issues del sprint 4 tienen asignado el sprint que declara su propio
+- Sprint 1, 2 y 3 completados; Sprint 4 en curso (desde el 10/11/2026) y
+  Sprint 5 planificado (desde el 17/11/2026).
+- Las 13 issues del sprint 4 tienen asignado el sprint que declara su propio
   cuerpo; #41 y #42 (sprint 5) están en Blocked porque dependen de #40 y de
   ellas mismas.
 - Las Pull Requests abiertas y en revisión también están en el tablero.
 
 ## 8. Qué se terminará o corregirá antes de la entrega definitiva
 
-- **Fotos del catálogo**: las 20 imágenes actuales sirven de relleno. Se
-  sustituirán por las que aporte la persona usuaria, con el formato indicado
-  en [`recetas-fotos.md`](recetas-fotos.md).
+- **Fotos del catálogo**: sustituidas por fotografías reales del plato, con
+  licencia libre y crédito en [`fotos-recetas.md`](fotos-recetas.md). Queda
+  pendiente revisarlas y, si hace falta, sustituir alguna por otra.
 - **Memoria en Word** (#41) y **presentación de la defensa** (#42): dependen de
   la revisión de la entrega.
 - **Revisión de las últimas Pull Requests**: las PR #93, #95 y #96 están

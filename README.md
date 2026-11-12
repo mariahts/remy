@@ -185,10 +185,11 @@ integra en `dev` y `main` se actualiza al cerrar cada hito.
   (`macrosDeReceta`), de modo que el catálogo y la app no pueden
   desincronizarse. Los pasos van de cuatro a cinco por receta. La proteína del
   yogur natural está corregida (3 g/100 g, no 10).
-- **Fotos**: las 20 recetas tienen foto real de Wikimedia Commons con licencia
-  libre; el crédito de cada una está en `docs/fotos-recetas.md`. Si falta la
-  foto, la miniatura usa un color pastel. La foto que hace la persona usuaria
-  al cocinar tiene prioridad sobre la del catálogo.
+- **Fotos**: las 20 recetas tienen una fotografía real del plato con licencia
+  libre; el autor, la licencia y el enlace de cada una están en
+  `docs/fotos-recetas.md`. Si falta la foto, la miniatura usa un color pastel.
+  La foto que hace la persona usuaria al cocinar tiene prioridad sobre la del
+  catálogo.
 - **Interfaz**: tema crema/terracota/azul tinta con Nunito, cuatro destinos en
   la barra inferior, estados vacíos propios, insignia de disponibilidad en la
   receta del día y los dos accesos directos de Inicio con la misma altura. La
@@ -231,7 +232,6 @@ pendiente, está en [`docs/entrega-4.md`](docs/entrega-4.md).
 | [`docs/evidencias-individuales.md`](docs/evidencias-individuales.md) | Evidencias de contribución de cada integrante |
 | [`docs/uso-ia.md`](docs/uso-ia.md) | Registro del uso de IA: para qué, qué se cambió y cómo se verificó |
 | [`docs/fotos-recetas.md`](docs/fotos-recetas.md) | Crédito de las fotos del catálogo |
-| [`docs/recetas-fotos.md`](docs/recetas-fotos.md) | Las 20 recetas y el formato que deben cumplir sus fotos |
 | [`docs/mvp-estado.md`](docs/mvp-estado.md) | Estado del MVP, resuelto y pendiente |
 | [`docs/ModeloE_R_Remy.drawio`](docs/ModeloE_R_Remy.drawio) | Modelo de datos |
 | [`docs/diseno/`](docs/diseno) | Maqueta de la interfaz y material de diseño |
