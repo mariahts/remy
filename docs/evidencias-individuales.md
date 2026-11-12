@@ -16,15 +16,32 @@ Entregable 7 de la Entrega 4. Datos recogidos de GitHub el 12 de noviembre de
 | Pull Requests revisadas por la otra persona | 13 | 3 |
 
 Reparto de responsabilidades: María lleva el grueso del desarrollo en Kotlin
-—datos, pantallas, pruebas, documentación y empaquetado— y Mario lleva la
-parte de diseño de interfaz (maqueta en Stitch, identidad visual y modelo de
-datos) y la revisión de las PR.
+—datos, pantallas, pruebas, documentación y empaquetado— y también el diseño
+final de la interfaz. Mario lleva la maqueta de Stitch, el modelo de datos y la
+revisión de las PR.
+
+### Diseño de interfaz
+
+El trabajo de diseño tiene dos partes y conviene distinguirlas:
+
+- **Mario** hizo las pantallas maquetadas en Stitch, que son la referencia
+  visual de partida, y el modelo Entidad/Relación.
+- **María** reorganizó ese diseño para que la identidad quedara más limpia:
+  redefinió la jerarquía visual y la paleta (crema, terracota y azul tinta con
+  Nunito) sobre las pantallas de Stitch, descartó la paleta verde y la
+  tipografía Plus Jakarta Sans de la primera identidad, e implementó el tema
+  resultante en Compose.
+
+El resultado está documentado en `docs/disenio/Identidad visual de REMY.md` y
+`docs/revision-diseno-usabilidad.md`, y llegó a la app en la PR #83 (rediseño)
+y en la #90 (pulido de interfaz).
 
 ## Issues
 
 Hay 40 issues en el repositorio. Todas llevan en su cuerpo el bloque
-«Clasificación» con RA, tamaño, prioridad, revisor, sprint y dependencias, y
-criterios de aceptación comprobables. Todas están cerradas salvo tres:
+«Clasificación» con responsable, RA, tamaño, prioridad, revisor, sprint y
+dependencias, y criterios de aceptación comprobables. Todas están cerradas
+salvo tres:
 
 | Issue | Título | Estado |
 |---|---|---|
@@ -32,9 +49,11 @@ criterios de aceptación comprobables. Todas están cerradas salvo tres:
 | #41 | Memoria final | Abierta, en Blocked (depende de #40) |
 | #42 | Presentación de la defensa | Abierta, en Blocked (depende de #41) |
 
-El revisor de cada issue es la persona que la implementó. Las 13 issues cuyo
-revisor es María (#8, #9, #10, #11, #12, #13, #36, #39, #40, #41, #43, #44 y
-#47) las implementó Mario; las otras 27, María.
+**Responsable de todas las issues: María.** La columna «Revisor» recoge quién
+revisa el trabajo; en las 13 issues cuyo revisor es María (#8, #9, #10, #11,
+#12, #13, #36, #39, #40, #41, #43, #44 y #47) quien aporta el resultado es
+Mario: la maqueta de Stitch, el modelo Entidad/Relación, la primera identidad
+visual y la revisión de las PR.
 
 ## Pull Requests
 
@@ -50,58 +69,30 @@ pendiente de la aprobación que exige la protección de `main`).
 | #65 | Sprint 2 y 3: integración de todo el avance en `main` |
 | #66 | Pantallas designed en Stitch |
 
-**De María** (52), agrupadas por bloque de trabajo:
+**De María**: 48 PR de los sprints 1 a 3 (montaje del proyecto, esqueleto
+MVVM, despensa, cámara, DataStore, catálogo, navegación, cocina con foto e
+historial) y 15 del sprint 4, que son las que cierran esta entrega:
 
-| Bloque | Pull Requests |
+| PR | Título |
 |---|---|
-| Montaje del proyecto, README, plantillas y esqueleto MVVM | #14, #15, #16, #17, #18, #19, #21, #27 |
-| Navegación, documentación y Sprint 2 (despensa, cámara, DataStore) | #49, #50, #51, #53, #54, #55, #56, #57, #58 |
-| Sprint 3: catálogo, listado, detalle y sugerencias | #59, #60, #61, #62, #63, #67 |
-| Cocción con foto, galería, navegación e historial | #68, #69, #70, #71, #72, #73, #74, #75, #76, #77, #78, #79, #80, #81 |
-| Sprint 4: limpieza, macros, rediseño, release y cierre | #82, #83, #84, #85, #86, #87, #88, #89, #90, #91, #92, #93, #94, #95, #96 |
+| #82 | Limpieza del MVP, refactor de recetas y macros completas |
+| #83 | Rediseño de la interfaz y mejoras de experiencia |
+| #84 | Actualiza README y registro de uso de IA al cierre de la entrega |
+| #85 | Sprint 4: acercándonos a la v1 con el MVP (rediseño, limpieza y macros) |
+| #86 | Retira el acceso con la cuenta de demo del login |
+| #87 | Actualiza el README y la documentación de pruebas al cierre del sprint 4 |
+| #88 | Arregla las pruebas instrumentadas y cubre los filtros de macros |
+| #89 | Pulido de interfaz: miniaturas pastel, Sugerencias en la barra y coherencia con la maqueta |
+| #90 | Actualiza el README y la documentación de pruebas tras el pulido de interfaz |
+| #91 | Ofusca la APK de entrega con R8 y prepara la build de release firmada |
+| #92 | Entrega 4: v.1 de REMY con pulido de interfaz, release firmada y documentación al día |
+| #93 | Arregla el botón añadir de la hoja del plan y la creación de cuenta |
+| #94 | Entrega 4: arreglos de la hoja del plan, el registro y el calendario, y catálogo con fotos reales y macros calculadas |
+| #95 | Añade fotos reales al catálogo y calcula los macros de las recetas desde sus ingredientes |
+| #96 | Arregla el parpadeo de la pantalla de inicio al cambiar de día |
 
-## Issues que menciona cada Pull Request
-
-Relación objective extraída del cuerpo de cada PR (las issues #1 a #50; a
-partir de la #51 las PR citan issues de la entrega anterior o no citan ninguna,
-porque las tareas ya no se relacionaban con una issue abierta).
-
-| PR | Issues citadas |
-|---|---|
-| #14 | #2, #3 |
-| #15 | #4 |
-| #16 | #5 |
-| #19 | #6 |
-| #21 | #20 |
-| #27 | #12, #13 |
-| #50, #51 | #7 |
-| #52 | #11 |
-| #53 | #11, #22, #24 |
-| #54 | #25, #35 |
-| #55 | #7, #8, #9, #10, #22, #23, #25, #26 |
-| #56 | #24, #28 |
-| #57 | #11, #23 |
-| #58 | #29 |
-| #59 | #30 |
-| #60 | #31 |
-| #61 | #32 |
-| #62 | #33 |
-| #63 | #29, #33, #34 |
-| #64, #66 | #8 |
-| #67 | #8, #30 |
-| #68 | #25, #35 |
-| #69 | #26 |
-| #70 | #8, #24, #26, #30, #31, #32, #33, #34, #35 |
-| #71 | #24, #30, #34 |
-| #72 | #26, #35 |
-| #74 | #44 |
-| #75 | #44, #45 |
-| #76 | #46 |
-| #77 | #37 |
-| #78 | #38 |
-| #85 | #37, #38, #44, #46 |
-| #87 | #41, #42 |
-| #90 | #40 |
+La relación completa entre PR e issue se consulta en cada PR, que cita las
+issues que cierra (`Closes #N`).
 
 ## Revisiones
 
