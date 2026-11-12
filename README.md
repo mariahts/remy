@@ -202,7 +202,7 @@ integra en `dev` y `main` se actualiza al cerrar cada hito.
 - **Pruebas**: 54 unitarias (10 suites) y 22 instrumentadas (7 suites), todas
   en verde. El detalle está en `docs/pruebas.md`.
 - **APK de entrega**: `release` con ofuscación R8, recorte de recursos y firma
-  propia, de **5,2 MB** (5.490.573 bytes).
+  propia, de **6,7 MB** (7.051.273 bytes).
 
 ### Pendiente
 
@@ -211,7 +211,6 @@ integra en `dev` y `main` se actualiza al cerrar cada hito.
 - Comprobar letra grande y gama baja en un móvil real: la app ya se ha probado
   en un dispositivo físico y funciona, pero no se ha verificado con la fuente
   ampliada ni en un equipo de gama baja.
-- Probar con 2-3 personas ajenas al equipo.
 - Contraste de los macros del catálogo con una fuente de referencia (la tabla
   usada es estándar, pero está revisada a mano, no por una base de datos
   oficial).

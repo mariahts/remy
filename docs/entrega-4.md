@@ -11,7 +11,7 @@ pendiente. Los enlaces son al repositorio
 | # | Entregable | Dónde está | Estado |
 |---|---|---|---|
 | 1 | Enlaces al repositorio y al GitHub Project | Cabecera del [README](../README.md) | Completado |
-| 2 | Versión candidata con las funcionalidades principales integradas | `REMY_MARIA_ENTREGA4.apk` (5.490.573 bytes, release con R8 y firma propia) y `REMY_MARIA_ENTREGA4.zip` | Completado |
+| 2 | Versión candidata con las funcionalidades principales integradas | `REMY_MARIA_ENTREGA4.apk` (7.051.273 bytes, release con R8 y firma propia) y `REMY_MARIA_ENTREGA4.zip` | Completado |
 | 3 | Lista breve de pruebas y resultados, con los errores detectados y cómo se resolvieron | [`pruebas.md`](pruebas.md) | Completado |
 | 4 | Revisión del diseño, la usabilidad y la accesibilidad | [`revision-diseno-usabilidad.md`](revision-diseno-usabilidad.md) | Completado |
 | 5 | Memoria en Word y `README.md` actualizados | [README](../README.md) y la memoria en Word, entregada en el Aula Virtual | Memoria pendiente (#41) |
@@ -21,11 +21,11 @@ pendiente. Los enlaces son al repositorio
 
 ## 2. Versión candidata
 
-`REMY_MARIA_ENTREGA4.apk` (5,2 MB) es la build de `release` con ofuscación R8,
+`REMY_MARIA_ENTREGA4.apk` (6,7 MB) es la build de `release` con ofuscación R8,
 recorte de recursos y firma propia. Incluye todo lo integrado en `dev`:
 
 - Inicio con receta del día, accesos directos y semana planificada.
-- Despensa con 12 alimentos de demostración sembrados con las unidades de las
+- Despensa con 13 alimentos de demostración sembrados con las unidades de las
   recetas.
 - Catálogo de 20 recetas con foto real, pasos detallados y macros calculadas a
   partir de los ingredientes.
