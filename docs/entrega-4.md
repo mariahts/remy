@@ -55,7 +55,9 @@ recorte de recursos y firma propia. Incluye todo lo integrado en `dev`:
 - **Revisión de las últimas Pull Requests**: las PR #93, #95 y #96 están
   fusionadas en `dev` sin revisión registrada, y la #94 (`dev` → `main`) espera
   la aprobación que exige la protección de `main`.
-- **Validación en móviles reales**: letra grande, rotación y gama baja.
+- **Letra grande y gama baja**: la aplicación ya se ha instalado y probado en un
+  móvil físico, y funciona. Falta comprobar la fuente ampliada y un equipo de
+  gama baja.
 - **Prueba con personas ajenas** al equipo: 2-3 usuarios sin explicación.
 - **Contraste de los macros** con una fuente de referencia (la Base de Datos
   Española de Composición de Alimentos).

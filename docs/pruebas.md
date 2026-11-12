@@ -59,9 +59,11 @@ pruebas instrumentadas en 7 suites.
   `CatalogoRecetasTest`, que validan la coherencia del catálogo.
 - Comprobaciones manuales previas en emulador (recorrido, precarga, CRUD de
   despensa, recetas/sugerencias, filtros, cocinados, descuento y migraciones)
-  se documentaron en iteraciones anteriores. Tras los cambios del catálogo y
-  las fotos reales, conviene repetir el recorrido principal en dispositivo o
-  emulador.
+  se documentaron en iteraciones anteriores.
+- **Prueba en un dispositivo físico**: la aplicación se ha instalado y probado
+  en un móvil real y funciona correctamente. Esa prueba destapó los dos
+  últimos defectos de la lista siguiente (el registro y el calendario de
+  Inicio), que se han corregido y verificado después en el emulador.
 
 ## Defectos encontrados en pruebas manuales y corregidos
 
@@ -88,11 +90,11 @@ confirmación y enlace de reenvío), login normal, y hoja del plan con el títul
 - La prueba manual de «cocinar con foto y reiniciar» queda recomendada en
   dispositivo o emulador actual; el flujo tiene cobertura parcial por pruebas
   automatizadas existentes.
-- No se ha probado en dispositivo físico en esta sesión.
+- La app ya se ha probado en un móvil físico y funciona. No se ha comprobado
+  con la fuente de letra ampliada ni en un equipo de gama baja.
 - Los macros de las recetas se calculan a partir de los valores nutricionales
   estándar por 100 g/ml de cada ingrediente del catálogo, por lo que son
   coherentes entre sí. Antes de publicar conviene contrastarlos con una fuente
   de referencia (por ejemplo, la Base de Datos Española de Composición de
   Alimentos).
-- Falta la prueba con 2-3 personas ajenas al equipo y la validación en móviles
-  reales (letra grande, rotación y gama baja).
+- Falta la prueba con 2-3 personas ajenas al equipo.

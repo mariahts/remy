@@ -207,7 +207,10 @@ integra en `dev` y `main` se actualiza al cerrar cada hito.
 ### Pendiente
 
 - Memoria en Word (#41) y presentación de la defensa (#42), fuera del repo.
-- Validación en móviles reales: letra grande, rotación y gama baja.
+- Pruebas con 2-3 personas ajenas al equipo, sin explicación previa.
+- Comprobar letra grande y gama baja en un móvil real: la app ya se ha probado
+  en un dispositivo físico y funciona, pero no se ha verificado con la fuente
+  ampliada ni en un equipo de gama baja.
 - Probar con 2-3 personas ajenas al equipo.
 - Contraste de los macros del catálogo con una fuente de referencia (la tabla
   usada es estándar, pero está revisada a mano, no por una base de datos

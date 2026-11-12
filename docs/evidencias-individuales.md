@@ -109,6 +109,22 @@ revisión registrada, porque la regla de protección de `dev` no la exige. Antes
 de la entrega definitiva conviene que Mario deje su revisión en esas tres y
 apruebe la #94, que es la que actualiza `main`.
 
+## Pruebas en dispositivo real
+
+La aplicación se ha instalado y probado en un **móvil físico** y funciona
+correctamente. Es la evidencia que más valor aporta del sprint 4, porque la
+prueba en el emulador no detectó dos de los defectos que sí aparecieron en el
+teléfono:
+
+| Defecto | Cómo se detectó | Corrección |
+|---|---|---|
+| El botón «Crear cuenta» no avanzaba. | Uso en el móvil con una cuenta nueva: la cuenta se creaba en el servidor pero la app no abría sesión porque el proyecto de Supabase exige confirmar el correo. | PR #93: validación previa, intento de inicio de sesión tras el alta y enlace de reenvío del correo. |
+| El calendario de «Tu semana» parpadeaba al tocar otro día. | Uso en el móvil: la pantalla se sustituía entera por el indicador de carga y perdía la posición del scroll. | PR #96: el contenido se mantiene hasta que llegan los datos del día y el día resaltado se mueve de inmediato. |
+
+Los dos se corrigieron y se volvieron a verificar en el emulador
+`Medium_Phone_API_37.0` (Android 17). El detalle está en
+[`docs/pruebas.md`](pruebas.md).
+
 ## Seguimiento semanal
 
 | Sprint | Periodo | Qué se revisó |
