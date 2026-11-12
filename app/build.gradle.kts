@@ -27,8 +27,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "SUPABASE_URL", "\"${localProperties.getProperty("SUPABASE_URL", "")}\"")
-        buildConfigField("String", "SUPABASE_ANON_KEY", "\"${localProperties.getProperty("SUPABASE_ANON_KEY", "")}\"")
+        // Conexion con Supabase. Por defecto se usa nuestro propio proyecto, con la
+        // clave publicable incluida: es la clave de cliente y esta pensada para ir en
+        // la app, no es una credencial secreta (la secreta es la sb_secret_ y nunca
+        // se escribe aqui). Quien clone el repositorio puede compilar y usar la app
+        // sin configurar nada. Si quiere apuntar a otro backend, lo sobreescribe en
+        // local.properties con SUPABASE_URL y SUPABASE_ANON_KEY.
+        buildConfigField("String", "SUPABASE_URL", "\"${localProperties.getProperty("SUPABASE_URL", "https://hfkefquivvaneyqrvlnb.supabase.co")}\"")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "\"${localProperties.getProperty("SUPABASE_ANON_KEY", "sb_publishable_GiIYeTm-znux6XONvcDfvA_bSw9gq9K")}\"")
     }
 
     // Firma de la build de release. Las claves se leen de local.properties (no se versiona),

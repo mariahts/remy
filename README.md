@@ -116,18 +116,17 @@ Con `JAVA_HOME` apuntando al JBR de Android Studio
 (`C:\Program Files\Android\Android Studio\jbr` en Windows) funcionan tanto
 Gradle como `apksigner`.
 
-### Configuración necesaria
+### Configuración
 
-**El registro y el inicio de sesión necesitan un proyecto de Supabase.** Las
-claves van en `local.properties` (no se versiona):
+**No hace falta configurar nada.** La app se conecta a nuestro propio proyecto
+de Supabase con la clave publicable incluida en `app/build.gradle.kts`. Esa clave
+es la de cliente: está pensada para ir dentro de la aplicación, no es una
+credencial secreta (la secreta es la `sb_secret_`, que no aparece en el
+repositorio). Por eso cualquiera que clone el proyecto puede compilarlo y usarlo
+tal cual.
 
-```properties
-SUPABASE_URL=https://<tu-proyecto>.supabase.co
-SUPABASE_ANON_KEY=<tu-clave-publica>
-```
-
-Si no están, la app arranca y todo lo demás funciona, pero el login falla.
-El resto de la aplicación no necesita ninguna clave ni servicio externo.
+Si alguien quiere apuntarlo a su propio backend, sobreescribe `SUPABASE_URL` y
+`SUPABASE_ANON_KEY` en `local.properties` (no se versiona).
 
 La build de release se firma con un almacén de claves propio. Las propiedades
 `RELEASE_STORE_FILE`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS` y
