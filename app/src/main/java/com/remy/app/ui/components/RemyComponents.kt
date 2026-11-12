@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,6 +52,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
@@ -256,7 +258,9 @@ fun OutlineButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    icon: ImageVector? = null
+    icon: ImageVector? = null,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 24.dp),
+    fillWidth: Boolean = true
 ) {
     OutlinedButton(
         onClick = onClick,
@@ -267,9 +271,9 @@ fun OutlineButton(
             containerColor = SuperficieBlanca,
             contentColor = AzulTinta
         ),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp),
+        contentPadding = contentPadding,
         modifier = modifier
-            .fillMaxWidth()
+            .then(if (fillWidth) Modifier.fillMaxWidth() else Modifier)
             .height(52.dp)
     ) {
         if (icon != null) {
@@ -410,8 +414,9 @@ fun StatusBadge(
 }
 
 // ---------------------------------------------------------------------------
-// Foto de receta. Cuando la receta no tiene foto, se muestra un bloque de
-// color pastel, tal y como aparece en el diseño de la app.
+// Foto de receta. Prioridad: la foto que el usuario hizo al cocinar, despues
+// la foto del catalogo y, si la receta no tiene ninguna, un bloque de color
+// pastel tal y como aparece en el diseño de la app.
 // ---------------------------------------------------------------------------
 @Composable
 fun RecipePhoto(
@@ -422,6 +427,7 @@ fun RecipePhoto(
     contentScale: ContentScale = ContentScale.Crop
 ) {
     val tono = TONOS_PASTEL[indiceTonoPastel(nombre)]
+    val fotoCatalogo = ImagenesReceta.para(nombre)
     Box(
         modifier = modifier
             .clip(shape)
@@ -439,6 +445,13 @@ fun RecipePhoto(
                 contentScale = contentScale,
                 placeholder = ColorPainter(tono),
                 error = ColorPainter(Color.Transparent),
+                modifier = Modifier.fillMaxSize()
+            )
+        } else if (fotoCatalogo != null) {
+            Image(
+                painter = painterResource(fotoCatalogo),
+                contentDescription = nombre,
+                contentScale = contentScale,
                 modifier = Modifier.fillMaxSize()
             )
         }

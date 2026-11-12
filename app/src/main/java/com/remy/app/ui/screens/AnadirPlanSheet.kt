@@ -3,6 +3,7 @@ package com.remy.app.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -108,9 +110,9 @@ internal fun ContenidoAnadirPlan(
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            ChipTipo(TipoComida.DESAYUNO, tipoSeleccionado, R.string.inicio_anadir_desayuno, R.string.inicio_desayuno, onTipoChange)
-            ChipTipo(TipoComida.COMIDA, tipoSeleccionado, R.string.inicio_anadir_comida, R.string.inicio_comida, onTipoChange)
-            ChipTipo(TipoComida.CENA, tipoSeleccionado, R.string.inicio_anadir_cena, R.string.inicio_cena, onTipoChange)
+            ChipTipo(TipoComida.DESAYUNO, tipoSeleccionado, onTipoChange)
+            ChipTipo(TipoComida.COMIDA, tipoSeleccionado, onTipoChange)
+            ChipTipo(TipoComida.CENA, tipoSeleccionado, onTipoChange)
         }
 
         RemySearchField(
@@ -146,14 +148,12 @@ internal fun ContenidoAnadirPlan(
 private fun ChipTipo(
     tipo: TipoComida,
     seleccionado: TipoComida,
-    @Suppress("UNUSED_PARAMETER") textoAnadir: Int,
-    textoLabel: Int,
     onTipoChange: (TipoComida) -> Unit
 ) {
     val etiqueta = when (tipo) {
-        TipoComida.DESAYUNO -> "Desayuno"
-        TipoComida.COMIDA -> "Comida"
-        TipoComida.CENA -> "Cena"
+        TipoComida.DESAYUNO -> stringResource(R.string.plan_chip_desayuno)
+        TipoComida.COMIDA -> stringResource(R.string.plan_chip_comida)
+        TipoComida.CENA -> stringResource(R.string.plan_chip_cena)
     }
     RemyChip(
         text = etiqueta,
@@ -218,7 +218,9 @@ private fun FilaRecetaPlan(
         OutlineButton(
             text = stringResource(R.string.plan_anadir),
             onClick = onAnadir,
-            modifier = Modifier.width(92.dp)
+            modifier = Modifier.widthIn(min = 88.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            fillWidth = false
         )
     }
 }

@@ -124,7 +124,7 @@ sistema.
 No se hacen commits directos a `main`: está protegida y exige una aprobación.
 El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
 
-## Estado actual (11 de noviembre de 2026)
+## Estado actual (12 de noviembre de 2026)
 - Base de datos Room en la versión 8 con migraciones explícitas: despensa
   (#22 y #28), recetas e ingredientes (#23), precarga del catálogo (#30),
   receta cocinada con fecha y foto (#35), e hidratos y grasas de recetas (#82).
@@ -143,28 +143,35 @@ El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
 - Filtros de macros por ración (#82): `Alta en proteína` (≥ 25 g),
   `Baja en hidratos` (≤ 30 g) y `Baja en grasa` (≤ 15 g), con persistencia
   en DataStore.
+- Catálogo de 20 recetas y 31 alimentos: las macros (calorías, proteínas,
+  hidratos y grasas) de cada receta se **calculan a partir de sus ingredientes**
+  al precargar el catálogo, a partir de los valores nutricionales por 100 g/ml de
+  cada alimento. Los pasos de elaboración se han detallado y la proteína del
+  yogur natural se ha corregido.
+- Fotos reales del catálogo: cada receta muestra una imagen procedente de
+  Wikimedia Commons con licencia libre; los créditos (autor, licencia y enlace)
+  están en `docs/fotos-recetas.md`. La foto que la persona usuaria hace al
+  cocinar sigue teniendo prioridad sobre la del catálogo.
 - Macros completas en el detalle (#82): proteínas, hidratos y grasas por
-  ración, escaladas con el selector de raciones. Los valores de hidratos y
-  grasas del catálogo son **estimados**, no oficiales: conviene revisarlos con
-  una fuente fiable antes de publicar la app.
+  ración, escaladas con el selector de raciones.
 - Rediseño de la interfaz (#83): tema Nunito, componentes reutilizables,
   pantallas rediseñadas, planificación semanal y estados vacíos mejorados.
-- Pulido de interfaz para la entrega 4: miniaturas de receta con bloques de
-  color pastel como en la maqueta, insignia de disponibilidad en «Tu receta
-  de hoy», despensa de demostración sembrada con las unidades de las recetas,
-  mes visible en la cabecera de la semana y los dos accesos directos del
-  inicio («Añadir a mi despensa» y «Ver sugerencias») con la misma altura.
-  La revisión de diseño, accesibilidad y usabilidad está en
-  `docs/revision-diseno-usabilidad.md`.
+- Pulido de interfaz para la entrega 4: miniaturas de receta con fotos del
+  catálogo (o bloques de color pastel si falta la foto), insignia de
+  disponibilidad en «Tu receta de hoy», despensa de demostración sembrada con
+  las unidades de las recetas, mes visible en la cabecera de la semana y los
+  dos accesos directos del inicio («Añadir a mi despensa» y «Ver sugerencias»)
+  con la misma altura. La revisión de diseño, accesibilidad y usabilidad está
+  en `docs/revision-diseno-usabilidad.md`.
 - Estados de carga y error con reintento en las pantallas que consultan Room
   (#46).
 - Versión de entrega: APK de `release` con ofuscación (R8) y firma propia,
   de 3,3 MB.
-- Pruebas: 49 unitarias y 19 instrumentadas en verde; el registro está en
+- Pruebas: 54 unitarias y 22 instrumentadas en verde; el registro está en
   `docs/pruebas.md`.
 - Pendientes: documentos de la entrega (#41 y #42), verificación en móviles
-  reales, fotos reales de las recetas, caducidad en la despensa, modo oscuro y
-  publicación (icono, capturas, política de privacidad).
+  reales, caducidad en la despensa, modo oscuro y publicación (icono, capturas,
+  política de privacidad).
 
 ## Documentación
 La memoria del proyecto (Word) se entrega en el Aula Virtual. En la carpeta

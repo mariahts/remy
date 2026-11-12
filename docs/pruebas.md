@@ -1,12 +1,11 @@
 # Pruebas de REMY
 
 Qué se ha probado, en qué entorno, con qué resultado y qué queda pendiente.
-Documento actualizado el 11 de noviembre de 2026 tras el sprint 4 (rama `dev`,
-integrada en `main` mediante la PR #85). Solo se citan pruebas que existen en
-el repositorio.
+Documento actualizado el 12 de noviembre de 2026. Solo se citan pruebas que
+existen en el repositorio.
 
-**Recuento actual:** 49 pruebas unitarias en 9 suites (todas en verde) y 19
-pruebas instrumentadas en 6 suites.
+**Recuento actual:** 54 pruebas unitarias en 10 suites (todas en verde) y 22
+pruebas instrumentadas en 7 suites.
 
 ## Entorno
 
@@ -37,6 +36,7 @@ pruebas instrumentadas en 6 suites.
 | `FechaEspanolTest` | Formato de fecha en español para «Cocinada el …» y nombre del mes en minúsculas. |
 | `ColorRecetaTest` | Reparto estable del color pastel de cada receta: mismo nombre, mismo tono, rango válido y variedad de tonos. |
 | `DatosDemoTest` | Despensa de demostración: unidades en gramos o mililitros, cantidades mayores que cero y al menos una receta completa con lo sembrado. |
+| `MacrosRecetaTest` | Cálculo puro de macros de una receta a partir de sus ingredientes: suma proporcional, el aceite solo aporta grasas, receta vacía, ingredientes ausentes del catálogo y redondeo. |
 
 ### Instrumentadas (`app/src/androidTest`, emulador)
 
@@ -48,31 +48,49 @@ pruebas instrumentadas en 6 suites.
 | `Migration7To8Test` | Migración de Room de la versión 7 a la 8: se conservan los datos del usuario y las recetas quedan con hidratos y grasas. |
 | `EstadoCargaUiTest` | Estados de carga, error con reintento y contenido disponible. |
 | `FiltrosSugerenciasUiTest` | Pantalla/sheet de filtros: controles, cambios, limpiar filtros y visibilidad de acciones. |
+| `CatalogoRecetasTest` | Catálogo de recetas: los macros de cada receta coinciden con los calculados a partir de sus ingredientes, todos los alimentos declaran hidratos y grasas, y todas las recetas tienen al menos tres pasos y dos ingredientes válidos. |
 
 ## Pruebas manuales y verificación
 
 - Compilación y pruebas unitarias verificadas en sesión con
-  `assembleDebug` y `testDebugUnitTest`.
+  `assembleDebug` y `testDebugUnitTest` (54 en verde).
+- Pruebas instrumentadas ejecutadas en el emulador `Medium_Phone_API_37.0`
+  (Android 17) con `connectedDebugAndroidTest` (22 en verde), incluidas las de
+  `CatalogoRecetasTest`, que validan la coherencia del catálogo.
 - Comprobaciones manuales previas en emulador (recorrido, precarga, CRUD de
   despensa, recetas/sugerencias, filtros, cocinados, descuento y migraciones)
-  se documentaron en iteraciones anteriores; repetirlas en dispositivo o
-  emulador tras los cambios del sprint 4 es recomendable.
+  se documentaron en iteraciones anteriores. Tras los cambios del catálogo y
+  las fotos reales, conviene repetir el recorrido principal en dispositivo o
+  emulador.
+
+## Defectos encontrados en pruebas manuales y corregidos
+
+Estas comprobaciones se hicieron a partir del feedback de uso en un móvil real,
+reproduciendo el flujo en el emulador `Medium_Phone_API_37.0` (Android 17).
+
+| Defecto | Causa raíz | Corrección |
+| --- | --- | --- |
+| El botón «Añadir» de la hoja del plan se veía cortado como «Añadi». | `OutlineButton` tenía `fillMaxWidth()` forzado y 24 dp de padding horizontal; con el ancho fijo de 92 dp solo quedaban 44 dp para el texto. | `OutlineButton` acepta ahora `contentPadding` y `fillWidth`; la hoja usa `widthIn(min = 88.dp)`, 16 dp de padding y sin relleno. |
+| El título decía «Añadir a el desayuno». | Las cadenas `plan_desayuno`, `plan_comida` y `plan_cena` ya traían el artículo («el desayuno»…) y la plantilla era «Añadir a %1$s». | Plantilla «Añadir %1$s» y cadenas «al desayuno», «a la comida», «a la cena». |
+| El enlace «Crear cuenta» no hacía nada con los campos vacíos. | El `Text` solo era pulsable con `formularioValido`, así que no llegaba ni a ejecutarse la validación. | Ahora es pulsable siempre y muestra el error de validación correspondiente. |
+| Al registrarse, la app parecía no hacer nada. | El proyecto de Supabase exige confirmar el correo (`mailer_autoconfirm = false`), así que `signUpWith` no devuelve sesión y la app se queda en el login. | Se explica el paso de confirmación, se ofrece reenviar el correo y, si la cuenta ya existía, se entra directamente. |
+| El reenvío del correo de confirmación a veces fallaba. | Límite de Supabase: `HTTP 429 over_email_send_rate_limit` («solo puedes pedirlo tras 35 segundos»). No es un fallo de la app. | Mensaje explicativo en lugar de un error genérico. |
+
+Verificación tras la corrección, en el emulador: registro con una cuenta ya
+existente (entra directamente en la app), registro con una cuenta nueva (aviso de
+confirmación y enlace de reenvío), login normal, y hoja del plan con el título
+«Añadir al desayuno» y el botón «Añadir» completo.
 
 ## Limitaciones y pendientes
 
 - La prueba manual de «cocinar con foto y reiniciar» queda recomendada en
-  dispositivo/emulador actual; el flujo tiene cobertura parcial por pruebas
+  dispositivo o emulador actual; el flujo tiene cobertura parcial por pruebas
   automatizadas existentes.
 - No se ha probado en dispositivo físico en esta sesión.
-- El sprint 4 incorpora refactors de limpieza (descuento extraído, avisos,
-  strings/tema, perfil y ampliación de tests de cruce), el rediseño de la
-  interfaz y las macros por ración; validar el flujo de cocción y descuento en
-  UI tras estos cambios.
-- Las 19 pruebas instrumentadas (incluida `Migration7To8Test`) se ejecutaron en
-  el emulador `Medium_Phone_API_37.0` (Android 17) y quedaron en verde; se
-  corrigió además un fallo real de la suite de filtros, que no compilaba desde
-  el sprint 4.
-- Los valores de hidratos y grasas del catálogo de recetas son estimados, no
-  oficiales: antes de publicar habría que revisarlos con una fuente fiable.
+- Los macros de las recetas se calculan a partir de los valores nutricionales
+  estándar por 100 g/ml de cada ingrediente del catálogo, por lo que son
+  coherentes entre sí. Antes de publicar conviene contrastarlos con una fuente
+  de referencia (por ejemplo, la Base de Datos Española de Composición de
+  Alimentos).
 - Falta la prueba con 2-3 personas ajenas al equipo y la validación en móviles
   reales (letra grande, rotación y gama baja).
