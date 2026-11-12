@@ -18,7 +18,7 @@ pruebas instrumentadas en 7 suites.
   - `gradlew assembleDebug` — APK de depuración.
 - En esta sesión se ejecutaron `testDebugUnitTest` y `assembleDebug` tras cada
   tarea implementada, además de `assembleRelease` para la versión de entrega
-  (resultado: BUILD SUCCESSFUL). Las 19 pruebas instrumentadas se ejecutaron en
+  (resultado: BUILD SUCCESSFUL). Las 22 pruebas instrumentadas se ejecutaron en
   el emulador y quedaron en verde.
 
 ## Pruebas automatizadas (existentes)
@@ -59,9 +59,11 @@ pruebas instrumentadas en 7 suites.
   `CatalogoRecetasTest`, que validan la coherencia del catálogo.
 - Comprobaciones manuales previas en emulador (recorrido, precarga, CRUD de
   despensa, recetas/sugerencias, filtros, cocinados, descuento y migraciones)
-  se documentaron en iteraciones anteriores. Tras los cambios del catálogo y
-  las fotos reales, conviene repetir el recorrido principal en dispositivo o
-  emulador.
+  se documentaron en iteraciones anteriores.
+- **Prueba en un dispositivo físico**: la aplicación se ha instalado y probado
+  en un móvil real y funciona correctamente. Esa prueba destapó los dos
+  últimos defectos de la lista siguiente (el registro y el calendario de
+  Inicio), que se han corregido y verificado después en el emulador.
 
 ## Defectos encontrados en pruebas manuales y corregidos
 
@@ -75,6 +77,8 @@ reproduciendo el flujo en el emulador `Medium_Phone_API_37.0` (Android 17).
 | El enlace «Crear cuenta» no hacía nada con los campos vacíos. | El `Text` solo era pulsable con `formularioValido`, así que no llegaba ni a ejecutarse la validación. | Ahora es pulsable siempre y muestra el error de validación correspondiente. |
 | Al registrarse, la app parecía no hacer nada. | El proyecto de Supabase exige confirmar el correo (`mailer_autoconfirm = false`), así que `signUpWith` no devuelve sesión y la app se queda en el login. | Se explica el paso de confirmación, se ofrece reenviar el correo y, si la cuenta ya existía, se entra directamente. |
 | El reenvío del correo de confirmación a veces fallaba. | Límite de Supabase: `HTTP 429 over_email_send_rate_limit` («solo puedes pedirlo tras 35 segundos»). No es un fallo de la app. | Mensaje explicativo en lugar de un error genérico. |
+| Al tocar otro día del calendario de Inicio, la pantalla parpadeaba y perdía la posición del scroll. | `PlanViewModel.estado` emitía el estado «Cargando» dentro del `flatMapLatest`, así que se re-emitía en cada cambio de día y `ContenidoConEstado` sustituía todo el contenido por el indicador de carga. | Se emite «Cargando» solo en la primera carga; mientras llegan los datos del día nuevo se mantiene el día anterior en pantalla. El día resaltado se mueve de inmediato. |
+| Los macros de las recetas no coincidían con los calculados a partir de sus ingredientes. | Los hidratos y las grasas se leían del JSON con `getInt`, que trunca los decimales, y `MacrosAlimento` los guardaba como `Int`, así que se perdía la parte decimal. Además el redondeo de Python no coincide con el `roundToInt()` de Kotlin en los empates. | Macros en `Double` leídos con `optDouble`, redondeo `roundToInt()` (half up) y recálculo del catálogo con el mismo criterio. |
 
 Verificación tras la corrección, en el emulador: registro con una cuenta ya
 existente (entra directamente en la app), registro con una cuenta nueva (aviso de
@@ -86,11 +90,11 @@ confirmación y enlace de reenvío), login normal, y hoja del plan con el títul
 - La prueba manual de «cocinar con foto y reiniciar» queda recomendada en
   dispositivo o emulador actual; el flujo tiene cobertura parcial por pruebas
   automatizadas existentes.
-- No se ha probado en dispositivo físico en esta sesión.
+- La app ya se ha probado en un móvil físico y funciona. No se ha comprobado
+  con la fuente de letra ampliada ni en un equipo de gama baja.
 - Los macros de las recetas se calculan a partir de los valores nutricionales
   estándar por 100 g/ml de cada ingrediente del catálogo, por lo que son
   coherentes entre sí. Antes de publicar conviene contrastarlos con una fuente
   de referencia (por ejemplo, la Base de Datos Española de Composición de
   Alimentos).
-- Falta la prueba con 2-3 personas ajenas al equipo y la validación en móviles
-  reales (letra grande, rotación y gama baja).
+- Falta la prueba con 2-3 personas ajenas al equipo.

@@ -1,134 +1,159 @@
 # Identidad visual de REMY
 
-Tema de Compose de la aplicación · Issue #8 · Noviembre de 2026
+Tema de Compose de la aplicación · Issue #8 · Actualizado el 12 de noviembre de 2026
 
-## Resumen
+## Cómo se construyó
 
-REMY tiene una identidad visual fresca y natural, pensada para una app de despensa y recetas. Se basa en un verde vivo como color de marca sobre un fondo verde menta muy suave, con tarjetas blancas de esquinas muy redondeadas y botones en forma de píldora. Toda la identidad está definida en un único tema de Compose (`REMYTheme`), que envuelve la navegación completa desde `MainActivity`, de modo que cualquier pantalla la hereda sin configuración adicional.
+El diseño de la aplicación parte de las pantallas maquetadas en Stitch por Mario
+como referencia de partida. Sobre ellas se reorganizó la jerarquía visual y se
+volvieron a definir los colores para que la identidad quedara más limpia: se
+descartaron la paleta verde y la tipografía Plus Jakarta Sans de la primera
+identidad, que ya no se usan en ningún sitio del código, y se adoptó la paleta
+crema / terracota / azul tinta con Nunito que se describe aquí.
 
-Los valores salen de los bocetos de Despensa, Añadir alimento, Editar cantidad, Eliminar alimento, Recetas guardadas y Sugerencias. Los colores se midieron directamente sobre las imágenes.
+Todo lo que sigue está implementado en el tema de Compose (`REMYTheme`), que
+envuelve la navegación completa desde `MainActivity`, de modo que cualquier
+pantalla la hereda sin configuración adicional. Los valores se comprobaron
+contra el código: los nombres de esta tabla son los mismos que los de
+`ui/theme/Color.kt` y `ui/theme/Type.kt`.
 
 ## Decisiones generales
 
-- **Solo modo claro.** El equipo ha decidido no incluir tema oscuro. Las barras del sistema se fuerzan a estilo claro en `MainActivity` para que los iconos sean siempre legibles.
-- **Sin colores dinámicos.** No se usan los colores del fondo de pantalla de Android 12+, para que la app se vea igual en todos los dispositivos.
-- **Un único punto de definición.** Colores, tipografía y formas viven en `ui/theme/` y las pantallas deben usarlos mediante `MaterialTheme`, sin escribir valores a mano.
+- **Solo modo claro.** El equipo ha decidido no incluir tema oscuro. Las barras
+  del sistema se fuerzan a estilo claro en `MainActivity` para que los iconos
+  sean siempre legibles.
+- **Sin colores dinámicos.** No se usan los colores del fondo de pantalla de
+  Android 12+, para que la app se vea igual en todos los dispositivos.
+- **Un único punto de definición.** Colores, tipografía y formas viven en
+  `ui/theme/` y las pantallas los usan mediante `MaterialTheme`, sin escribir
+  valores a mano.
 
 ## Colores
 
-### Verde de marca
+### Base
 
 | Nombre | Hexadecimal | Uso |
-| --- | --- | --- |
-| Green600 | `#16A34A` | Color principal: botones, botón flotante, chips seleccionados, pestaña activa |
-| Green700 | `#15803D` | Color secundario |
-| Green900 | `#14532D` | Texto sobre contenedores verdes claros |
-| Green100 | `#DCFCE7` | Contenedores verdes suaves (indicadores, categoría Frescos) |
-| Mint | `#E2F8E7` | Fondo de las pantallas |
-| MintDeep | `#DCF5E3` | Superficie menta más intensa (hojas inferiores, diálogos) |
+|---|---|---|
+| `FondoCrema` | `#FFFBF5` | Fondo de las pantallas |
+| `SuperficieBlanca` | `#FFFFFF` | Tarjetas, barra inferior y superficies principales |
+| `BordeTarjeta` | `#F1E9DC` | Bordes y separadores |
+| `TextoPrincipal` | `#14213D` | Texto principal |
+| `TextoSecundario` | `#475569` | Texto secundario e iconos inactivos |
+| `Terracota` | `#C2410C` | Acción principal: botones, chips seleccionados, botón flotante |
+| `AzulTinta` | `#14213D` | Estructura y selección: destino activo de la barra, insignias |
+| `Melocoton` | `#FFEDD5` | Avatar, círculo del logo y fondos suaves |
 
-El fondo es un degradado vertical de blanco a menta (`RemyBackgroundBrush`), visible en la cabecera de Despensa.
-
-### Neutros
-
-| Nombre | Hexadecimal | Uso |
-| --- | --- | --- |
-| Blanco | `#FFFFFF` | Tarjetas, barra de navegación y superficies principales |
-| Slate900 | `#0F172A` | Texto principal |
-| Slate500 | `#64748B` | Texto secundario e iconos inactivos |
-| Slate300 | `#CBD5E1` | Bordes |
-| Slate200 | `#E2E8F0` | Bordes suaves y separadores |
-| Slate100 | `#F1F5F9` | Botón Cancelar y fondos neutros |
+El fondo usa un degradado vertical de crema a crema cálida
+(`RemyBackgroundBrush`, `#FFFBF5` → `#FFF7ED`).
 
 ### Colores de estado
 
 | Nombre | Hexadecimal | Uso |
-| --- | --- | --- |
-| Red600 | `#DC2626` | Error y acción de eliminar |
-| Red100 | `#FEE2E2` | Fondo de elementos de error |
-| Red900 | `#991B1B` | Texto sobre fondos de error |
-| Orange600 | `#EA580C` | Avisos ("Usar pronto", "Consumir en 2 días") |
-| Orange100 | `#FFEDD5` | Fondo de avisos |
-| Orange800 | `#9A3412` | Texto sobre fondos de aviso |
-| Indigo700 | `#3730A3` | Texto de chips informativos (kcal, proteína) |
-| Indigo100 | `#E0E7FF` | Fondo de chips informativos |
+|---|---|---|
+| `AvisoFaltaBg` / `AvisoFaltaFg` | `#FFEDD5` / `#9A3412` | Falta un ingrediente |
+| `AvisoProntoBg` / `AvisoProntoFg` | `#FEF3C7` / `#92400E` | Caduca pronto |
+| `AvisoCaducadoBg` / `AvisoCaducadoFg` | `#FEE2E2` / `#991B1B` | Caducado |
+| `AvisoNeutroBg` / `AvisoNeutroFg` | `#E8EEF3` / `#334155` | Insignia neutra |
+| `NaranjaAviso` | `#EA580C` | Texto del aviso al cocinar |
 
-### Colores por categoría de alimento
+### Tonos pasteles de las miniaturas
 
-Se usan para el fondo de los iconos y las etiquetas de cada categoría. Están disponibles como `MaterialTheme.remyColors`.
+Se usan como marcador de posición mientras una receta no tenga foto real, y
+como fondo de reserva cuando la carga de la imagen falla.
 
-| Categoría | Hexadecimal |
-| --- | --- |
-| Cereales | `#FEF08A` |
-| Verduras | `#FFE4C8` |
-| Proteínas | `#FFEDD5` |
-| Frescos | `#DCFCE7` |
-| Aceites | `#ECFCCB` |
+| Nombre | Hexadecimal |
+|---|---|
+| `TonoPastelMelocoton` | `#E9A27A` |
+| `TonoPastelMostaza` | `#F4C98B` |
+| `TonoPastelAzul` | `#9DC3D6` |
+| `TonoPastelLavanda` | `#C7D2E8` |
+| `TonoPastelRosa` | `#FBCFE8` |
+| `TonoPastelAzulClaro` | `#DCE7F5` |
+
+El tono de cada receta se elige de forma estable a partir de su nombre
+(`logica/ColorReceta.kt`), de modo que una receta siempre se ve igual.
 
 ### Correspondencia con Material 3
 
 | Rol de Material 3 | Valor |
-| --- | --- |
-| primary / onPrimary | `#16A34A` / blanco |
-| primaryContainer / onPrimaryContainer | `#DCFCE7` / `#14532D` |
-| secondary | `#15803D` |
+|---|---|
+| primary / onPrimary | `#C2410C` / blanco |
+| secondary | `#C2410C` |
 | tertiary | `#EA580C` |
-| background / onBackground | `#E2F8E7` / `#0F172A` |
-| surface / onSurface | blanco / `#0F172A` |
-| surfaceVariant / onSurfaceVariant | `#F1F5F9` / `#64748B` |
-| outline / outlineVariant | `#CBD5E1` / `#E2E8F0` |
+| background / onBackground | `#FFFBF5` / `#14213D` |
+| surface / onSurface | blanco / `#14213D` |
+| surfaceVariant / onSurfaceVariant | `#F1E9DC` / `#475569` |
+| outline / outlineVariant | `#F1E9DC` / `#F1E9DC` |
 | error / errorContainer | `#DC2626` / `#FEE2E2` |
 | surfaceContainerHighest | blanco (así las `Card` se ven blancas) |
-| surfaceContainerHigh | `#E2F8E7` (diálogos) |
 
 ## Tipografía
 
-Los bocetos usan una sans-serif geométrica y redondeada, que se corresponde con **Plus Jakarta Sans**. Mientras no se añadan los archivos de la fuente al proyecto (`res/font/`), la aplicación usa la fuente del sistema. Los tamaños, pesos e interlineados ya están definidos, por lo que al activar la fuente solo cambia el aspecto de las letras. El bloque necesario está preparado y comentado en `Type.kt`.
+La familia es **Nunito**, la misma que usa la maqueta. Se carga con
+`compose.ui.text.googlefonts`, por lo que **necesita Google Play Services** en
+el dispositivo: sin ellos, Android usa la fuente del sistema y el aspecto
+cambia. Está anotado como pendiente empaquetar los archivos de la fuente en
+`res/font/` para no depender de ese servicio.
 
 | Estilo | Tamaño | Peso | Uso |
-| --- | --- | --- | --- |
-| displaySmall | 36 sp | ExtraBold | Cantidad grande del selector ("500 g") |
-| headlineMedium | 26 sp | Bold | Título de pantalla ("Despensa", "Sugerencias") |
-| headlineSmall | 22 sp | Bold | Títulos de sección |
-| titleLarge | 20 sp | Bold | Nombre de receta, título de diálogo |
-| titleMedium | 17 sp | SemiBold | Nombre de alimento |
+|---|---|---|---|
+| displaySmall | 26 sp | Bold | Cantidad grande del selector («500 g») |
+| headlineLarge | 24 sp | Bold | Título de detalle de receta |
+| headlineMedium | 22 sp | Bold | Título de pantalla |
+| headlineSmall | 20 sp | Bold | Título de sección |
+| titleLarge | 18 sp | Bold | Nombre de receta, título de diálogo |
+| titleMedium | 16 sp | SemiBold | Nombre de alimento |
 | titleSmall | 14 sp | SemiBold | Subtítulos |
 | bodyLarge | 16 sp | Normal | Texto de lectura |
 | bodyMedium | 14 sp | Normal | Texto general |
-| bodySmall | 12 sp | Normal | Texto secundario ("Despensa · Pasta") |
-| labelLarge | 15 sp | Bold | Botones y chips de filtro |
-| labelMedium | 12 sp | SemiBold | Chips de ingredientes, kcal y proteína |
-| labelSmall | 10 sp | SemiBold | Etiquetas de categoría y estado |
+| bodySmall | 12 sp | Normal | Texto secundario |
+| labelLarge | 14 sp | Bold | Botones y chips de filtro |
+| labelMedium | 12 sp | SemiBold | Chips de ingredientes, kcal y macros |
+| labelSmall | 11 sp | SemiBold | Etiquetas de categoría y estado |
 
 ## Formas
 
-Todo el diseño usa esquinas muy redondeadas, con un contraste claro entre dos familias: tarjetas y paneles redondeados, y elementos interactivos en forma de píldora.
+Esquinas muy redondeadas, con dos familias: tarjetas y paneles redondeados, y
+elementos interactivos en forma de píldora.
 
 | Forma | Radio | Uso |
-| --- | --- | --- |
+|---|---|---|
 | extraSmall | 8 dp | Etiquetas pequeñas |
 | small | 12 dp | Teclas del teclado numérico |
 | medium | 16 dp | Elementos internos de las tarjetas |
 | large | 24 dp | Tarjetas de alimentos y recetas |
-| extraLarge | 28 dp | Hojas inferiores y diálogos |
-| Píldora (`PillShape`) | 50 % | Botones, chips, buscador y pestañas de la barra inferior |
+| extraLarge | 24 dp | Tarjetas grandes y diálogos |
+| `PillShape` | 50 % | Botones, chips, buscador y destinos activos de la barra |
+
+Las hojas inferiores usan bordes redondeados de 28, 32 y 40 dp
+(`SheetShape28`, `SheetShape32`, `SheetShape40`).
 
 ## Componentes
 
-- **Fondo de pantalla:** verde menta, con degradado de blanco a menta en las cabeceras.
+- **Fondo de pantalla:** crema, con degradado vertical suave.
 - **Tarjetas:** blancas, con esquinas de 24 dp.
-- **Botón principal:** verde `#16A34A`, texto blanco, forma de píldora.
-- **Botón flotante (+):** verde sólido `#16A34A` con el símbolo en blanco.
-- **Barra de navegación:** fondo blanco; la pestaña activa se resalta en verde sólido con letra blanca y las inactivas van en gris azulado `#64748B`.
+- **Botón principal:** terracota `#C2410C`, texto blanco, forma de píldora.
+  Deshabilitado mantiene el tono terracota con menos opacidad, para que se
+  lea como «no disponible» y no como otro color.
+- **Botón flotante (+):** terracota sólido, con el símbolo en blanco.
+- **Barra inferior:** fondo blanco y **cuatro destinos** (Inicio, Despensa,
+  Recetas y Sugerencias). Cada destino tiene el icono dentro de un círculo de
+  40 dp y la etiqueta debajo; el activo se marca con el círculo en azul tinta y
+  la etiqueta en texto principal.
+- **Insignias de estado:** azul tinta para «Lista para cocinar», melocotón para
+  «Faltan N» y los avisos con su fondo propio.
 - **Eliminar:** rojo `#DC2626` en el botón, con icono sobre fondo rojo claro.
-- **Chips de filtro:** píldoras; la opción seleccionada va en verde sólido con texto blanco.
+- **Chips de filtro:** píldoras; la opción seleccionada va en azul tinta con
+  texto blanco.
 
 ## Cómo usarlo en el código
 
-Las pantallas no deben escribir colores, tamaños de letra ni radios a mano. Se accede a todo a través del tema:
+Las pantallas no deben escribir colores, tamaños de letra ni radios a mano. Se
+accede a todo a través del tema:
 
 - Colores: `MaterialTheme.colorScheme.primary`, `.background`, `.surface`, etc.
-- Colores propios de REMY (avisos, información y categorías): `MaterialTheme.remyColors.warning`, `.categoryCereales`, etc.
+- Colores propios de REMY: `MaterialTheme.remyColors.warning`,
+  `.categoryCereales`, etc.
 - Tipografía: `MaterialTheme.typography.titleMedium`, etc.
 - Formas: `MaterialTheme.shapes.large`, o `PillShape` para las píldoras.
 - Degradado de fondo: `Modifier.background(RemyBackgroundBrush)`.
@@ -137,14 +162,14 @@ Las pantallas no deben escribir colores, tamaños de letra ni radios a mano. Se 
 
 Todos están en `app/src/main/java/com/remy/app/ui/theme/`:
 
-- `Color.kt`: paleta y degradado de fondo.
-- `Type.kt`: estilos tipográficos.
+- `Color.kt`: paleta, tonos pasteles y degradados de fondo.
+- `Type.kt`: estilos tipográficos con Nunito.
 - `Shape.kt`: formas y `PillShape`.
 - `Theme.kt`: esquema de colores, colores propios (`RemyColors`) y `REMYTheme`.
 
 ## Pendiente
 
-- Añadir los archivos de la fuente (Plus Jakarta Sans, si se confirma) a `res/font/` y activar el bloque comentado de `Type.kt`.
-- Mejorar la barra de navegación cuando haya iconos reales (en los bocetos, icono y texto van juntos dentro de la píldora activa).
-- Ajustar los chips de filtro y las hojas inferiores cuando existan las pantallas definitivas.
-- Anotar el uso de IA en esta tarea en `docs/uso-ia.md`.
+- Empaquetar los archivos de Nunito en `res/font/` y dejar de depender de Google
+  Play Services para la tipografía.
+- Modo oscuro: no está en la maqueta y el equipo ha decidido no incluirlo
+  todavía; hay que decidirlo antes de la entrega definitiva.
