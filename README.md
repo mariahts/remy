@@ -1,20 +1,19 @@
-<div align="center">
+<p align="center">
+  <img src="docs/diseno/remy-logo-gris.png" alt="Logotipo de REMY" width="170">
+</p>
 
-<img src="docs/diseno/remy-logo-gris.png" alt="Logotipo de REMY" width="170">
+<h1 align="center">REMY</h1>
 
-# REMY
+<p align="center"><strong>Cocina con lo que ya tienes en casa.</strong></p>
 
-**Cocina con lo que ya tienes en casa.**
+<p align="center">Aplicación Android que sugiere recetas según los ingredientes que hay en la despensa,<br>descuenta lo que se ha cocinado y guarda el histórico con foto.</p>
 
-Aplicación Android que sugiere recetas según los ingredientes que hay en la despensa,
-descuenta lo que se ha cocinado y guarda el histórico con foto.
-
-[Repositorio](https://github.com/mariahts/remy) ·
-[Tablero del proyecto](https://github.com/users/mariahts/projects/1) ·
-[Índice de la Entrega 4](docs/entrega-4.md) ·
-[Créditos de las fotos](docs/fotos-recetas.md)
-
-</div>
+<p align="center">
+  <a href="https://github.com/mariahts/remy">Repositorio</a> &nbsp;·&nbsp;
+  <a href="https://github.com/users/mariahts/projects/1">Tablero del proyecto</a> &nbsp;·&nbsp;
+  <a href="docs/entrega-4.md">Índice de la Entrega 4</a> &nbsp;·&nbsp;
+  <a href="docs/fotos-recetas.md">Créditos de las fotos</a>
+</p>
 
 ---
 

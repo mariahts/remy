@@ -1,15 +1,12 @@
-<div align="center">
+<p align="center">
+  <img src="logo-remy.png" alt="Logotipo de REMY" width="150">
+</p>
 
-<img src="logo-remy.png" alt="Logotipo de REMY" width="150">
+<h1 align="center">REMY — Entrega 4</h1>
 
-# REMY — Entrega 4
+<p align="center"><strong>Cocina con lo que ya tienes en casa.</strong></p>
 
-**Cocina con lo que ya tienes en casa.**
-
-Versión candidata de la aplicación Android REMY, con la funcionalidad principal
-integrada, las pruebas ejecutadas y la documentación al día.
-
-</div>
+<p align="center">Versión candidata de la aplicación Android REMY, con la funcionalidad principal<br>integrada, las pruebas ejecutadas y la documentación al día.</p>
 
 ---
 
