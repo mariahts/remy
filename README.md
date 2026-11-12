@@ -234,6 +234,7 @@ pendiente, está en [`docs/entrega-4.md`](docs/entrega-4.md).
 | [`docs/evidencias-individuales.md`](docs/evidencias-individuales.md) | Evidencias de contribución de cada integrante |
 | [`docs/uso-ia.md`](docs/uso-ia.md) | Registro del uso de IA: para qué, qué se cambió y cómo se verificó |
 | [`docs/fotos-recetas.md`](docs/fotos-recetas.md) | Crédito de las fotos del catálogo |
+| [`docs/plantilla-recetas.md`](docs/plantilla-recetas.md) | Prompt para añadir o cambiar recetas del catálogo, con la tabla de alimentos |
 | [`docs/mvp-estado.md`](docs/mvp-estado.md) | Estado del MVP, resuelto y pendiente |
 | [`docs/ModeloE_R_Remy.drawio`](docs/ModeloE_R_Remy.drawio) | Modelo de datos |
 | [`docs/diseno/`](docs/diseno) | Maqueta de la interfaz y material de diseño |
