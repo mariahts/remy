@@ -259,6 +259,7 @@ revisión aprobatoria de alguien con permisos de escritura. El trabajo se integr
 | Documento | Contenido |
 |---|---|
 | [`docs/entrega-4.md`](docs/entrega-4.md) | Los ocho entregables de la Entrega 4 y su estado |
+| [`docs/leeme-entrega4.md`](docs/leeme-entrega4.md) | El leeme del ZIP que se entrega al profesor |
 | [`docs/pruebas.md`](docs/pruebas.md) | Qué se ha probado, con qué resultado y qué queda pendiente |
 | [`docs/revision-diseno-usabilidad.md`](docs/revision-diseno-usabilidad.md) | Revisión de diseño, usabilidad y accesibilidad |
 | [`docs/evidencias-individuales.md`](docs/evidencias-individuales.md) | Evidencias de contribución de cada integrante |
