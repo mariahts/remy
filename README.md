@@ -1,179 +1,241 @@
 # REMY
 
-Aplicación móvil Android que sugiere recetas a partir de los ingredientes
-que tienes en casa.
+Aplicación Android que sugiere recetas según los ingredientes que hay en la
+despensa, descuenta lo que se ha cocinado y guarda el histórico con foto.
+
+- **Repositorio:** https://github.com/mariahts/remy
+- **Tablero (GitHub Project):** https://github.com/users/mariahts/projects/1
+- **APK de entrega:** `REMY_MARIA_ENTREGA4.apk` (release con ofuscación y firma propia)
 
 ## Integrantes
-- María José Sánchez León (GitHub: [mariahts](https://github.com/mariahts))
-- Mario Jiménez Ruiz (GitHub: [FedericoCamposMartinez](https://github.com/FedericoCamposMartinez))
+
+- María José Sánchez León ([mariahts](https://github.com/mariahts))
+- Mario Jiménez Ruiz ([FedericoCamposMartinez](https://github.com/FedericoCamposMartinez))
 
 Proyecto integrador de PMDM · 2.º DAM · curso 2026–2027.
 
-## Problema que resuelve
-Muchas veces no sabemos qué cocinar con lo que tenemos en casa, y acabamos
-comprando de más y tirando comida. REMY propone recetas según tu despensa y
-te dice qué ingredientes te faltan.
+## Qué problema resuelve
 
-## Personas usuarias
-Estudiantes, personas que viven solas o en piso compartido y familias que
-cocinan en casa con poco tiempo y presupuesto ajustado.
+No saber qué cocinar con lo que ya hay en casa. REMY parte de la despensa real
+de la persona usuaria, distingue lo que ya se puede cocinar de lo que «casi»
+se puede y descuenta de la despensa lo que se ha cocinado.
 
-## Qué la hace diferente
-- Parte de la despensa real de la persona usuaria, no de una búsqueda por plato.
-- Distingue recetas que ya se pueden cocinar y recetas "casi cocinables"
-  (con un máximo configurable de ingredientes que faltan).
-- Al cocinar una receta descuenta los ingredientes y guarda una foto del plato.
+Personas usuarias: estudiantes, personas que viven solas o en piso compartido
+y familias que cocinan con poco tiempo y presupuesto ajustado.
 
-## Funcionalidades de la primera versión
-- Pantalla de inicio con calendario y registro de las recetas cocinadas por día.
-- Despensa personal: alimentos, cantidades y unidades (Room).
-- Catálogo de al menos 20 recetas con tiempo e información nutricional.
-- Sugerencias según la despensa: completas y con pocos ingredientes faltantes.
-- Filtros por tipo de plato, tiempo máximo, calorías máximas, proteínas mínimas,
-  región y máximo de ingredientes que faltan, con las preferencias guardadas en
-  DataStore y un botón para limpiar los filtros (#37).
-- Estados de carga y de error con opción de reintentar en las pantallas que
-  consultan Room (#46).
-- Marcar una receta como cocinada, con fecha y fotografía del plato
-  (función multimedia), y registro de lo cocinado en el calendario.
-- Al marcar una receta como cocinada se descuentan de la despensa los
-  ingredientes que había, sin bajar nunca de cero (#36).
+## Funcionalidades implementadas
 
-## Si hay tiempo
-Registro e inicio de sesión, lista de la compra con cálculo de gasto, planes de
-comidas, valoraciones, recetas propias con foto, modo sin conexión, sugerencias
-por patrones de consumo y funciones sociales.
+**Despensa**
+- Alta, edición y borrado de alimentos con cantidad y unidad, con validación
+  del formulario.
+- Los alimentos del catálogo se distinguen de los de la despensa (`enDespensa`),
+  de modo que ocultar un alimento no rompe las recetas que lo usan.
+
+**Recetas y sugerencias**
+- Catálogo de 20 recetas y 31 alimentos, precargado desde `assets/recetas.json`.
+- Sugerencias en dos grupos: «Puedes cocinarlas ya» y «Casi listas», con los
+  ingredientes que faltan en cada caso.
+- Filtros por tipo de plato, tiempo máximo, calorías máximas, proteínas
+  mínimas, región, máximo de faltantes y macros por ración (`Alta en proteína`
+  ≥ 25 g, `Baja en hidratos` ≤ 30 g, `Baja en grasa` ≤ 15 g). Se guardan en
+  DataStore, sobreviven al cierre de la app y «Limpiar filtros» los restablece.
+- Detalle de receta con tiempo, calorías, proteínas, hidratos y grasas **por
+  ración**, escaladas con el selector de raciones, y los pasos de elaboración.
+
+**Cocinar**
+- Marcar una receta como cocinada: cámara (CameraX) o selector de fotos del
+  sistema como alternativa, con el permiso de cámara pedido y el caso de
+  denegación contemplado.
+- La foto se copia al almacenamiento interno de la app y se recupera al
+  reabrirla.
+- Se descuenta de la despensa lo que había, sin bajar nunca de cero, escalado
+  por el número de raciones. Si algún ingrediente no se puede descontar, se
+  avisa con su nombre y la cocción se guarda igualmente.
+
+**Inicio y planificación**
+- Pantalla de inicio con la receta del día, accesos directos, y la semana con
+  el plan de comidas por día (desayuno, comida y cena), que se puede añadir o
+  quitar.
+- Registro de lo cocinado en el calendario.
+- Estados de carga y de error con reintento en las pantallas que consultan la
+  base de datos.
+
+**Cuenta**
+- Inicio de sesión y registro con Supabase, con validación previa del correo y
+  de la contraseña, aviso de que hay que confirmar el correo y opción de
+  reenviarlo.
 
 ## Tecnologías
-- Kotlin y Jetpack Compose (Material 3)
-- Arquitectura MVVM (ViewModel y repositorios)
-- Navigation Compose (barra inferior con tres destinos: Inicio, Despensa y
-  Recetas; Sugerencias, Perfil y el detalle de receta se abren desde ellas)
-- Room para los datos estructurados (despensa, recetas e historial de
-  cocciones, con el esquema exportado a `app/schemas/` para poder migrar)
-- CameraX para la foto del plato (permiso, vista previa y captura) y selector
-  de fotos del sistema como alternativa
-- DataStore para las preferencias de filtros
+
+| Tecnología | Para qué |
+|---|---|
+| Kotlin, Jetpack Compose (Material 3) | Interfaz |
+| Navigation Compose | Rutas; barra inferior con cuatro destinos (Inicio, Despensa, Recetas, Sugerencias) |
+| Room 2.8.5 | Despensa, recetas, ingredientes, plan de comidas e historial de cocciones. Esquema exportado en `app/schemas/` |
+| DataStore 1.1.1 | Preferencias de filtros y versión de la despensa de demostración |
+| CameraX 1.6.2 + Coil 2.7.0 | Foto del plato (cámara o galería) y carga de imágenes |
+| Supabase (auth) | Inicio de sesión y registro |
+| Nunito (Google Fonts) | Tipografía del tema |
 
 ## Estructura del proyecto
+
 El código está en `app/src/main/java/com/remy/app/`:
 
-- `data`: acceso a datos (entidades, DAO, `RemyDatabase`, repositorios y las
-  preferencias de filtros con DataStore).
-- `domain/model`: clases de negocio, como Receta o Alimento.
-- `ui`: interfaz con Jetpack Compose.
-  - `screens`: pantallas (inicio, despensa, recetas, sugerencias, perfil y
-    detalle de receta).
-  - `components`: elementos reutilizables.
-  - `navigation`: rutas y navegación entre pantallas.
-  - `viewmodel`: ViewModels de cada pantalla.
-  - `theme`: colores, tipografía y tema.
+- `data`: entidades, DAO, `RemyDatabase`, repositorios, precarga del catálogo y
+  preferencias con DataStore.
+- `domain/model`: clases de negocio (`Receta`, `Alimento`).
+- `ui`:
+  - `screens`: pantallas (inicio, despensa, recetas, sugerencias, perfil, hoja
+    del plan, captura de foto y detalle de receta).
+  - `components`: componentes reutilizables, entre ellos `RecipePhoto`, que
+    resuelve la imagen de una receta (foto de la persona usuaria, foto del
+    catálogo o color pastel).
+  - `navigation`: rutas y barra inferior.
+  - `viewmodel`: ViewModel de cada pantalla.
+  - `theme`: `Color.kt`, `Type.kt` y el tema.
+
+Los macros de las recetas no se guardan a mano: `data/MacrosAlimento.kt` los
+calcula sumando el aporte de cada ingrediente a partir de la tabla nutricional
+por 100 g/ml del catálogo.
 
 ## Cómo compilar y ejecutar
+
 Requisitos: Android Studio (versión estable reciente) y un emulador Android o
-un móvil con la depuración USB activada. La app usa minSdk 26.
+un móvil con depuración USB. `minSdk` 26, `targetSdk` 36.
 
-1. Clonar el repositorio: `git clone https://github.com/mariahts/remy.git`
-2. En Android Studio: **File → Open** y elegir la carpeta `remy`.
-3. Esperar a que termine la sincronización de Gradle.
-4. Crear o elegir un dispositivo en **Device Manager**.
-5. Pulsar **Run** sobre el módulo `app`.
+```bash
+git clone https://github.com/mariahts/remy.git
+cd remy
+./gradlew :app:assembleDebug
+```
 
-No se necesita ninguna clave ni servicio externo para ejecutar la aplicación.
-La app pide permiso de cámara al marcar una receta como cocinada y elegir la
-cámara; se puede denegar y seguir funcionando con el selector de fotos del
-sistema.
+O en Android Studio: **File → Open** sobre la carpeta `remy`, esperar a la
+sincronización de Gradle y pulsar **Run** en el módulo `app`.
 
-### Cómo probar el recorrido principal
-1. Instalar la APK o pulsar Run: la app abre la pantalla de Inicio con el
-   calendario y, en la primera instalación, entran el catálogo de 20 recetas y
-   30 alimentos.
-2. Pestaña Despensa: añadir un alimento con el botón flotante; probar a guardar
+Con `JAVA_HOME` apuntando al JBR de Android Studio
+(`C:\Program Files\Android\Android Studio\jbr` en Windows) funcionan tanto
+Gradle como `apksigner`.
+
+### Configuración necesaria
+
+**El registro y el inicio de sesión necesitan un proyecto de Supabase.** Las
+claves van en `local.properties` (no se versiona):
+
+```properties
+SUPABASE_URL=https://<tu-proyecto>.supabase.co
+SUPABASE_ANON_KEY=<tu-clave-publica>
+```
+
+Si no están, la app arranca y todo lo demás funciona, pero el login falla.
+El resto de la aplicación no necesita ninguna clave ni servicio externo.
+
+La build de release se firma con un almacén de claves propio. Las propiedades
+`RELEASE_STORE_FILE`, `RELEASE_STORE_PASSWORD`, `RELEASE_KEY_ALIAS` y
+`RELEASE_KEY_PASSWORD` de `local.properties` son opcionales: si no están, la
+build sale sin firmar y no falla.
+
+### Recorrido principal para probar
+
+1. La app abre en Inicio. En la primera instalación se precargan el catálogo
+   (20 recetas y 31 alimentos) y la despensa de la cuenta de demostración.
+2. **Despensa**: añadir un alimento con el botón flotante; probar a guardar
    con cantidad 0 para ver el mensaje de validación.
-3. Pestaña Recetas: tocar una tarjeta para abrir el detalle (ingredientes,
-   pasos y nutrición) y volver con «Volver al listado».
-4. En la barra inferior, abrir «Sugerencias»: con la despensa
-   completa aparecen «Se puede cocinar ya» y «Casi cocinable»; al borrar un
-   alimento de la despensa (por ejemplo «Arroz») aparecen recetas en «Casi
-   cocinable» con «Falta: …».
-5. En Sugerencias, abrir los filtros, elegir un tipo de plato, un tiempo
-   máximo, unas calorías máximas, unas proteínas mínimas, una región o un
-   filtro de macros por ración (`Alta en proteína`, `Baja en hidratos`,
-   `Baja en grasa`), y comprobar que la lista y el contador cambian. Cerrar y
-   abrir la app: los filtros se conservan (DataStore); «Limpiar filtros» vuelve
-   al estado inicial.
-6. Abrir una receta, pulsar «Empezar a cocinar», bajar hasta «Marcar como
-   cocinada» y confirmar con foto o sin ella: la receta queda registrada en el
-   calendario de Inicio en el día correspondiente y la despensa descuenta los
-   ingredientes (sin bajar nunca de cero). Si algún ingrediente no se puede
-   descontar, la app avisa con su nombre y la cocción se guarda igualmente.
-7. Abrir el icono de perfil: se puede comprobar la información de la cuenta y
-   el acceso a las recetas que ya se han cocinado.
+3. **Recetas**: tocar una tarjeta para abrir el detalle (ingredientes, pasos y
+   nutrición). Cada receta tiene foto del catálogo.
+4. **Sugerencias** (cuarto destino de la barra): con la despensa llena
+   aparecen «Puedes cocinarlas ya» y «Casi listas». Al borrar un alimento
+   (por ejemplo «Arroz») pasan a «Casi listas» con la lista de lo que falta.
+5. En **Sugerencias → filtros**, cambiar un criterio (tipo de plato, tiempo,
+   calorías, proteínas, región, faltantes o macros por ración) y comprobar que
+   la lista y el contador cambian. Cerrar y abrir la app: los filtros se
+   conservan. «Limpiar filtros» los restablece.
+6. Abrir una receta y bajar hasta «Marcar como cocinada»: se puede confirmar
+   con foto (cámara o galería) o sin ella. La receta queda en el calendario de
+   Inicio y la despensa descuenta los ingredientes sin bajar de cero. Si algún
+   ingrediente no se puede descontar, la app avisa con su nombre.
+7. **Inicio → Tu semana**: tocar otro día del calendario. El contenido se
+   mantiene en pantalla y solo cambia el plan del día.
+8. **Perfil** (avatar de la cabecera): datos de la cuenta y recetas cocinadas.
 
 ## Organización del equipo
-- Tablero Kanban (GitHub Project): https://github.com/users/mariahts/projects/1
-- Columnas: Backlog, Ready, En progreso, En revision, Hecho y Blocked.
+
+- Tablero Kanban: https://github.com/users/mariahts/projects/1
+- Columnas: Backlog, Ready, En progreso, En revisión, Hecho y Blocked.
+- Cada issue lleva en su cuerpo el bloque «Clasificación» con RA, tamaño,
+  prioridad, revisor, sprint y dependencias.
 
 ### Flujo de trabajo
-1. Cada tarea tiene una issue asignada a una persona.
-2. Se crea una rama desde `dev` (ejemplo: `feature/22-room-despensa`).
-3. Se hacen commits descriptivos y se abre una Pull Request con `Closes #N`.
-4. La otra persona revisa la PR, deja una observación concreta y la aprueba.
-5. Se hace merge a `dev` y la issue pasa a Hecho.
 
-No se hacen commits directos a `main`: está protegida y exige una aprobación.
-El avance se integra en `dev` y `main` se actualiza al cerrar cada hito.
+1. Cada tarea tiene una issue con criterios de aceptación comprobables.
+2. Rama propia desde `dev` (`feature/...`, `fix/...`, `docs/...`).
+3. Commits pequeños y descriptivos.
+4. Pull Request a `dev` con el resumen, las pruebas ejecutadas y `Closes #N`.
+5. Revisión de la otra persona, merge en `dev` y la issue pasa a Hecho.
+
+No se hacen commits directos a `main`: la regla de protección de `main` exige
+una revisión aprobatoria de alguien con permisos de escritura. El trabajo se
+integra en `dev` y `main` se actualiza al cerrar cada hito.
 
 ## Estado actual (12 de noviembre de 2026)
-- Base de datos Room en la versión 8 con migraciones explícitas: despensa
-  (#22 y #28), recetas e ingredientes (#23), precarga del catálogo (#30),
-  receta cocinada con fecha y foto (#35), e hidratos y grasas de recetas (#82).
-- Tema de la app (#8): paleta, tipografía y formas aplicados en todas las
-  pantallas, con su documento en `docs/disenio/Identidad visual de REMY.md`.
-- Preferencias con DataStore (#29), listado (#31) y detalle (#32) de recetas,
-  y sugerencias con los dos grupos (#33 y #34).
-- Receta marcada como cocinada con foto (#35), registro de recetas cocinadas
-  en el calendario de Inicio (#44) y descuento automático de la despensa al
-  cocinar (#36).
-- Navegación con cuatro destinos en la barra inferior: Inicio, Despensa,
-  Recetas y Sugerencias (#45 y #83).
-- Filtros completos de #37: tipo de plato, tiempo máximo, calorías máximas,
-  proteínas mínimas, región y máximo de faltantes, persistidos en DataStore y
-  con opción de limpiarlos.
-- Filtros de macros por ración (#82): `Alta en proteína` (≥ 25 g),
-  `Baja en hidratos` (≤ 30 g) y `Baja en grasa` (≤ 15 g), con persistencia
-  en DataStore.
-- Catálogo de 20 recetas y 31 alimentos: las macros (calorías, proteínas,
-  hidratos y grasas) de cada receta se **calculan a partir de sus ingredientes**
-  al precargar el catálogo, a partir de los valores nutricionales por 100 g/ml de
-  cada alimento. Los pasos de elaboración se han detallado y la proteína del
-  yogur natural se ha corregido.
-- Fotos reales del catálogo: cada receta muestra una imagen procedente de
-  Wikimedia Commons con licencia libre; los créditos (autor, licencia y enlace)
-  están en `docs/fotos-recetas.md`. La foto que la persona usuaria hace al
-  cocinar sigue teniendo prioridad sobre la del catálogo.
-- Macros completas en el detalle (#82): proteínas, hidratos y grasas por
-  ración, escaladas con el selector de raciones.
-- Rediseño de la interfaz (#83): tema Nunito, componentes reutilizables,
-  pantallas rediseñadas, planificación semanal y estados vacíos mejorados.
-- Pulido de interfaz para la entrega 4: miniaturas de receta con fotos del
-  catálogo (o bloques de color pastel si falta la foto), insignia de
-  disponibilidad en «Tu receta de hoy», despensa de demostración sembrada con
-  las unidades de las recetas, mes visible en la cabecera de la semana y los
-  dos accesos directos del inicio («Añadir a mi despensa» y «Ver sugerencias»)
-  con la misma altura. La revisión de diseño, accesibilidad y usabilidad está
-  en `docs/revision-diseno-usabilidad.md`.
-- Estados de carga y error con reintento en las pantallas que consultan Room
-  (#46).
-- Versión de entrega: APK de `release` con ofuscación (R8) y firma propia,
-  de 3,3 MB.
-- Pruebas: 54 unitarias y 22 instrumentadas en verde; el registro está en
-  `docs/pruebas.md`.
-- Pendientes: documentos de la entrega (#41 y #42), verificación en móviles
-  reales, caducidad en la despensa, modo oscuro y publicación (icono, capturas,
-  política de privacidad).
+
+- **Base de datos**: Room en la versión 8, con migraciones explícitas y esquema
+  exportado en `app/schemas/`. Cada migración tiene su prueba instrumentada.
+- **Catálogo**: 20 recetas y 31 alimentos. Las kcal, proteínas, hidratos y
+  grasas de cada receta se calculan a partir de los ingredientes al precargar
+  (`macrosDeReceta`), de modo que el catálogo y la app no pueden
+  desincronizarse. Los pasos van de cuatro a cinco por receta. La proteína del
+  yogur natural está corregida (3 g/100 g, no 10).
+- **Fotos**: las 20 recetas tienen una fotografía real del plato con licencia
+  libre; el autor, la licencia y el enlace de cada una están en
+  `docs/fotos-recetas.md`. Si falta la foto, la miniatura usa un color pastel.
+  La foto que hace la persona usuaria al cocinar tiene prioridad sobre la del
+  catálogo.
+- **Interfaz**: tema crema/terracota/azul tinta con Nunito, cuatro destinos en
+  la barra inferior, estados vacíos propios, insignia de disponibilidad en la
+  receta del día y los dos accesos directos de Inicio con la misma altura. La
+  revisión de diseño, usabilidad y accesibilidad está en
+  `docs/revision-diseno-usabilidad.md`.
+- **Filtros**: seis criterios más tres de macros por ración, persistidos en
+  DataStore.
+- **Cocción**: foto con CameraX o galería, descuento de despensa por raciones y
+  aviso de los ingredientes que no se pueden descontar.
+- **Pruebas**: 54 unitarias (10 suites) y 22 instrumentadas (7 suites), todas
+  en verde. El detalle está en `docs/pruebas.md`.
+- **APK de entrega**: `release` con ofuscación R8, recorte de recursos y firma
+  propia, de **6,7 MB** (7.051.273 bytes).
+
+### Pendiente
+
+- Memoria en Word (#41) y presentación de la defensa (#42), fuera del repo.
+- Pruebas con 2-3 personas ajenas al equipo, sin explicación previa.
+- Comprobar letra grande y gama baja en un móvil real: la app ya se ha probado
+  en un dispositivo físico y funciona, pero no se ha verificado con la fuente
+  ampliada ni en un equipo de gama baja.
+- Contraste de los macros del catálogo con una fuente de referencia (la tabla
+  usada es estándar, pero está revisada a mano, no por una base de datos
+  oficial).
+- Caducidad de los alimentos de la despensa: el modelo actual no tiene ese
+  campo y añadirlo supondría una migración de la base de datos.
+- Modo oscuro: el diseño solo define el modo claro.
+- Publicación en tienda: icono definitivo, capturas y política de privacidad.
+
+## Entrega 4
+
+El índice de los ocho entregables, con dónde está cada uno y qué queda
+pendiente, está en [`docs/entrega-4.md`](docs/entrega-4.md).
 
 ## Documentación
-La memoria del proyecto (Word) se entrega en el Aula Virtual. En la carpeta
-`docs/` están el modelo de datos (`.drawio`), el registro de uso de IA
-(`uso-ia.md`) y el registro de pruebas (`pruebas.md`).
+
+| Documento | Contenido |
+|---|---|
+| [`docs/entrega-4.md`](docs/entrega-4.md) | Los ocho entregables de la Entrega 4 y su estado |
+| [`docs/pruebas.md`](docs/pruebas.md) | Qué se ha probado, con qué resultado y qué queda pendiente |
+| [`docs/revision-diseno-usabilidad.md`](docs/revision-diseno-usabilidad.md) | Revisión de diseño, usabilidad y accesibilidad |
+| [`docs/evidencias-individuales.md`](docs/evidencias-individuales.md) | Evidencias de contribución de cada integrante |
+| [`docs/uso-ia.md`](docs/uso-ia.md) | Registro del uso de IA: para qué, qué se cambió y cómo se verificó |
+| [`docs/fotos-recetas.md`](docs/fotos-recetas.md) | Crédito de las fotos del catálogo |
+| [`docs/mvp-estado.md`](docs/mvp-estado.md) | Estado del MVP, resuelto y pendiente |
+| [`docs/ModeloE_R_Remy.drawio`](docs/ModeloE_R_Remy.drawio) | Modelo de datos |
+| [`docs/diseno/`](docs/diseno) | Maqueta de la interfaz y material de diseño |
+
+La memoria del proyecto se entrega en Word en el Aula Virtual.
