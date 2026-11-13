@@ -101,12 +101,12 @@ familias que cocinan con poco tiempo y presupuesto ajustado.
 
 ### Con la APK
 
-`REMY_MARIA_ENTREGA4.apk` es la build de `release` con ofuscación (R8), recorte de
-recursos y firma propia (6,7 MB). Se instala en el móvil desde el archivo, o por
-ADB:
+`entrega/REMY_MARIA_ENTREGA4.apk` es la build de `release` con ofuscación (R8),
+recorte de recursos y firma propia (6,7 MB). Se instala en el móvil desde el archivo,
+o por ADB:
 
 ```bash
-adb install -r REMY_MARIA_ENTREGA4.apk
+adb install -r entrega/REMY_MARIA_ENTREGA4.apk
 ```
 
 Cuenta de demostración: `demo@remy.app` / `Demo1234!`.
@@ -172,9 +172,18 @@ sale sin firmar y no falla.
 
 El código está en `app/src/main/java/com/remy/app/`:
 
-- `data`: entidades, DAO, `RemyDatabase`, repositorios, precarga del catálogo y
-  preferencias con DataStore.
-- `domain/model`: clases de negocio (`Receta`, `Alimento`).
+- `data`: entidades de Room, DAO, `RemyDatabase`, repositorios, precarga del catálogo
+  y preferencias con DataStore.
+- `domain`: reglas de negocio puras, sin dependencias de Android:
+  - `AlgoritmoSugerencias.kt`: compara la despensa con los ingredientes y calcula
+    qué falta en cada receta.
+  - `DescuentoDespensa.kt`: resta de la despensa lo que se ha cocinado.
+  - `FiltroRecetas.kt`: aplica los filtros de sugerencias.
+  - `ColorReceta.kt`: elige el tono pastel de las miniaturas sin foto.
+  - `model`: los tipos que comparten esas reglas (`Faltante`,
+    `IngredienteFaltante`, `DisponibilidadReceta`, `ResultadoSugerencias` y
+    `ResultadoDescuento`). No depende de Room ni de Compose, así que se puede probar
+    con pruebas unitarias normales.
 - `ui`:
   - `screens`: pantallas (inicio, despensa, recetas, sugerencias, perfil, hoja del
     plan, captura de foto y detalle de receta).
@@ -267,6 +276,6 @@ revisión aprobatoria de alguien con permisos de escritura. El trabajo se integr
 | [`docs/plantilla-recetas.md`](docs/plantilla-recetas.md) | Prompt para añadir o cambiar recetas del catálogo, con la tabla de alimentos |
 | [`docs/mvp-estado.md`](docs/mvp-estado.md) | Estado del MVP, resuelto y pendiente |
 | [`docs/ModeloE_R_Remy.drawio`](docs/ModeloE_R_Remy.drawio) | Modelo de datos |
-| [`docs/disenio/`](docs/diseno) | Maqueta de la interfaz, identidad visual y material de diseño |
+| [`docs/diseno/`](docs/diseno) | Maqueta de la interfaz, identidad visual y material de diseño |
 
 La memoria del proyecto se entrega en Word en el Aula Virtual.

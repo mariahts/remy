@@ -37,5 +37,5 @@ google-services.json
 # OpenCode local data
 .opencode/
 
-capturas-pantallas/
+/entrega/
 *.zip
