@@ -409,10 +409,10 @@ private fun SemanaPlan(
                         modifier = Modifier
                             .size(36.dp)
                             .clip(CircleShape)
-                            .background(if (esHoy) AzulTinta else if (esSeleccionado) Melocoton else SuperficieBlanca)
+                            .background(if (esSeleccionado) AzulTinta else SuperficieBlanca)
                             .border(
-                                width = if (!esHoy && !esSeleccionado) 1.dp else 0.dp,
-                                color = BordeTarjeta,
+                                width = if (esSeleccionado) 0.dp else 1.dp,
+                                color = if (esHoy) AzulTinta else BordeTarjeta,
                                 shape = CircleShape
                             ),
                         contentAlignment = Alignment.Center
@@ -420,7 +420,7 @@ private fun SemanaPlan(
                         Text(
                             text = dia.dayOfMonth.toString(),
                             style = MaterialTheme.typography.labelLarge,
-                            color = if (esHoy) Color.White else TextoPrincipal,
+                            color = if (esSeleccionado) Color.White else TextoPrincipal,
                             fontWeight = FontWeight.Bold
                         )
                     }
