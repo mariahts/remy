@@ -54,6 +54,7 @@ import com.remy.app.data.Receta
 import com.remy.app.data.RecetaConIngredientes
 import com.remy.app.data.SupabaseClientProvider
 import com.remy.app.data.TipoComida
+import com.remy.app.domain.model.DisponibilidadReceta
 import com.remy.app.ui.components.ContenidoConEstado
 import com.remy.app.ui.components.PrimaryButton
 import com.remy.app.ui.components.RecipePhoto
@@ -72,7 +73,6 @@ import com.remy.app.ui.theme.SuperficieBlanca
 import com.remy.app.ui.theme.Terracota
 import com.remy.app.ui.theme.TextoPrincipal
 import com.remy.app.ui.theme.TextoSecundario
-import com.remy.app.ui.viewmodel.DisponibilidadReceta
 import com.remy.app.ui.viewmodel.PlanDia
 import com.remy.app.ui.viewmodel.PlanViewModel
 import io.github.jan.supabase.auth.auth
