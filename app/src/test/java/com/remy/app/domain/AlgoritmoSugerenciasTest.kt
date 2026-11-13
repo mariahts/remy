@@ -1,10 +1,12 @@
-package com.remy.app.logica
+package com.remy.app.domain
 
 import com.remy.app.data.Alimento
 import com.remy.app.data.Ingrediente
 import com.remy.app.data.IngredienteConAlimento
 import com.remy.app.data.Receta
 import com.remy.app.data.RecetaConIngredientes
+import com.remy.app.domain.model.Faltante
+import com.remy.app.domain.model.MotivoFaltante
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

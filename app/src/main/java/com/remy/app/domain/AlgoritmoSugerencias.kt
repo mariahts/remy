@@ -1,13 +1,15 @@
-package com.remy.app.logica
+package com.remy.app.domain
 
 import com.remy.app.data.Alimento
 import com.remy.app.data.RecetaConIngredientes
+import com.remy.app.domain.model.Faltante
+import com.remy.app.domain.model.IngredienteFaltante
+import com.remy.app.domain.model.MotivoFaltante
+import com.remy.app.domain.model.RecetaCasiCocinable
+import com.remy.app.domain.model.RecetaCompleta
+import com.remy.app.domain.model.ResultadoSugerencias
 import java.text.Normalizer
 import java.util.Locale
-import kotlin.math.abs
-
-/** Motivo por el que un ingrediente cuenta como faltante. */
-enum class MotivoFaltante { AUSENTE, CANTIDAD_INSUFICIENTE }
 
 private val BASICOS = setOf("sal", "agua", "pimienta")
 
@@ -18,20 +20,51 @@ private fun esBasico(nombre: String?): Boolean {
     return normalizado in BASICOS
 }
 
-/** Ingrediente que falta para poder cocinar una receta. */
-data class Faltante(val alimentoId: Long, val motivo: MotivoFaltante = MotivoFaltante.AUSENTE)
+/**
+ * Ingredientes que le faltan a [receta] con la [despensa] actual, ya resueltos
+ * con su nombre y sus cantidades.
+ *
+ * Un ingrediente falta si no está en la despensa o si no hay cantidad
+ * suficiente. Sal, agua y pimienta no cuentan. Los ingredientes repetidos se
+ * devuelven una sola vez.
+ */
+fun faltantesDeReceta(
+    receta: RecetaConIngredientes,
+    despensa: List<Alimento>
+): List<IngredienteFaltante> {
+    val enDespensa = despensa.associateBy { it.id }
+    val vistos = mutableSetOf<Long>()
+    val faltantes = mutableListOf<IngredienteFaltante>()
 
-/** Receta que ya se puede cocinar: tiene todos los ingredientes en la despensa. */
-data class RecetaCompleta(val receta: RecetaConIngredientes)
+    for (ing in receta.ingredientes) {
+        val id = ing.ingrediente.alimentoId
+        if (!vistos.add(id)) continue
+        if (esBasico(ing.alimento?.nombre)) continue
 
-/** Receta a la que le faltan ingredientes, pero dentro del máximo permitido. */
-data class RecetaCasiCocinable(val receta: RecetaConIngredientes, val faltantes: List<Faltante>)
+        val disponible = enDespensa[id]
+        val motivo = when {
+            disponible == null -> MotivoFaltante.AUSENTE
+            !cantidadSuficiente(
+                ing.ingrediente.cantidad,
+                ing.ingrediente.unidad,
+                disponible.cantidad,
+                disponible.unidad
+            ) -> MotivoFaltante.CANTIDAD_INSUFICIENTE
+            else -> null
+        } ?: continue
 
-/** Los dos grupos que devuelve el algoritmo de sugerencias. */
-data class ResultadoSugerencias(
-    val completas: List<RecetaCompleta>,
-    val casiCocinables: List<RecetaCasiCocinable>
-)
+        faltantes += IngredienteFaltante(
+            alimentoId = id,
+            nombre = ing.alimento?.nombre ?: "Alimento $id",
+            necesario = ing.ingrediente.cantidad,
+            unidad = ing.ingrediente.unidad,
+            disponible = disponible?.cantidad,
+            motivo = motivo
+        )
+    }
+
+    return faltantes
+}
 
 /**
  * Clasifica las recetas según el contenido de la despensa.
@@ -47,30 +80,16 @@ fun clasificarRecetas(
     maximoFaltantes: Int,
     faltantesPermitidos: Set<Long> = emptySet()
 ): ResultadoSugerencias {
-    val enDespensa = despensa.associateBy { it.id }
     val completas = mutableListOf<RecetaCompleta>()
     val casiCocinables = mutableListOf<RecetaCasiCocinable>()
 
     for (item in recetas) {
-        val faltantes = linkedMapOf<Long, Faltante>()
-        for (ing in item.ingredientes) {
-            val id = ing.ingrediente.alimentoId
-            if (id in faltantes) continue
-            if (esBasico(ing.alimento?.nombre)) continue
-            val disponible = enDespensa[id]
-            val motivo = when {
-                disponible == null -> MotivoFaltante.AUSENTE
-                !cantidadSuficiente(ing.ingrediente.cantidad, ing.ingrediente.unidad, disponible.cantidad, disponible.unidad) ->
-                    MotivoFaltante.CANTIDAD_INSUFICIENTE
-                else -> null
-            }
-            if (motivo != null) faltantes[id] = Faltante(id, motivo)
-        }
-        val lista = faltantes.values.toList()
-        val permitidosOk = faltantesPermitidos.isEmpty() || lista.all { it.alimentoId in faltantesPermitidos }
+        val faltantes = faltantesDeReceta(item, despensa)
+            .map { Faltante(it.alimentoId, it.motivo) }
+        val permitidosOk = faltantesPermitidos.isEmpty() || faltantes.all { it.alimentoId in faltantesPermitidos }
         when {
-            lista.isEmpty() -> completas += RecetaCompleta(item)
-            lista.size <= maximoFaltantes && permitidosOk -> casiCocinables += RecetaCasiCocinable(item, lista)
+            faltantes.isEmpty() -> completas += RecetaCompleta(item)
+            faltantes.size <= maximoFaltantes && permitidosOk -> casiCocinables += RecetaCasiCocinable(item, faltantes)
         }
     }
 

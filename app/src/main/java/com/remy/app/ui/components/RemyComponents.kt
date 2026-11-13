@@ -63,7 +63,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import androidx.compose.ui.platform.LocalContext
 import com.remy.app.R
-import com.remy.app.logica.indiceTonoPastel
+import com.remy.app.domain.indiceTonoPastel
 import com.remy.app.ui.theme.AvisoCaducadoBg
 import com.remy.app.ui.theme.AvisoCaducadoFg
 import com.remy.app.ui.theme.AvisoFaltaBg

@@ -11,8 +11,8 @@ import com.remy.app.data.PreferenciasRepository
 import com.remy.app.data.RecetaConIngredientes
 import com.remy.app.data.RecetaRepository
 import com.remy.app.data.RemyDatabase
-import com.remy.app.logica.clasificarRecetas
-import com.remy.app.logica.filtrarRecetas
+import com.remy.app.domain.clasificarRecetas
+import com.remy.app.domain.filtrarRecetas
 import com.remy.app.ui.EstadoCarga
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -99,7 +99,7 @@ class SugerenciasViewModel(
                         FaltanteVista(
                             alimentoId = f.alimentoId,
                             nombre = nombres[f.alimentoId] ?: "Alimento ${f.alimentoId}",
-                            insuficiente = f.motivo == com.remy.app.logica.MotivoFaltante.CANTIDAD_INSUFICIENTE
+                            insuficiente = f.motivo == com.remy.app.domain.model.MotivoFaltante.CANTIDAD_INSUFICIENTE
                         )
                     }
                     .sortedBy { it.nombre.lowercase() }
@@ -113,7 +113,7 @@ class SugerenciasViewModel(
                                 FaltanteVista(
                                     alimentoId = faltante.alimentoId,
                                     nombre = nombres[faltante.alimentoId] ?: "Alimento ${faltante.alimentoId}",
-                                    insuficiente = faltante.motivo == com.remy.app.logica.MotivoFaltante.CANTIDAD_INSUFICIENTE
+                                    insuficiente = faltante.motivo == com.remy.app.domain.model.MotivoFaltante.CANTIDAD_INSUFICIENTE
                                 )
                             }
                         )

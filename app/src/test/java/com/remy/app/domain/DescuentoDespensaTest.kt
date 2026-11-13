@@ -1,4 +1,4 @@
-package com.remy.app.logica
+package com.remy.app.domain
 
 import com.remy.app.data.Alimento
 import com.remy.app.data.Ingrediente

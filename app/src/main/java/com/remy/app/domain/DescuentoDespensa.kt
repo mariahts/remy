@@ -1,17 +1,10 @@
-package com.remy.app.logica
+package com.remy.app.domain
 
 import com.remy.app.data.Alimento
 import com.remy.app.data.IngredienteConAlimento
+import com.remy.app.domain.model.ResultadoDescuento
 import java.util.Locale
 import kotlin.math.max
-
-/** Resultado de aplicar el descuento de una receta sobre la despensa. */
-data class ResultadoDescuento(
-    /** Alimentos de la despensa con la cantidad ya actualizada (listos para persistir). */
-    val actualizaciones: List<Alimento>,
-    /** Nombres de ingredientes que no se han podido descontar. */
-    val noDescontados: List<String>
-)
 
 /**
  * Calcula el descuento de los [ingredientes] de una receta sobre la [despensa].

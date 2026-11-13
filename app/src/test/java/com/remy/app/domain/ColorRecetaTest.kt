@@ -1,4 +1,4 @@
-package com.remy.app.logica
+package com.remy.app.domain
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

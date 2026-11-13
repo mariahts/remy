@@ -14,7 +14,7 @@ import com.remy.app.data.AlmacenamientoFotos
 import com.remy.app.data.RecetaDetalle
 import com.remy.app.data.RecetaRepository
 import com.remy.app.data.RemyDatabase
-import com.remy.app.logica.calcularDescuentoDespensa
+import com.remy.app.domain.calcularDescuentoDespensa
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

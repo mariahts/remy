@@ -1,6 +1,6 @@
 package com.remy.app.data
 
-import com.remy.app.logica.clasificarRecetas
+import com.remy.app.domain.clasificarRecetas
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

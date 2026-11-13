@@ -1,4 +1,4 @@
-package com.remy.app.logica
+package com.remy.app.domain
 
 /**
  * Número de tonos pasteles disponibles para las miniaturas de receta.
