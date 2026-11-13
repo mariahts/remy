@@ -76,6 +76,9 @@ familias que cocinan con poco tiempo y presupuesto ajustado.
 
 - Pantalla de inicio con la receta del día, accesos directos, y la semana con el
   plan de comidas por día (desayuno, comida y cena), que se puede añadir o quitar.
+- Al añadir una comida al plan, si a la receta le falta algún ingrediente o no hay
+  cantidad suficiente, la app avisa con la lista de lo que falta y pide confirmación
+  antes de planificarla.
 - Registro de lo cocinado en el calendario.
 - Estados de carga y de error con reintento en las pantallas que consultan la base
   de datos.
@@ -246,7 +249,7 @@ revisión aprobatoria de alguien con permisos de escritura. El trabajo se integr
 - **Pruebas**: 54 unitarias (10 suites) y 22 instrumentadas (7 suites), todas en
   verde. El detalle está en [`docs/pruebas.md`](docs/pruebas.md).
 - **APK de entrega**: `release` con ofuscación R8, recorte de recursos y firma propia,
-  de **6,7 MB** (7.051.273 bytes).
+  de **6,7 MB** (7.073.133 bytes).
 
 ### Pendiente
 

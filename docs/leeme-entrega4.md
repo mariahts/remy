@@ -36,7 +36,7 @@
 
 | | |
 |---|---|
-| `REMY_MARIA_ENTREGA4.apk` | Versión candidata: build de `release` con ofuscación R8, recorte de recursos y firma propia. 7.051.273 bytes (6,7 MB). |
+| `REMY_MARIA_ENTREGA4.apk` | Versión candidata: build de `release` con ofuscación R8, recorte de recursos y firma propia. 7.073.133 bytes (6,7 MB). |
 | `LEEME.md` | Este documento: qué se entrega, cómo instalarlo, qué se ha probado y qué queda pendiente. |
 | `README.md` | El README del repositorio: descripción de la app, cómo compilar y ejecutarla, recorrido principal y estado actual. |
 | `capturas-pantallas/` | Las siete pantallas de la versión de entrega, a resolución completa. |

@@ -11,7 +11,7 @@ pendiente. Los enlaces son al repositorio
 | # | Entregable | Dónde está | Estado |
 |---|---|---|---|
 | 1 | Enlaces al repositorio y al GitHub Project | Cabecera del [README](../README.md) | Completado |
-| 2 | Versión candidata con las funcionalidades principales integradas | `REMY_MARIA_ENTREGA4.apk` (7.051.273 bytes, release con R8 y firma propia) y `REMY_MARIA_ENTREGA4.zip` | Completado |
+| 2 | Versión candidata con las funcionalidades principales integradas | `REMY_MARIA_ENTREGA4.apk` (7.073.133 bytes, release con R8 y firma propia) y `REMY_MARIA_ENTREGA4.zip` | Completado |
 | 3 | Lista breve de pruebas y resultados, con los errores detectados y cómo se resolvieron | [`pruebas.md`](pruebas.md) | Completado |
 | 4 | Revisión del diseño, la usabilidad y la accesibilidad | [`revision-diseno-usabilidad.md`](revision-diseno-usabilidad.md) | Completado |
 | 5 | Memoria en Word y `README.md` actualizados | [README](../README.md) y la memoria en Word, entregada en el Aula Virtual | Memoria pendiente (#41) |
