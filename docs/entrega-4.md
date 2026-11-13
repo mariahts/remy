@@ -1,7 +1,7 @@
 # Entrega 4 — índice de entregables
 
 Cierre: domingo 15 de noviembre de 2026, 23:59. Valor: 5% de la evaluación
-continua. Documento actualizado el 12 de noviembre de 2026.
+continua. Documento actualizado el 13 de noviembre de 2026.
 
 Los ocho entregables que pide el enunciado, dónde está cada uno y qué queda
 pendiente. Los enlaces son al repositorio

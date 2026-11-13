@@ -225,7 +225,7 @@ No se hacen commits directos a `main`: la regla de protección de `main` exige u
 revisión aprobatoria de alguien con permisos de escritura. El trabajo se integra en
 `dev` y `main` se actualiza al cerrar cada hito.
 
-## Estado actual (12 de noviembre de 2026)
+## Estado actual (13 de noviembre de 2026)
 
 - **Base de datos**: Room en la versión 8, con migraciones explícitas y esquema
   exportado en `app/schemas/`. Cada migración tiene su prueba instrumentada.

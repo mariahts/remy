@@ -1,7 +1,7 @@
 # Pruebas de REMY
 
 Qué se ha probado, en qué entorno, con qué resultado y qué queda pendiente.
-Documento actualizado el 12 de noviembre de 2026. Solo se citan pruebas que
+Documento actualizado el 13 de noviembre de 2026. Solo se citan pruebas que
 existen en el repositorio.
 
 **Recuento actual:** 54 pruebas unitarias en 10 suites (todas en verde) y 22
