@@ -237,8 +237,6 @@
     <string name="perfil_favoritas_vacio_titulo">Aún no tienes favoritas</string>
     <string name="perfil_favoritas_vacio_texto">Marca una receta con el marcador y aparecerá aquí.</string>
     <string name="perfil_ajustes">Ajustes</string>
-    <string name="perfil_unidades">Unidades</string>
-    <string name="perfil_unidades_valor">Gramos y mililitros</string>
     <string name="perfil_acerca">Acerca de REMY</string>
     <string name="perfil_version">Versión 1.0</string>
     <string name="perfil_cerrar_sesion">Cerrar sesión</string>
