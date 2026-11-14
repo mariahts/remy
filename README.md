@@ -5,7 +5,6 @@ despensa, descuenta lo que se ha cocinado y guarda el histórico con foto.
 
 - **Repositorio:** https://github.com/mariahts/remy
 - **Tablero (GitHub Project):** https://github.com/users/mariahts/projects/1
-- **APK de entrega:** `REMY_MARIA_ENTREGA4.apk` (release con ofuscación y firma propia)
 
 ## Integrantes
 
