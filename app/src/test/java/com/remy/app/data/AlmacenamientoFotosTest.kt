@@ -1,5 +1,7 @@
 package com.remy.app.data
 
+import com.remy.app.data.local.AlmacenamientoFotos
+import com.remy.app.data.model.Receta
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

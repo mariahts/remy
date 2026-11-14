@@ -9,11 +9,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.remy.app.R
-import com.remy.app.data.AlimentoDao
-import com.remy.app.data.AlmacenamientoFotos
-import com.remy.app.data.RecetaDetalle
-import com.remy.app.data.RecetaRepository
-import com.remy.app.data.RemyDatabase
+import com.remy.app.data.dao.AlimentoDao
+import com.remy.app.data.database.RemyDatabase
+import com.remy.app.data.local.AlmacenamientoFotos
+import com.remy.app.data.model.RecetaDetalle
+import com.remy.app.data.repository.RecetaRepository
 import com.remy.app.domain.calcularDescuentoDespensa
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

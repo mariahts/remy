@@ -1,5 +1,11 @@
 package com.remy.app.data
 
+import com.remy.app.data.local.DatosDemo
+import com.remy.app.data.model.Alimento
+import com.remy.app.data.model.Ingrediente
+import com.remy.app.data.model.IngredienteConAlimento
+import com.remy.app.data.model.Receta
+import com.remy.app.data.model.RecetaConIngredientes
 import com.remy.app.domain.clasificarRecetas
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -33,7 +39,7 @@ class DatosDemoTest {
         nombre: String,
         cantidad: Double,
         unidad: String
-    ) = com.remy.app.data.IngredienteConAlimento(
+    ) = com.remy.app.data.model.IngredienteConAlimento(
         ingrediente = Ingrediente(
             id = id,
             recetaId = recetaId,

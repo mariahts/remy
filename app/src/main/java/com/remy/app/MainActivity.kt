@@ -18,11 +18,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
-import com.remy.app.data.DatosDemo
-import com.remy.app.data.PreferenciasRepository
-import com.remy.app.data.PrecargaRecetas
-import com.remy.app.data.RemyDatabase
-import com.remy.app.data.SupabaseClientProvider
+import com.remy.app.data.database.RemyDatabase
+import com.remy.app.data.local.DatosDemo
+import com.remy.app.data.local.PrecargaRecetas
+import com.remy.app.data.remote.SupabaseClientProvider
+import com.remy.app.data.repository.PreferenciasRepository
 import com.remy.app.ui.navigation.AppNavigation
 import com.remy.app.ui.navigation.Routes
 import com.remy.app.ui.screens.BienvenidaScreen

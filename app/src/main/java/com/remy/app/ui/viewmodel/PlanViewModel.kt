@@ -6,17 +6,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.remy.app.data.AlimentoRepository
-import com.remy.app.data.ComidaPlanificadaConReceta
-import com.remy.app.data.PlanRepository
-import com.remy.app.data.PreferenciasRepository
-import com.remy.app.data.RecetaRepository
-import com.remy.app.data.RemyDatabase
-import com.remy.app.data.TipoComida
+import com.remy.app.data.database.RemyDatabase
+import com.remy.app.data.model.Alimento
+import com.remy.app.data.model.ComidaPlanificadaConReceta
+import com.remy.app.data.model.FiltrosSugerencias
+import com.remy.app.data.model.RecetaConIngredientes
+import com.remy.app.data.model.TipoComida
+import com.remy.app.data.repository.AlimentoRepository
+import com.remy.app.data.repository.PlanRepository
+import com.remy.app.data.repository.PreferenciasRepository
+import com.remy.app.data.repository.RecetaRepository
 import com.remy.app.domain.faltantesDeReceta
 import com.remy.app.domain.filtrarRecetas
 import com.remy.app.domain.model.DisponibilidadReceta
-import com.remy.app.ui.EstadoCarga
+import com.remy.app.ui.state.EstadoCarga
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,7 +48,7 @@ data class PlanDia(
     val comidasHoy: Map<TipoComida, ComidaPlanificadaVista> = emptyMap(),
     val diasConPlan: Set<LocalDate> = emptySet(),
     /** Recetas disponibles para elegir en el sheet, con disponibilidad y ordenadas (listas primero). */
-    val recetasParaElegir: List<Pair<com.remy.app.data.RecetaConIngredientes, DisponibilidadReceta>> = emptyList(),
+    val recetasParaElegir: List<Pair<com.remy.app.data.model.RecetaConIngredientes, DisponibilidadReceta>> = emptyList(),
     /** Número de alimentos que hay ahora mismo en la despensa. */
     val alimentosEnDespensa: Int = 0
 ) {
@@ -82,16 +85,16 @@ class PlanViewModel(
                 preferenciasRepositorio.filtros
             ) { valores ->
                 @Suppress("UNCHECKED_CAST")
-                val comidasDia = valores[0] as List<com.remy.app.data.ComidaPlanificadaConReceta>
+                val comidasDia = valores[0] as List<com.remy.app.data.model.ComidaPlanificadaConReceta>
                 @Suppress("UNCHECKED_CAST")
-                val comidasHoy = valores[1] as List<com.remy.app.data.ComidaPlanificadaConReceta>
+                val comidasHoy = valores[1] as List<com.remy.app.data.model.ComidaPlanificadaConReceta>
                 @Suppress("UNCHECKED_CAST")
                 val fechasConPlan = valores[2] as List<String>
                 @Suppress("UNCHECKED_CAST")
-                val recetas = valores[3] as List<com.remy.app.data.RecetaConIngredientes>
+                val recetas = valores[3] as List<com.remy.app.data.model.RecetaConIngredientes>
                 @Suppress("UNCHECKED_CAST")
-                val despensa = valores[4] as List<com.remy.app.data.Alimento>
-                val filtros = valores[5] as com.remy.app.data.FiltrosSugerencias
+                val despensa = valores[4] as List<com.remy.app.data.model.Alimento>
+                val filtros = valores[5] as com.remy.app.data.model.FiltrosSugerencias
 
                 val filtradas = filtrarRecetas(recetas, filtros)
                 val faltantesPorReceta = recetas.associate { receta ->
@@ -104,7 +107,7 @@ class PlanViewModel(
                     else DisponibilidadReceta.Faltan(faltantes)
                 }
 
-                fun aVista(lista: List<com.remy.app.data.ComidaPlanificadaConReceta>) =
+                fun aVista(lista: List<com.remy.app.data.model.ComidaPlanificadaConReceta>) =
                     lista.associate { comida ->
                         comida.plan.tipoComida to
                             ComidaPlanificadaVista(comida, disponibilidadDe(comida.receta.receta.id))
@@ -113,7 +116,7 @@ class PlanViewModel(
                 val dias = fechasConPlan.mapNotNull { runCatching { LocalDate.parse(it) }.getOrNull() }.toSet()
                 val recetasElegir = filtradas.map { receta ->
                     receta to disponibilidadDe(receta.receta.id)
-                }.sortedWith(compareBy<Pair<com.remy.app.data.RecetaConIngredientes, DisponibilidadReceta>> {
+                }.sortedWith(compareBy<Pair<com.remy.app.data.model.RecetaConIngredientes, DisponibilidadReceta>> {
                     when (it.second) { is DisponibilidadReceta.Lista -> 0; is DisponibilidadReceta.Faltan -> 1 }
                 }.thenBy { (it.second as? DisponibilidadReceta.Faltan)?.cantidad ?: 0 }
                  .thenBy { it.first.receta.nombre.lowercase() })

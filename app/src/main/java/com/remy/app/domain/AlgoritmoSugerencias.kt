@@ -1,7 +1,7 @@
 package com.remy.app.domain
 
-import com.remy.app.data.Alimento
-import com.remy.app.data.RecetaConIngredientes
+import com.remy.app.data.model.Alimento
+import com.remy.app.data.model.RecetaConIngredientes
 import com.remy.app.domain.model.Faltante
 import com.remy.app.domain.model.IngredienteFaltante
 import com.remy.app.domain.model.MotivoFaltante

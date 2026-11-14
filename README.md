@@ -234,10 +234,11 @@ revisión aprobatoria de alguien con permisos de escritura. El trabajo se integr
   (`macrosDeReceta`), de modo que el catálogo y la app no pueden desincronizarse.
   Los pasos van de cuatro a cinco por receta. La proteína del yogur natural está
   corregida (3 g/100 g, no 10).
-- **Fotos**: las 20 recetas tienen una fotografía real del plato con licencia libre;
-  el autor, la licencia y el enlace de cada una están en `docs/fotos-recetas.md`. Si
-  falta la foto, la miniatura usa un color pastel. La foto que hace la persona
-  usuaria al cocinar tiene prioridad sobre la del catálogo.
+- **Fotos**: las 20 recetas tienen una fotografía real del plato. Diecinueve son
+  de licencia libre y una la hizo el equipo; el autor, la licencia y el enlace de
+  cada una están en `docs/fotos-recetas.md`. Si falta la foto, la miniatura usa un
+  color pastel. La foto que hace la persona usuaria al cocinar tiene prioridad
+  sobre la del catálogo.
 - **Interfaz**: tema crema/terracota/azul tinta con Nunito, cuatro destinos en la
   barra inferior, estados vacíos propios, insignia de disponibilidad en la receta del
   día y los dos accesos directos de Inicio con la misma altura. La revisión de

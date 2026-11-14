@@ -7,6 +7,8 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +28,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Kitchen
@@ -61,13 +64,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.remy.app.R
-import com.remy.app.data.Alimento
+import com.remy.app.data.model.Alimento
 import com.remy.app.ui.components.CategoriaIcono
 import com.remy.app.ui.components.ContenidoConEstado
 import com.remy.app.ui.components.IngredientIcon
 import com.remy.app.ui.components.PrimaryButton
 import com.remy.app.ui.components.RemyCard
 import com.remy.app.ui.components.RemyChip
+import com.remy.app.ui.components.RemyLogo
 import com.remy.app.ui.components.RemySearchField
 import com.remy.app.ui.components.RemyTopBar
 import com.remy.app.ui.components.categoriaDeIngrediente
@@ -87,10 +91,6 @@ import com.remy.app.ui.theme.TextoSecundario
 import com.remy.app.ui.viewmodel.BienvenidaViewModel
 import com.remy.app.ui.viewmodel.DespensaViewModel
 import com.remy.app.ui.viewmodel.ErroresAlimento
-import com.remy.app.ui.components.RemyLogo
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.material.icons.outlined.Check
 
 private enum class FiltroDespensa(val etiqueta: Int) {
     TODOS(R.string.despensa_todos),

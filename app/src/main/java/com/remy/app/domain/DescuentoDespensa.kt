@@ -1,7 +1,8 @@
 package com.remy.app.domain
 
-import com.remy.app.data.Alimento
-import com.remy.app.data.IngredienteConAlimento
+import com.remy.app.data.model.Alimento
+import com.remy.app.data.model.Ingrediente
+import com.remy.app.data.model.IngredienteConAlimento
 import com.remy.app.domain.model.ResultadoDescuento
 import java.util.Locale
 import kotlin.math.max

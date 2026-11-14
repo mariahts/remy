@@ -1,5 +1,7 @@
 package com.remy.app.domain.model
 
+import com.remy.app.data.model.Ingrediente
+
 /** Motivo por el que un ingrediente cuenta como faltante. */
 enum class MotivoFaltante { AUSENTE, CANTIDAD_INSUFICIENTE }
 

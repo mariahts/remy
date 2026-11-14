@@ -50,10 +50,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.remy.app.R
-import com.remy.app.data.Receta
-import com.remy.app.data.RecetaConIngredientes
-import com.remy.app.data.SupabaseClientProvider
-import com.remy.app.data.TipoComida
+import com.remy.app.data.model.ComidaPlanificadaConReceta
+import com.remy.app.data.model.PlannedMeal
+import com.remy.app.data.model.Receta
+import com.remy.app.data.model.RecetaConIngredientes
+import com.remy.app.data.model.TipoComida
+import com.remy.app.data.remote.SupabaseClientProvider
 import com.remy.app.domain.model.DisponibilidadReceta
 import com.remy.app.ui.components.ContenidoConEstado
 import com.remy.app.ui.components.PrimaryButton
@@ -612,8 +614,8 @@ private fun PreviewInicio() {
         fecha = hoy,
         comidas = mapOf(
             TipoComida.COMIDA to com.remy.app.ui.viewmodel.ComidaPlanificadaVista(
-                plan = com.remy.app.data.ComidaPlanificadaConReceta(
-                    plan = com.remy.app.data.PlannedMeal(id = 1, fecha = hoy.toString(), tipoComida = TipoComida.COMIDA, recetaId = 1),
+                plan = com.remy.app.data.model.ComidaPlanificadaConReceta(
+                    plan = com.remy.app.data.model.PlannedMeal(id = 1, fecha = hoy.toString(), tipoComida = TipoComida.COMIDA, recetaId = 1),
                     receta = receta
                 ),
                 disponibilidad = DisponibilidadReceta.Lista

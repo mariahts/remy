@@ -37,9 +37,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.remy.app.R
-import com.remy.app.data.Receta
-import com.remy.app.data.RecetaConIngredientes
-import com.remy.app.data.TipoComida
+import com.remy.app.data.model.Receta
+import com.remy.app.data.model.RecetaConIngredientes
+import com.remy.app.data.model.TipoComida
 import com.remy.app.domain.model.DisponibilidadReceta
 import com.remy.app.domain.model.IngredienteFaltante
 import com.remy.app.domain.model.MotivoFaltante

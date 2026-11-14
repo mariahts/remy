@@ -35,12 +35,12 @@ import androidx.compose.material.icons.outlined.OilBarrel
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.SetMeal
 import androidx.compose.material.icons.outlined.Spa
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -52,6 +52,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -61,7 +62,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import androidx.compose.ui.platform.LocalContext
 import com.remy.app.R
 import com.remy.app.domain.indiceTonoPastel
 import com.remy.app.ui.theme.AvisoCaducadoBg
@@ -78,10 +78,10 @@ import com.remy.app.ui.theme.FondoCrema
 import com.remy.app.ui.theme.Melocoton
 import com.remy.app.ui.theme.PillShape
 import com.remy.app.ui.theme.SuperficieBlanca
+import com.remy.app.ui.theme.TONOS_PASTEL
 import com.remy.app.ui.theme.Terracota
 import com.remy.app.ui.theme.TextoPrincipal
 import com.remy.app.ui.theme.TextoSecundario
-import com.remy.app.ui.theme.TONOS_PASTEL
 
 // ---------------------------------------------------------------------------
 // Logo circular de REMY.

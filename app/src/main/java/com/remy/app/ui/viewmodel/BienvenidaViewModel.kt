@@ -6,10 +6,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.remy.app.data.Alimento
-import com.remy.app.data.AlimentoRepository
-import com.remy.app.data.PreferenciasRepository
-import com.remy.app.data.RemyDatabase
+import com.remy.app.data.database.RemyDatabase
+import com.remy.app.data.model.Alimento
+import com.remy.app.data.model.Ingrediente
+import com.remy.app.data.repository.AlimentoRepository
+import com.remy.app.data.repository.PreferenciasRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 

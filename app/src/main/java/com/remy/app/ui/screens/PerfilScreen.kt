@@ -41,9 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.remy.app.R
-import com.remy.app.data.Receta
-import com.remy.app.data.RecetaConIngredientes
-import com.remy.app.data.SupabaseClientProvider
+import com.remy.app.data.model.Receta
+import com.remy.app.data.model.RecetaConIngredientes
+import com.remy.app.data.remote.SupabaseClientProvider
 import com.remy.app.ui.components.RecipePhoto
 import com.remy.app.ui.components.RemyCard
 import com.remy.app.ui.components.RemyTopBar

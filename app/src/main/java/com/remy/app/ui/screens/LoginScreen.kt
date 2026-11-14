@@ -52,7 +52,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.remy.app.R
-import com.remy.app.data.SupabaseClientProvider
+import com.remy.app.data.remote.SupabaseClientProvider
 import com.remy.app.ui.components.OutlineButton
 import com.remy.app.ui.components.PrimaryButton
 import com.remy.app.ui.components.RemyLogo

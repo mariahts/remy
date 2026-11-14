@@ -1,6 +1,6 @@
 package com.remy.app.domain.model
 
-import com.remy.app.data.Alimento
+import com.remy.app.data.model.Alimento
 
 /** Resultado de aplicar el descuento de una receta sobre la despensa. */
 data class ResultadoDescuento(

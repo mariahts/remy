@@ -1,6 +1,7 @@
 package com.remy.app.domain.model
 
-import com.remy.app.data.RecetaConIngredientes
+import com.remy.app.data.model.Receta
+import com.remy.app.data.model.RecetaConIngredientes
 
 /** Receta que ya se puede cocinar: tiene todos los ingredientes en la despensa. */
 data class RecetaCompleta(val receta: RecetaConIngredientes)

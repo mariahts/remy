@@ -1,7 +1,7 @@
 package com.remy.app.domain
 
-import com.remy.app.data.FiltrosSugerencias
-import com.remy.app.data.RecetaConIngredientes
+import com.remy.app.data.model.FiltrosSugerencias
+import com.remy.app.data.model.RecetaConIngredientes
 
 /**
  * Aplica los filtros de #37 al catálogo de recetas antes de clasificarlas.

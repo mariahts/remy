@@ -1,8 +1,8 @@
 package com.remy.app.domain
 
-import com.remy.app.data.FiltrosSugerencias
-import com.remy.app.data.Receta
-import com.remy.app.data.RecetaConIngredientes
+import com.remy.app.data.model.FiltrosSugerencias
+import com.remy.app.data.model.Receta
+import com.remy.app.data.model.RecetaConIngredientes
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
