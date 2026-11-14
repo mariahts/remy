@@ -4,7 +4,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import com.remy.app.data.FiltrosSugerencias
+import com.remy.app.data.model.FiltrosSugerencias
 import com.remy.app.ui.theme.REMYTheme
 import com.remy.app.ui.viewmodel.GruposSugerencias
 import org.junit.Assert.assertEquals

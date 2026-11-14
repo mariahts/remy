@@ -1,6 +1,9 @@
 package com.remy.app.data
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import com.remy.app.data.model.FiltrosSugerencias
+import com.remy.app.data.repository.PreferenciasRepository
+import java.io.File
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -12,7 +15,6 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 class PreferenciasRepositoryTest {
 

@@ -6,10 +6,11 @@ import com.remy.app.R
 /**
  * Fotos del catalogo de recetas.
  *
- * Cada imagen procede de Wikimedia Commons con licencia libre (CC0, CC BY o
- * CC BY-SA). El credito completo de cada una (autor, licencia y ficha de
- * origen) esta en `docs/fotos-recetas.md`, porque las licencias CC BY y
- * CC BY-SA obligan a dar esos creditos.
+ * La mayoria proceden de Openverse, que agrega repositorios de imagenes con
+ * licencia libre (CC0, CC BY o CC BY-SA), y una es una foto del propio equipo.
+ * El credito completo de cada una (autor, licencia y ficha de origen) esta en
+ * `docs/fotos-recetas.md`, porque las licencias CC BY y CC BY-SA obligan a dar
+ * esos creditos.
  *
  * Se busca por nombre exacto porque el mapa es una lista cerrada del catalogo:
  * si una receta no esta aqui, se sigue mostrando el bloque de color pastel.
@@ -18,26 +19,32 @@ object ImagenesReceta {
 
     @DrawableRes
     private val porNombre: Map<String, Int> = mapOf(
-        "Ensalada mixta" to R.drawable.receta_ensalada_mixta,
-        "Sopa de verduras" to R.drawable.receta_sopa_de_verduras,
-        "Ensalada de atún" to R.drawable.receta_ensalada_de_atun,
-        "Crema de zanahoria" to R.drawable.receta_crema_de_zanahoria,
-        "Revuelto de champiñones" to R.drawable.receta_revuelto_de_champinones,
+        "Gazpacho andaluz" to R.drawable.receta_gazpacho_andaluz,
+        "Ensalada de atún y huevo" to R.drawable.receta_ensalada_de_atun_y_huevo,
+        "Croquetas de pollo" to R.drawable.receta_croquetas_de_pollo,
         "Camarones al ajillo" to R.drawable.receta_camarones_al_ajillo,
-        "Arroz con pollo" to R.drawable.receta_arroz_con_pollo,
-        "Tortilla de patatas" to R.drawable.receta_tortilla_de_patatas,
-        "Lentejas estofadas" to R.drawable.receta_lentejas_estofadas,
+        "Ensalada de tomate y cebolla" to R.drawable.receta_ensalada_de_tomate_y_cebolla,
+        "Tortilla de patatas con cebolla" to R.drawable.receta_tortilla_de_patatas_con_cebolla,
         "Garbanzos con espinacas" to R.drawable.receta_garbanzos_con_espinacas,
-        "Pasta con tomate" to R.drawable.receta_pasta_con_tomate,
-        "Bacalao al horno" to R.drawable.receta_bacalao_al_horno,
-        "Pollo al curry" to R.drawable.receta_pollo_al_curry,
-        "Paella de verduras" to R.drawable.receta_paella_de_verduras,
-        "Macarrones con queso" to R.drawable.receta_macarrones_con_queso,
-        "Flan de huevo" to R.drawable.receta_flan_de_huevo,
+        "Lentejas con verduras" to R.drawable.receta_lentejas_con_verduras,
+        "Arroz con pollo y pimiento" to R.drawable.receta_arroz_con_pollo_y_pimiento,
+        "Pasta con tomate y atún" to R.drawable.receta_pasta_con_tomate_y_atun,
+        "Bacalao al pil-pil" to R.drawable.receta_bacalao_al_pil_pil,
+        "Bacalao a lo pobre" to R.drawable.receta_bacalao_a_lo_pobre,
+        "Marmitako de atún" to R.drawable.receta_marmitako_de_atun,
+        "Wok de pollo con verduras" to R.drawable.receta_wok_de_pollo_con_verduras,
+        "Arroz frito con huevo y camarones" to R.drawable.receta_arroz_frito_con_huevo_y_camarones,
+        "Pasta con champiñones y nata" to R.drawable.receta_pasta_con_champinones_y_nata,
         "Arroz con leche" to R.drawable.receta_arroz_con_leche,
-        "Yogur con fresas" to R.drawable.receta_yogur_con_fresas,
-        "Plátano con chocolate" to R.drawable.receta_platano_con_chocolate,
-        "Bizcocho de plátano" to R.drawable.receta_bizcocho_de_platano
+        "Tarta de queso" to R.drawable.receta_tarta_de_queso,
+        "Plátano con chocolate negro" to R.drawable.receta_platano_con_chocolate_negro,
+        "Fresas con nata" to R.drawable.receta_fresas_con_nata,
+        "Albóndigas en salsa" to R.drawable.receta_albondigas_en_salsa,
+        "Avena cremosa con plátano y canela" to R.drawable.receta_avena_cremosa_con_platano_y_canela,
+        "Huevos revueltos cremosos" to R.drawable.receta_huevos_revueltos,
+        "Tortitas americanas" to R.drawable.receta_tortitas_americanas,
+        "Tostadas francesas" to R.drawable.receta_tostadas_francesas,
+        "Wrap de pollo" to R.drawable.receta_wrap_de_pollo
     )
 
     /** Nombre de las recetas que tienen foto en el catalogo. */

@@ -1,4 +1,4 @@
-package com.remy.app.ui.screens
+﻿package com.remy.app.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,9 +32,9 @@ import androidx.compose.material.icons.outlined.FitnessCenter
 import androidx.compose.material.icons.outlined.LocalFireDepartment
 import androidx.compose.material.icons.outlined.Opacity
 import androidx.compose.material.icons.outlined.Public
-import androidx.compose.material.icons.outlined.RiceBowl
 import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material.icons.outlined.Restaurant
+import androidx.compose.material.icons.outlined.RiceBowl
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -67,12 +67,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.remy.app.R
-import com.remy.app.data.Alimento
-import com.remy.app.data.Ingrediente
-import com.remy.app.data.IngredienteConAlimento
-import com.remy.app.data.PreferenciasRepository
-import com.remy.app.data.Receta
-import com.remy.app.data.RecetaDetalle
+import com.remy.app.data.model.Alimento
+import com.remy.app.data.model.Ingrediente
+import com.remy.app.data.model.IngredienteConAlimento
+import com.remy.app.data.model.Receta
+import com.remy.app.data.model.RecetaDetalle
+import com.remy.app.data.repository.PreferenciasRepository
 import com.remy.app.ui.components.FotoDelPlato
 import com.remy.app.ui.components.IngredientIcon
 import com.remy.app.ui.components.OutlineButton
@@ -84,6 +84,7 @@ import com.remy.app.ui.components.StatusBadge
 import com.remy.app.ui.components.VarianteBadge
 import com.remy.app.ui.components.fechaEnEspanol
 import com.remy.app.ui.components.formatoCantidad
+import com.remy.app.ui.components.formatoCantidadReceta
 import com.remy.app.ui.theme.AvisoNeutroBg
 import com.remy.app.ui.theme.AzulTinta
 import com.remy.app.ui.theme.BordeTarjeta
@@ -96,8 +97,8 @@ import com.remy.app.ui.theme.Terracota
 import com.remy.app.ui.theme.TextoPrincipal
 import com.remy.app.ui.theme.TextoSecundario
 import com.remy.app.ui.viewmodel.RecetaDetalleViewModel
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+import kotlinx.coroutines.launch
 
 @Composable
 fun RecetaDetalleScreen(
@@ -457,7 +458,7 @@ private fun FilaIngredienteDetalle(par: IngredienteConAlimento, porcionesReceta:
     val nombre = par.alimento?.nombre ?: stringResource(R.string.detalle_ingrediente)
     val tiene = par.alimento != null
     val cantidadEscalada = par.ingrediente.cantidad * racionesDeseadas / porcionesReceta.coerceAtLeast(1)
-    val cantidad = "${cantidadEscalada.formatoCantidad()} ${par.ingrediente.unidad}"
+    val cantidad = "${cantidadEscalada.formatoCantidadReceta()} ${par.ingrediente.unidad}"
 
     Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),

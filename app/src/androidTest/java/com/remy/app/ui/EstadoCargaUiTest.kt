@@ -8,6 +8,7 @@ import androidx.compose.ui.test.performClick
 import com.remy.app.ui.components.ContenidoConEstado
 import com.remy.app.ui.components.PantallaCargando
 import com.remy.app.ui.components.PantallaError
+import com.remy.app.ui.state.EstadoCarga
 import com.remy.app.ui.theme.REMYTheme
 import org.junit.Assert.assertEquals
 import org.junit.Rule

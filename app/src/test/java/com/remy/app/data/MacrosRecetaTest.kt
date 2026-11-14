@@ -1,5 +1,8 @@
 package com.remy.app.data
 
+import com.remy.app.data.model.Ingrediente
+import com.remy.app.data.model.MacrosAlimento
+import com.remy.app.data.model.macrosDeReceta
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

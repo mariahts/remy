@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.remy.app.data.Alimento
-import com.remy.app.data.AlimentoRepository
-import com.remy.app.data.RemyDatabase
-import com.remy.app.ui.EstadoCarga
+import com.remy.app.data.database.RemyDatabase
+import com.remy.app.data.model.Alimento
+import com.remy.app.data.repository.AlimentoRepository
+import com.remy.app.ui.state.EstadoCarga
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

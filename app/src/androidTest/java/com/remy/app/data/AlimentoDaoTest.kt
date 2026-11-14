@@ -3,6 +3,9 @@ package com.remy.app.data
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.remy.app.data.dao.AlimentoDao
+import com.remy.app.data.database.RemyDatabase
+import com.remy.app.data.model.Alimento
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After

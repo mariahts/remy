@@ -32,7 +32,7 @@ El trabajo de diseño tiene dos partes y conviene distinguirlas:
   tipografía Plus Jakarta Sans de la primera identidad, e implementó el tema
   resultante en Compose.
 
-El resultado está documentado en `docs/disenio/Identidad visual de REMY.md` y
+El resultado está documentado en `docs/diseno/Identidad visual de REMY.md` y
 `docs/revision-diseno-usabilidad.md`, y llegó a la app en la PR #83 (rediseño)
 y en la #90 (pulido de interfaz).
 

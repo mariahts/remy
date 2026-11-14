@@ -22,7 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.remy.app.ui.EstadoCarga
+import com.remy.app.ui.state.EstadoCarga
 import com.remy.app.ui.theme.Green600
 import com.remy.app.ui.theme.Red100
 import com.remy.app.ui.theme.Red600

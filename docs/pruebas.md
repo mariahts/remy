@@ -1,7 +1,7 @@
 # Pruebas de REMY
 
 Qué se ha probado, en qué entorno, con qué resultado y qué queda pendiente.
-Documento actualizado el 12 de noviembre de 2026. Solo se citan pruebas que
+Documento actualizado el 13 de noviembre de 2026. Solo se citan pruebas que
 existen en el repositorio.
 
 **Recuento actual:** 54 pruebas unitarias en 10 suites (todas en verde) y 22
@@ -44,7 +44,7 @@ pruebas instrumentadas en 7 suites.
 |---|---|
 | `AlimentoDaoTest` | Alta/lectura en la despensa y ocultar un alimento sin borrar la fila. |
 | `RecetaDaoTest` | Receta con ingredientes en transacción, edición/borrado y observable de la lista. |
-| `PrecargaRecetasTest` | Precarga inicial, ausencia de duplicados al reabrir y datos básicos de las recetas. |
+| `PrecargaRecetasTest` | Precarga inicial, ausencia de duplicados al reabrir, retirada de las recetas que ya no están en el catálogo y datos básicos de las recetas. |
 | `Migration7To8Test` | Migración de Room de la versión 7 a la 8: se conservan los datos del usuario y las recetas quedan con hidratos y grasas. |
 | `EstadoCargaUiTest` | Estados de carga, error con reintento y contenido disponible. |
 | `FiltrosSugerenciasUiTest` | Pantalla/sheet de filtros: controles, cambios, limpiar filtros y visibilidad de acciones. |

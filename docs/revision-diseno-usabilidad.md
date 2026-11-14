@@ -56,8 +56,10 @@ Capturas de la aplicación y de la maqueta en `capturas-pantallas/` (app) y `doc
 El cambio de unidades corrige un defecto real: antes la despensa de demostración se sembraba con
 `Cebolla 3 ud`, `Huevo 6 ud`, `Patata 4 ud` y `Pasta`, que no existe en el catálogo. Como el algoritmo de
 sugerencias compara cantidad y unidad, ninguna receta llegaba a considerarse completa y la aplicación
-mostraba «0 listas para cocinar». Con la corrección, la cuenta de demostración muestra tres recetas
-listas para cocinar («Pasta con tomate», «Pollo al curry» y «Tortilla de patatas»), igual que en la maqueta.
+mostraba «0 listas para cocinar». Con la corrección, la cuenta de demostración tiene una despensa realista
+y la mayoría del catálogo aparece lista para cocinar («Gazpacho andaluz», «Tortilla de patatas con
+cebolla», «Arroz con leche»…), mientras que las recetas de bacalao, camarón y tarta de queso se quedan
+cortas para poder ver el aviso de ingredientes que faltan.
 
 Las capturas de esta revisión se han hecho con la versión de entrega (`assembleRelease`, con ofuscación
 y firma) instalada en el emulador, de modo que muestran exactamente la aplicación que se entrega.

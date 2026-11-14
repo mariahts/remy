@@ -4,6 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.remy.app.data.database.RemyDatabase
+import com.remy.app.data.local.PrecargaRecetas
+import com.remy.app.data.model.Ingrediente
+import com.remy.app.data.model.Receta
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -57,8 +61,26 @@ class PrecargaRecetasTest {
     }
 
     @Test
-    fun lasRecetasTraenTiempoYPasos() = runBlocking {
+    fun retiraLasRecetasQueYaNoEstanEnElCatalogo() = runBlocking {
         val contexto = ApplicationProvider.getApplicationContext<Context>()
+        PrecargaRecetas.siHaceFalta(db, contexto)
+
+        // Una receta que no está en assets/recetas.json, como las de una
+        // versión anterior del catálogo.
+        db.recetaDao().insertarCompleta(
+            Receta(nombre = "Receta antigua de prueba", porciones = 2),
+            listOf(Ingrediente(recetaId = 0, alimentoId = 1, cantidad = 100.0, unidad = "g"))
+        )
+        assertEquals(21, db.recetaDao().contar())
+
+        PrecargaRecetas.siHaceFalta(db, contexto)
+
+        assertEquals(20, db.recetaDao().contar())
+        assertEquals(null, db.recetaDao().porNombre("Receta antigua de prueba"))
+    }
+
+    @Test
+    fun lasRecetasTraenTiempoYPasos() = runBlocking {        val contexto = ApplicationProvider.getApplicationContext<Context>()
         PrecargaRecetas.siHaceFalta(db, contexto)
 
         val recetas = db.recetaDao().observarTodas().first()

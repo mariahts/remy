@@ -140,6 +140,13 @@
     <string name="plan_badge_lista">Lista</string>
     <string name="plan_badge_falta">Falta 1</string>
     <string name="plan_badge_faltan">Faltan %1$d</string>
+    <string name="plan_faltantes_titulo">Faltan ingredientes</string>
+    <string name="plan_faltantes_texto">Para cocinar «%1$s» te falta:</string>
+    <string name="plan_faltante_ausente">%1$s: no está en la despensa</string>
+    <string name="plan_faltante_insuficiente">%1$s: necesitas %2$s %3$s y tienes %4$s %3$s</string>
+    <string name="plan_faltantes_confirmar">¿Quieres añadirla igualmente al plan?</string>
+    <string name="plan_faltantes_anadir">Añadir igualmente</string>
+    <string name="comun_cancelar">Cancelar</string>
 
     <!-- Sugerencias -->
     <string name="sugerencias_titulo">Sugerencias</string>
@@ -230,8 +237,6 @@
     <string name="perfil_favoritas_vacio_titulo">Aún no tienes favoritas</string>
     <string name="perfil_favoritas_vacio_texto">Marca una receta con el marcador y aparecerá aquí.</string>
     <string name="perfil_ajustes">Ajustes</string>
-    <string name="perfil_unidades">Unidades</string>
-    <string name="perfil_unidades_valor">Gramos y mililitros</string>
     <string name="perfil_acerca">Acerca de REMY</string>
     <string name="perfil_version">Versión 1.0</string>
     <string name="perfil_cerrar_sesion">Cerrar sesión</string>

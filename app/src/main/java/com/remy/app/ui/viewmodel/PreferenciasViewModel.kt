@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.remy.app.data.FiltrosSugerencias
-import com.remy.app.data.PreferenciasRepository
+import com.remy.app.data.model.FiltrosSugerencias
+import com.remy.app.data.repository.PreferenciasRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first

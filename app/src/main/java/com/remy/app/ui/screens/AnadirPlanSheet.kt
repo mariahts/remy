@@ -15,14 +15,17 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -34,21 +37,24 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.remy.app.R
-import com.remy.app.data.Receta
-import com.remy.app.data.RecetaConIngredientes
-import com.remy.app.data.TipoComida
+import com.remy.app.data.model.Receta
+import com.remy.app.data.model.RecetaConIngredientes
+import com.remy.app.data.model.TipoComida
+import com.remy.app.domain.model.DisponibilidadReceta
+import com.remy.app.domain.model.IngredienteFaltante
+import com.remy.app.domain.model.MotivoFaltante
 import com.remy.app.ui.components.OutlineButton
 import com.remy.app.ui.components.RecipePhoto
 import com.remy.app.ui.components.RemyChip
 import com.remy.app.ui.components.RemySearchField
 import com.remy.app.ui.components.StatusBadge
 import com.remy.app.ui.components.VarianteBadge
+import com.remy.app.ui.components.formatoCantidad
 import com.remy.app.ui.theme.FondoCrema
 import com.remy.app.ui.theme.REMYTheme
 import com.remy.app.ui.theme.SuperficieBlanca
 import com.remy.app.ui.theme.TextoPrincipal
 import com.remy.app.ui.theme.TextoSecundario
-import com.remy.app.ui.viewmodel.DisponibilidadReceta
 import java.io.File
 
 /** Sheet para elegir una receta y añadirla al plan de un momento del día. */
@@ -63,6 +69,7 @@ fun AnadirPlanSheet(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var tipoSeleccionado by rememberSaveable(tipoInicial) { mutableStateOf(tipoInicial) }
     var busqueda by rememberSaveable { mutableStateOf("") }
+    var pendiente by remember { mutableStateOf<RecetaConIngredientes?>(null) }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -75,9 +82,79 @@ fun AnadirPlanSheet(
             busqueda = busqueda,
             onBusquedaChange = { busqueda = it },
             recetas = recetas,
-            onAnadir = { recetaId -> onAnadir(tipoSeleccionado, recetaId) }
+            onAnadir = { recetaId ->
+                val item = recetas.firstOrNull { it.first.receta.id == recetaId }
+                if (item?.second is DisponibilidadReceta.Faltan) {
+                    pendiente = item.first
+                } else {
+                    onAnadir(tipoSeleccionado, recetaId)
+                }
+            }
         )
     }
+
+    pendiente?.let { receta ->
+        val disponibilidad = recetas
+            .firstOrNull { it.first.receta.id == receta.receta.id }
+            ?.second
+        val faltantes = (disponibilidad as? DisponibilidadReceta.Faltan)?.faltantes.orEmpty()
+        AvisoFaltantesDialog(
+            receta = receta,
+            faltantes = faltantes,
+            onConfirmar = {
+                pendiente = null
+                onAnadir(tipoSeleccionado, receta.receta.id)
+            },
+            onDescartar = { pendiente = null }
+        )
+    }
+}
+
+/** Avisa de lo que falta antes de planificar una receta que no está completa. */
+@Composable
+private fun AvisoFaltantesDialog(
+    receta: RecetaConIngredientes,
+    faltantes: List<IngredienteFaltante>,
+    onConfirmar: () -> Unit,
+    onDescartar: () -> Unit
+) {
+    val detalle = faltantes.map { faltante ->
+        when (faltante.motivo) {
+            MotivoFaltante.AUSENTE -> stringResource(
+                R.string.plan_faltante_ausente,
+                faltante.nombre
+            )
+            MotivoFaltante.CANTIDAD_INSUFICIENTE -> stringResource(
+                R.string.plan_faltante_insuficiente,
+                faltante.nombre,
+                faltante.necesario.formatoCantidad(),
+                faltante.unidad,
+                (faltante.disponible ?: 0.0).formatoCantidad()
+            )
+        }
+    }.joinToString("\n")
+
+    AlertDialog(
+        onDismissRequest = onDescartar,
+        title = { Text(stringResource(R.string.plan_faltantes_titulo)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.plan_faltantes_texto, receta.receta.nombre))
+                Text(detalle)
+                Text(stringResource(R.string.plan_faltantes_confirmar))
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirmar) {
+                Text(stringResource(R.string.plan_faltantes_anadir))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDescartar) {
+                Text(stringResource(R.string.comun_cancelar))
+            }
+        }
+    )
 }
 
 @Composable
@@ -246,6 +323,16 @@ private fun BadgeDisponibilidad(disponibilidad: DisponibilidadReceta) {
 @Preview(showBackground = true, backgroundColor = 0xFFFFFBF5, heightDp = 700)
 @Composable
 private fun ContenidoAnadirPlanPreview() {
+    fun faltantes(vararg nombres: String) = nombres.mapIndexed { indice, nombre ->
+        IngredienteFaltante(
+            alimentoId = indice.toLong() + 1,
+            nombre = nombre,
+            necesario = 200.0,
+            unidad = "g",
+            disponible = null,
+            motivo = MotivoFaltante.AUSENTE
+        )
+    }
     val demo = listOf(
         RecetaConIngredientes(
             Receta(id = 1, nombre = "Tortilla de patatas", tiempoMinutos = 25, kcal = 380, porciones = 4),
@@ -254,11 +341,11 @@ private fun ContenidoAnadirPlanPreview() {
         RecetaConIngredientes(
             Receta(id = 2, nombre = "Pasta con tomate", tiempoMinutos = 20, kcal = 450, porciones = 4),
             emptyList()
-        ) to DisponibilidadReceta.Faltan(1),
+        ) to DisponibilidadReceta.Faltan(faltantes("Tomate")),
         RecetaConIngredientes(
             Receta(id = 3, nombre = "Ensalada César", tiempoMinutos = 15, kcal = 320, porciones = 2),
             emptyList()
-        ) to DisponibilidadReceta.Faltan(2)
+        ) to DisponibilidadReceta.Faltan(faltantes("Lechuga", "Pollo"))
     )
     REMYTheme {
         ContenidoAnadirPlan(

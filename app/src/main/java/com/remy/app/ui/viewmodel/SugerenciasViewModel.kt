@@ -6,14 +6,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.remy.app.data.AlimentoRepository
-import com.remy.app.data.PreferenciasRepository
-import com.remy.app.data.RecetaConIngredientes
-import com.remy.app.data.RecetaRepository
-import com.remy.app.data.RemyDatabase
-import com.remy.app.logica.clasificarRecetas
-import com.remy.app.logica.filtrarRecetas
-import com.remy.app.ui.EstadoCarga
+import com.remy.app.data.database.RemyDatabase
+import com.remy.app.data.model.Alimento
+import com.remy.app.data.model.RecetaConIngredientes
+import com.remy.app.data.repository.AlimentoRepository
+import com.remy.app.data.repository.PreferenciasRepository
+import com.remy.app.data.repository.RecetaRepository
+import com.remy.app.domain.clasificarRecetas
+import com.remy.app.domain.filtrarRecetas
+import com.remy.app.ui.state.EstadoCarga
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -99,7 +100,7 @@ class SugerenciasViewModel(
                         FaltanteVista(
                             alimentoId = f.alimentoId,
                             nombre = nombres[f.alimentoId] ?: "Alimento ${f.alimentoId}",
-                            insuficiente = f.motivo == com.remy.app.logica.MotivoFaltante.CANTIDAD_INSUFICIENTE
+                            insuficiente = f.motivo == com.remy.app.domain.model.MotivoFaltante.CANTIDAD_INSUFICIENTE
                         )
                     }
                     .sortedBy { it.nombre.lowercase() }
@@ -113,7 +114,7 @@ class SugerenciasViewModel(
                                 FaltanteVista(
                                     alimentoId = faltante.alimentoId,
                                     nombre = nombres[faltante.alimentoId] ?: "Alimento ${faltante.alimentoId}",
-                                    insuficiente = faltante.motivo == com.remy.app.logica.MotivoFaltante.CANTIDAD_INSUFICIENTE
+                                    insuficiente = faltante.motivo == com.remy.app.domain.model.MotivoFaltante.CANTIDAD_INSUFICIENTE
                                 )
                             }
                         )

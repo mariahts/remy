@@ -50,10 +50,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.remy.app.R
-import com.remy.app.data.Receta
-import com.remy.app.data.RecetaConIngredientes
-import com.remy.app.data.SupabaseClientProvider
-import com.remy.app.data.TipoComida
+import com.remy.app.data.model.ComidaPlanificadaConReceta
+import com.remy.app.data.model.PlannedMeal
+import com.remy.app.data.model.Receta
+import com.remy.app.data.model.RecetaConIngredientes
+import com.remy.app.data.model.TipoComida
+import com.remy.app.data.remote.SupabaseClientProvider
+import com.remy.app.domain.model.DisponibilidadReceta
 import com.remy.app.ui.components.ContenidoConEstado
 import com.remy.app.ui.components.PrimaryButton
 import com.remy.app.ui.components.RecipePhoto
@@ -72,7 +75,6 @@ import com.remy.app.ui.theme.SuperficieBlanca
 import com.remy.app.ui.theme.Terracota
 import com.remy.app.ui.theme.TextoPrincipal
 import com.remy.app.ui.theme.TextoSecundario
-import com.remy.app.ui.viewmodel.DisponibilidadReceta
 import com.remy.app.ui.viewmodel.PlanDia
 import com.remy.app.ui.viewmodel.PlanViewModel
 import io.github.jan.supabase.auth.auth
@@ -409,10 +411,10 @@ private fun SemanaPlan(
                         modifier = Modifier
                             .size(36.dp)
                             .clip(CircleShape)
-                            .background(if (esHoy) AzulTinta else if (esSeleccionado) Melocoton else SuperficieBlanca)
+                            .background(if (esSeleccionado) AzulTinta else SuperficieBlanca)
                             .border(
-                                width = if (!esHoy && !esSeleccionado) 1.dp else 0.dp,
-                                color = BordeTarjeta,
+                                width = if (esSeleccionado) 0.dp else 1.dp,
+                                color = if (esHoy) AzulTinta else BordeTarjeta,
                                 shape = CircleShape
                             ),
                         contentAlignment = Alignment.Center
@@ -420,7 +422,7 @@ private fun SemanaPlan(
                         Text(
                             text = dia.dayOfMonth.toString(),
                             style = MaterialTheme.typography.labelLarge,
-                            color = if (esHoy) Color.White else TextoPrincipal,
+                            color = if (esSeleccionado) Color.White else TextoPrincipal,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -612,8 +614,8 @@ private fun PreviewInicio() {
         fecha = hoy,
         comidas = mapOf(
             TipoComida.COMIDA to com.remy.app.ui.viewmodel.ComidaPlanificadaVista(
-                plan = com.remy.app.data.ComidaPlanificadaConReceta(
-                    plan = com.remy.app.data.PlannedMeal(id = 1, fecha = hoy.toString(), tipoComida = TipoComida.COMIDA, recetaId = 1),
+                plan = com.remy.app.data.model.ComidaPlanificadaConReceta(
+                    plan = com.remy.app.data.model.PlannedMeal(id = 1, fecha = hoy.toString(), tipoComida = TipoComida.COMIDA, recetaId = 1),
                     receta = receta
                 ),
                 disponibilidad = DisponibilidadReceta.Lista

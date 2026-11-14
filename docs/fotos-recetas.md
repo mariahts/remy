@@ -1,35 +1,36 @@
 # Fotos de las recetas
 
-Las 20 recetas del catálogo llevan una fotografía real del plato. Todas proceden de Openverse, que agrega repositorios de imágenes con licencia libre (StockSnap, RawPixel, Flickr, Wikimedia, Nappy y WordPress).
+Las 20 recetas del catálogo llevan una fotografía del plato. Diecinueve proceden de Openverse, que agrega repositorios de imágenes con licencia libre (StockSnap, RawPixel, Flickr y Wikimedia), y una es una foto propia del equipo.
 
-Se han recortado al centro en formato cuadrado de 1080 × 1080 px para que encajen en las miniaturas y en la portada del detalle, que recortan la imagen en lugar de deformarla.
+Todas se han recortado al centro en formato cuadrado de 1080 × 1080 px para que encajen en las miniaturas y en la portada del detalle, que recortan la imagen en lugar de deformarla.
 
 | Receta | Fichero | Autor | Licencia | Fuente |
 | --- | --- | --- | --- | --- |
-| Ensalada mixta | `receta_ensalada_mixta.jpg` | Jeffrey Betts | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/salad-lettuce-Z0133GNPXT) |
-| Sopa de verduras | `receta_sopa_de_verduras.jpg` | Foodie Girl | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/bowl-soup-WOZ7PQGMMI) |
-| Ensalada de atún | `receta_ensalada_de_atun.jpg` | U.S. Department of Agriculture | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/8735009/photo-image-public-domain-food) |
-| Crema de zanahoria | `receta_crema_de_zanahoria.jpg` | Autor no indicado en la fuente | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/5927971/photo-image-public-domain-hand-person) |
-| Revuelto de champiñones | `receta_revuelto_de_champinones.jpg` | Wide Awake! | CC BY | [ficha](https://commons.wikimedia.org/w/index.php?curid=161098494) |
+| Gazpacho andaluz | `receta_gazpacho_andaluz.jpg` | Foodie Girl | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/bowl-soup-WOZ7PQGMMI) |
+| Ensalada de atún y huevo | `receta_ensalada_de_atun_y_huevo.jpg` | U.S. Department of Agriculture | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/8735009/photo-image-public-domain-food) |
+| Croquetas de pollo | `receta_croquetas_de_pollo.jpg` | 花よりキヨエ | CC BY | [ficha](https://commons.wikimedia.org/w/index.php?curid=164908087) |
 | Camarones al ajillo | `receta_camarones_al_ajillo.jpg` | Syced | CC0 1.0 (dominio público) | [ficha](https://commons.wikimedia.org/w/index.php?curid=108531254) |
-| Arroz con pollo | `receta_arroz_con_pollo.jpg` | Krzysztof Puszczyński | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/chicken-rice-MS5GA8U814) |
-| Tortilla de patatas | `receta_tortilla_de_patatas.jpg` | Kolforn (Kolforn) | CC BY-SA | [ficha](https://commons.wikimedia.org/w/index.php?curid=79327653) |
-| Lentejas estofadas | `receta_lentejas_estofadas.jpg` | Autor no indicado en la fuente | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/5974847/traditional-lentil-stew-with-smoked-pork-meat) |
+| Ensalada de tomate y cebolla | `receta_ensalada_de_tomate_y_cebolla.jpg` | Jeffrey Betts | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/salad-lettuce-Z0133GNPXT) |
+| Tortilla de patatas con cebolla | `receta_tortilla_de_patatas_con_cebolla.jpg` | Foto del equipo de REMY | Uso propio | — |
 | Garbanzos con espinacas | `receta_garbanzos_con_espinacas.jpg` | Kari Sullivan from Austin, TX | CC BY | [ficha](https://commons.wikimedia.org/w/index.php?curid=35731637) |
-| Pasta con tomate | `receta_pasta_con_tomate.jpg` | Toronto Eaters | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/pasta-food-JK5UXP69CE) |
-| Bacalao al horno | `receta_bacalao_al_horno.jpg` | Jakub Kapusnak | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/448397/free-photo-image-eat-fish-salad-appetite) |
-| Pollo al curry | `receta_pollo_al_curry.jpg` | Autor no indicado en la fuente | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/5970320/green-chicken-curry) |
-| Paella de verduras | `receta_paella_de_verduras.jpg` | Patryk Dziejma | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/paella-rice-T3JTA2VN26) |
-| Macarrones con queso | `receta_macarrones_con_queso.jpg` | Jakub Kapusnak | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/448249/free-photo-image-pasta-cheese-meal-appetite) |
-| Flan de huevo | `receta_flan_de_huevo.jpg` | Mohammad Ali Huzam | CC BY-SA | [ficha](https://commons.wikimedia.org/w/index.php?curid=44987000) |
+| Lentejas con verduras | `receta_lentejas_con_verduras.jpg` | Autor no indicado en la fuente | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/5974847/traditional-lentil-stew-with-smoked-pork-meat) |
+| Arroz con pollo y pimiento | `receta_arroz_con_pollo_y_pimiento.jpg` | Krzysztof Puszczyński | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/chicken-rice-MS5GA8U814) |
+| Pasta con tomate y atún | `receta_pasta_con_tomate_y_atun.jpg` | Toronto Eaters | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/pasta-food-JK5UXP69CE) |
+| Bacalao al pil-pil | `receta_bacalao_al_pil_pil.jpg` | Jakub Kapusnak | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/448397/free-photo-image-eat-fish-salad-appetite) |
+| Bacalao a lo pobre | `receta_bacalao_a_lo_pobre.jpg` | Jessica Spengler from Brighton, United Kingdom | CC BY | [ficha](https://commons.wikimedia.org/w/index.php?curid=26517896) |
+| Marmitako de atún | `receta_marmitako_de_atun.jpg` | www_ukberri_net | CC BY | [ficha](https://commons.wikimedia.org/w/index.php?curid=19583802) |
+| Wok de pollo con verduras | `receta_wok_de_pollo_con_verduras.jpg` | Vegan Feast Catering | CC BY | [ficha](https://commons.wikimedia.org/w/index.php?curid=35602805) |
+| Arroz frito con huevo y camarones | `receta_arroz_frito_con_huevo_y_camarones.jpg` | Autor no indicado en la fuente | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/5927569/photo-image-public-domain-food-free) |
+| Pasta con champiñones y nata | `receta_pasta_con_champinones_y_nata.jpg` | Autor no indicado en la fuente | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/11524320/photo-image-plant-mushroom-public-domain) |
 | Arroz con leche | `receta_arroz_con_leche.jpg` | Jakub Kapusnak | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/448144/free-photo-image-mango-indian-sweets-coconut-milk) |
-| Yogur con fresas | `receta_yogur_con_fresas.jpg` | Jamie Hamel-Smith | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/granola-yogurt-QL0I5DPNGX) |
-| Plátano con chocolate | `receta_platano_con_chocolate.jpg` | Brenda Godinez | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/banana-apple-4PMQRDQ65P) |
-| Bizcocho de plátano | `receta_bizcocho_de_platano.jpg` | Ashwin Vaswani | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/banana-food-EY0DD0UUIC) |
+| Tarta de queso | `receta_tarta_de_queso.jpg` | Markus Spiske | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/strawberry-cheesecake-291W99OY2D) |
+| Plátano con chocolate negro | `receta_platano_con_chocolate_negro.jpg` | Brenda Godinez | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/banana-apple-4PMQRDQ65P) |
+| Fresas con nata | `receta_fresas_con_nata.jpg` | Jamie Hamel-Smith | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/granola-yogurt-QL0I5DPNGX) |
 
 ## Licencias
 
 - **CC0 1.0** y **Public Domain Mark**: uso libre sin atribución obligatoria. Se cita igualmente al autor por cortesía.
 - **CC BY** y **CC BY-SA**: obligan a citar al autor y la licencia, y en el caso de CC BY-SA a compartir la obra derivada con la misma licencia.
+- **Uso propio**: foto hecha por el equipo del proyecto; es nuestra y no depende de ninguna licencia externa.
 
-La aplicación muestra siempre el crédito completo en esta tabla. Si en el futuro se sustituye alguna foto por una propia, esta tabla se actualiza en la misma Pull Request.
+La aplicación muestra siempre el crédito completo en esta tabla. Si en el futuro se sustituye alguna foto por una propia, esta tabla se actualiza en el mismo cambio.

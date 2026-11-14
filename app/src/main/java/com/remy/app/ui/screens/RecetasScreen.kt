@@ -49,9 +49,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.remy.app.R
-import com.remy.app.data.PreferenciasRepository
-import com.remy.app.data.Receta
-import com.remy.app.data.RecetaConIngredientes
+import com.remy.app.data.model.Receta
+import com.remy.app.data.model.RecetaConIngredientes
+import com.remy.app.data.repository.PreferenciasRepository
 import com.remy.app.ui.components.ContenidoConEstado
 import com.remy.app.ui.components.OutlineButton
 import com.remy.app.ui.components.PrimaryButton
@@ -69,8 +69,8 @@ import com.remy.app.ui.theme.Terracota
 import com.remy.app.ui.theme.TextoPrincipal
 import com.remy.app.ui.theme.TextoSecundario
 import com.remy.app.ui.viewmodel.RecetasViewModel
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+import kotlinx.coroutines.launch
 
 @Composable
 fun RecetasScreen(

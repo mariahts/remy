@@ -1,4 +1,4 @@
-﻿package com.remy.app.ui.viewmodel
+package com.remy.app.ui.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.remy.app.data.RecetaConIngredientes
-import com.remy.app.data.RecetaRepository
-import com.remy.app.data.RemyDatabase
-import com.remy.app.ui.EstadoCarga
+import com.remy.app.data.database.RemyDatabase
+import com.remy.app.data.model.RecetaConIngredientes
+import com.remy.app.data.repository.RecetaRepository
+import com.remy.app.ui.state.EstadoCarga
 import java.time.LocalDate
 import kotlin.random.Random
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,24 +43,28 @@ class CocinadasViewModel(private val repositorio: RecetaRepository) : ViewModel(
                     val semilla = LocalDate.now().toEpochDay().toInt()
                     todas[Random(semilla).nextInt(todas.size)]
                 }
-                InicioDatos(cocinadas = cocinadas, sugerencia = sugerencia)
+                EstadoCarga.Datos(InicioDatos(cocinadas = cocinadas, sugerencia = sugerencia)) as EstadoCarga<InicioDatos>
+            }.onStart {
+                emit(EstadoCarga.Cargando)
+            }.catch { error ->
+                emit(EstadoCarga.Error(error.message ?: "No se pudo cargar el inicio"))
             }
-                .map<InicioDatos, EstadoCarga<InicioDatos>> { EstadoCarga.Datos(it) }
-                .onStart { emit(EstadoCarga.Cargando) }
-                .catch { emit(EstadoCarga.Error("No se ha podido cargar el inicio.")) }
-        }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), EstadoCarga.Cargando)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = EstadoCarga.Cargando
+        )
 
     fun reintentar() {
         reintentos.update { it + 1 }
     }
 
     companion object {
-        /** Crea el ViewModel real de la app, con la base de datos Room. */
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val app = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]!! as Application
-                CocinadasViewModel(RecetaRepository(RemyDatabase.obtener(app).recetaDao()))
+                val app = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
+                val db = RemyDatabase.obtener(app)
+                CocinadasViewModel(RecetaRepository(db.recetaDao()))
             }
         }
     }

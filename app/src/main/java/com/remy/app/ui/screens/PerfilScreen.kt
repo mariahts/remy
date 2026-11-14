@@ -22,7 +22,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -42,16 +41,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.remy.app.R
-import com.remy.app.data.Receta
-import com.remy.app.data.RecetaConIngredientes
-import com.remy.app.data.SupabaseClientProvider
+import com.remy.app.data.model.Receta
+import com.remy.app.data.model.RecetaConIngredientes
+import com.remy.app.data.remote.SupabaseClientProvider
 import com.remy.app.ui.components.RecipePhoto
 import com.remy.app.ui.components.RemyCard
 import com.remy.app.ui.components.RemyTopBar
 import com.remy.app.ui.components.StatusBadge
 import com.remy.app.ui.components.VarianteBadge
 import com.remy.app.ui.theme.AzulTinta
-import com.remy.app.ui.theme.BordeTarjeta
 import com.remy.app.ui.theme.FondoCrema
 import com.remy.app.ui.theme.Melocoton
 import com.remy.app.ui.theme.PillShape
@@ -363,11 +361,6 @@ private fun TarjetaAjustes() {
                 style = MaterialTheme.typography.titleLarge,
                 color = TextoPrincipal
             )
-            FilaAjuste(
-                titulo = stringResource(R.string.perfil_unidades),
-                valor = stringResource(R.string.perfil_unidades_valor)
-            )
-            HorizontalDivider(color = BordeTarjeta)
             FilaAjuste(
                 titulo = stringResource(R.string.perfil_acerca),
                 valor = stringResource(R.string.perfil_version)

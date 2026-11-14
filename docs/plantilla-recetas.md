@@ -44,18 +44,19 @@ estas claves en este orden exacto:
  "porciones": 0}
 
 EJEMPLO DE UNA RECETA DE LA MISMA APP
-{"nombre": "Ensalada mixta", "kcal": 0, "proteinas": 0, "hidratos": 0,
- "grasas": 0, "regionOrigen": "Mediterráneo", "tipoPlato": "Entrante",
- "tiempoMinutos": 10,
- "pasos": ["Lava la lechuga, el tomate y la cebolla, y secarlos bien con un paño
- de cocina.", "Trocea la lechuga, corta el tomate en rodajas y pica la cebolla
- en juliana fina.", "Coloca todo en un bol grande y aliña con el aceite de oliva
- y la sal.", "Remueve justo antes de servir para que la lechuga no se aguade."],
- "ingredientes": [{"alimentoId": 29, "cantidad": 150, "unidad": "g"},
- {"alimentoId": 3, "cantidad": 200, "unidad": "g"},
- {"alimentoId": 4, "cantidad": 50, "unidad": "g"},
- {"alimentoId": 6, "cantidad": 15, "unidad": "ml"},
- {"alimentoId": 30, "cantidad": 3, "unidad": "g"}],
+{"nombre": "Ensalada de tomate y cebolla", "kcal": 0, "proteinas": 0,
+ "hidratos": 0, "grasas": 0, "regionOrigen": "Mediterráneo",
+ "tipoPlato": "Entrante", "tiempoMinutos": 10,
+ "pasos": ["Lava el tomate y córtalo en rodajas de medio centímetro.", "Pela la
+ cebolla, córtala en juliana fina y deja que repose 5 minutos para que pierda
+ el picor.", "Lava la lechuga, escúrrela bien y trocéala.", "Coloca la lechuga
+ en un bol y añade encima el tomate y la cebolla.", "Aliña con aceite y sal
+ justo antes de servir."],
+ "ingredientes": [{"alimentoId": 3, "cantidad": 300, "unidad": "g"},
+ {"alimentoId": 4, "cantidad": 120, "unidad": "g"},
+ {"alimentoId": 29, "cantidad": 80, "unidad": "g"},
+ {"alimentoId": 6, "cantidad": 30, "unidad": "ml"},
+ {"alimentoId": 30, "cantidad": 4, "unidad": "g"}],
  "porciones": 2}
 
 TABLA DE ALIMENTOS DISPONIBLES
@@ -144,44 +145,45 @@ Macros por 100 g o 100 ml. La app calcula los macros de cada receta sumando la a
 
 ```json
 {
-    "nombre": "Ensalada mixta",
-    "kcal": 211,
-    "proteinas": 4,
-    "hidratos": 16,
-    "grasas": 16,
+    "nombre": "Ensalada de tomate y cebolla",
+    "kcal": 379,
+    "proteinas": 5,
+    "hidratos": 24,
+    "grasas": 31,
     "regionOrigen": "Mediterráneo",
     "tipoPlato": "Entrante",
     "tiempoMinutos": 10,
     "pasos": [
-        "Lava la lechuga, el tomate y la cebolla, y secarlos bien con un paño de cocina.",
-        "Trocea la lechuga, corta el tomate en rodajas y pica la cebolla en juliana fina.",
-        "Coloca todo en un bol grande y aliña con el aceite de oliva y la sal.",
-        "Remueve justo antes de servir para que la lechuga no se aguade."
+        "Lava el tomate y córtalo en rodajas de medio centímetro.",
+        "Pela la cebolla, córtala en juliana fina y deja que repose 5 minutos para que pierda el picor.",
+        "Lava la lechuga, escúrrela bien y trocéala.",
+        "Coloca la lechuga en un bol y añade encima el tomate y la cebolla.",
+        "Aliña con aceite y sal justo antes de servir."
     ],
     "ingredientes": [
         {
-            "alimentoId": 29,
-            "cantidad": 150,
-            "unidad": "g"
-        },
-        {
             "alimentoId": 3,
-            "cantidad": 200,
+            "cantidad": 300,
             "unidad": "g"
         },
         {
             "alimentoId": 4,
-            "cantidad": 50,
+            "cantidad": 120,
+            "unidad": "g"
+        },
+        {
+            "alimentoId": 29,
+            "cantidad": 80,
             "unidad": "g"
         },
         {
             "alimentoId": 6,
-            "cantidad": 15,
+            "cantidad": 30,
             "unidad": "ml"
         },
         {
             "alimentoId": 30,
-            "cantidad": 3,
+            "cantidad": 4,
             "unidad": "g"
         }
     ],
