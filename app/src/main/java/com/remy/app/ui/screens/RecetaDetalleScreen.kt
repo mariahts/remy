@@ -1,4 +1,4 @@
-package com.remy.app.ui.screens
+﻿package com.remy.app.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -84,6 +84,7 @@ import com.remy.app.ui.components.StatusBadge
 import com.remy.app.ui.components.VarianteBadge
 import com.remy.app.ui.components.fechaEnEspanol
 import com.remy.app.ui.components.formatoCantidad
+import com.remy.app.ui.components.formatoCantidadReceta
 import com.remy.app.ui.theme.AvisoNeutroBg
 import com.remy.app.ui.theme.AzulTinta
 import com.remy.app.ui.theme.BordeTarjeta
@@ -457,7 +458,7 @@ private fun FilaIngredienteDetalle(par: IngredienteConAlimento, porcionesReceta:
     val nombre = par.alimento?.nombre ?: stringResource(R.string.detalle_ingrediente)
     val tiene = par.alimento != null
     val cantidadEscalada = par.ingrediente.cantidad * racionesDeseadas / porcionesReceta.coerceAtLeast(1)
-    val cantidad = "${cantidadEscalada.formatoCantidad()} ${par.ingrediente.unidad}"
+    val cantidad = "${cantidadEscalada.formatoCantidadReceta()} ${par.ingrediente.unidad}"
 
     Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
