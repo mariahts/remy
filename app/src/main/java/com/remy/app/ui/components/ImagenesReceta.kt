@@ -29,7 +29,6 @@ object ImagenesReceta {
         "Lentejas con verduras" to R.drawable.receta_lentejas_con_verduras,
         "Arroz con pollo y pimiento" to R.drawable.receta_arroz_con_pollo_y_pimiento,
         "Pasta con tomate y atún" to R.drawable.receta_pasta_con_tomate_y_atun,
-        "Bacalao al pil-pil" to R.drawable.receta_bacalao_al_pil_pil,
         "Bacalao a lo pobre" to R.drawable.receta_bacalao_a_lo_pobre,
         "Marmitako de atún" to R.drawable.receta_marmitako_de_atun,
         "Wok de pollo con verduras" to R.drawable.receta_wok_de_pollo_con_verduras,

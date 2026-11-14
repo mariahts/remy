@@ -456,11 +456,13 @@
             "tipoPlato": "Entrante",
             "tiempoMinutos": 15,
             "pasos": [
-                "Trocea el tomate, el pimiento y la cebolla en trozos grandes y pica el ajo.",
-                "Moja el pan en agua hasta que esté empapado y tritúralo junto con las verduras y el ajo.",
-                "Añade el aceite en hilo y tritura otra vez hasta que la salsa quede lisa y emulsionada.",
-                "Pasa el gazpacho por un colador fino, rectifica de sal y déjalo enfriar al menos una hora.",
-                "Sirve en vasos fríos."
+                "Lava bien los tomates, el pepino y el pimiento. Pela el pepino y retira las semillas del pimiento.",
+                "Corta los tomates, el pepino, el pimiento y la cebolla en trozos pequeños. Pela el ajo y retira el germen central si lo tiene.",
+                "Coloca los 15 g de pan en un recipiente con un poco del agua fría durante unos minutos para que se ablande.",
+                "Introduce en la batidora todas las verduras, el pan escurrido, el vinagre, la sal y el agua. Tritura durante 1-2 minutos hasta conseguir una mezcla homogénea.",
+                "Incorpora poco a poco los 15 g de aceite de oliva mientras sigues batiendo. Esto ayudará a conseguir una textura más fina y cremosa.",
+                "Pasa el gazpacho por un colador fino si quieres una textura más suave, sin pieles ni semillas.",
+                "Déjalo en la nevera entre 30 y 60 minutos. Sírvelo bien frío y, si quieres, añade unos trocitos de pepino o tomate por encima."
             ],
             "ingredientes": [
                 {
@@ -511,11 +513,12 @@
             "tipoPlato": "Entrante",
             "tiempoMinutos": 12,
             "pasos": [
-                "Cuece los huevos 9 minutos en agua hirviendo, pásalos a agua fría, pélalos y córtalos en cuartos.",
-                "Escurre el atún y desmenúzalo con las manos.",
-                "Lava la lechuga y córtala en trozos, lava el tomate y córtalo en rodajas y pica la cebolla en juliana fina.",
-                "Coloca la lechuga en un bol y añade el tomate, la cebolla y el atún.",
-                "Aliña con aceite y sal y corona con los cuartos de huevo."
+                "ponlo en agua hirviendo durante 10-11 minutos. Después, enfríalo, pélalo y córtalo en cuartos.",
+                "lava la lechuga y el tomate. Trocea la lechuga, corta el tomate en dados y la cebolla en tiras finas.",
+                "escúrrelo bien y desmenúzalo con un tenedor.",
+                "coloca la lechuga como base y añade el tomate, la cebolla, el maíz y el atún.",
+                "distribuye los cuartos de huevo por encima.",
+                "incorpora el aceite, el vinagre y la sal justo antes de servir."
             ],
             "ingredientes": [
                 {
@@ -566,11 +569,15 @@
             "tipoPlato": "Entrante",
             "tiempoMinutos": 45,
             "pasos": [
-                "Cuece el pollo en agua con sal durante 20 minutos y déjalo enfriar antes de desmenuzarlo.",
-                "Pica la cebolla finamente y sofríela en el aceite 8 minutos a fuego medio.",
-                "Añade la harina y tuéstala 2 minutos; incorpora la leche poco a poco y remueve hasta que espese.",
-                "Añade el pollo desmenuzado y la sal, mezcla y deja enfriar la masa en la nevera.",
-                "Forma las croquetas, pásalas por huevo y pan rallado y fríelas 3 minutos por cada cara."
+                "desmenuza el pollo cocido o asado en trocitos pequeños.",
+                "pícala muy fina y cocínala en una sartén con el aceite y la mantequilla durante 4-5 minutos.",
+                "añade la harina y remueve durante 2 minutos para cocinarla. Incorpora la leche poco a poco, sin dejar de remover para evitar grumos.",
+                "incorpora el pollo desmenuzado, la sal, la pimienta y la nuez moscada.",
+                "cocina a fuego medio-bajo durante 8-10 minutos, removiendo hasta conseguir una masa espesa que se despegue de la sartén.",
+                "coloca la masa en un recipiente, cúbrela con film en contacto y refrigera al menos 3-4 horas.",
+                "toma pequeñas porciones y dales forma alargada o redonda.",
+                "pásalas primero por harina, después por huevo batido y finalmente por pan rallado.",
+                "calienta abundante aceite y fríe las croquetas hasta que estén doradas. Déjalas escurrir sobre papel de cocina."
             ],
             "ingredientes": [
                 {
@@ -626,11 +633,12 @@
             "tipoPlato": "Entrante",
             "tiempoMinutos": 20,
             "pasos": [
-                "Pela los camarones, déjalos limpios y aparta las cabezas.",
-                "Lamina el ajo y dóralo en el aceite a fuego medio 2 minutos, sin que se queme, y retíralo.",
-                "Saltea el pimiento en juliana 5 minutos, añade las cabezas y apaga el fuego para que suelten sabor.",
-                "Sube el fuego, saltea los camarones 3 o 4 minutos y devuelve el ajo dorado a la cazuela.",
-                "Rectifica de sal y sirve con pan para mojar la salsa."
+                "pela los ajos y córtalos en láminas finas. Pica el perejil.",
+                "pon el aceite de oliva en una sartén pequeña o cazuela de barro a fuego medio-bajo.",
+                "añade los ajos y la guindilla. Cocina lentamente hasta que estén ligeramente dorados, sin dejar que se quemen.",
+                "incorpora los camarones y una pizca de sal. Cocina durante 2-4 minutos, dependiendo de su tamaño, hasta que estén hechos.",
+                "añade el perejil picado, un poco de pimienta y unas gotas de limón si te gustan.",
+                "lleva directamente a la mesa, con cuidado si utilizas una cazuela de barro caliente."
             ],
             "ingredientes": [
                 {
@@ -676,11 +684,11 @@
             "tipoPlato": "Entrante",
             "tiempoMinutos": 10,
             "pasos": [
-                "Lava el tomate y córtalo en rodajas de medio centímetro.",
-                "Pela la cebolla, córtala en juliana fina y deja que repose 5 minutos para que pierda el picor.",
-                "Lava la lechuga, escúrrela bien y trocéala.",
-                "Coloca la lechuga en un bol y añade encima el tomate y la cebolla.",
-                "Aliña con aceite y sal justo antes de servir."
+                "córtalo en rodajas o en gajos.",
+                "pélala y córtala en tiras finas. Si quieres suavizar su sabor, déjala 5-10 minutos en agua fría.",
+                "coloca el tomate en un plato y reparte la cebolla por encima.",
+                "añade el aceite de oliva, el vinagre, la sal y el orégano.",
+                "espera unos 5 minutos para que se mezclen los sabores."
             ],
             "ingredientes": [
                 {
@@ -721,11 +729,13 @@
             "tipoPlato": "Principal",
             "tiempoMinutos": 40,
             "pasos": [
-                "Pela las patatas y la cebolla y córtalas en láminas finas.",
-                "Fríe las patatas y la cebolla en el aceite a fuego medio-bajo unos 20 minutos, con sal, hasta que estén tiernas.",
-                "Escurre el aceite, mezcla las patatas con el huevo batido y la sal y deja reposar 5 minutos.",
-                "Cuaja la tortilla en una sartén con un poco de aceite, 4 minutos por cada cara, usando un plato para darle la vuelta.",
-                "Deja reposar la tortilla 5 minutos antes de cortarla en porciones."
+                "Pela las patatas y córtalas en rodajas finas o en pequeños trozos irregulares.",
+                "Pela la cebolla y córtala en juliana fina para que se cocine uniformemente.",
+                "Calienta el aceite en una sartén. Añade las patatas y la cebolla con una pizca de sal. Cocina a fuego medio-bajo durante 15-18 minutos, removiendo suavemente. Deben quedar tiernas, no crujientes.",
+                "Bate los 2 huevos en un bol con una pizca de sal. Escurre ligeramente las patatas y la cebolla para retirar el exceso de aceite e incorpóralas al huevo. Mezcla y deja reposar 3 minutos.",
+                "Pon una sartén antiadherente a fuego medio-bajo. Vierte la mezcla y cocina durante 2-3 minutos, moviendo ligeramente la sartén para evitar que se pegue.",
+                "Coloca un plato encima de la sartén, gira con cuidado y desliza la tortilla de nuevo en la sartén por el otro lado.",
+                "Cocina otros 2-3 minutos, dependiendo de si la prefieres más o menos cuajada. Deja reposar un par de minutos antes de servir."
             ],
             "ingredientes": [
                 {
@@ -766,11 +776,13 @@
             "tipoPlato": "Principal",
             "tiempoMinutos": 35,
             "pasos": [
-                "Pica la cebolla y el ajo y sofríelos en el aceite 8 minutos a fuego medio.",
-                "Añade el tomate rallado y deja que reduzca 5 minutos.",
-                "Incorpora los garbanzos escurridos con un vaso de agua y deja cocer 10 minutos a fuego suave.",
-                "Añade las espinacas y remueve hasta que bajen de volumen, unos 3 minutos.",
-                "Rectifica de sal y sirve con pan."
+                "pica la cebolla y el ajo. Lava las espinacas si son frescas.",
+                "calienta el aceite en una sartén o cazuela y pocha la cebolla durante 4-5 minutos. Añade el ajo y cocina un minuto más.",
+                "incorpora el tomate triturado y cocina unos 5 minutos, hasta que reduzca.",
+                "aparta un momento del fuego, incorpora el pimentón y el comino y remueve.",
+                "añade los garbanzos escurridos y el caldo. Cocina a fuego medio durante 8-10 minutos.",
+                "incorpóralas poco a poco y cocina 3-4 minutos, hasta que estén tiernas.",
+                "prueba y ajusta de sal y pimienta. Si quieres una salsa más espesa, aplasta algunos garbanzos con un tenedor."
             ],
             "ingredientes": [
                 {
@@ -821,11 +833,13 @@
             "tipoPlato": "Principal",
             "tiempoMinutos": 35,
             "pasos": [
-                "Pica la cebolla, la zanahoria y el pimiento en dados pequeños.",
-                "Sofríelos con el ajo en el aceite 10 minutos a fuego medio, hasta que la cebolla esté transparente.",
-                "Añade las lentejas escurridas, cubre con agua y cuece 20 o 25 minutos a fuego suave.",
-                "Rectifica de sal cuando las lentejas estén tiernas y la salsa espesa.",
-                "Deja reposar 5 minutos antes de servir."
+                "Lava los 70 g de lentejas bajo el grifo y retira cualquier impureza. Las lentejas pardinas no necesitan remojo previo, aunque puedes dejarlas en agua unas horas si quieres reducir el tiempo de cocción.",
+                "Pela la patata y la zanahoria. Corta todas las verduras en dados pequeños para que se cocinen de manera uniforme.",
+                "Calienta el aceite en una cazuela. Añade la cebolla, los pimientos y el ajo picado. Cocina durante 5 minutos a fuego medio.",
+                "Incorpora el tomate triturado y el pimentón dulce. Cocina durante 3-4 minutos, removiendo para integrar los sabores.",
+                "Añade las lentejas, la patata, la zanahoria, el calabacín y la hoja de laurel. Remueve suavemente.",
+                "Vierte los 350-400 g de agua o caldo caliente. Lleva a ebullición y después baja el fuego. Cocina a fuego suave durante 30-40 minutos, hasta que las lentejas estén tiernas. Comprueba el líquido durante la cocción y añade un poco más si es necesario.",
+                "Añade la sal y la pimienta al gusto. Retira el laurel y deja reposar 5 minutos antes de servir."
             ],
             "ingredientes": [
                 {
@@ -876,11 +890,14 @@
             "tipoPlato": "Principal",
             "tiempoMinutos": 45,
             "pasos": [
-                "Trocea el pollo, pica la cebolla y el pimiento.",
-                "Dora el pollo en el aceite 8 minutos a fuego fuerte y resérvalo en un plato.",
-                "Sofríe la cebolla y el pimiento 8 minutos, añade el ajo y el arroz y rehoga 2 minutos.",
-                "Cubre con agua (una vez y media el volumen del arroz) y cuece 18 minutos a fuego medio.",
-                "Devuelve el pollo al guiso, deja reposar 5 minutos y sirve."
+                "Corta los 120 g de pechuga en dados pequeños. Añade una pizca de sal y pimienta.",
+                "Trocea los pimientos, la cebolla y el ajo en trozos pequeños.",
+                "Calienta el aceite en una sartén o paellera. Añade el pollo y dóralo durante 3-4 minutos. Retíralo y resérvalo.",
+                "En la misma sartén incorpora la cebolla, los pimientos y el ajo. Cocina durante 5-6 minutos a fuego medio.",
+                "Incorpora el tomate triturado, el pimentón dulce y la cúrcuma. Cocina durante 3-4 minutos, removiendo.",
+                "Añade los 80 g de arroz y remueve durante 1 minuto para que se impregne bien del sofrito.",
+                "Vierte los 200-220 g de caldo caliente y vuelve a incorporar el pollo. Reparte todo uniformemente y cocina a fuego medio durante unos 16-18 minutos.",
+                "Cuando el arroz esté tierno y haya absorbido el caldo, apaga el fuego. Tapa la sartén y deja reposar 5 minutos."
             ],
             "ingredientes": [
                 {
@@ -931,11 +948,13 @@
             "tipoPlato": "Principal",
             "tiempoMinutos": 20,
             "pasos": [
-                "Cuece la pasta en agua con sal 10 o 12 minutos y escúrrela reservando un poco del agua de cocción.",
-                "Pica la cebolla y el ajo y sofríelos en el aceite 6 minutos a fuego medio.",
-                "Añade el tomate troceado y deja que reduzca 10 minutos hasta que la salsa quede espesa.",
-                "Incorpora el atún escurrido y remueve 2 minutos.",
-                "Mezcla la pasta con la salsa y sirve."
+                "Pon agua abundante a hervir con una pizca de sal. Añade los 80 g de pasta y cocina siguiendo el tiempo indicado en el paquete. Escurre y reserva un poco del agua de cocción.",
+                "Pica finamente la cebolla y el ajo para que se integren bien en la salsa.",
+                "Calienta el aceite en una sartén. Añade la cebolla y cocina durante 4-5 minutos a fuego medio. Incorpora el ajo y cocina un minuto más.",
+                "Añade los 150 g de tomate triturado, el orégano, la pimienta y una pizca de sal. Cocina durante 10-12 minutos a fuego medio-bajo, removiendo de vez en cuando.",
+                "Escurre bien el atún y añádelo a la salsa. Mezcla suavemente y cocina durante 2 minutos.",
+                "Añade la pasta cocida a la sartén. Mezcla para que se impregne bien de la salsa. Si está demasiado espesa, incorpora un poco del agua de cocción reservada.",
+                "Retira del fuego y añade la albahaca fresca picada. Sirve caliente."
             ],
             "ingredientes": [
                 {
@@ -977,51 +996,6 @@
             "porciones": 3
         },
         {
-            "nombre": "Bacalao al pil-pil",
-            "kcal": 1172,
-            "proteinas": 92,
-            "hidratos": 11,
-            "grasas": 84,
-            "regionOrigen": "Cantábrico",
-            "tipoPlato": "Principal",
-            "tiempoMinutos": 35,
-            "pasos": [
-                "Deja el bacalao en remojo en la nevera 12 horas y escúrrelo.",
-                "Dora el ajo laminado en el aceite 3 minutos a fuego medio y retíralo.",
-                "Coloca el bacalao en la cazuela con el aceite templado y cocínalo a fuego muy suave 12 o 15 minutos, sin dejar de mover la cazuela.",
-                "Añade el pimiento en juliana y el ajo dorado y liga la salsa moviendo la cazuela en círculos.",
-                "Rectifica de sal y sirve con pan para mojar."
-            ],
-            "ingredientes": [
-                {
-                    "alimentoId": 17,
-                    "cantidad": 500,
-                    "unidad": "g"
-                },
-                {
-                    "alimentoId": 5,
-                    "cantidad": 20,
-                    "unidad": "g"
-                },
-                {
-                    "alimentoId": 6,
-                    "cantidad": 80,
-                    "unidad": "ml"
-                },
-                {
-                    "alimentoId": 15,
-                    "cantidad": 80,
-                    "unidad": "g"
-                },
-                {
-                    "alimentoId": 30,
-                    "cantidad": 4,
-                    "unidad": "g"
-                }
-            ],
-            "porciones": 3
-        },
-        {
             "nombre": "Bacalao a lo pobre",
             "kcal": 1540,
             "proteinas": 107,
@@ -1031,11 +1005,12 @@
             "tipoPlato": "Principal",
             "tiempoMinutos": 50,
             "pasos": [
-                "Deja el bacalao en remojo en la nevera 12 horas y escúrrelo.",
-                "Pela las patatas y córtalas en láminas; pela la cebolla y córtala en juliana.",
-                "Coloca las patatas y la cebolla en una cazuela con el aceite y la sal, cúbrelas de agua y cuece 20 minutos a fuego medio.",
-                "Añade el bacalao en trozos y deja cocer 12 minutos a fuego suave, sin remover para que no se rompa.",
-                "Sirve bien escurrido, con el pan para acompañar."
+                "Pela los 200 g de patata y córtalas en rodajas de aproximadamente medio centímetro de grosor.",
+                "Corta la cebolla en juliana y los pimientos en tiras. Lamina también el ajo.",
+                "Calienta el aceite en una sartén amplia. Añade las patatas y cocínalas a fuego medio-bajo durante 12-15 minutos, removiendo con cuidado. Deben quedar tiernas y ligeramente doradas.",
+                "Incorpora las verduras y cocina otros 8-10 minutos hasta que estén blanditas. Añade el ajo durante los últimos 2 minutos.",
+                "Coloca los 150 g de bacalao sobre las patatas y verduras. Cocina a fuego medio-bajo unos 5-8 minutos, dependiendo del grosor, hasta que esté completamente hecho y se separe fácilmente en lascas.",
+                "Añade el vinagre, un poco de pimienta negra y perejil picado. Mezcla suavemente y deja reposar un minuto antes de servir."
             ],
             "ingredientes": [
                 {
@@ -1081,11 +1056,15 @@
             "tipoPlato": "Principal",
             "tiempoMinutos": 40,
             "pasos": [
-                "Pela las patatas y córtalas en dados de dos centímetros; pela y pica la cebolla.",
-                "Sofríe la cebolla en el aceite 8 minutos y añade el tomate troceado.",
-                "Incorpora las patatas, cubre con agua y deja cocer 15 minutos a fuego medio.",
-                "Añade el pimiento troceado y el atún, y cuece 8 minutos a fuego fuerte, sin romper el atún.",
-                "Rectifica de sal: la salsa debe quedar espesa, no caldosa."
+                "Corta los 150 g de atún en dados de unos 3 cm. Añade un poco de sal y pimienta y reserva en la nevera.",
+                "Pela los 200 g de patata y córtalas en trozos irregulares, chascándolas al final del corte. Esto ayuda a liberar almidón y espesar el caldo.",
+                "Pica la cebolla, los pimientos y el ajo en trozos pequeños.",
+                "Calienta el aceite en una cazuela. Añade la cebolla y los pimientos. Cocina a fuego medio durante 7-8 minutos. Incorpora el ajo y cocina un minuto más.",
+                "Incorpora el tomate triturado, el pimentón dulce y la pulpa de pimiento choricero. Cocina durante 4-5 minutos removiendo suavemente.",
+                "Añade las patatas chascadas y remueve para que se impregnen del sofrito. Incorpora la hoja de laurel.",
+                "Vierte los 250 g de caldo de pescado caliente hasta cubrir casi las patatas. Cocina a fuego medio-bajo durante 18-22 minutos, hasta que estén tiernas. Si es necesario, añade un poco más de caldo.",
+                "Añade los dados de atún cuando las patatas estén tiernas. Cocina suavemente durante unos minutos, hasta que el pescado esté completamente cocinado. Evita remover demasiado para no romperlo.",
+                "Retira el laurel, añade perejil picado y deja reposar unos 3-5 minutos antes de servir."
             ],
             "ingredientes": [
                 {
@@ -1136,11 +1115,13 @@
             "tipoPlato": "Principal",
             "tiempoMinutos": 25,
             "pasos": [
-                "Corta el pollo en tiras y las verduras en juliana fina.",
-                "Cuece el arroz en agua con sal 12 minutos y escúrrelo.",
-                "Calienta el aceite del wok a fuego fuerte y saltea el pollo 4 minutos; retíralo.",
-                "Saltea las verduras 6 minutos y añade el champiñón en el último minuto.",
-                "Devuelve el pollo al wok, sal y mezcla 2 minutos; sirve con el arroz al lado."
+                "Corta los 150 g de pechuga en tiras finas. Añade un poco de pimienta y reserva.",
+                "Corta el brócoli en pequeños ramilletes, la zanahoria en tiras finas y el resto de verduras en láminas o bastones.",
+                "Calienta la mitad del aceite en un wok o sartén grande. Añade el pollo y saltéalo durante 5-7 minutos, hasta que esté completamente cocinado. Retira y reserva.",
+                "Añade el resto del aceite. Incorpora la zanahoria y el brócoli primero. Cocina 3 minutos. Después añade el pimiento, el calabacín, los champiñones y la cebolla. Saltea otros 4-5 minutos.",
+                "Incorpora el ajo picado y el jengibre rallado. Añade la salsa de soja y mezcla bien.",
+                "Devuelve el pollo al wok y saltea todo junto durante 2 minutos para integrar los sabores. Comprueba que el pollo esté completamente hecho.",
+                "Retira del fuego y añade las semillas de sésamo por encima. Sirve caliente."
             ],
             "ingredientes": [
                 {
@@ -1196,11 +1177,13 @@
             "tipoPlato": "Principal",
             "tiempoMinutos": 20,
             "pasos": [
-                "Cuece el arroz, escúrrelo y deja que se enfríe un poco.",
-                "Bate los huevos y cuájalos en el aceite como una tortilla fina; córtala en tiras.",
-                "Saltea el camarón 2 minutos y después el pimiento y la cebolla en juliana 4 minutos.",
-                "Añade el arroz y remueve a fuego fuerte 3 minutos, para que se tueste.",
-                "Incorpora el huevo en tiras, sal y sirve."
+                "Cuece los 70 g de arroz en agua con una pizca de sal siguiendo las instrucciones del paquete. Escúrrelo y déjalo enfriar. Lo ideal es utilizar arroz previamente cocido y refrigerado.",
+                "Pela los camarones si es necesario y sécalos con papel de cocina. Reserva.",
+                "Bate el huevo. Calienta la mitad del aceite en una sartén y cocina el huevo removiendo hasta obtener un revuelto. Retíralo y reserva.",
+                "Añade el resto del aceite. Incorpora el ajo, la zanahoria, los guisantes y la cebolleta. Saltea 3 minutos. Añade los camarones y cocina hasta que estén completamente hechos.",
+                "Añade el arroz cocido y mezcla a fuego medio-alto durante 2-3 minutos para que se fría ligeramente y se integre con los ingredientes.",
+                "Incorpora el huevo reservado, la salsa de soja y la pimienta. Remueve durante 1 minuto y prueba antes de añadir más sal.",
+                "Retira del fuego y sirve caliente. Puedes decorar con un poco de cebolleta fresca."
             ],
             "ingredientes": [
                 {
@@ -1251,11 +1234,13 @@
             "tipoPlato": "Principal",
             "tiempoMinutos": 25,
             "pasos": [
-                "Cuece la pasta 10 o 12 minutos en agua con sal y escúrrela.",
-                "Limpia los champiñones con un paño y córtalos en láminas.",
-                "Dora el ajo y saltea los champiñones 8 minutos, hasta que estén dorados.",
-                "Añade la nata, baja el fuego y deja que reduzca 3 minutos; incorpora el queso rallado y remueve.",
-                "Mezcla la pasta con la salsa y sirve caliente."
+                "Pon agua abundante a hervir con una pizca de sal. Añade los 80 g de pasta y cocina siguiendo las instrucciones del paquete. Escurre y reserva un poco del agua de cocción.",
+                "Limpia los champiñones con un paño húmedo y córtalos en láminas. Pica finamente la cebolla y el ajo.",
+                "Calienta el aceite en una sartén. Añade la cebolla y cocina durante 3-4 minutos. Incorpora el ajo y remueve durante un minuto.",
+                "Añade los champiñones y cocina durante 6-8 minutos a fuego medio-alto hasta que pierdan parte de su agua y se doren ligeramente. Añade sal y pimienta.",
+                "Incorpora los 80 g de nata para cocinar. Remueve y cocina a fuego suave durante 3-4 minutos hasta que la salsa espese ligeramente.",
+                "Añade la pasta cocida a la sartén y mezcla bien. Incorpora un chorrito del agua de cocción si quieres una salsa más ligera y cremosa.",
+                "Añade los 10 g de parmesano rallado y mezcla. Decora con perejil fresco y un poco de pimienta negra. Sirve caliente."
             ],
             "ingredientes": [
                 {
@@ -1306,11 +1291,12 @@
             "tipoPlato": "Postre",
             "tiempoMinutos": 35,
             "pasos": [
-                "Enjuaga el arroz bajo el grifo hasta que el agua salga clara.",
-                "Pon el arroz en una cazuela con la leche y el azúcar y cuece a fuego medio-bajo 25 minutos, removiendo de vez en cuando para que no se pegue.",
-                "Cuando el arroz esté tierno, añade la mantequilla y mezcla.",
-                "Deja templar y reparte en boles.",
-                "Sirve frío o recién hecho, según el gusto."
+                "Pon en un cazo los 400 g de leche, la rama de canela y la piel de limón. Calienta a fuego medio hasta que esté a punto de hervir.",
+                "Incorpora los 50 g de arroz y una pizca de sal. Remueve suavemente para que no se pegue al fondo.",
+                "Baja el fuego y cocina durante unos 30-35 minutos. Remueve cada pocos minutos, especialmente al final, para evitar que se pegue.",
+                "Cuando el arroz esté prácticamente tierno, incorpora los 25 g de azúcar. Remueve y cocina otros 5 minutos aproximadamente.",
+                "Saca la rama de canela y la piel de limón. Comprueba que el arroz esté tierno y que la textura sea cremosa.",
+                "Pasa el arroz con leche a un cuenco. Espolvorea canela en polvo por encima. Puedes comerlo caliente, templado o frío."
             ],
             "ingredientes": [
                 {
@@ -1346,11 +1332,14 @@
             "tipoPlato": "Postre",
             "tiempoMinutos": 60,
             "pasos": [
-                "Funde 40 g de mantequilla, mézclala con la harina y forma una base fina en un molde untado.",
-                "Bate los huevos con el azúcar y añade la leche y el queso fundido templado.",
-                "Vierte la mezcla sobre la base y hornea 40 minutos a 180 grados, hasta que el centro tiemble.",
-                "Deja templar la tarta y refrigera 2 horas antes de cortarla.",
-                "Sirve en porciones, con la masa vista."
+                "Coloca el queso crema en un bol y bátelo hasta que esté suave y sin grumos.",
+                "Incorpora los 25 g de azúcar y los 40 g de yogur griego. Mezcla hasta conseguir una crema homogénea.",
+                "Añade el huevo y mezcla suavemente para integrarlo sin introducir demasiado aire.",
+                "Incorpora la nata, la vainilla y la ralladura de limón. Remueve hasta integrar todos los ingredientes.",
+                "Tamiza los 8 g de harina sobre la mezcla y remueve hasta que no queden grumos.",
+                "Forra un molde individual de unos 10-12 cm con papel de horno y vierte la mezcla.",
+                "Precalienta el horno a 200 °C, con calor arriba y abajo. Hornea durante 20-25 minutos, vigilando el dorado. El centro puede quedar ligeramente tembloroso, pero debe alcanzar una cocción segura.",
+                "Saca la tarta del horno, deja que se enfríe y refrigérala al menos 2 horas para que adquiera una textura más firme."
             ],
             "ingredientes": [
                 {
@@ -1396,10 +1385,12 @@
             "tipoPlato": "Postre",
             "tiempoMinutos": 10,
             "pasos": [
-                "Pela el plátano y córtalo en rodajas de un centímetro.",
-                "Trocea el chocolate negro en pequeños trozos.",
-                "Coloca el plátano en un plato y cúbrelo con el chocolate.",
-                "Deja reposar 5 minutos, hasta que el chocolate se derrita, y sirve."
+                "Pela el plátano y córtalo en rodajas de aproximadamente 1-2 cm de grosor.",
+                "Corta los 25 g de chocolate negro en trozos pequeños para facilitar que se derrita.",
+                "Pon el chocolate junto con los 3 g de aceite de coco en un recipiente. Caliéntalo en el microondas en intervalos de 20 segundos, removiendo entre cada uno, hasta que quede líquido. También puedes hacerlo al baño maría.",
+                "Baña las rodajas de plátano en el chocolate derretido o vierte el chocolate por encima con una cuchara.",
+                "Espolvorea las almendras picadas y una pizca de canela por encima.",
+                "Introduce el plato en la nevera durante 10-15 minutos para que el chocolate se endurezca. Sirve frío."
             ],
             "ingredientes": [
                 {
@@ -1425,10 +1416,11 @@
             "tipoPlato": "Postre",
             "tiempoMinutos": 10,
             "pasos": [
-                "Lava las fresas, quítales el rabito y córtalas por la mitad.",
-                "Bate la nata con el azúcar hasta que tenga volumen y esté firme.",
-                "Reparte las fresas en vasos y corona con la nata batida.",
-                "Sirve enseguida, antes de que la nata se baje."
+                "retira las hojas, lávalas y sécalas cuidadosamente.",
+                "córtalas en mitades o cuartos y colócalas en un bol o una copa.",
+                "asegúrate de que esté bien fría. Bátela con unas varillas eléctricas.",
+                "cuando empiece a espesar, añade el azúcar y la vainilla. Sigue batiendo hasta que tenga una textura firme, sin pasarte para que no se convierta en mantequilla.",
+                "coloca la nata sobre las fresas y disfruta."
             ],
             "ingredientes": [
                 {
@@ -1459,11 +1451,16 @@
             "tipoPlato": "Principal",
             "tiempoMinutos": 45,
             "pasos": [
-                "Mezcla la carne picada con el huevo, el pan rallado, la leche, el ajo picado, la sal y la pimienta. Forma 10-12 bolitas del mismo tamaño y pásalas ligeramente por harina.",
-                "Calienta un poco de aceite en una sartén y dora las albóndigas por todos los lados a fuego medio. Retíralas y reserva.",
-                "En la misma sartén, cocina la cebolla y la zanahoria picadas a fuego medio durante 6-8 minutos. Incorpora el ajo y el tomate triturado y cocina 4 minutos más.",
-                "Añade el vino blanco y deja hervir 2 minutos para evaporar el alcohol. Vierte el caldo, añade la hoja de laurel y cocina 5 minutos.",
-                "Incorpora las albóndigas y cocina a fuego suave durante 15-20 minutos hasta que estén completamente hechas. Retira el laurel antes de servir."
+                "coloca la carne picada en un bol. Añade el huevo, el pan rallado, la leche, el ajo picado, el perejil, la sal y la pimienta.",
+                "mezcla bien y forma 5-6 bolitas del mismo tamaño. Pásalas ligeramente por harina.",
+                "calienta un poco de aceite en una sartén y dora las albóndigas por todos los lados. Retíralas y reserva.",
+                "pica la cebolla, el ajo y la zanahoria en trocitos pequeños.",
+                "en la misma sartén añade el resto del aceite y cocina la cebolla y la zanahoria durante 6-8 minutos. Incorpora el ajo.",
+                "incorpora el tomate triturado y cocina otros 4 minutos.",
+                "añade el vino blanco y deja hervir unos minutos para que se evapore el alcohol.",
+                "vierte el caldo y añade la hoja de laurel. Cocina durante 5 minutos.",
+                "vuelve a introducirlas en la sartén y cocina a fuego suave durante 15-20 minutos, hasta que estén completamente hechas.",
+                "retira el laurel y prueba la salsa. Si la quieres más fina, puedes triturarla antes de añadir las albóndigas."
             ],
             "ingredientes": [
                 {
@@ -1529,11 +1526,12 @@
             "tipoPlato": "Postre",
             "tiempoMinutos": 10,
             "pasos": [
-                "Vierte los 200 ml de leche en un cazo a fuego medio y caliéntala hasta que empiece a humear.",
-                "Incorpora los 50 g de copos de avena y remueve con una cuchara de madera.",
-                "Cocina durante 5-7 minutos a fuego medio-bajo, removiendo de vez en cuando, hasta que la avena espese y absorba la leche.",
-                "Corta el plátano en rodajas de medio centímetro.",
-                "Vierte la avena en un bol, coloca las rodajas de plátano encima, añade las nueces y la miel y sirve inmediatamente."
+                "vierte la leche en un cazo a fuego medio.",
+                "incorpora los copos de avena y remueve.",
+                "deja que se cocine durante 5-7 minutos, removiendo de vez en cuando, hasta que espese.",
+                "incorpora la canela y la vainilla.",
+                "córtalo en rodajas.",
+                "coloca la avena en un bol y añade el plátano, las nueces y la miel por encima."
             ],
             "ingredientes": [
                 {
@@ -1574,11 +1572,12 @@
             "tipoPlato": "Entrante",
             "tiempoMinutos": 10,
             "pasos": [
-                "Casca los dos huevos en un bol y bátelos suavemente con los 15 ml de leche, una pizca de sal y pimienta.",
-                "Coloca una sartén antiadherente a fuego bajo y añade los 5 g de mantequilla. Espera a que se derrita completamente.",
-                "Vierte la mezcla de huevo en la sartén y remueve con una espátula desde los bordes hacia el centro.",
-                "Cocina durante 3-5 minutos a fuego bajo, removiendo continuamente. Retira cuando todavía estén ligeramente húmedos, ya que seguirán cocinándose con el calor residual.",
-                "Tuesta el pan y sirve los huevos revueltos encima. Añade perejil o cebollino picado si lo deseas."
+                "casca los dos huevos en un bol y bátelos suavemente con la leche, la sal y la pimienta.",
+                "coloca una sartén antiadherente a fuego bajo y añade la mantequilla.",
+                "vierte la mezcla cuando la mantequilla esté derretida.",
+                "utiliza una espátula para mover los huevos desde los bordes hacia el centro.",
+                "cocina durante 3-5 minutos a fuego bajo, removiendo continuamente. Retíralos cuando todavía estén ligeramente húmedos, ya que seguirán cocinándose con el calor residual.",
+                "añade cebollino o perejil picado y acompaña con pan tostado."
             ],
             "ingredientes": [
                 {
@@ -1614,11 +1613,13 @@
             "tipoPlato": "Postre",
             "tiempoMinutos": 20,
             "pasos": [
-                "En un bol, mezcla los 60 g de harina, los 10 g de azúcar, la levadura química y una pizca de sal.",
-                "Añade el huevo, los 75 ml de leche, los 10 g de mantequilla derretida y unas gotas de vainilla. Mezcla suavemente hasta conseguir una masa homogénea; algunos grumos pequeños no son problema.",
-                "Deja reposar la masa 5 minutos para que gane consistencia.",
-                "Calienta una sartén antiadherente a fuego medio-bajo, engrásala ligeramente y vierte pequeñas porciones de masa. Cuando aparezcan burbujas en la superficie, dale la vuelta.",
-                "Cocina el otro lado aproximadamente 1 minuto más, hasta que esté doradito. Sirve inmediatamente con tus toppings favoritos."
+                "en un bol añade la harina, el azúcar, la levadura y la pizca de sal.",
+                "incorpora el huevo, la leche, la mantequilla derretida y la vainilla.",
+                "bate suavemente hasta conseguir una masa homogénea. No hace falta batir demasiado; algunos pequeños grumos no son un problema.",
+                "espera unos 5 minutos para que la masa coja consistencia.",
+                "engrásala ligeramente y ponla a fuego medio-bajo.",
+                "vierte pequeñas cantidades de masa. Cuando aparezcan burbujitas en la superficie, dales la vuelta.",
+                "deja aproximadamente 1 minuto más, hasta que estén doraditas."
             ],
             "ingredientes": [
                 {
@@ -1659,10 +1660,12 @@
             "tipoPlato": "Postre",
             "tiempoMinutos": 15,
             "pasos": [
-                "Bate el huevo en un plato hondo. Añade los 60 ml de leche, los 10 g de azúcar, una pizca de canela y sal. Mezcla bien.",
-                "Introduce cada rebanada de pan en la mezcla durante unos segundos por cada lado para que absorba el líquido sin deshacerse.",
-                "Calienta una sartén con los 10 g de mantequilla a fuego medio. Coloca las rebanadas empapadas y cocina 2-3 minutos por cada lado hasta que estén doradas.",
-                "Retira y sirve con tus toppings favoritos: fresas, plátano, chocolate negro o sirope de arce."
+                "bate el huevo en un plato hondo.",
+                "incorpora la leche, el azúcar, la canela, la vainilla y la pizca de sal. Mezcla bien.",
+                "introduce cada rebanada en la mezcla durante unos segundos por cada lado. Debe absorber líquido sin deshacerse.",
+                "añade la mantequilla a fuego medio.",
+                "coloca las rebanadas en la sartén y cocina unos 2-3 minutos por cada lado, hasta que estén doradas.",
+                "retíralas y añade tus toppings favoritos."
             ],
             "ingredientes": [
                 {
@@ -1703,11 +1706,15 @@
             "tipoPlato": "Principal",
             "tiempoMinutos": 20,
             "pasos": [
-                "Corta la pechuga de pollo en tiras pequeñas y sazónalas con sal, pimienta, pimentón dulce y ajo en polvo.",
-                "Calienta el aceite en una sartén a fuego medio y cocina las tiras de pollo durante 6-8 minutos, hasta que estén bien hechas y ligeramente doradas.",
-                "Lava la lechuga y córtala en tiras, corta el tomate en dados y la cebolla en tiras finas. Mezcla el yogur con una pizca de ajo en polvo, perejil y sal para preparar la salsa.",
-                "Calienta las tortillas en la sartén unos 20 segundos por cada lado para que estén flexibles.",
-                "Reparte la lechuga, el tomate, la cebolla, el pollo y la salsa de yogur sobre las tortillas. Dobla los laterales hacia dentro y enrolla firmemente desde abajo."
+                "corta la pechuga en tiras pequeñas y añade sal, pimienta, pimentón y ajo en polvo.",
+                "calienta el aceite en una sartén y cocina las tiras durante 6-8 minutos, hasta que estén bien hechas y doradas.",
+                "lava la lechuga, corta el tomate en dados, la cebolla en tiras finas y el aguacate en láminas.",
+                "mezcla el yogur con el limón, el ajo en polvo, el perejil y una pizca de sal.",
+                "pásalas por una sartén unos 20 segundos por cada lado para que estén flexibles.",
+                "reparte la lechuga, el tomate, la cebolla, el aguacate y el pollo entre las dos tortillas.",
+                "incorpora la salsa de yogur por encima.",
+                "dobla los laterales hacia dentro y enrolla desde abajo.",
+                "vuelve a ponerlos en la sartén durante 1 minuto por cada lado para que queden crujientes."
             ],
             "ingredientes": [
                 {
@@ -1749,4 +1756,4 @@
             "porciones": 1
         }
     ]
-}
+}\n
