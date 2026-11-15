@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.CircularProgressIndicator
@@ -56,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.remy.app.R
 import com.remy.app.data.remote.SupabaseClientProvider
+import com.remy.app.data.repository.PreferenciasRepository
 import com.remy.app.ui.components.OutlineButton
 import com.remy.app.ui.components.PrimaryButton
 import com.remy.app.ui.components.RemyLogo
@@ -75,9 +77,11 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.Google
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.put
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
+    var nombre by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
     var mostrarContrasena by remember { mutableStateOf(false) }
@@ -85,9 +89,11 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     var mensaje by remember { mutableStateOf<String?>(null) }
     var esError by remember { mutableStateOf(true) }
     var correoPendiente by remember { mutableStateOf<String?>(null) }
+    var modoRegistro by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val auth = remember { SupabaseClientProvider.client.auth }
     val contexto = LocalContext.current
+    val prefs = remember { PreferenciasRepository.delContexto(contexto) }
 
     fun ejecutarAccion(esRegistro: Boolean = false, google: Boolean = false) {
         scope.launch {
@@ -109,6 +115,16 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                             esError = true
                             return@launch
                         }
+                        val nombreLimpio = nombre.trim()
+                        if (nombreLimpio.isBlank()) {
+                            mensaje = contexto.getString(R.string.login_nombre_obligatorio)
+                            esError = true
+                            return@launch
+                        }
+                        // Guardamos el nombre para aplicarlo al perfil en cuanto
+                        // haya sesión (si el proyecto exige confirmar el correo,
+                        // todavía no la hay al terminar el alta).
+                        prefs.guardarNombrePendiente(correoLimpio, nombreLimpio)
                         // Devuelve null cuando el alta inicia sesión y el usuario
                         // cuando el proyecto exige confirmar el correo: en ese caso
                         // no hay sesión y hay que avisar de la confirmación.
@@ -117,7 +133,18 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                             password = contrasena
                         }
                         if (usuario == null) {
-                            // El alta ha iniciado sesion: la app entra directamente.
+                            // El alta ha iniciado sesión: guardamos el nombre en
+                            // el perfil y la app entra directamente.
+                            try {
+                                auth.updateUser {
+                                    data {
+                                        put("full_name", nombreLimpio)
+                                    }
+                                }
+                                prefs.borrarNombrePendiente(correoLimpio)
+                            } catch (_: Exception) {
+                                // El nombre queda pendiente y se aplicará al entrar.
+                            }
                             mensaje = contexto.getString(R.string.login_cuenta_creada)
                             esError = false
                         } else {
@@ -155,6 +182,13 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 mensaje = when {
                     texto.contains("already registered", ignoreCase = true) ->
                         contexto.getString(R.string.login_cuenta_existente)
+                    texto.contains("rate limit", ignoreCase = true) ||
+                        texto.contains("429", ignoreCase = true) ||
+                        texto.contains("sending confirmation email", ignoreCase = true) ->
+                        contexto.getString(R.string.login_error_limite_correo)
+                    texto.contains("signups not allowed", ignoreCase = true) ||
+                        texto.contains("signup is disabled", ignoreCase = true) ->
+                        contexto.getString(R.string.login_error_registro_desactivado)
                     texto.contains("Password should be", ignoreCase = true) ->
                         contexto.getString(R.string.login_contrasena_corta)
                     texto.contains("Email address", ignoreCase = true) ||
@@ -190,6 +224,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     }
 
     ContenidoLogin(
+        nombre = nombre,
+        onNombreChange = { nombre = it },
         correo = correo,
         onCorreoChange = { correo = it },
         contrasena = contrasena,
@@ -200,16 +236,24 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         mensaje = mensaje,
         esError = esError,
         correoPendiente = correoPendiente,
+        modoRegistro = modoRegistro,
         onReenviarConfirmacion = { reenviarConfirmacion() },
-        onEntrar = { ejecutarAccion() },
+        onEntrar = {
+            if (modoRegistro) ejecutarAccion(esRegistro = true) else ejecutarAccion()
+        },
         onGoogle = { ejecutarAccion(google = true) },
-        onCrearCuenta = { ejecutarAccion(esRegistro = true) },
+        onCambiarModo = {
+            modoRegistro = !modoRegistro
+            mensaje = null
+        },
         modifier = modifier
     )
 }
 
 @Composable
 private fun ContenidoLogin(
+    nombre: String,
+    onNombreChange: (String) -> Unit,
     correo: String,
     onCorreoChange: (String) -> Unit,
     contrasena: String,
@@ -220,13 +264,15 @@ private fun ContenidoLogin(
     mensaje: String?,
     esError: Boolean,
     correoPendiente: String?,
+    modoRegistro: Boolean,
     onReenviarConfirmacion: () -> Unit,
     onEntrar: () -> Unit,
     onGoogle: () -> Unit,
-    onCrearCuenta: () -> Unit,
+    onCambiarModo: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val formularioValido = correo.isNotBlank() && contrasena.isNotBlank()
+    val formularioValido = correo.isNotBlank() && contrasena.isNotBlank() &&
+        (!modoRegistro || nombre.isNotBlank())
     val estadoScroll = rememberScrollState()
 
     // Al mostrar un aviso (sobre todo el de confirmar el correo al registrarse),
@@ -287,6 +333,33 @@ private fun ContenidoLogin(
                 )
             }
             Spacer(Modifier.height(14.dp))
+        }
+
+        if (modoRegistro) {
+            OutlinedTextField(
+                value = nombre,
+                onValueChange = onNombreChange,
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(stringResource(R.string.login_nombre)) },
+                leadingIcon = {
+                    Icon(Icons.Outlined.Person, contentDescription = null, tint = TextoSecundario)
+                },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                shape = RoundedCornerShape(16.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = SuperficieBlanca,
+                    unfocusedContainerColor = SuperficieBlanca,
+                    focusedBorderColor = Terracota,
+                    unfocusedBorderColor = BordeTarjeta,
+                    focusedLabelColor = Terracota,
+                    unfocusedLabelColor = TextoSecundario,
+                    cursorColor = Terracota,
+                    focusedTextColor = TextoPrincipal,
+                    unfocusedTextColor = TextoPrincipal
+                )
+            )
+            Spacer(Modifier.height(12.dp))
         }
 
         OutlinedTextField(
@@ -356,63 +429,73 @@ private fun ContenidoLogin(
 
         if (cargando) {
             PrimaryButton(
-                text = stringResource(R.string.login_entrando),
+                text = stringResource(
+                    if (modoRegistro) R.string.login_creando_cuenta else R.string.login_entrando
+                ),
                 onClick = {},
                 enabled = false
             )
         } else {
             PrimaryButton(
-                text = stringResource(R.string.login_entrar),
+                text = stringResource(
+                    if (modoRegistro) R.string.login_crear_cuenta else R.string.login_entrar
+                ),
                 onClick = onEntrar,
                 enabled = formularioValido,
                 icon = Icons.AutoMirrored.Filled.ArrowForward
             )
         }
 
-        Spacer(Modifier.height(20.dp))
+        if (!modoRegistro) {
+            Spacer(Modifier.height(20.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            HorizontalDivider(modifier = Modifier.weight(1f), color = BordeTarjeta)
-            Text(
-                text = stringResource(R.string.login_o_continua),
-                style = MaterialTheme.typography.labelMedium,
-                color = TextoSecundario
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                HorizontalDivider(modifier = Modifier.weight(1f), color = BordeTarjeta)
+                Text(
+                    text = stringResource(R.string.login_o_continua),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = TextoSecundario
+                )
+                HorizontalDivider(modifier = Modifier.weight(1f), color = BordeTarjeta)
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            OutlineButton(
+                text = stringResource(R.string.login_google),
+                onClick = onGoogle,
+                enabled = !cargando
             )
-            HorizontalDivider(modifier = Modifier.weight(1f), color = BordeTarjeta)
         }
-
-        Spacer(Modifier.height(16.dp))
-
-        OutlineButton(
-            text = stringResource(R.string.login_google),
-            onClick = onGoogle,
-            enabled = !cargando
-        )
 
         Spacer(Modifier.height(8.dp))
 
         // Toda la fila es pulsable y tiene un área táctil amplia: antes solo lo
-        // era el texto «Crear cuenta» y era fácil fallar el toque.
+        // era el texto de la acción y era fácil fallar el toque.
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(enabled = !cargando, onClick = onCrearCuenta)
+                .clickable(enabled = !cargando, onClick = onCambiarModo)
                 .padding(vertical = 14.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.login_sin_cuenta),
+                text = stringResource(
+                    if (modoRegistro) R.string.login_ya_tengo_cuenta else R.string.login_sin_cuenta
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = TextoSecundario
             )
             Spacer(Modifier.width(6.dp))
             Text(
-                text = stringResource(R.string.login_crear_cuenta),
+                text = stringResource(
+                    if (modoRegistro) R.string.login_iniciar_sesion else R.string.login_crear_cuenta
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Terracota,
                 fontWeight = FontWeight.Bold
@@ -443,6 +526,8 @@ private fun ContenidoLogin(
 private fun PreviewLogin() {
     REMYTheme {
         ContenidoLogin(
+            nombre = "",
+            onNombreChange = {},
             correo = "demo@remy.app",
             onCorreoChange = {},
             contrasena = "Demo1234!",
@@ -453,10 +538,11 @@ private fun PreviewLogin() {
             mensaje = null,
             esError = true,
             correoPendiente = null,
+            modoRegistro = false,
             onReenviarConfirmacion = {},
             onEntrar = {},
             onGoogle = {},
-            onCrearCuenta = {}
+            onCambiarModo = {}
         )
     }
 }
