@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🍳 REMY
+<img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" alt="Logo de REMY" width="120" />
+
+# REMY
 
 **Cocina con lo que ya tienes en casa.**
 
@@ -12,16 +14,13 @@
 
 Una app Android que sugiere recetas según los ingredientes de tu despensa, planifica las comidas de la semana y guarda lo que cocinas.
 
-**[Ver capturas](#-capturas)** ·
-**[Instalar](#-instalar)** ·
-**[Ejecutar desde el código](#-ejecutar-desde-el-código)** ·
-**[Documentación](#-documentación)**
+**[Ver capturas](#capturas)** · **[Instalar](#instalar)** · **[Ejecutar desde el código](#ejecutar-desde-el-código)** · **[Documentación](#documentación)**
 
 </div>
 
 ---
 
-## ✨ Características
+## Características
 
 - **Despensa inteligente:** guarda alimentos con cantidad y unidad; alta, edición y borrado con validación.
 - **Sugerencias según lo que tienes:** separa las recetas que puedes cocinar ya de las que les falta poco, e indica los ingredientes que faltan.
@@ -31,7 +30,7 @@ Una app Android que sugiere recetas según los ingredientes de tu despensa, plan
 - **Cocinar y guardar:** marca recetas como cocinadas, haz una foto del plato (cámara o galería) y descuenta lo utilizado de la despensa.
 - **Cuenta de usuario:** inicio de sesión y registro.
 
-## 📱 Capturas
+## Capturas
 
 <div align="center">
 
@@ -53,7 +52,7 @@ Una app Android que sugiere recetas según los ingredientes de tu despensa, plan
 
 </div>
 
-## 🚀 Instalar
+## Instalar
 
 ### APK
 
@@ -73,7 +72,7 @@ La app incluye una **cuenta pública de prueba** con datos ya cargados (despensa
 
 > Es una cuenta de demostración pensada para probar la app libremente. También puedes crear tu propia cuenta desde **Crear cuenta**: solo pide nombre, correo y contraseña, y los datos se guardan en el dispositivo.
 
-## 🛠 Ejecutar desde el código
+## Ejecutar desde el código
 
 **Requisitos:** Android Studio (reciente), Android SDK y JDK (el JBR que incluye Android Studio sirve). `minSdk` 26.
 
@@ -95,7 +94,7 @@ $env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
 ./gradlew :app:assembleDebug
 ```
 
-## 🧠 Tecnologías y arquitectura
+## Tecnologías y arquitectura
 
 | Capa | Tecnologías |
 | --- | --- |
@@ -121,13 +120,13 @@ app/src/main/java/com/remy/app/
 └── MainActivity.kt
 ```
 
-## ✅ Pruebas
+## Pruebas
 
 - Pruebas unitarias y instrumentadas (detalle en [`docs/pruebas.md`](docs/pruebas.md)).
 - Verificación de compilación y ensamblado (`assembleDebug` / `assembleRelease`).
 - Recorrido manual y prueba en dispositivo físico.
 
-## 📚 Documentación
+## Documentación
 
 | Documento | Contenido |
 | --- | --- |
@@ -138,18 +137,18 @@ app/src/main/java/com/remy/app/
 | [`docs/evidencias-individuales.md`](docs/evidencias-individuales.md) | Evidencias de contribución |
 | [`docs/uso-ia.md`](docs/uso-ia.md) | Registro de uso de IA |
 
-## 🤝 Contribuir
+## Contribuir
 
 Las contribuciones son bienvenidas: revisa las Issues, abre una rama (`feature/...`, `fix/...`, `docs/...`) y propón los cambios con una Pull Request describiendo qué cambia y cómo se ha probado.
 
-## ⭐ Apoya el proyecto
+## Apoya el proyecto
 
-Si REMY te resulta útil o interesante, deja una estrella ⭐ en el repositorio.
+Si REMY te resulta útil o interesante, deja una estrella en el repositorio.
 
 ---
 
 <div align="center">
 
-Hecho con 💛 por el equipo REMY.
+Hecho con cariño por el equipo REMY.
 
 </div>
