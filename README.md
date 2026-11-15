@@ -43,6 +43,10 @@ Una app Android que sugiere recetas según los ingredientes de tu despensa, plan
 | --- | --- | --- |
 | <img src="docs/imagenes/sugerencias.png" width="200" alt="Sugerencias"> | <img src="docs/imagenes/despensa.png" width="200" alt="Despensa"> | <img src="docs/imagenes/perfil.png" width="200" alt="Perfil"> |
 
+| Filtros |
+| --- |
+| <img src="docs/imagenes/filtros.png" width="200" alt="Filtros de recetas"> |
+
 </div>
 
 ## 🚀 Instalar
