@@ -36,7 +36,7 @@ REMY es una aplicación Android para cocinar con lo que ya tienes en casa: gesti
    - Usar **Inicio/Plan** para organizar comidas.
    - Marcar una receta como cocinada (con o sin foto) y comprobar el descuento en despensa.
 
-> Si se utiliza una cuenta de demostración, sus credenciales deben proporcionarse por el canal de entrega acordado.
+> **Cuenta de demostración:** `demo@remy.app` / `Demo1234!`. Tiene datos ya cargados (despensa, plan e historial) para recorrer la app sin crear nada. También se puede crear una cuenta nueva desde «Crear cuenta» (nombre, correo y contraseña).
 
 ## Pruebas y calidad
 

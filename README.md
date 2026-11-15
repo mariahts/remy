@@ -39,13 +39,17 @@ Una app Android que sugiere recetas según los ingredientes de tu despensa, plan
 | --- | --- | --- |
 | <img src="docs/imagenes/inicio.png" width="200" alt="Inicio"> | <img src="docs/imagenes/recetas.png" width="200" alt="Recetas"> | <img src="docs/imagenes/detalle.png" width="200" alt="Detalle"> |
 
-| Sugerencias | Despensa | Perfil |
+| Sugerencias | Despensa | Añadir alimento |
 | --- | --- | --- |
-| <img src="docs/imagenes/sugerencias.png" width="200" alt="Sugerencias"> | <img src="docs/imagenes/despensa.png" width="200" alt="Despensa"> | <img src="docs/imagenes/perfil.png" width="200" alt="Perfil"> |
+| <img src="docs/imagenes/sugerencias.png" width="200" alt="Sugerencias"> | <img src="docs/imagenes/despensa.png" width="200" alt="Despensa"> | <img src="docs/imagenes/anadir-alimento.png" width="200" alt="Añadir alimento"> |
 
-| Filtros |
+| Filtros | Marcar como cocinada | Foto del plato |
+| --- | --- | --- |
+| <img src="docs/imagenes/filtros.png" width="200" alt="Filtros de recetas"> | <img src="docs/imagenes/marcar-cocinada.png" width="200" alt="Marcar como cocinada"> | <img src="docs/imagenes/foto-plato.png" width="200" alt="Foto del plato"> |
+
+| Perfil |
 | --- |
-| <img src="docs/imagenes/filtros.png" width="200" alt="Filtros de recetas"> |
+| <img src="docs/imagenes/perfil.png" width="200" alt="Perfil"> |
 
 </div>
 
@@ -61,7 +65,13 @@ adb install -r entrega/REMY_MARIA_ENTREGA4.apk
 
 ### Cuenta de demostración
 
-> La app usa un backend de demostración para el inicio de sesión. Si tu entorno incluye la cuenta de prueba, se indica en la documentación de la entrega.
+La app incluye una **cuenta pública de prueba** con datos ya cargados (despensa, plan semanal e historial) para poder recorrer todas las pantallas sin configurar nada:
+
+| Correo | Contraseña |
+| --- | --- |
+| `demo@remy.app` | `Demo1234!` |
+
+> Es una cuenta de demostración pensada para probar la app libremente. También puedes crear tu propia cuenta desde **Crear cuenta**: solo pide nombre, correo y contraseña, y los datos se guardan en el dispositivo.
 
 ## 🛠 Ejecutar desde el código
 
