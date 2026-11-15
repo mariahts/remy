@@ -34,6 +34,7 @@ import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.put
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +66,20 @@ class MainActivity : ComponentActivity() {
                             val usuario = SupabaseClientProvider.client.auth.currentUserOrNull()
                             val usuarioId = usuario?.id ?: usuario?.email ?: "anonimo"
                             val correo = usuario?.email
+                            // Si se registró con nombre y la sesión llega después
+                            // (confirmación por correo), lo aplicamos al perfil.
+                            if (correo != null && usuario?.userMetadata?.get("full_name") == null) {
+                                val pendiente = prefs.tomarNombrePendiente(correo)
+                                if (pendiente != null) {
+                                    try {
+                                        SupabaseClientProvider.client.auth.updateUser {
+                                            data { put("full_name", pendiente) }
+                                        }
+                                    } catch (_: Exception) {
+                                        // Sin conexión: se reintentará en el próximo acceso.
+                                    }
+                                }
+                            }
                             val ultimo = prefs.ultimoUsuarioId.first()
                             if (ultimo != null && ultimo != usuarioId) {
                                 DatosDemo.resetearDatosUsuario(db, prefs)

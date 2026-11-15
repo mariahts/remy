@@ -1,6 +1,6 @@
 # Fotos de las recetas
 
-Las 20 recetas del catálogo llevan una fotografía del plato. Diecinueve proceden de Openverse, que agrega repositorios de imágenes con licencia libre (StockSnap, RawPixel, Flickr y Wikimedia), y una es una foto propia del equipo.
+Las recetas del catálogo llevan una fotografía del plato. Salvo una foto propia del equipo, proceden de Openverse, que agrega repositorios de imágenes con licencia libre (StockSnap, RawPixel, Flickr y Wikimedia).
 
 Todas se han recortado al centro en formato cuadrado de 1080 × 1080 px para que encajen en las miniaturas y en la portada del detalle, que recortan la imagen en lugar de deformarla.
 
@@ -16,7 +16,6 @@ Todas se han recortado al centro en formato cuadrado de 1080 × 1080 px para que
 | Lentejas con verduras | `receta_lentejas_con_verduras.jpg` | Autor no indicado en la fuente | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/5974847/traditional-lentil-stew-with-smoked-pork-meat) |
 | Arroz con pollo y pimiento | `receta_arroz_con_pollo_y_pimiento.jpg` | Krzysztof Puszczyński | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/chicken-rice-MS5GA8U814) |
 | Pasta con tomate y atún | `receta_pasta_con_tomate_y_atun.jpg` | Toronto Eaters | CC0 1.0 (dominio público) | [ficha](https://stocksnap.io/photo/pasta-food-JK5UXP69CE) |
-| Bacalao al pil-pil | `receta_bacalao_al_pil_pil.jpg` | Jakub Kapusnak | CC0 1.0 (dominio público) | [ficha](https://www.rawpixel.com/image/448397/free-photo-image-eat-fish-salad-appetite) |
 | Bacalao a lo pobre | `receta_bacalao_a_lo_pobre.jpg` | Jessica Spengler from Brighton, United Kingdom | CC BY | [ficha](https://commons.wikimedia.org/w/index.php?curid=26517896) |
 | Marmitako de atún | `receta_marmitako_de_atun.jpg` | www_ukberri_net | CC BY | [ficha](https://commons.wikimedia.org/w/index.php?curid=19583802) |
 | Wok de pollo con verduras | `receta_wok_de_pollo_con_verduras.jpg` | Vegan Feast Catering | CC BY | [ficha](https://commons.wikimedia.org/w/index.php?curid=35602805) |

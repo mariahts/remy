@@ -19,6 +19,13 @@
     <string name="login_google">Continuar con Google</string>
     <string name="login_sin_cuenta">¿No tienes cuenta?</string>
     <string name="login_crear_cuenta">Crear cuenta</string>
+    <string name="login_ya_tengo_cuenta">¿Ya tienes cuenta?</string>
+    <string name="login_iniciar_sesion">Inicia sesión</string>
+    <string name="login_nombre">Nombre</string>
+    <string name="login_creando_cuenta">Creando cuenta…</string>
+    <string name="login_nombre_obligatorio">Escribe tu nombre para crear la cuenta.</string>
+    <string name="login_error_limite_correo">No se ha podido enviar el correo de confirmación: el servidor limita los envíos. Espera unos minutos e inténtalo de nuevo.</string>
+    <string name="login_error_registro_desactivado">El registro por correo está desactivado en el servidor. Usa el acceso con Google.</string>
     <string name="login_cuenta_creada">¡Cuenta creada! Ya estás dentro de REMY.</string>
     <string name="login_confirmar_correo">Cuenta creada. Te hemos enviado un correo a %1$s para confirmarla. Confírmalo y después entra con tu contraseña.</string>
     <string name="login_correo_reenviado">Hemos vuelto a enviar el correo de confirmación a %1$s.</string>

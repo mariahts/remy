@@ -83,6 +83,45 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { it[CLAVE_ULTIMO_USUARIO] = id }
     }
 
+    /**
+     * Guarda el nombre elegido al registrarse, asociado a un correo, para
+     * aplicarlo al perfil en cuanto haya sesión (la confirmación por correo
+     * puede retrasar el primer acceso).
+     */
+    suspend fun guardarNombrePendiente(correo: String, nombre: String) {
+        dataStore.edit {
+            it[CLAVE_NOMBRE_PENDIENTE] = "${correo.trim().lowercase()}|${nombre.trim()}"
+        }
+    }
+
+    /** Devuelve el nombre pendiente del correo y lo borra, si coincide. */
+    suspend fun tomarNombrePendiente(correo: String): String? {
+        var encontrado: String? = null
+        dataStore.edit { preferencias ->
+            val guardado = preferencias[CLAVE_NOMBRE_PENDIENTE] ?: return@edit
+            val separador = guardado.indexOf('|')
+            if (separador <= 0) return@edit
+            val correoGuardado = guardado.substring(0, separador)
+            if (correoGuardado.equals(correo.trim(), ignoreCase = true)) {
+                encontrado = guardado.substring(separador + 1)
+                preferencias.remove(CLAVE_NOMBRE_PENDIENTE)
+            }
+        }
+        return encontrado
+    }
+
+    /** Descarta el nombre pendiente de un correo concreto. */
+    suspend fun borrarNombrePendiente(correo: String) {
+        dataStore.edit { preferencias ->
+            val guardado = preferencias[CLAVE_NOMBRE_PENDIENTE] ?: return@edit
+            val separador = guardado.indexOf('|')
+            if (separador <= 0) return@edit
+            if (guardado.substring(0, separador).equals(correo.trim(), ignoreCase = true)) {
+                preferencias.remove(CLAVE_NOMBRE_PENDIENTE)
+            }
+        }
+    }
+
     /** Guarda la versión de la despensa de demostración ya sembrada. */
     suspend fun guardarVersionDespensaDemo(version: Int) {
         dataStore.edit { it[CLAVE_VERSION_DESPENSA_DEMO] = version }
@@ -184,6 +223,7 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
         val CLAVE_FAVORITAS = stringSetPreferencesKey("recetas_favoritas")
         val CLAVE_BIENVENIDA_COMPLETADA = booleanPreferencesKey("bienvenida_completada")
         val CLAVE_ULTIMO_USUARIO = stringPreferencesKey("ultimo_usuario_id")
+        val CLAVE_NOMBRE_PENDIENTE = stringPreferencesKey("nombre_pendiente")
         val CLAVE_VERSION_DESPENSA_DEMO = intPreferencesKey("version_despensa_demo")
 
         const val MAXIMO_POR_DEFECTO = 3
