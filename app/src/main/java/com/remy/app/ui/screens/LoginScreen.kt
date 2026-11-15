@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -33,6 +35,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -160,9 +163,11 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                     else -> contexto.getString(R.string.login_error_generico)
                 }
                 esError = true
-                if (google) cargando = false
             } finally {
-                if (!google) cargando = false
+                // El acceso con Google abre el navegador y vuelve enseguida: hay
+                // que liberar el formulario siempre para no dejarlo bloqueado
+                // (si no, ni «Entrar» ni «Crear cuenta» vuelven a responder).
+                cargando = false
             }
         }
     }
@@ -222,12 +227,21 @@ private fun ContenidoLogin(
     modifier: Modifier = Modifier
 ) {
     val formularioValido = correo.isNotBlank() && contrasena.isNotBlank()
+    val estadoScroll = rememberScrollState()
+
+    // Al mostrar un aviso (sobre todo el de confirmar el correo al registrarse),
+    // subimos arriba para que el mensaje no quede fuera de la pantalla.
+    LaunchedEffect(mensaje) {
+        if (mensaje != null) estadoScroll.animateScrollTo(0)
+    }
 
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(FondoCrema)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(estadoScroll)
+            .navigationBarsPadding()
+            .imePadding()
             .padding(horizontal = 24.dp, vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -381,8 +395,13 @@ private fun ContenidoLogin(
 
         Spacer(Modifier.height(8.dp))
 
+        // Toda la fila es pulsable y tiene un área táctil amplia: antes solo lo
+        // era el texto «Crear cuenta» y era fácil fallar el toque.
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(enabled = !cargando, onClick = onCrearCuenta)
+                .padding(vertical = 14.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -396,10 +415,7 @@ private fun ContenidoLogin(
                 text = stringResource(R.string.login_crear_cuenta),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Terracota,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .clickable(enabled = !cargando, onClick = onCrearCuenta)
-                    .padding(horizontal = 4.dp, vertical = 6.dp)
+                fontWeight = FontWeight.Bold
             )
         }
 
@@ -410,9 +426,11 @@ private fun ContenidoLogin(
                 style = MaterialTheme.typography.labelLarge,
                 color = Terracota,
                 fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
+                    .fillMaxWidth()
                     .clickable(enabled = !cargando, onClick = onReenviarConfirmacion)
-                    .padding(horizontal = 4.dp, vertical = 6.dp)
+                    .padding(vertical = 10.dp)
             )
         }
 
