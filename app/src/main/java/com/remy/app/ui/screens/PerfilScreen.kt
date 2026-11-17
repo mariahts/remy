@@ -249,8 +249,8 @@ private fun FilaCifras(cifras: CifrasPerfil) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Cifra(valor = cifras.guardadas, etiqueta = stringResource(R.string.perfil_guardadas))
             Cifra(valor = cifras.favoritas, etiqueta = stringResource(R.string.perfil_favoritas))
+            Cifra(valor = cifras.cocinadas, etiqueta = stringResource(R.string.perfil_cocinadas))
             Cifra(valor = cifras.despensa, etiqueta = stringResource(R.string.perfil_en_despensa))
         }
     }
@@ -397,7 +397,7 @@ private fun PerfilScreenPreview() {
         ContenidoPerfil(
             nombre = "María",
             correo = "maria@remy.app",
-            cifras = CifrasPerfil(guardadas = 20, favoritas = 2, despensa = 14),
+            cifras = CifrasPerfil(favoritas = 2, cocinadas = 5, despensa = 14),
             favoritas = listOf(
                 RecetaConIngredientes(
                     receta = Receta(
