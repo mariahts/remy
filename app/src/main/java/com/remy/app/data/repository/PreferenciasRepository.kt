@@ -227,7 +227,7 @@ class PreferenciasRepository(private val dataStore: DataStore<Preferences>) {
         val CLAVE_VERSION_DESPENSA_DEMO = intPreferencesKey("version_despensa_demo")
 
         const val MAXIMO_POR_DEFECTO = 3
-        const val MAXIMO_MAXIMO = 5
+        const val MAXIMO_MAXIMO = 20
 
         fun delContexto(contexto: Context): PreferenciasRepository =
             PreferenciasRepository(contexto.applicationContext.dataStorePreferencias)

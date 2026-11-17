@@ -18,8 +18,8 @@ import kotlinx.coroutines.flow.stateIn
 
 /** Cifras resumidas que muestra la pantalla de perfil. */
 data class CifrasPerfil(
+    val guardadas: Int = 0,
     val favoritas: Int = 0,
-    val cocinadas: Int = 0,
     val despensa: Int = 0
 )
 
@@ -42,8 +42,8 @@ class PerfilViewModel(
         alimentos.alimentos
     ) { lista, ids, despensa ->
         CifrasPerfil(
+            guardadas = lista.size,
             favoritas = lista.count { it.receta.id in ids },
-            cocinadas = lista.count { it.receta.fechaCocinada != null },
             despensa = despensa.count { it.enDespensa }
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CifrasPerfil())

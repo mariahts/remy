@@ -84,7 +84,7 @@ class PreferenciasRepositoryTest {
     @Test
     fun alReabrir_seRecuperaLoGuardado() = runBlocking {
         repositorio.guardarTiposDePlato(setOf("Principal"))
-        repositorio.guardarMaximoFaltantes(4)
+        repositorio.guardarMaximoFaltantes(7)
         repositorio.guardarTiempoMaximo(45)
         repositorio.guardarKcalMaximas(700)
         repositorio.guardarProteinasMinimas(30)
@@ -103,7 +103,7 @@ class PreferenciasRepositoryTest {
         )
         val filtros = reabierta.filtros.first()
         assertEquals(setOf("Principal"), filtros.tiposDePlato)
-        assertEquals(4, filtros.maximoFaltantes)
+        assertEquals(7, filtros.maximoFaltantes)
         assertEquals(45, filtros.tiempoMaximoMinutos)
         assertEquals(700, filtros.kcalMaximas)
         assertEquals(30, filtros.proteinasMinimas)

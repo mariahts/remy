@@ -12,7 +12,6 @@ import com.remy.app.data.repository.AlimentoRepository
 import com.remy.app.ui.state.EstadoCarga
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -42,14 +41,6 @@ class DespensaViewModel(private val repositorio: AlimentoRepository) : ViewModel
     fun guardar(editando: Alimento?, nombre: String, cantidad: String, unidad: String): ErroresAlimento {
         val errores = validarAlimento(nombre, cantidad, unidad)
         if (errores.hayErrores) return errores
-
-        // La búsqueda sigue siendo sensible a tildes y mayúsculas: si el nombre
-        // solo cambia en la escritura respecto a un alimento del catálogo, se
-        // avisa para que el usuario pueda corregirlo antes de guardarlo.
-        val aviso = runBlocking {
-            avisoNombre(nombre, repositorio.catalogo.first().map { it.nombre })
-        }
-        if (aviso != null) return ErroresAlimento(nombre = aviso)
 
         val valor = cantidad.replace(',', '.').toDouble()
         viewModelScope.launch {

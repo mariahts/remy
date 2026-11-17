@@ -21,8 +21,8 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -364,7 +364,7 @@ private fun BotonFavoritaTarjeta(esFavorita: Boolean, onClick: () -> Unit, modif
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            if (esFavorita) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+            if (esFavorita) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
             contentDescription = stringResource(if (esFavorita) R.string.recetas_quitar else R.string.recetas_guardar),
             tint = if (esFavorita) Terracota else TextoSecundario,
             modifier = Modifier.size(19.dp)

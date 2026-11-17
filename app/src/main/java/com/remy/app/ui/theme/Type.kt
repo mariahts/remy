@@ -2,21 +2,27 @@ package com.remy.app.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.googlefonts.Font
+import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.sp
 import com.remy.app.R
 
-// Nunito empaquetada en la app (res/font): así la tipografía propia tiene
-// prioridad siempre, sin depender de Google Play Services ni de la fuente
-// personalizada que cada móvil tenga configurada en el sistema.
+private val fontProvider = GoogleFont.Provider(
+    providerAuthority = "com.google.android.gms.fonts",
+    providerPackage = "com.google.android.gms",
+    certificates = R.array.com_google_android_gms_fonts_certs
+)
+
+private val nunitoFont = GoogleFont("Nunito")
+
 private val RemyFontFamily = FontFamily(
-    Font(R.font.nunito_regular, FontWeight.Normal),
-    Font(R.font.nunito_medium, FontWeight.Medium),
-    Font(R.font.nunito_semibold, FontWeight.SemiBold),
-    Font(R.font.nunito_bold, FontWeight.Bold),
-    Font(R.font.nunito_extrabold, FontWeight.ExtraBold),
+    Font(googleFont = nunitoFont, fontProvider = fontProvider, weight = FontWeight.Normal),
+    Font(googleFont = nunitoFont, fontProvider = fontProvider, weight = FontWeight.Medium),
+    Font(googleFont = nunitoFont, fontProvider = fontProvider, weight = FontWeight.SemiBold),
+    Font(googleFont = nunitoFont, fontProvider = fontProvider, weight = FontWeight.Bold),
+    Font(googleFont = nunitoFont, fontProvider = fontProvider, weight = FontWeight.ExtraBold),
 )
 
 val Typography = Typography(

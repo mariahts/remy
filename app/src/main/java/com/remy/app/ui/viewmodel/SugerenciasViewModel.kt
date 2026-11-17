@@ -64,7 +64,7 @@ class SugerenciasViewModel(
     val regiones: StateFlow<List<String>> = recetas.recetas
         .map { lista ->
             lista.map { it.receta.regionOrigen.trim() }
-                .filter { it.isNotEmpty() && it != REGION_OCULTA }
+                .filter { it.isNotEmpty() }
                 .distinct()
                 .sorted()
         }
@@ -133,9 +133,6 @@ class SugerenciasViewModel(
     }
 
     companion object {
-        /** Región que ya no se ofrece como chip en el filtro (#ajuste final). */
-        const val REGION_OCULTA = "Cantábrico"
-
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val app = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]!! as Application

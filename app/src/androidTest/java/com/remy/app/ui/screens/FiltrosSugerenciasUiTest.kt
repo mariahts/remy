@@ -18,7 +18,7 @@ class FiltrosSugerenciasUiTest {
     val compose = createComposeRule()
 
     private val grupos = GruposSugerencias()
-    private val regiones = listOf("Asiático", "Europeo", "Mediterráneo", "Tropical")
+    private val regiones = listOf("Asiático", "Cantábrico", "Europeo", "Mediterráneo", "Tropical")
 
     private fun mostrar(
         filtros: FiltrosSugerencias = FiltrosSugerencias(),
