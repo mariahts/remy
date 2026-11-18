@@ -32,7 +32,7 @@ import androidx.compose.material.icons.outlined.Egg
 import androidx.compose.material.icons.outlined.Grain
 import androidx.compose.material.icons.outlined.Icecream
 import androidx.compose.material.icons.outlined.OilBarrel
-import androidx.compose.material.icons.outlined.OutdoorGrill
+import androidx.compose.material.icons.outlined.KebabDining
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.SetMeal
 import androidx.compose.material.icons.outlined.Spa
@@ -513,7 +513,7 @@ fun IngredientIcon(
         else -> categoriaDeIngrediente(categoria)
     }
     val icono = when (cat) {
-        CategoriaIcono.CARNE -> Icons.Outlined.OutdoorGrill
+        CategoriaIcono.CARNE -> Icons.Outlined.KebabDining
         CategoriaIcono.PESCADO -> Icons.Outlined.SetMeal
         CategoriaIcono.VERDURA -> Icons.Outlined.Eco
         CategoriaIcono.LACTEO -> Icons.Outlined.Icecream
