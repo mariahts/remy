@@ -52,14 +52,28 @@ class DespensaViewModel(private val repositorio: AlimentoRepository) : ViewModel
         if (aviso != null) return ErroresAlimento(nombre = aviso)
 
         val valor = cantidad.replace(',', '.').toDouble()
+        // Al renombrar no se puede chocar con otro alimento: si otro distinto
+        // ya tiene ese nombre (aunque sea con otra tilde o mayúscula), se avisa
+        // en vez de dejar dos filas iguales.
+        if (editando != null) {
+            val normalizadoNombre = normalizarNombre(nombre.trim())
+            val duplicado = runBlocking {
+                repositorio.catalogo.first()
+                    .firstOrNull { it.id != editando.id && normalizarNombre(it.nombre) == normalizadoNombre }
+            }
+            if (duplicado != null) return ErroresAlimento(nombre = "Ya tienes un alimento con ese nombre")
+        }
         viewModelScope.launch {
             if (editando == null) {
                 val limpio = nombre.trim()
-                // Si el nombre ya está en el catálogo de recetas, se recupera
-                // ese mismo alimento en vez de duplicarlo: así una receta que
-                // usa "Arroz" vuelve a completarse al añadirlo otra vez (#34)
+                // Si el nombre ya está en el catálogo (o en la despensa), se
+                // recupera ese mismo alimento en vez de duplicarlo: así una
+                // receta que usa "Arroz" vuelve a completarse al añadirlo otra
+                // vez (#34) y no se crean duplicados si solo cambian tildes o
+                // mayúsculas.
+                val normalizado = normalizarNombre(limpio)
                 val existente = repositorio.catalogo.first()
-                    .firstOrNull { it.nombre.trim().equals(limpio, ignoreCase = true) }
+                    .firstOrNull { normalizarNombre(it.nombre) == normalizado }
                 if (existente != null) {
                     repositorio.actualizar(
                         existente.copy(cantidad = valor, unidad = unidad.trim(), enDespensa = true)

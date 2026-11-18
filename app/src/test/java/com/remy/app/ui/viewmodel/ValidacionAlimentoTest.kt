@@ -48,4 +48,10 @@ class ValidacionAlimentoTest {
 
     @Test fun aviso_nombreVacio_noAvisa() =
         assertNull(avisoNombre("", listOf("Atún")))
+
+    @Test fun normalizarNombre_quitaTildesYMayusculas() {
+        assertEquals(normalizarNombre("Atún"), normalizarNombre("atun"))
+        assertEquals(normalizarNombre("Jamón"), normalizarNombre("JAMON"))
+        assertFalse(normalizarNombre("Tomate") == normalizarNombre("Lechuga"))
+    }
 }

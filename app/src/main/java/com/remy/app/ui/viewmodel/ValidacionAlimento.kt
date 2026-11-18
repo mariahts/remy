@@ -21,7 +21,7 @@ fun validarAlimento(nombre: String, cantidad: String, unidad: String): ErroresAl
 }
 
 /** Quita tildes y pasa a minúsculas: «Atún» y «atun» se comparan igual. */
-private fun normalizarNombre(texto: String): String =
+fun normalizarNombre(texto: String): String =
     Normalizer.normalize(texto.trim().lowercase(Locale.getDefault()), Normalizer.Form.NFD)
         .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
 

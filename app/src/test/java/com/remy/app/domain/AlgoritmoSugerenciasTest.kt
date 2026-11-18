@@ -50,6 +50,60 @@ class AlgoritmoSugerenciasTest {
 
     private fun despensa(vararg alimentos: Alimento): List<Alimento> = alimentos.toList()
 
+    // ---------------------------------------------------------------------
+    // ingredienteDisponible (badge «Lista» y checks del detalle de receta)
+    // ---------------------------------------------------------------------
+
+    private fun lineaConAlimento(
+        nombre: String,
+        cantidadNecesaria: Double,
+        unidadNecesaria: String,
+        enDespensa: Boolean,
+        cantidadDespensa: Double,
+        unidadDespensa: String
+    ) = IngredienteConAlimento(
+        ingrediente = Ingrediente(id = 1, recetaId = 1, alimentoId = 1L, cantidad = cantidadNecesaria, unidad = unidadNecesaria),
+        alimento = Alimento(id = 1L, nombre = nombre, cantidad = cantidadDespensa, unidad = unidadDespensa, enDespensa = enDespensa)
+    )
+
+    @Test
+    fun ingredienteDisponible_faltaSiNoEstaEnLaDespensa() {
+        // La fila del catálogo existe (alimento != null) pero no está en la despensa
+        val linea = lineaConAlimento("Tomate", 200.0, "g", enDespensa = false, cantidadDespensa = 0.0, unidadDespensa = "g")
+
+        assertTrue(!ingredienteDisponible(linea))
+    }
+
+    @Test
+    fun ingredienteDisponible_sinAlimentoEnElCatalogoNoCuenta() {
+        val linea = IngredienteConAlimento(
+            ingrediente = Ingrediente(id = 1, recetaId = 1, alimentoId = 99L, cantidad = 1.0, unidad = "ud"),
+            alimento = null
+        )
+
+        assertTrue(!ingredienteDisponible(linea))
+    }
+
+    @Test
+    fun ingredienteDisponible_losBasicosSiempreCuentan() {
+        val sal = lineaConAlimento("Sal", 1.0, "cdta", enDespensa = false, cantidadDespensa = 0.0, unidadDespensa = "cdta")
+        val agua = lineaConAlimento("Agua", 200.0, "ml", enDespensa = false, cantidadDespensa = 0.0, unidadDespensa = "ml")
+
+        assertTrue(ingredienteDisponible(sal))
+        assertTrue(ingredienteDisponible(agua))
+    }
+
+    @Test
+    fun ingredienteDisponible_compruebaCantidadSuficiente() {
+        val suficiente = lineaConAlimento("Arroz", 100.0, "g", enDespensa = true, cantidadDespensa = 250.0, unidadDespensa = "g")
+        val insuficiente = lineaConAlimento("Arroz", 300.0, "g", enDespensa = true, cantidadDespensa = 250.0, unidadDespensa = "g")
+        val otraUnidad = lineaConAlimento("Arroz", 1.0, "kg", enDespensa = true, cantidadDespensa = 250.0, unidadDespensa = "g")
+
+        assertTrue(ingredienteDisponible(suficiente))
+        assertTrue(!ingredienteDisponible(insuficiente))
+        assertTrue(!ingredienteDisponible(otraUnidad))
+    }
+
     @Test
     fun casoPrincipal_completaCasiCocinableYExcluida() {
         val completa = receta(10, "Arroz con huevo", 1L, 2L)      // todo en la despensa

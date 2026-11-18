@@ -1,6 +1,7 @@
 package com.remy.app.domain
 
 import com.remy.app.data.model.Alimento
+import com.remy.app.data.model.IngredienteConAlimento
 import com.remy.app.data.model.RecetaConIngredientes
 import com.remy.app.domain.model.Faltante
 import com.remy.app.domain.model.IngredienteFaltante
@@ -64,6 +65,27 @@ fun faltantesDeReceta(
     }
 
     return faltantes
+}
+
+/**
+ * ¿Está disponible el [ingrediente] en la despensa actual?
+ *
+ * Cuenta lo mismo que [faltantesDeReceta]: los básicos (sal, agua y
+ * pimienta) siempre, y el resto si la fila del alimento está en la
+ * despensa ([Alimento.enDespensa]) con la cantidad suficiente. La fila
+ * del catálogo existe aunque el alimento no esté en la despensa, así que
+ * comprobar solo `alimento != null` no sirve para saber qué falta.
+ */
+fun ingredienteDisponible(ingrediente: IngredienteConAlimento): Boolean {
+    val alimento = ingrediente.alimento ?: return false
+    if (esBasico(alimento.nombre)) return true
+    if (!alimento.enDespensa) return false
+    return cantidadSuficiente(
+        ingrediente.ingrediente.cantidad,
+        ingrediente.ingrediente.unidad,
+        alimento.cantidad,
+        alimento.unidad
+    )
 }
 
 /**
