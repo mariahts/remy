@@ -10,6 +10,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -159,17 +160,26 @@ private fun SelectorFuenteFoto(
 
 @Composable
 private fun AccionesCaptura(hayFoto: Boolean, guardando: Boolean, onCancelar: () -> Unit, onConfirmar: () -> Unit) {
+    // Relleno estrecho: en «Confirmar sin foto» el texto no cabía de otra forma
+    // y la palabra «foto» se perdía al pasar a la segunda línea.
+    val relleno = PaddingValues(horizontal = 8.dp)
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        OutlineButton(text = stringResource(R.string.detalle_cancelar), onClick = onCancelar, modifier = Modifier.weight(1f))
+        OutlineButton(
+            text = stringResource(R.string.detalle_cancelar),
+            onClick = onCancelar,
+            modifier = Modifier.weight(1f),
+            contentPadding = relleno
+        )
         PrimaryButton(
             text = stringResource(if (hayFoto) R.string.detalle_confirmar else R.string.detalle_confirmar_sin_foto),
             onClick = onConfirmar,
             modifier = Modifier.weight(1f),
-            enabled = !guardando
+            enabled = !guardando,
+            contentPadding = relleno
         )
     }
 }

@@ -223,7 +223,8 @@ fun PrimaryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    icon: ImageVector? = null
+    icon: ImageVector? = null,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 24.dp)
 ) {
     Button(
         onClick = onClick,
@@ -235,7 +236,7 @@ fun PrimaryButton(
             disabledContainerColor = Terracota.copy(alpha = 0.7f),
             disabledContentColor = Color.White.copy(alpha = 0.9f)
         ),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp),
+        contentPadding = contentPadding,
         modifier = modifier
             .fillMaxWidth()
             .height(52.dp)
