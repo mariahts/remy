@@ -105,6 +105,30 @@ class AlgoritmoSugerenciasTest {
     }
 
     @Test
+    fun ingredienteDisponible_equiparaGramosYMililitros() {
+        // La receta pide5 g de aceite y la despensa lo guarda en ml (como en la demo)
+        val suficiente = lineaConAlimento("Aceite de oliva", 5.0, "g", enDespensa = true, cantidadDespensa = 100.0, unidadDespensa = "ml")
+        val insuficiente = lineaConAlimento("Aceite de oliva", 5.0, "g", enDespensa = true, cantidadDespensa = 2.0, unidadDespensa = "ml")
+
+        assertTrue(ingredienteDisponible(suficiente))
+        assertTrue(!ingredienteDisponible(insuficiente))
+    }
+
+    @Test
+    fun faltantesDeReceta_aceiteEnGConStockEnMlNoFalta() {
+        // Caso del wrap de pollo:5 g pedidos y500 ml en la despensa → sin faltantes
+        val recetaWrap = recetaConLineas(
+            1, "Wrap de pollo",
+            listOf(linea(1, 1, 6, "Aceite de oliva", 5.0, "g"))
+        )
+        val despensaAceite = despensa(
+            Alimento(id = 6, nombre = "Aceite de oliva", cantidad = 500.0, unidad = "ml", enDespensa = true)
+        )
+
+        assertTrue(faltantesDeReceta(recetaWrap, despensaAceite).isEmpty())
+    }
+
+    @Test
     fun casoPrincipal_completaCasiCocinableYExcluida() {
         val completa = receta(10, "Arroz con huevo", 1L, 2L)      // todo en la despensa
         val casi = receta(11, "Tortilla", 1L, 3L)                  // falta el huevo (3)

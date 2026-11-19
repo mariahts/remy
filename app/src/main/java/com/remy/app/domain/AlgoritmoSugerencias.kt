@@ -59,7 +59,9 @@ fun faltantesDeReceta(
             nombre = ing.alimento?.nombre ?: "Alimento $id",
             necesario = ing.ingrediente.cantidad,
             unidad = ing.ingrediente.unidad,
-            disponible = disponible?.cantidad,
+            disponible = disponible?.let {
+                convertirAUnidad(it.cantidad, it.unidad, ing.ingrediente.unidad)
+            },
             motivo = motivo
         )
     }
@@ -147,8 +149,33 @@ private fun cantidadSuficiente(necesaria: Double, unidadNecesaria: String, dispo
     val d = normalizarCantidad(disponible, unidadDisponible)
     return when {
         n == null || d == null -> unidadNecesaria.trim().equals(unidadDisponible.trim(), ignoreCase = true) && disponible + 1e-9 >= necesaria
-        n.second != d.second -> false
+        !familiasComparables(n.second, d.second) -> false
         else -> d.first + 1e-9 >= n.first
+    }
+}
+
+private val FAMILIAS_CANTIDAD = setOf("masa", "volumen")
+
+/**
+ * Las familias «masa» y «volumen» se equiparan (1 ml ≈ 1 g, aproximación de
+ * cocina): una receta que pide aceite en gramos se considera cubierta si la
+ * despensa lo guarda en mililitros, y al revés. El resto de familias solo se
+ * comparan consigo mismas.
+ */
+internal fun familiasComparables(a: String, b: String): Boolean =
+    a == b || (a in FAMILIAS_CANTIDAD && b in FAMILIAS_CANTIDAD)
+
+/**
+ * Expresa [cantidad] (guardada en [unidad]) en [unidadObjetivo] cuando las
+ * familias son comparables. Si no hay conversión posible, la devuelve tal cual.
+ */
+private fun convertirAUnidad(cantidad: Double, unidad: String, unidadObjetivo: String): Double {
+    val origen = normalizarCantidad(cantidad, unidad) ?: return cantidad
+    val destino = normalizarCantidad(cantidad, unidadObjetivo) ?: return cantidad
+    if (!familiasComparables(origen.second, destino.second)) return cantidad
+    return when (unidadObjetivo.trim().lowercase(Locale.getDefault())) {
+        "kg", "kilo", "kilos", "l", "litro", "litros" -> origen.first / 1000.0
+        else -> origen.first
     }
 }
 

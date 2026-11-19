@@ -72,7 +72,8 @@ internal fun restarCantidad(
 ): Double? {
     val disp = normalizarCantidadDescuento(disponible, unidadDisponible)
     val nec = normalizarCantidadDescuento(necesario, unidadNecesaria)
-    return if (disp != null && nec != null && disp.second == nec.second) {
+    return if (disp != null && nec != null && familiasComparables(disp.second, nec.second)) {
+        // Masa y volumen se equiparan (1 ml ≈ 1 g): el resto se devuelve tal cual
         val restanteBase = disp.first - nec.first
         convertirDesdeBase(restanteBase, disp.second, unidadDisponible)
     } else if (unidadDisponible.trim().equals(unidadNecesaria.trim(), ignoreCase = true)) {
