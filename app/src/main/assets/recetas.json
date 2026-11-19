@@ -1107,21 +1107,20 @@
         },
         {
             "nombre": "Wok de pollo con verduras",
-            "kcal": 1170,
-            "proteinas": 126,
-            "hidratos": 66,
-            "grasas": 48,
+            "kcal": 2093,
+            "proteinas": 150,
+            "hidratos": 228,
+            "grasas": 62,
             "regionOrigen": "Asiático",
             "tipoPlato": "Principal",
             "tiempoMinutos": 25,
             "pasos": [
-                "Corta los 150 g de pechuga en tiras finas. Añade un poco de pimienta y reserva.",
-                "Corta el brócoli en pequeños ramilletes, la zanahoria en tiras finas y el resto de verduras en láminas o bastones.",
-                "Calienta la mitad del aceite en un wok o sartén grande. Añade el pollo y saltéalo durante 5-7 minutos, hasta que esté completamente cocinado. Retira y reserva.",
-                "Añade el resto del aceite. Incorpora la zanahoria y el brócoli primero. Cocina 3 minutos. Después añade el pimiento, el calabacín, los champiñones y la cebolla. Saltea otros 4-5 minutos.",
-                "Incorpora el ajo picado y el jengibre rallado. Añade la salsa de soja y mezcla bien.",
-                "Devuelve el pollo al wok y saltea todo junto durante 2 minutos para integrar los sabores. Comprueba que el pollo esté completamente hecho.",
-                "Retira del fuego y añade las semillas de sésamo por encima. Sirve caliente."
+                "Cuece el arroz en agua con sal durante 12 minutos, escúrrelo y déjalo aparte.",
+                "Corta los 400 g de pechuga en tiras finas y sazona con sal.",
+                "Corta la zanahoria en tiras finas, el pimiento en láminas, la cebolla en juliana y los champiñones en láminas gruesas.",
+                "Calienta la mitad del aceite en un wok o sartén grande a fuego fuerte y saltea el pollo 5-7 minutos, hasta que esté completamente cocinado. Retira y resérvalo.",
+                "Añade el resto del aceite y saltea la zanahoria 3 minutos; después incorpora el pimiento, la cebolla y los champiñones y saltea otros 4-5 minutos.",
+                "Incorpora el arroz escurrido y el pollo, remueve todo junto 2 minutos a fuego fuerte, rectifica de sal y sirve caliente."
             ],
             "ingredientes": [
                 {
