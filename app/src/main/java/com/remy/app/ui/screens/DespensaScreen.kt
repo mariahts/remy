@@ -75,6 +75,7 @@ import com.remy.app.ui.components.RemyLogo
 import com.remy.app.ui.components.RemySearchField
 import com.remy.app.ui.components.RemyTopBar
 import com.remy.app.ui.components.categoriaDeIngrediente
+import com.remy.app.ui.components.cantidadPresentacion
 import com.remy.app.ui.components.formatoCantidad
 import com.remy.app.ui.theme.AvisoCaducadoBg
 import com.remy.app.ui.theme.AvisoCaducadoFg
@@ -327,11 +328,12 @@ private fun FilaAlimento(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
+                    val presentacion = cantidadPresentacion(alimento.cantidad, alimento.unidad)
                     Text(
                         text = stringResource(
                             R.string.despensa_cantidad,
-                            alimento.cantidad.formatoCantidad(),
-                            alimento.unidad
+                            presentacion.first.formatoCantidad(),
+                            presentacion.second
                         ),
                         style = MaterialTheme.typography.bodyMedium,
                         color = TextoSecundario,
@@ -526,8 +528,9 @@ private fun FormularioAlimento(
     onCerrar: () -> Unit
 ) {
     var nombre by rememberSaveable { mutableStateOf(alimento?.nombre ?: "") }
-    var cantidad by rememberSaveable { mutableStateOf(alimento?.cantidad?.formatoCantidad() ?: "") }
-    var unidad by rememberSaveable { mutableStateOf(alimento?.unidad ?: "g") }
+    val inicial = alimento?.let { cantidadPresentacion(it.cantidad, it.unidad) }
+    var cantidad by rememberSaveable { mutableStateOf(inicial?.first?.formatoCantidad() ?: "") }
+    var unidad by rememberSaveable { mutableStateOf(inicial?.second ?: "g") }
     var errores by remember { mutableStateOf(ErroresAlimento()) }
     val unidades = listOf("g", "kg", "ml", "l", "ud", "cda")
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)

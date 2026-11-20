@@ -32,6 +32,7 @@ import androidx.compose.material.icons.outlined.Egg
 import androidx.compose.material.icons.outlined.Grain
 import androidx.compose.material.icons.outlined.Icecream
 import androidx.compose.material.icons.outlined.OilBarrel
+import androidx.compose.material.icons.outlined.KebabDining
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.SetMeal
 import androidx.compose.material.icons.outlined.Spa
@@ -222,7 +223,8 @@ fun PrimaryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    icon: ImageVector? = null
+    icon: ImageVector? = null,
+    contentPadding: PaddingValues = PaddingValues(horizontal = 24.dp)
 ) {
     Button(
         onClick = onClick,
@@ -234,7 +236,7 @@ fun PrimaryButton(
             disabledContainerColor = Terracota.copy(alpha = 0.7f),
             disabledContentColor = Color.White.copy(alpha = 0.9f)
         ),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp),
+        contentPadding = contentPadding,
         modifier = modifier
             .fillMaxWidth()
             .height(52.dp)
@@ -479,10 +481,21 @@ fun categoriaDeIngrediente(nombre: String): CategoriaIcono {
     return when {
         listOf("huevo", "huevos").any { n.contains(it) } -> CategoriaIcono.HUEVO
         listOf("aceite", "aove", "vinagre").any { n.contains(it) } -> CategoriaIcono.ACEITE
+        // Pescado y marisco antes que las especias: «salmón» contiene «sal».
+        listOf(
+            "pescado", "atún", "atun", "salmón", "salmon", "bacalao", "merluza",
+            "caballa", "sardina", "jurel", "gamba", "camarón", "camaron",
+            "langostino", "marisco", "mejillones", "almejas", "calamar", "pulpo"
+        ).any { n.contains(it) } -> CategoriaIcono.PESCADO
+        // Carne antes que las especias: «salchicha» contiene «sal».
+        listOf(
+            "pollo", "carne", "ternera", "cerdo", "pavo", "jamón", "jamon",
+            "chorizo", "salchicha", "salchichón", "salchichon", "cordero",
+            "conejo", "buey", "vacuno"
+        ).any { n.contains(it) } -> CategoriaIcono.CARNE
         listOf("sal", "pimienta", "comino", "pimentón", "pimenton", "orégano", "oregano", "canela", "azúcar", "azucar", "especia", "ajo en polvo").any { n.contains(it) } -> CategoriaIcono.ESPECIA
         listOf("leche", "queso", "yogur", "nata", "mantequilla", "lácteo", "lacteo").any { n.contains(it) } -> CategoriaIcono.LACTEO
         listOf("arroz", "pasta", "pan", "harina", "avena", "cereal", "macarrón", "macarron", "lenteja", "garbanzo", "fideo", "cuscús", "cuscus").any { n.contains(it) } -> CategoriaIcono.CEREAL
-        listOf("pollo", "carne", "ternera", "cerdo", "pavo", "jamón", "jamon", "chorizo", "atún", "atun", "salmón", "salmon", "bacalao", "pescado", "gamba", "camarón", "camaron", "marisco").any { n.contains(it) } -> CategoriaIcono.CARNE
         listOf("manzana", "plátano", "platano", "fresa", "naranja", "limón", "limon", "fruta", "pera", "uva").any { n.contains(it) } -> CategoriaIcono.FRUTA
         listOf("tomate", "lechuga", "espinaca", "verdura", "zanahoria", "cebolla", "pimiento", "calabacín", "calabacin", "patata", "champiñón", "champinon", "brócoli", "brocoli", "ajo", "guisante").any { n.contains(it) } -> CategoriaIcono.VERDURA
         else -> CategoriaIcono.OTRO
@@ -501,7 +514,8 @@ fun IngredientIcon(
         else -> categoriaDeIngrediente(categoria)
     }
     val icono = when (cat) {
-        CategoriaIcono.CARNE, CategoriaIcono.PESCADO -> Icons.Outlined.SetMeal
+        CategoriaIcono.CARNE -> Icons.Outlined.KebabDining
+        CategoriaIcono.PESCADO -> Icons.Outlined.SetMeal
         CategoriaIcono.VERDURA -> Icons.Outlined.Eco
         CategoriaIcono.LACTEO -> Icons.Outlined.Icecream
         CategoriaIcono.CEREAL -> Icons.Outlined.Grain

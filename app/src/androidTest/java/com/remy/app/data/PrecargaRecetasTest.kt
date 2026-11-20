@@ -16,11 +16,19 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.json.JSONObject
 
 @RunWith(AndroidJUnit4::class)
 class PrecargaRecetasTest {
 
     private lateinit var db: RemyDatabase
+
+    /** Número de recetas que trae assets/recetas.json (crece con el catálogo). */
+    private fun recetasEnAssets(contexto: Context): Int {
+        val texto = contexto.assets.open("recetas.json")
+            .bufferedReader(Charsets.UTF_8).use { it.readText() }
+        return JSONObject(texto).getJSONArray("recetas").length()
+    }
 
     @Before
     fun crearBase() {
@@ -34,11 +42,11 @@ class PrecargaRecetasTest {
     fun cerrarBase() = db.close()
 
     @Test
-    fun precargaDejaLasVeinteRecetas() = runBlocking {
+    fun precargaDejaLasRecetasDelCatalogo() = runBlocking {
         val contexto = ApplicationProvider.getApplicationContext<Context>()
 
         PrecargaRecetas.siHaceFalta(db, contexto)
-        assertEquals(20, db.recetaDao().contar())
+        assertEquals(recetasEnAssets(contexto), db.recetaDao().contar())
 
         // Cada ingrediente referencia a un alimento existente (lo garantiza la clave externa)
         val recetas = db.recetaDao().observarTodas().first()
@@ -57,7 +65,7 @@ class PrecargaRecetasTest {
         PrecargaRecetas.siHaceFalta(db, contexto)
         PrecargaRecetas.siHaceFalta(db, contexto)
 
-        assertEquals(20, db.recetaDao().contar())
+        assertEquals(recetasEnAssets(contexto), db.recetaDao().contar())
     }
 
     @Test
@@ -71,11 +79,11 @@ class PrecargaRecetasTest {
             Receta(nombre = "Receta antigua de prueba", porciones = 2),
             listOf(Ingrediente(recetaId = 0, alimentoId = 1, cantidad = 100.0, unidad = "g"))
         )
-        assertEquals(21, db.recetaDao().contar())
+        assertEquals(recetasEnAssets(contexto) + 1, db.recetaDao().contar())
 
         PrecargaRecetas.siHaceFalta(db, contexto)
 
-        assertEquals(20, db.recetaDao().contar())
+        assertEquals(recetasEnAssets(contexto), db.recetaDao().contar())
         assertEquals(null, db.recetaDao().porNombre("Receta antigua de prueba"))
     }
 

@@ -76,13 +76,27 @@ class DescuentoDespensaTest {
 
     @Test
     fun unidadesIncompatibles_seOmiteYSeInforma() {
+        // Unidades de familias distintas que no se equiparan (ud frente a masa)
+        val despensa = mapOf(1L to alimento(1, "Huevo", 6.0, "ud"))
+        val ingredientes = listOf(linea(1, "Huevo", 100.0, "g"))
+
+        val resultado = calcularDescuentoDespensa(ingredientes, 1, 1, despensa)
+
+        assertTrue(resultado.actualizaciones.isEmpty())
+        assertEquals(listOf("Huevo"), resultado.noDescontados)
+    }
+
+    @Test
+    fun masaYVolumen_seDescuentaComo1ml1g() {
+        // 1 l de leche y 200 g en la receta: se restan como 1000 ml − 200 = 800 ml
         val despensa = mapOf(1L to alimento(1, "Leche", 1.0, "l"))
         val ingredientes = listOf(linea(1, "Leche", 200.0, "g"))
 
         val resultado = calcularDescuentoDespensa(ingredientes, 1, 1, despensa)
 
-        assertTrue(resultado.actualizaciones.isEmpty())
-        assertEquals(listOf("Leche"), resultado.noDescontados)
+        assertEquals(1, resultado.actualizaciones.size)
+        assertEquals(0.8, resultado.actualizaciones.first().cantidad, 0.0001)
+        assertTrue(resultado.noDescontados.isEmpty())
     }
 
     @Test

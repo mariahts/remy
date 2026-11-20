@@ -16,7 +16,8 @@ data class Faltante(
  * explicarlo en la interfaz.
  *
  * [necesario] y [unidad] son la cantidad que pide la receta. [disponible] es lo
- * que hay en la despensa en este momento, o null si el alimento no está.
+ * que hay en la despensa en este momento expresado en [unidad] cuando las
+ * familias son comparables (masa y volumen), o null si el alimento no está.
  */
 data class IngredienteFaltante(
     val alimentoId: Long,

@@ -117,7 +117,7 @@
     <string name="recetas_sin_resultados">No encontramos recetas con «%1$s»</string>
     <string name="recetas_sin_resultados_filtro">No hay recetas en este filtro</string>
     <string name="recetas_sin_resultados_filtro_texto">Prueba con otro filtro para ver más recetas.</string>
-    <string name="recetas_guardar">Guardar receta</string>
+    <string name="recetas_guardar">Añadir a favoritas</string>
     <string name="recetas_quitar">Quitar de favoritas</string>
     <string name="recetas_kcal_proteina">%1$d kcal · %2$d g de proteína por ración</string>
     <string name="recetas_cocinada_el">Cocinada el %1$s</string>
@@ -219,7 +219,7 @@
     <string name="sugerencias_ajustar_texto">Los filtros se guardan y se recuperan al volver a abrir la app.</string>
     <string name="sugerencias_tipo">Tipo de plato</string>
     <string name="sugerencias_max_faltantes">Máx. faltantes</string>
-    <string name="sugerencias_de_20">de 20</string>
+    <string name="sugerencias_de_5">de 5</string>
     <string name="sugerencias_tiempo">Tiempo máximo</string>
     <string name="sugerencias_kcal">Calorías máximas</string>
     <string name="sugerencias_proteinas">Proteínas mínimas</string>
@@ -237,12 +237,12 @@
     <string name="perfil_usuario">Tu cuenta</string>
     <string name="perfil_sin_correo">Sin correo</string>
     <string name="perfil_cuenta_demo">Cuenta de demostración</string>
-    <string name="perfil_guardadas">Guardadas</string>
     <string name="perfil_favoritas">Favoritas</string>
+    <string name="perfil_cocinadas">Cocinadas</string>
     <string name="perfil_en_despensa">En despensa</string>
     <string name="perfil_favoritas_titulo">Tus favoritas</string>
     <string name="perfil_favoritas_vacio_titulo">Aún no tienes favoritas</string>
-    <string name="perfil_favoritas_vacio_texto">Marca una receta con el marcador y aparecerá aquí.</string>
+    <string name="perfil_favoritas_vacio_texto">Marca una receta con el corazón y aparecerá aquí.</string>
     <string name="perfil_ajustes">Ajustes</string>
     <string name="perfil_acerca">Acerca de REMY</string>
     <string name="perfil_version">Versión 1.0</string>

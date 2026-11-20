@@ -57,6 +57,7 @@ import com.remy.app.R
 import com.remy.app.data.model.FiltrosSugerencias
 import com.remy.app.data.model.Receta
 import com.remy.app.data.model.RecetaConIngredientes
+import com.remy.app.data.repository.PreferenciasRepository
 import com.remy.app.ui.components.ContenidoConEstado
 import com.remy.app.ui.components.IngredientIcon
 import com.remy.app.ui.components.OutlineButton
@@ -502,11 +503,11 @@ internal fun PantallaFiltros(
                 )
                 StepperBoton(
                     icono = Icons.Outlined.Add,
-                    enabled = filtros.maximoFaltantes < 20,
-                    onClick = { onCambiarMaximo((filtros.maximoFaltantes + 1).coerceAtMost(20)) }
+                    enabled = filtros.maximoFaltantes < PreferenciasRepository.MAXIMO_MAXIMO,
+                    onClick = { onCambiarMaximo((filtros.maximoFaltantes + 1).coerceAtMost(PreferenciasRepository.MAXIMO_MAXIMO)) }
                 )
                 Text(
-                    stringResource(R.string.sugerencias_de_20),
+                    stringResource(R.string.sugerencias_de_5),
                     style = MaterialTheme.typography.bodySmall,
                     color = TextoSecundario
                 )

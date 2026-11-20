@@ -24,10 +24,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.FitnessCenter
 import androidx.compose.material.icons.outlined.LocalFireDepartment
 import androidx.compose.material.icons.outlined.Opacity
@@ -83,6 +83,7 @@ import com.remy.app.ui.components.RemyTopBar
 import com.remy.app.ui.components.StatusBadge
 import com.remy.app.ui.components.VarianteBadge
 import com.remy.app.ui.components.fechaEnEspanol
+import com.remy.app.domain.ingredienteDisponible
 import com.remy.app.ui.components.formatoCantidad
 import com.remy.app.ui.components.formatoCantidadReceta
 import com.remy.app.ui.theme.AvisoNeutroBg
@@ -310,7 +311,7 @@ private fun DatosRecetaDetalle(receta: Receta, porciones: Int, racionesDeseadas:
 @Composable
 private fun TarjetaIngredientesDetalle(detalle: RecetaDetalle, porciones: Int, racionesDeseadas: Int) {
     val total = detalle.ingredientes.size
-    val disponibles = detalle.ingredientes.count { it.alimento != null }
+    val disponibles = detalle.ingredientes.count { ingredienteDisponible(it) }
     val faltan = (total - disponibles).coerceAtLeast(0)
     RemyCard(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
         CabeceraIngredientes(racionesDeseadas, faltan, total)
@@ -367,7 +368,12 @@ private fun FilaPaso(numero: Int, paso: String) {
         ) {
             Text(text = "$numero", style = MaterialTheme.typography.labelLarge, color = Color.White)
         }
-        Text(text = paso, style = MaterialTheme.typography.bodyMedium, color = TextoSecundario, modifier = Modifier.weight(1f))
+        Text(
+            text = paso.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
+            style = MaterialTheme.typography.bodyMedium,
+            color = TextoSecundario,
+            modifier = Modifier.weight(1f)
+        )
     }
 }
 
@@ -411,7 +417,7 @@ private fun HeroDetalle(
             modifier = Modifier.align(Alignment.TopStart).statusBarsPadding().padding(start = 16.dp, top = 12.dp)
         )
         BotonRedondo(
-            icon = if (esFavorita) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+            icon = if (esFavorita) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
             descripcion = stringResource(if (esFavorita) R.string.recetas_quitar else R.string.recetas_guardar),
             onClick = onToggleFavorita,
             tint = if (esFavorita) Terracota else TextoPrincipal,
@@ -456,7 +462,7 @@ private fun DatoPildora(icon: androidx.compose.ui.graphics.vector.ImageVector, t
 @Composable
 private fun FilaIngredienteDetalle(par: IngredienteConAlimento, porcionesReceta: Int = 1, racionesDeseadas: Int = 1) {
     val nombre = par.alimento?.nombre ?: stringResource(R.string.detalle_ingrediente)
-    val tiene = par.alimento != null
+    val tiene = ingredienteDisponible(par)
     val cantidadEscalada = par.ingrediente.cantidad * racionesDeseadas / porcionesReceta.coerceAtLeast(1)
     val cantidad = "${cantidadEscalada.formatoCantidadReceta()} ${par.ingrediente.unidad}"
 
