@@ -20,6 +20,12 @@ Una app Android que sugiere recetas según los ingredientes de tu despensa, plan
 
 ---
 
+## El proyecto
+
+REMY nace para responder a una necesidad concreta: comer mejor con los ingredientes que ya se tienen en casa, sin depender de una lista de la compra improvisada. Va dirigido a estudiantes, personas que viven solas o en piso compartido y familias con poco tiempo y presupuesto.
+
+**Integrantes:** María José Sánchez León ([mariahts](https://github.com/mariahts)) y Mario Jiménez Ruiz ([FedericoCamposMartinez](https://github.com/FedericoCamposMartinez)).
+
 ## Características
 
 - **Despensa inteligente:** guarda alimentos con cantidad y unidad; alta, edición y borrado con validación.
@@ -100,7 +106,7 @@ $env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
 | Datos locales | Room (despensa, recetas, plan, historial), DataStore (preferencias) |
 | Imágenes / cámara | CameraX, Coil |
 | Autenticación | Supabase Auth |
-| Tipografía | Nunito (Google Fonts) |
+| Tipografía | Nunito (empaquetada en `res/font`) |
 
 La app sigue una estructura por capas:
 
