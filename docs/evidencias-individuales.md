@@ -1,7 +1,7 @@
 # Evidencias individuales de contribución
 
-Entregable 7 de la Entrega 4. Datos recogidos de GitHub el 12 de noviembre de
-2026.
+Evidencias de contribución acumuladas hasta la Entrega Final. Datos de GitHub
+recogidos el 12 de noviembre de 2026 y actualizados el 20 de noviembre de 2026.
 
 - **María José Sánchez León** — [mariahts](https://github.com/mariahts)
 - **Mario Jiménez Ruiz** — [FedericoCamposMartinez](https://github.com/FedericoCamposMartinez)
@@ -40,14 +40,9 @@ y en la #90 (pulido de interfaz).
 
 Hay 40 issues en el repositorio. Todas llevan en su cuerpo el bloque
 «Clasificación» con responsable, RA, tamaño, prioridad, revisor, sprint y
-dependencias, y criterios de aceptación comprobables. Todas están cerradas
-salvo tres:
-
-| Issue | Título | Estado |
-|---|---|---|
-| #40 | README final y cierre de `docs/uso-ia.md` | Abierta (en revisión) |
-| #41 | Memoria final | Abierta, en Blocked (depende de #40) |
-| #42 | Presentación de la defensa | Abierta, en Blocked (depende de #41) |
+dependencias, y criterios de aceptación comprobables. Las 40 están cerradas:
+las tres últimas —#40 (README final), #41 (memoria final) y #42 (presentación)—
+se cerraron al preparar la entrega definitiva.
 
 **Responsable de todas las issues: María.** La columna «Revisor» recoge quién
 revisa el trabajo; en las 13 issues cuyo revisor es María (#8, #9, #10, #11,
@@ -57,8 +52,9 @@ visual y la revisión de las PR.
 
 ## Pull Requests
 
-56 Pull Requests en total: 55 fusionadas y una abierta (#94, `dev` → `main`,
-pendiente de la aprobación que exige la protección de `main`).
+66 Pull Requests fusionadas, sin ninguna abierta. La última fue la **PR #106**
+(«Ajustes finales de UX y correcciones antes de la entrega»), aprobada por Mario
+y fusionada en `main`.
 
 **De Mario** (4):
 
@@ -71,7 +67,8 @@ pendiente de la aprobación que exige la protección de `main`).
 
 **De María**: 48 PR de los sprints 1 a 3 (montaje del proyecto, esqueleto
 MVVM, despensa, cámara, DataStore, catálogo, navegación, cocina con foto e
-historial) y 15 del sprint 4, que son las que cierran esta entrega:
+historial) y 16 del cierre (15 del sprint 4 y la PR #106), que son las que
+cierran esta entrega:
 
 | PR | Título |
 |---|---|
@@ -90,6 +87,7 @@ historial) y 15 del sprint 4, que son las que cierran esta entrega:
 | #94 | Entrega 4: arreglos de la hoja del plan, el registro y el calendario, y catálogo con fotos reales y macros calculadas |
 | #95 | Añade fotos reales al catálogo y calcula los macros de las recetas desde sus ingredientes |
 | #96 | Arregla el parpadeo de la pantalla de inicio al cambiar de día |
+| #106 | Ajustes finales de UX y correcciones antes de la entrega |
 
 La relación completa entre PR e issue se consulta en cada PR, que cita las
 issues que cierra (`Closes #N`).
@@ -104,10 +102,10 @@ otra persona**, con aprobación explícita en 15:
 | FedericoCamposMartinez | #14, #15, #16, #18, #19, #21, #27, #49, #54, #55, #70, #71, #85, #92 |
 | mariahts | #52, #65 |
 
-**Pendiente de proceso:** las PR #93, #95 y #96 están fusionadas en `dev` sin
-revisión registrada, porque la regla de protección de `dev` no la exige. Antes
-de la entrega definitiva conviene que Mario deje su revisión en esas tres y
-apruebe la #94, que es la que actualiza `main`.
+**Revisiones del cierre:** las PR #93, #95 y #96 quedaron fusionadas en `dev`
+sin revisión registrada, porque su regla de protección no la exige. La PR #106
+sí se aprobó desde la cuenta de Mario antes de fusionarse en `main`, que está
+protegida.
 
 ## Pruebas en dispositivo real
 
@@ -133,6 +131,7 @@ Los dos se corrigieron y se volvieron a verificar en el emulador
 | 2 | 20/10 – 03/11/2026 | Esqueleto de la app, tema, navegación y primera issue de datos |
 | 3 | 03/11 – 10/11/2026 | Integración de datos y función multimedia, con las primeras pruebas instrumentadas |
 | 4 | 10/11 – 15/11/2026 | Versión candidata: rediseño, limpieza, macros, fotos y cierre de la entrega |
+| Cierre | 15/11 – 20/11/2026 | Ajustes finales de UX, correcciones de defectos reportados por personas de prueba, recorte de tests y entrega definitiva |
 
 ## Tareas del sprint 4 y sus Pull Requests
 
