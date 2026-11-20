@@ -122,41 +122,25 @@ class FiltroRecetasTest {
     }
 
     @Test
-    fun filtraAltaEnProteinaPorRacion() {
-        // 100g / 4 raciones = 25g por ración (pasa), 80g / 4 = 20g (no pasa)
-        val recetas = listOf(
-            receta(1, proteinas = 100, porciones = 4),
-            receta(2, proteinas = 80, porciones = 4)
+    fun filtrosDeMacrosPorRacion() {
+        // proteínas: 100 g / 4 = 25 por ración (pasa) y 80 / 4 = 20 (no pasa);
+        // hidratos: 120 / 4 = 30 (pasa) y 124 / 4 = 31 (no pasa);
+        // grasas: 60 / 4 = 15 (pasa) y 64 / 4 = 16 (no pasa)
+        val base = receta(1, proteinas = 100, hidratos = 120, grasas = 60)
+        val noPasa = receta(2, proteinas = 80, hidratos = 124, grasas = 64)
+        val recetas = listOf(base, noPasa)
+
+        assertEquals(
+            listOf(1L),
+            filtrarRecetas(recetas, FiltrosSugerencias(altaProteina = true)).map { it.receta.id }
         )
-
-        val resultado = filtrarRecetas(recetas, FiltrosSugerencias(altaProteina = true))
-
-        assertEquals(listOf(1L), resultado.map { it.receta.id })
-    }
-
-    @Test
-    fun filtraBajaEnHidratosPorRacion() {
-        // 120g / 4 = 30g por ración (pasa), 124g / 4 = 31g (no pasa)
-        val recetas = listOf(
-            receta(1, hidratos = 120, porciones = 4),
-            receta(2, hidratos = 124, porciones = 4)
+        assertEquals(
+            listOf(1L),
+            filtrarRecetas(recetas, FiltrosSugerencias(bajaHidratos = true)).map { it.receta.id }
         )
-
-        val resultado = filtrarRecetas(recetas, FiltrosSugerencias(bajaHidratos = true))
-
-        assertEquals(listOf(1L), resultado.map { it.receta.id })
-    }
-
-    @Test
-    fun filtraBajaEnGrasaPorRacion() {
-        // 60g / 4 = 15g por ración (pasa), 64g / 4 = 16g (no pasa)
-        val recetas = listOf(
-            receta(1, grasas = 60, porciones = 4),
-            receta(2, grasas = 64, porciones = 4)
+        assertEquals(
+            listOf(1L),
+            filtrarRecetas(recetas, FiltrosSugerencias(bajaGrasa = true)).map { it.receta.id }
         )
-
-        val resultado = filtrarRecetas(recetas, FiltrosSugerencias(bajaGrasa = true))
-
-        assertEquals(listOf(1L), resultado.map { it.receta.id })
     }
 }

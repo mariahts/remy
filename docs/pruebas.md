@@ -1,11 +1,16 @@
 # Pruebas de REMY
 
 Qué se ha probado, en qué entorno, con qué resultado y qué queda pendiente.
-Documento actualizado el 19 de noviembre de 2026. Solo se citan pruebas que
+Documento actualizado el 20 de noviembre de 2026. Solo se citan pruebas que
 existen en el repositorio.
 
-**Recuento actual:** 68 pruebas unitarias en 10 suites (todas en verde) y 23
+**Recuento actual:** 54 pruebas unitarias en 7 suites (todas en verde) y 23
 pruebas instrumentadas en 7 suites (todas en verde).
+
+El 20 de noviembre se revisaron los tests y se quitó lo que no aportaba:
+las suites de color de receta, de fecha en español y de datos de demo, y los
+tres tests de macros por ración (quedaron en uno). Lo que queda cubre la
+lógica de la app y los defectos corregidos.
 
 ## Entorno
 
@@ -30,12 +35,9 @@ pruebas instrumentadas en 7 suites (todas en verde).
 | `ValidacionAlimentoTest` | Validación del formulario de despensa: nombre vacío, cantidad cero o no numérica, unidad vacía; acepta coma decimal; aviso al escribir un ingrediente con mayúsculas o acentos de más y normalización de nombres para no repetir alimentos. |
 | `AlgoritmoSugerenciasTest` | Clasificación completas/casi cocinables por identificador, máximo configurable de faltantes, ingredientes repetidos, cantidad insuficiente, conversión g/kg y ml/l, equiparación de g con ml al comprobar cantidades, exclusión de básicos (sal, agua, pimienta) y disponibilidad de cada ingrediente para el badge «Lista» del detalle. |
 | `DescuentoDespensaTest` | Descuento puro de despensa al cocinar: descuento normal, cantidad insuficiente (queda en 0), mismo alimento en varias líneas, unidades incompatibles (se omite y se informa) y escalado por raciones. |
-| `FiltroRecetasTest` | Filtros de sugerencias: sin filtros, tipo de plato, región, tiempo máximo, calorías, proteínas, combinaciones y límites a cero. |
+| `FiltroRecetasTest` | Filtros de sugerencias: sin filtros, tipo de plato, región, tiempo máximo, calorías, proteínas, macros por ración, combinaciones y límites a cero. |
 | `PreferenciasRepositoryTest` | Valores por defecto, guardado/lectura de filtros, límites, persistencia al reabrir y limpieza de filtros en DataStore. |
 | `AlmacenamientoFotosTest` | Nombres de archivo de la foto del plato y copia de la imagen al almacenamiento interno. |
-| `FechaEspanolTest` | Formato de fecha en español para «Cocinada el …» y nombre del mes en minúsculas. |
-| `ColorRecetaTest` | Reparto estable del color pastel de cada receta: mismo nombre, mismo tono, rango válido y variedad de tonos. |
-| `DatosDemoTest` | Despensa de demostración: unidades en gramos o mililitros, cantidades mayores que cero y al menos una receta completa con lo sembrado. |
 | `MacrosRecetaTest` | Cálculo puro de macros de una receta a partir de sus ingredientes: suma proporcional, el aceite solo aporta grasas, receta vacía, ingredientes ausentes del catálogo y redondeo. |
 
 ### Instrumentadas (`app/src/androidTest`, emulador)
@@ -53,7 +55,7 @@ pruebas instrumentadas en 7 suites (todas en verde).
 ## Pruebas manuales y verificación
 
 - Compilación y pruebas unitarias verificadas en sesión con
-  `assembleDebug` y `testDebugUnitTest` (68 en verde).
+  `assembleDebug` y `testDebugUnitTest` (54 en verde).
 - Pruebas instrumentadas ejecutadas en el emulador `Medium_Phone_API_37.0`
   (Android 17) con `connectedDebugAndroidTest` (23 en verde), incluidas las de
   `CatalogoRecetasTest`, que validan la coherencia del catálogo.
